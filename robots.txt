@@ -1,0 +1,12 @@
+# Erlaube allen Bots den Zugriff
+User-agent: *
+Allow: /
+
+# Sitemap für bessere Indexierung
+Sitemap: https://stevennoack.de/sitemap-index.xml
+
+# Optional: Crawl-Delay für höfliches Crawling
+Crawl-delay: 1
+
+# Blockiere nichts (alles ist öffentlich)
+Disallow:

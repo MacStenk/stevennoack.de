@@ -1,16 +1,21 @@
-import { getCollection } from 'astro:content';
 import rss from '@astrojs/rss';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import { getCollection } from 'astro:content';
 
 export async function GET(context) {
-	const posts = await getCollection('blog');
-	return rss({
-		title: SITE_TITLE,
-		description: SITE_DESCRIPTION,
-		site: context.site,
-		items: posts.map((post) => ({
-			...post.data,
-			link: `/blog/${post.id}/`,
-		})),
-	});
+  const blog = await getCollection('blog');
+  
+  return rss({
+    title: 'Steven Noack Blog',
+    description: 'Gedanken über Technologie, akustische Architektur und digitale Souveränität',
+    site: context.site,
+    items: blog.map((post) => ({
+      title: post.data.title,
+      pubDate: post.data.pubDate,
+      description: post.data.description,
+      link: `/blog/${post.slug}/`,
+      author: post.data.author || 'Steven Noack',
+      categories: post.data.tags || [],
+    })),
+    customData: `<language>de-DE</language>`,
+  });
 }

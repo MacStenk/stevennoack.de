@@ -1,0 +1,221 @@
+---
+import stevenPortrait from '../assets/steven-noack-portrait.jpg';
+
+interface Props {
+  author?: string;
+}
+
+const { author = 'Steven Noack' } = Astro.props;
+---
+
+<aside class="author-bio">
+  <div class="author-content">
+    <div class="author-avatar">
+      <img src={stevenPortrait.src} alt="Steven Noack" class="avatar-image" />
+    </div>
+    <div class="author-text">
+      <h3>Über den Autor</h3>
+      <p>
+        <strong>{author}</strong> - Techno seit 1991, Code seit 1997, 
+        WoW seit 2005, erwacht seit 2023.
+      </p>
+      <p>
+        E-Werk, Tresor, Molten Core, Naxxramas. Soft-ICE, Assembly, 
+        40-man Raids, BiS-Gear. Samstags vor dem Plattenladen warten, 
+        Sonntags Guild-Raids führen. Von Underground-Warez zu Privacy-First AI, 
+        von Loveparade zu Berghain, von Vanilla zu Classic Anniversary.
+      </p>
+      <p>
+        Die Trennung 2023 als Geschenk: 19 Jahre zurückgeholt. 
+        Biochemie verstanden. Patterns überall erkannt - in Code, 
+        Techno, Boss-Mechanics und Bewusstsein.
+      </p>
+      <p class="manifesto">
+        <em>
+          "40-man Raids lehren Team-Koordination.<br>
+          Techno lehrt Flow & Presence.<br>
+          Code lehrt System-Thinking.<br>
+          Integration lehrt Klarheit."
+        </em>
+      </p>
+      <div class="author-roots">
+        <div class="root-category">
+          <strong>Techno Roots:</strong>
+          <span class="detail">E-Werk, Tresor, Bunker, WMF</span>
+        </div>
+        <div class="root-category">
+          <strong>Code Roots:</strong>
+          <span class="detail">Soft-ICE, Warez, Assembly</span>
+        </div>
+        <div class="root-category">
+          <strong>Gaming Roots:</strong>
+          <span class="detail">WoW Vanilla, Classic, 20th Anniversary</span>
+        </div>
+        <div class="root-category">
+          <strong>Awakening:</strong>
+          <span class="detail">Biochemie, Tarot, Human Design</span>
+        </div>
+      </div>
+      <div class="author-timeline">
+        <span class="era">1991: Techno</span>
+        <span class="era">1997: Code</span>
+        <span class="era">2005: WoW</span>
+        <span class="era">2023: Awakening</span>
+        <span class="era">2025: Integration</span>
+      </div>
+      <div class="author-expertise">
+        <span class="tag">Since '91</span>
+        <span class="tag">Underground Spirit</span>
+        <span class="tag">Raid Leader</span>
+        <span class="tag">Systems Thinker</span>
+      </div>
+      <a href="/about" class="author-link">
+        Die ganze Story →
+      </a>
+    </div>
+  </div>
+</aside>
+
+<style>
+  .author-bio {
+    margin-top: 4rem;
+    padding: 2.5rem;
+    background: linear-gradient(135deg, var(--sl-color-gray-6) 0%, var(--sl-color-gray-5) 100%);
+    border-radius: 12px;
+    border-left: 4px solid var(--sl-color-accent);
+  }
+
+  .author-content {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+  }
+
+  .author-avatar {
+    flex-shrink: 0;
+  }
+
+  .avatar-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--sl-color-accent);
+  }
+
+  .author-text {
+    flex: 1;
+  }
+
+  .author-bio h3 {
+    margin: 0 0 1rem 0;
+    font-size: 1.25rem;
+    color: var(--sl-color-white);
+  }
+
+  .author-bio p {
+    margin: 0 0 1rem 0;
+    line-height: 1.7;
+    color: var(--sl-color-gray-2);
+  }
+
+  .manifesto {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.3);
+    border-left: 3px solid var(--sl-color-accent);
+    font-style: italic;
+    color: var(--sl-color-gray-1);
+  }
+
+  .author-roots {
+    margin: 1.5rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .root-category {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .root-category strong {
+    color: var(--sl-color-white);
+    font-size: 0.9rem;
+  }
+
+  .detail {
+    color: var(--sl-color-gray-3);
+    font-size: 0.85rem;
+    font-family: 'Courier New', monospace;
+  }
+
+  .author-timeline {
+    display: flex;
+    gap: 1rem;
+    margin: 1.5rem 0;
+    flex-wrap: wrap;
+  }
+
+  .era {
+    font-size: 0.8rem;
+    color: var(--sl-color-gray-3);
+    font-family: 'Courier New', monospace;
+    padding: 4px 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+  }
+
+  .author-expertise {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1rem 0;
+  }
+
+  .tag {
+    display: inline-block;
+    background: var(--sl-color-gray-7);
+    color: var(--sl-color-gray-1);
+    padding: 4px 12px;
+    border-radius: 16px;
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+
+  .author-link {
+    display: inline-block;
+    color: var(--sl-color-accent);
+    text-decoration: none;
+    font-weight: 600;
+    margin-top: 1rem;
+    transition: color 0.2s ease;
+  }
+
+  .author-link:hover {
+    color: var(--sl-color-white);
+    text-decoration: underline;
+  }
+
+  @media (max-width: 768px) {
+    .author-content {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .author-text {
+      text-align: center;
+    }
+
+    .author-roots {
+      align-items: center;
+    }
+
+    .author-timeline,
+    .author-expertise {
+      justify-content: center;
+    }
+  }
+</style>

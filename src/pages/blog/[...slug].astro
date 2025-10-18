@@ -1,20 +1,247 @@
 ---
-import { type CollectionEntry, getCollection, render } from 'astro:content';
-import BlogPost from '../../layouts/BlogPost.astro';
+import { getCollection } from 'astro:content';
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+import RelatedPosts from '../../components/RelatedPosts.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import AuthorBio from '../../components/AuthorBio.astro';
+import { calculateReadingTime } from '../../utils/readingTime';
 
 export async function getStaticPaths() {
-	const posts = await getCollection('blog');
-	return posts.map((post) => ({
-		params: { slug: post.id },
-		props: post,
-	}));
+  const blogPosts = await getCollection('blog');
+  return blogPosts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
 }
-type Props = CollectionEntry<'blog'>;
 
-const post = Astro.props;
-const { Content } = await render(post);
+const { post } = Astro.props;
+const { Content } = await post.render();
+const readingTime = calculateReadingTime(post.body);
+const allPosts = await getCollection('blog');
+const categories = [...new Set(allPosts.map((p) => p.data.category).filter(Boolean))].sort();
+
+const postUrl = `https://stevennoack.de/blog/${post.slug}`;
+const categorySlug = post.data.category ? post.data.category.toLowerCase().replace(/\s+/g, '-') : '';
+const categoryUrl = post.data.category ? `/blog/categories/${categorySlug}` : '';
 ---
 
-<BlogPost {...post.data}>
-	<Content />
-</BlogPost>
+<StarlightPage
+  frontmatter={{
+    title: post.data.title,
+    description: post.data.description || 'Blog-Post von Steven Noack',
+  }}
+  head={[
+    {
+      tag: 'meta',
+      attrs: {
+        name: 'description',
+        content: post.data.description || 'Blog-Post von Steven Noack',
+      },
+    },
+    {
+      tag: 'meta',
+      attrs: {
+        name: 'author',
+        content: post.data.author || 'Steven Noack',
+      },
+    },
+    {
+      tag: 'script',
+      attrs: {
+        type: 'application/ld+json',
+      },
+      content: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'BlogPosting',
+        headline: post.data.title,
+        description: post.data.description,
+        author: {
+          '@type': 'Person',
+          name: post.data.author || 'Steven Noack',
+          url: 'https://stevennoack.de',
+        },
+        datePublished: post.data.pubDate.toISOString(),
+        dateModified: post.data.pubDate.toISOString(),
+        publisher: {
+          '@type': 'Person',
+          name: 'Steven Noack',
+          url: 'https://stevennoack.de',
+        },
+        mainEntityOfPage: {
+          '@type': 'WebPage',
+          '@id': postUrl,
+        },
+        timeRequired: `PT${readingTime}M`,
+        wordCount: post.body.trim().split(/\s+/).length,
+        ...(post.data.category && {
+          articleSection: post.data.category,
+        }),
+        ...(post.data.tags && {
+          keywords: post.data.tags.join(', '),
+        }),
+      }),
+    },
+    {
+      tag: 'link',
+      attrs: {
+        rel: 'canonical',
+        href: postUrl,
+      },
+    },
+  ]}
+  sidebar={[
+    {
+      label: 'Blog',
+      items: [
+        { label: '← Alle Beiträge', link: '/blog' },
+        { label: 'Zurück zur Hauptseite', link: '/' },
+      ],
+    },
+    ...(categories.length > 0
+      ? [
+          {
+            label: 'Kategorien',
+            items: categories.map((cat) => {
+              const slug = cat.toLowerCase().replace(/\s+/g, '-');
+              return {
+                label: cat,
+                link: `/blog/categories/${slug}`,
+              };
+            }),
+          },
+        ]
+      : []),
+    {
+      label: 'Neueste Beiträge',
+      items: allPosts
+        .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
+        .slice(0, 5)
+        .filter((p) => p.slug !== post.slug)
+        .slice(0, 4)
+        .map((p) => ({
+          label: p.data.title,
+          link: `/blog/${p.slug}`,
+          badge: p.data.category ? { text: p.data.category, variant: 'note' } : undefined,
+        })),
+    },
+  ]}
+>
+  <article>
+    <Breadcrumbs
+      items={[
+        { label: 'Home', href: '/' },
+        { label: 'Blog', href: '/blog' },
+        ...(post.data.category
+          ? [
+              {
+                label: post.data.category,
+                href: categoryUrl,
+              },
+            ]
+          : []),
+        { label: post.data.title },
+      ]}
+    />
+
+    {post.data.category && <a href={categoryUrl} class="category-badge">{post.data.category}</a>}
+
+    <div class="post-meta">
+      <time>
+        {
+          post.data.pubDate.toLocaleDateString('de-DE', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+          })
+        }
+      </time>
+      <span class="separator">•</span>
+      <span>{readingTime} Min. Lesezeit</span>
+    </div>
+
+    {
+      post.data.tags && post.data.tags.length > 0 && (
+        <div class="tags">
+          {post.data.tags.map((tag) => (
+            <span class="tag">#{tag}</span>
+          ))}
+        </div>
+      )
+    }
+
+    <Content />
+
+    <RelatedPosts currentSlug={post.slug} category={post.data.category} tags={post.data.tags} limit={3} />
+
+    <AuthorBio author={post.data.author} />
+
+    <footer class="post-footer">
+      <p>
+        Geschrieben von {post.data.author || 'Steven Noack'}.&nbsp;
+        <a href="https://stevennoack.de" class="footer-link">Besuchen Sie meine Hauptseite</a>.
+      </p>
+    </footer>
+  </article>
+</StarlightPage>
+
+<style>
+  article {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 20px;
+  }
+
+  .category-badge {
+    display: inline-block;
+    background: var(--sl-color-accent);
+    color: var(--sl-color-black);
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-size: 0.85em;
+    margin-bottom: 1rem;
+    text-decoration: none;
+  }
+
+  .post-meta {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    color: var(--sl-color-text-light);
+    font-size: 0.9rem;
+  }
+
+  .separator {
+    color: var(--sl-color-gray-3);
+  }
+
+  .tags {
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .tag {
+    display: inline-block;
+    background: var(--sl-color-gray-6);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.75em;
+    margin-right: 0.5rem;
+  }
+
+  .post-footer {
+    margin-top: 4rem;
+    font-size: 0.9rem;
+    color: var(--sl-color-text-light);
+  }
+
+  .footer-link {
+    color: var(--sl-color-accent);
+    text-decoration: none;
+  }
+
+  time {
+    color: var(--sl-color-text-light);
+    font-size: 0.9rem;
+  }
+</style>

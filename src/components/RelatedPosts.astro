@@ -1,0 +1,124 @@
+---
+import { getCollection } from 'astro:content';
+
+interface Props {
+  currentSlug: string;
+  category?: string;
+  tags?: string[];
+  limit?: number;
+}
+
+const { currentSlug, category, tags = [], limit = 3 } = Astro.props;
+
+// Hole alle Blog-Posts
+const allPosts = await getCollection('blog');
+
+// Finde ähnliche Posts
+const relatedPosts = allPosts
+  .filter(post => post.slug !== currentSlug) // Nicht den aktuellen Post
+  .map(post => {
+    let score = 0;
+    
+    // Gleiche Kategorie = hohe Relevanz
+    if (category && post.data.category === category) {
+      score += 10;
+    }
+    
+    // Gemeinsame Tags
+    if (tags.length > 0 && post.data.tags) {
+      const commonTags = tags.filter(tag => post.data.tags?.includes(tag));
+      score += commonTags.length * 3;
+    }
+    
+    return { post, score };
+  })
+  .filter(item => item.score > 0) // Nur Posts mit Relevanz
+  .sort((a, b) => b.score - a.score) // Nach Score sortieren
+  .slice(0, limit) // Limitieren
+  .map(item => item.post);
+---
+
+{relatedPosts.length > 0 && (
+  <section class="related-posts">
+    <h2>Ähnliche Beiträge</h2>
+    <ul>
+      {relatedPosts.map((post) => (
+        <li>
+          <a href={`/blog/${post.slug}`}>
+            <h3>{post.data.title}</h3>
+            {post.data.description && (
+              <p>{post.data.description}</p>
+            )}
+            {post.data.category && (
+              <span class="category">{post.data.category}</span>
+            )}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+)}
+
+<style>
+  .related-posts {
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 2px solid var(--sl-color-hairline);
+  }
+
+  .related-posts h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: var(--sl-color-text);
+  }
+
+  .related-posts ul {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+
+  .related-posts li {
+    background: var(--sl-color-gray-6);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .related-posts li:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+
+  .related-posts a {
+    display: block;
+    padding: 1.5rem;
+    text-decoration: none;
+    color: var(--sl-color-text);
+  }
+
+  .related-posts h3 {
+    font-size: 1.1rem;
+    margin: 0 0 0.5rem 0;
+    color: var(--sl-color-white);
+  }
+
+  .related-posts p {
+    font-size: 0.9rem;
+    color: var(--sl-color-gray-2);
+    margin: 0 0 0.75rem 0;
+    line-height: 1.5;
+  }
+
+  .related-posts .category {
+    display: inline-block;
+    background: var(--sl-color-accent);
+    color: var(--sl-color-black);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+</style>

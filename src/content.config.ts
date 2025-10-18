@@ -1,19 +1,23 @@
-import { defineCollection, z } from 'astro:content';
-import { glob } from 'astro/loaders';
+// src/content/content.config.ts
 
+import { defineCollection, z } from 'astro:content';
+import { docsSchema } from '@astrojs/starlight/schema';
+
+// 1. Definiert die Docs (Starlight) Collection
+const docs = defineCollection({ schema: docsSchema() });
+
+// 2. Definiert die neue Blog Collection (für src/content/blog)
 const blog = defineCollection({
-	// Load Markdown and MDX files in the `src/content/blog/` directory.
-	loader: glob({ base: './src/content/blog', pattern: '**/*.{md,mdx}' }),
-	// Type-check frontmatter using a schema
-	schema: ({ image }) =>
-		z.object({
-			title: z.string(),
-			description: z.string(),
-			// Transform string to Date object
-			pubDate: z.coerce.date(),
-			updatedDate: z.coerce.date().optional(),
-			heroImage: image().optional(),
-		}),
+    schema: z.object({
+        title: z.string(),
+        pubDate: z.date(),
+        description: z.string().optional(),
+        // NEU: Kategorien und Tags
+        category: z.string().optional(), // Einzelne Kategorie
+        tags: z.array(z.string()).optional(), // Mehrere Tags
+        author: z.string().optional(),
+    }),
 });
 
-export const collections = { blog };
+// Exportiert beide Collections, damit Astro sie verarbeitet
+export const collections = { docs, blog };
