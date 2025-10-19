@@ -1,0 +1,140 @@
+backend:
+  name: github
+  repo: MacStenk/stevennoack.de
+  branch: main
+
+media_folder: "public/images/blog"
+public_folder: "/images/blog"
+
+collections:
+  - name: "blog"
+    label: "Blog Posts"
+    folder: "src/content/blog"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      # ===== BASIS-INFORMATIONEN =====
+      - {label: "Titel", name: "title", widget: "string", required: true}
+      - {label: "Beschreibung", name: "description", widget: "text", required: true, hint: "SEO-Beschreibung (max. 160 Zeichen)"}
+      - {label: "TL;DR", name: "tldr", widget: "text", required: false, hint: "Ultra-Kurzzusammenfassung (1-2 Sätze für AI)"}
+      - {label: "Autor", name: "author", widget: "string", default: "Steven Noack"}
+      - {label: "Publikationsdatum", name: "pubDate", widget: "datetime", default: ""}
+      - {label: "Zuletzt aktualisiert", name: "lastUpdated", widget: "datetime", required: false}
+      - {label: "Sprache", name: "lang", widget: "select", options: ["de", "en", "de-DE", "en-US"], default: "de"}
+      
+      # ===== KATEGORISIERUNG =====
+      - {label: "Kategorie", name: "category", widget: "string", required: false}
+      - {label: "Tags", name: "tags", widget: "list", required: false, hint: "z.B.: ai, tutorial, python"}
+      - {label: "Content-Typ", name: "contentType", widget: "select", options: ["Tutorial", "Guide", "News", "Review", "Opinion", "Case Study", "Documentation"], required: false}
+      - {label: "Schwierigkeitsgrad", name: "level", widget: "select", options: ["Beginner", "Intermediate", "Advanced", "Expert"], required: false}
+      - {label: "Zielgruppe", name: "audience", widget: "string", required: false, hint: "z.B.: Entwickler, Marketing Manager, Studierende"}
+      
+      # ===== BILDER & MEDIA =====
+      - {label: "Featured Image", name: "featuredImage", widget: "image", required: false}
+      - {label: "Featured Image Alt-Text", name: "featuredImageAlt", widget: "string", required: false, hint: "Wichtig für Accessibility!"}
+      
+      # ===== SEO OPTIMIERUNGEN =====
+      - label: "SEO"
+        name: "seo"
+        widget: "object"
+        collapsed: true
+        fields:
+          - {label: "Canonical URL", name: "canonical", widget: "string", required: false, hint: "Wird auto-generiert wenn leer"}
+          - {label: "Keywords", name: "keywords", widget: "list", required: false, hint: "Primäre SEO-Keywords"}
+          - {label: "OG Image", name: "ogImage", widget: "image", required: false}
+          - {label: "OG Title Override", name: "ogTitle", widget: "string", required: false, hint: "Anderer Titel für Social Media"}
+          - {label: "OG Description", name: "ogDescription", widget: "text", required: false}
+          - {label: "Twitter Card", name: "twitterCard", widget: "select", options: ["summary", "summary_large_image"], default: "summary_large_image", required: false}
+          - {label: "Robots", name: "robots", widget: "select", options: ["index,follow", "noindex,follow", "index,nofollow", "noindex,nofollow"], default: "index,follow", required: false}
+          - {label: "Old URLs (Redirects)", name: "redirectFrom", widget: "list", required: false, hint: "Alte URLs die hierher umleiten"}
+      
+      # ===== SCHEMA.ORG STRUCTURED DATA =====
+      - label: "Schema.org"
+        name: "schema"
+        widget: "object"
+        collapsed: true
+        fields:
+          - {label: "Type", name: "type", widget: "hidden", default: "BlogPosting"}
+          - {label: "Published Date Override", name: "datePublished", widget: "datetime", required: false}
+          - {label: "Modified Date", name: "dateModified", widget: "datetime", required: false}
+      
+      # ===== E-E-A-T (EXPERTISE, AUTHORITATIVENESS, TRUSTWORTHINESS) =====
+      - label: "Autor-Details (E-E-A-T)"
+        name: "authorDetails"
+        widget: "object"
+        collapsed: true
+        fields:
+          - {label: "Autor Email", name: "email", widget: "string", required: false}
+          - {label: "Autor Website", name: "website", widget: "string", required: false}
+          - {label: "Autor Bio", name: "bio", widget: "text", required: false}
+          - {label: "Social Profile", name: "social", widget: "string", required: false, hint: "LinkedIn, Twitter, GitHub"}
+          - {label: "Credentials", name: "credentials", widget: "string", required: false, hint: "z.B.: Certified AI Engineer"}
+      
+      # ===== CONTENT-STRUKTUR =====
+      - {label: "Key Takeaways", name: "keyTakeaways", widget: "list", required: false, hint: "Haupterkenntnisse als Bullet Points"}
+      - {label: "Verwandte Posts (Slugs)", name: "relatedPosts", widget: "list", required: false, hint: "Slugs anderer Posts"}
+      - {label: "Teil einer Serie?", name: "series", widget: "string", required: false, hint: "z.B.: Python Basics"}
+      - {label: "Teil Nummer", name: "seriesPart", widget: "number", required: false}
+      
+      # ===== FAQ (STRUCTURED DATA) =====
+      - label: "FAQ"
+        name: "faq"
+        widget: "list"
+        collapsed: true
+        required: false
+        summary: "{{fields.question}}"
+        fields:
+          - {label: "Frage", name: "question", widget: "string"}
+          - {label: "Antwort", name: "answer", widget: "text"}
+      
+      # ===== UPDATE-HISTORIE =====
+      - label: "Update-Historie"
+        name: "updateHistory"
+        widget: "list"
+        collapsed: true
+        required: false
+        summary: "{{fields.date}} - {{fields.changes}}"
+        fields:
+          - {label: "Datum", name: "date", widget: "datetime"}
+          - {label: "Änderungen", name: "changes", widget: "text"}
+      
+      # ===== ZUSÄTZLICHE METADATEN =====
+      - {label: "Lesezeit (Minuten)", name: "readingTime", widget: "number", required: false, hint: "Auto-berechnet wenn leer"}
+      - {label: "Featured Post", name: "featured", widget: "boolean", default: false, hint: "Auf Homepage hervorheben"}
+      - {label: "Draft", name: "draft", widget: "boolean", default: false, hint: "Entwurf - nicht veröffentlichen"}
+      - {label: "Priority", name: "priority", widget: "select", options: ["high", "normal", "low"], default: "normal", required: false}
+      - {label: "Kommentare erlauben", name: "allowComments", widget: "boolean", default: true}
+      - {label: "External Links: nofollow", name: "externalNofollow", widget: "boolean", default: false}
+      
+      # ===== CALL-TO-ACTION =====
+      - label: "Call-to-Action"
+        name: "cta"
+        widget: "object"
+        collapsed: true
+        required: false
+        fields:
+          - {label: "CTA Text", name: "text", widget: "string", required: false}
+          - {label: "CTA Link", name: "link", widget: "string", required: false}
+      
+      # ===== HAUPTINHALT =====
+      - {label: "Inhalt", name: "body", widget: "markdown", hint: "Haupttext des Blog-Posts"}backend:
+  name: github
+  repo: MacStenk/stevennoack.de
+  branch: main
+
+media_folder: "public/images"
+public_folder: "/images"
+
+collections:
+  - name: "blog"
+    label: "Blog Posts"
+    folder: "src/content/blog"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Publish Date", name: "date", widget: "datetime"}
+      - {label: "Description", name: "description", widget: "string"}
+      - {label: "Author", name: "author", widget: "string", default: "Steven Noack"}
+      - {label: "Tags", name: "tags", widget: "list"}
+      - {label: "Body", name: "body", widget: "markdown"}
