@@ -149,7 +149,6 @@ const categoriesUrl = post.data.categories ? `/blog/categories/${categoriesSlug}
               },
             ]
           : []),
-        { label: post.data.title },
       ]}
     />
 
@@ -272,5 +271,20 @@ const categoriesUrl = post.data.categories ? `/blog/categories/${categoriesSlug}
   time {
     color: var(--sl-color-text-light);
     font-size: 0.9rem;
+  }
+
+  /* Wenn der Content selbst eine H1 enthält (z. B. aus Markdown/MDX),
+     soll diese versteckt werden — der Titel wird bereits oben vom
+     StarlightPage-Layout gerendert. */
+  article > h1:first-of-type {
+    display: none;
+  }
+
+  /* Breadcrumbs: das letzte Listenelement zeigt hier den vollständigen
+     Post-Titel und erzeugt eine doppelte Überschrift. Wir blenden das
+     letzte Breadcrumb-Element nur innerhalb des Artikel-Content aus. */
+  article nav[aria-label="Breadcrumb"] li:last-child,
+  article nav[aria-label="Breadcrumb"] li:last-child > span {
+    display: none;
   }
 </style>
