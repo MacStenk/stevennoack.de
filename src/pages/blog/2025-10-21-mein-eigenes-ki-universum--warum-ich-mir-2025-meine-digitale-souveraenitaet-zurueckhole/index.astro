@@ -1,0 +1,17 @@
+---
+const canonical = '/blog/mein-eigenes-ki-universum/';
+---
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="refresh" content="0;url={canonical}" />
+    <link rel="canonical" href={canonical} />
+    <meta name="robots" content="noindex" />
+    <title>Redirecting…</title>
+  </head>
+  <body>
+    <p>Diese Seite wurde dauerhaft verschoben. Weiterleitung zu <a href={canonical}>{canonical}</a></p>
+    <script>location.replace({canonical})</script>
+  </body>
+</html>
