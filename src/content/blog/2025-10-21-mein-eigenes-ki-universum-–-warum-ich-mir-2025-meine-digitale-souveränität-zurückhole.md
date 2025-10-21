@@ -9,7 +9,7 @@ author: Steven Noack
 slug: mein-eigenes-ki-universum
 pubDate: 2025-10-21T16:55:00.000+02:00
 lang: de
-categories: "tech"    # ← DIESE ZEILE HINZUFÜGEN!
+categories: "tech"
 seo:
   twitterCard: summary_large_image
   robots: index,follow
