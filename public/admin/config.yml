@@ -22,7 +22,21 @@ collections:
       - {label: "Publikationsdatum", name: "pubDate", widget: "datetime", default: ""}
       - {label: "Zuletzt aktualisiert", name: "lastUpdated", widget: "datetime", required: false}
       - {label: "Sprache", name: "lang", widget: "select", options: ["de", "en", "de-DE", "en-US"], default: "de"}
-      - {label: "Kategorie", name: "category", widget: "string", required: false}
+      - label: "Kategorie" # ← Kategorien Anfang!
+        name: "category"
+        widget: "select"
+        multiple: true  # ← Erlaubt Mehrfachauswahl!
+        required: false
+        default: "tech"
+        hint: "Hauptkategorie des Posts"
+        options:
+          - { label: "🔧 Tech & Development", value: "tech" }
+          - { label: "🤖 AI & Machine Learning", value: "ai" }
+          - { label: "🔒 Privacy & Security", value: "privacy" }
+          - { label: "🚀 DevOps & Docker", value: "devops" }
+          - { label: "🎵 Techno & Culture", value: "culture" }
+          - { label: "🧠 Consciousness", value: "consciousness" }
+          - { label: "😊 Tutorial", value: "tutorial" }  # ← Kategorien Ende!
       - {label: "Tags", name: "tags", widget: "list", required: false, hint: "z.B.: ai, tutorial, python"}
       - {label: "Content-Typ", name: "contentType", widget: "select", options: ["Tutorial", "Guide", "News", "Review", "Opinion", "Case Study", "Documentation"], required: false}
       - {label: "Schwierigkeitsgrad", name: "level", widget: "select", options: ["Beginner", "Intermediate", "Advanced", "Expert"], required: false}
