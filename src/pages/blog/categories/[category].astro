@@ -7,23 +7,24 @@ export async function getStaticPaths() {
   
   // Sammle alle einzigartigen Kategorien
   const categories = [...new Set(allPosts.map(post => post.data.categories).filter(Boolean))];
-  
-  return categories.map(categories => ({
-    params: { categories },
+
+  return categories.map((cat) => ({
+    // Route filename is [category].astro — param must be `category`
+    params: { category: cat },
     props: {
-      posts: allPosts.filter(post => post.data.categories === categories)
-        .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime())
+      posts: allPosts
+        .filter(post => post.data.categories === cat)
+        .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()),
     },
   }));
 }
-
-const { categories } = Astro.params;
+const { category } = Astro.params;
 const { posts } = Astro.props;
 ---
 
 <StarlightPage 
   frontmatter={{ 
-    title: `Kategorie: ${categories}`,
+    title: `Kategorie: ${category}`,
   }}
   sidebar={[
     {
@@ -37,7 +38,7 @@ const { posts } = Astro.props;
 >
   <div class="content-container">
     <p style="color: var(--sl-color-text-light); margin-bottom: 2rem;">
-      {posts.length} Beitrag{posts.length !== 1 ? 'e' : ''} in dieser Kategorie
+      {posts.length} Beitrag{posts.length !== 1 ? 'e' : ''} in der Kategorie «{category}»
     </p>
 
     <ul style="list-style: none; padding: 0;">

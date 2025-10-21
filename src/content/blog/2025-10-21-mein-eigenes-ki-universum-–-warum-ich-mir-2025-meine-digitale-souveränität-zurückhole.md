@@ -1,101 +1,25 @@
 ---
-title: Mein eigenes KI-Universum – warum ich mir 2025 meine digitale
-  Souveränität zurückhole
-description: Nach 30 Jahren im Netz hole ich mir meine digitale Souveränität
-  zurück. Mit eigenem Server, Open Web UI und n8n baue ich mein eigenes
-  KI-Universum auf.
-tldr: eigenes-ki-universum-digitale-souveraenitaet-2025
+title: Mein eigenes KI-Universum – warum ich mir 2025 meine
+  digitale   Souveränität zurückhole
+description: |-
+  Nach 30 Jahren im Netz hole ich mir meine digitale Souveränität
+    zurück. Mit eigenem Server, Open Web UI und n8n baue ich mein eigenes
+    KI-Universum auf.
 author: Steven Noack
-pubDate: 2025-10-21T07:41:00.000+02:00
-lastUpdated: ""
+pubDate: 2025-10-21T16:55:00.000+02:00
 lang: de
-// In src/content/config.ts oder content.config.ts
-
-const blogCollection = defineCollection({
-  schema: z.object({
-    // Entweder:
-    categories: z.string().optional(),  // Eine Kategorie
-    // ODER:
-    categories: z.array(z.string()).optional(),  // Mehrere Kategorien
-  })
-});
-
-tags:
-  - KI
-  - DigitaleSouveränität
-  - OpenWebUI
-  - n8n
-  - Selbsthosting
-  - LLM
-  - Hetzne
-  - Automatisierung
-  - DSGVO
-  - Datenschutz
-contentType: Opinion
-level: Beginner
-audience: Tech-Enthusiasten, Entwickler, Selbstständige, Digital Natives,
-  Menschen mit Interesse an KI und Datensouveränität
+categories: "tech"    # ← DIESE ZEILE HINZUFÜGEN!
 seo:
   twitterCard: summary_large_image
   robots: index,follow
-  keywords:
-    - "#KI #DigitaleSouveränität #OpenWebUI #n8n #Selbsthosting #LLM #Hetzner
-      #Automatisierung #DSGVO #Datenschutz #ServerHosting #CloudAlternative
-      #OpenSource #TechFreedom"
-  ogTitle: Mein eigenes KI-Universum – Digitale Souveränität 2025
-  ogDescription: Nach 30 Jahren im Netz hole ich mir meine Kontrolle zurück. Mit
-    eigenem Server, Open Web UI und n8n baue ich mein eigenes KI-Universum. Eine
-    persönliche Geschichte über Technologie, Freiheit und inneren Frieden.
 schema:
   type: BlogPosting
-  datePublished: 2025-10-21T07:32:00.000+02:00
-authorDetails:
-  bio: Steven Noack ist seit 1996 im Internet aktiv und experimentiert seit über
-    30 Jahren mit Web-Technologien. Als Tech-Enthusiast und emotionaler
-    Manifestor 6/2 verbindet er technische Expertise mit menschlicher Intuition.
-    2025 entschied er sich, seine digitale Souveränität zurückzuholen und sein
-    eigenes KI-Universum aufzubauen – nicht aus Notwendigkeit, sondern aus Liebe
-    zur Technologie.
-  website: stevennoack.de
-  credentials: "30+ Jahre Erfahrung in Web-Technologien | Self-Hosting-Experte |
-    KI-Enthusiast | Open-Source-Advocate | Human Design: Emotionaler Manifestor
-    6/2"
-  social: https://twitter.com/stevennoack_de
-keyTakeaways:
-  - "- Digitale Souveränität bedeutet"
-  - die Kontrolle über eigene Daten und KI-Systeme zurückzugewinnen - Open Web
-    UI ermöglicht lokales Hosting mehrerer KI-Modelle in einem Interface ohne
-    Datenweitergabe - n8n automatisiert Workflows und lässt KI-Agenten
-    selbstständig arbeiten – auch nachts - Server in Deutschland (DSGVO) bieten
-    rechtliche Sicherheit und Datenschutz - Es geht nicht um Paranoia
-  - sondern um inneren Frieden und bewusste Entscheidungen - Dedizierte Server
-    bieten volle Kontrolle
-  - bessere Performance und langfristige Flexibilität - Die Technologie ist
-    heute so zugänglich wie nie – jeder kann sein eigenes KI-Universum bauen
-faq:
-  - question: Brauche ich Programmierkenntnisse für ein eigenes KI-Universum?
-    answer: Nein, grundlegende technische Affinität reicht. Tools wie Open Web UI
-      und n8n sind benutzerfreundlich gestaltet.
-  - question: Wie viel kostet ein eigener Server bei Hetzner?
-    answer: Ein CCX23-Server kostet je nach Konfiguration zwischen 50-100 Euro
-      monatlich.
-  - question: Sind meine Daten auf einem eigenen Server wirklich sicherer?
-    answer: Du hast volle Kontrolle und Transparenz. Server in Deutschland
-      unterliegen der DSGVO.
-  - question: Was ist der Unterschied zwischen Open Web UI und ChatGPT?
-    answer: Open Web UI läuft lokal, unterstützt multiple KI-Modelle gleichzeitig
-      und deine Daten bleiben bei dir.
-readingTime: ""
-featured: true
+featured: false
 draft: false
-priority: high
+priority: normal
 allowComments: true
 externalNofollow: false
 ---
-
-
-- - -
-
 ## Die Reise beginnt
 
 1996 habe ich das Internet entdeckt. Nur angeschaut.
