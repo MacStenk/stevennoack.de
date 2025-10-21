@@ -60,3 +60,8 @@ Check out [our documentation](https://docs.astro.build) or jump into our [Discor
 ## Credit
 
 This theme is based off of the lovely [Bear Blog](https://github.com/HermanMartinus/bearblog/).
+
+## Maintenance notes
+
+Short notes about recent maintenance actions are kept in the repository under `docs/maintenance/`.
+See `docs/maintenance/redirects-and-backups.md` for details about recently added redirect pages and removed backup files.
