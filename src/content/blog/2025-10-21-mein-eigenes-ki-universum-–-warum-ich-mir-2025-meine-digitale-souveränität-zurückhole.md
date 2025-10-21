@@ -6,6 +6,7 @@ description: |-
     zurück. Mit eigenem Server, Open Web UI und n8n baue ich mein eigenes
     KI-Universum auf.
 author: Steven Noack
+slug: mein-eigenes-ki-universum
 pubDate: 2025-10-21T16:55:00.000+02:00
 lang: de
 categories: "tech"    # ← DIESE ZEILE HINZUFÜGEN!
