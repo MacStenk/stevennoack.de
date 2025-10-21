@@ -3,12 +3,12 @@ import { getCollection } from 'astro:content';
 
 interface Props {
   currentSlug: string;
-  category?: string;
+  categories?: string;
   tags?: string[];
   limit?: number;
 }
 
-const { currentSlug, category, tags = [], limit = 3 } = Astro.props;
+const { currentSlug, categories, tags = [], limit = 3 } = Astro.props;
 
 // Hole alle Blog-Posts
 const allPosts = await getCollection('blog');
@@ -20,7 +20,7 @@ const relatedPosts = allPosts
     let score = 0;
     
     // Gleiche Kategorie = hohe Relevanz
-    if (category && post.data.category === category) {
+    if (categories && post.data.categories === categories) {
       score += 10;
     }
     
@@ -49,8 +49,8 @@ const relatedPosts = allPosts
             {post.data.description && (
               <p>{post.data.description}</p>
             )}
-            {post.data.category && (
-              <span class="category">{post.data.category}</span>
+            {post.data.categories && (
+              <span class="categories">{post.data.categories}</span>
             )}
           </a>
         </li>
@@ -112,7 +112,7 @@ const relatedPosts = allPosts
     line-height: 1.5;
   }
 
-  .related-posts .category {
+  .related-posts .categories {
     display: inline-block;
     background: var(--sl-color-accent);
     color: var(--sl-color-black);

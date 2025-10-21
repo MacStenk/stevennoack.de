@@ -12,8 +12,8 @@ const blog = defineCollection({
         title: z.string(),
         pubDate: z.date(),
         description: z.string().optional(),
-        // NEU: Kategorien und Tags
-        category: z.string().optional(), // Einzelne Kategorie
+        // ⚠️ WICHTIG: Nur categories (plural), NICHT categories!
+        categories: z.string().optional(), // ← Multiple Kategorien
         tags: z.array(z.string()).optional(), // Mehrere Tags
         author: z.string().optional(),
     }),

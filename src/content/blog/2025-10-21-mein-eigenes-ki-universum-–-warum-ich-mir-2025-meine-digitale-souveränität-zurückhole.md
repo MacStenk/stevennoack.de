@@ -9,11 +9,17 @@ author: Steven Noack
 pubDate: 2025-10-21T07:41:00.000+02:00
 lastUpdated: ""
 lang: de
-category:
-  - privacy
-  - devops
-  - consciousness
-  - tech
+// In src/content/config.ts oder content.config.ts
+
+const blogCollection = defineCollection({
+  schema: z.object({
+    // Entweder:
+    categories: z.string().optional(),  // Eine Kategorie
+    // ODER:
+    categories: z.array(z.string()).optional(),  // Mehrere Kategorien
+  })
+});
+
 tags:
   - KI
   - DigitaleSouveränität

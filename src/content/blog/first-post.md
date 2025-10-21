@@ -2,7 +2,7 @@
 title: First post
 pubDate: 2022-07-08
 description: Ein Post zur Einführung.
-category: Technologie
+categories: Technologie
 tags: ["Astro", "Web Development", "Tutorial"]
 ---
 

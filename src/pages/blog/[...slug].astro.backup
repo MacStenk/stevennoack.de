@@ -18,11 +18,11 @@ const { post } = Astro.props;
 const { Content } = await post.render();
 const readingTime = calculateReadingTime(post.body);
 const allPosts = await getCollection('blog');
-const categories = [...new Set(allPosts.map((p) => p.data.category).filter(Boolean))].sort();
+const categories = [...new Set(allPosts.map((p) => p.data.categories).filter(Boolean))].sort();
 
 const postUrl = `https://stevennoack.de/blog/${post.slug}`;
-const categorySlug = post.data.category ? post.data.category.toLowerCase().replace(/\s+/g, '-') : '';
-const categoryUrl = post.data.category ? `/blog/categories/${categorySlug}` : '';
+const categoriesSlug = post.data.categories ? post.data.categories.toLowerCase().replace(/\s+/g, '-') : '';
+const categoriesUrl = post.data.categories ? `/blog/categories/${categoriesSlug}` : '';
 ---
 
 <StarlightPage
@@ -73,8 +73,8 @@ const categoryUrl = post.data.category ? `/blog/categories/${categorySlug}` : ''
         },
         timeRequired: `PT${readingTime}M`,
         wordCount: post.body.trim().split(/\s+/).length,
-        ...(post.data.category && {
-          articleSection: post.data.category,
+        ...(post.data.categories && {
+          articleSection: post.data.categories,
         }),
         ...(post.data.tags && {
           keywords: post.data.tags.join(', '),
@@ -121,7 +121,7 @@ const categoryUrl = post.data.category ? `/blog/categories/${categorySlug}` : ''
         .map((p) => ({
           label: p.data.title,
           link: `/blog/${p.slug}`,
-          badge: p.data.category ? { text: p.data.category, variant: 'note' } : undefined,
+          badge: p.data.categories ? { text: p.data.categories, variant: 'note' } : undefined,
         })),
     },
   ]}
@@ -131,11 +131,11 @@ const categoryUrl = post.data.category ? `/blog/categories/${categorySlug}` : ''
       items={[
         { label: 'Home', href: '/' },
         { label: 'Blog', href: '/blog' },
-        ...(post.data.category
+        ...(post.data.categories
           ? [
               {
-                label: post.data.category,
-                href: categoryUrl,
+                label: post.data.categories,
+                href: categoriesUrl,
               },
             ]
           : []),
@@ -143,7 +143,7 @@ const categoryUrl = post.data.category ? `/blog/categories/${categorySlug}` : ''
       ]}
     />
 
-    {post.data.category && <a href={categoryUrl} class="category-badge">{post.data.category}</a>}
+    {post.data.categories && <a href={categoriesUrl} class="categories-badge">{post.data.categories}</a>}
 
     <div class="post-meta">
       <time>
@@ -171,7 +171,7 @@ const categoryUrl = post.data.category ? `/blog/categories/${categorySlug}` : ''
 
     <Content />
 
-    <RelatedPosts currentSlug={post.slug} category={post.data.category} tags={post.data.tags} limit={3} />
+    <RelatedPosts currentSlug={post.slug} categories={post.data.categories} tags={post.data.tags} limit={3} />
 
     <AuthorBio author={post.data.author} />
 
@@ -191,7 +191,7 @@ const categoryUrl = post.data.category ? `/blog/categories/${categorySlug}` : ''
     padding: 40px 20px;
   }
 
-  .category-badge {
+  .categories-badge {
     display: inline-block;
     background: var(--sl-color-accent);
     color: var(--sl-color-black);
