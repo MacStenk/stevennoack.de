@@ -1,0 +1,49 @@
+---
+/**
+ * Projects Grid Component
+ * @description Grid layout for all project cards
+ */
+
+import ProjectCard from './ProjectCard.astro';
+import { projects } from '@/data/projects.js';
+---
+
+<section id="projects" class="section">
+  <h2 class="section-title">&gt; projects</h2>
+  <div class="projects-grid">
+    {projects.map(project => (
+      <ProjectCard
+        title={project.title}
+        status={project.status}
+        description={project.description}
+        techTags={project.techTags}
+      />
+    ))}
+  </div>
+</section>
+
+<style>
+  .section {
+    padding: 4rem 0;
+    border-top: 1px solid var(--border-color);
+  }
+
+  .section-title {
+    font-size: clamp(2rem, 5vw, 3rem);
+    color: var(--matrix-green);
+    margin-bottom: 3rem;
+    font-weight: 700;
+  }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+  }
+
+  @media (max-width: 768px) {
+    .section {
+      padding: 3rem 0;
+    }
+  }
+</style>

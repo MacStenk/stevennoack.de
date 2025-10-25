@@ -1,0 +1,34 @@
+---
+/**
+ * Base Layout
+ * @description Main HTML structure
+ */
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "Steven Noack - Tech Pioneer",
+  description = "Tech Pioneer · Berlin Underground · Warez Scene · WoW Veteran · LLM Early Adopter"
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
+
+<style is:global>
+  @import '../styles/global.css';
+</style>

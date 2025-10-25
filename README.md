@@ -1,32 +1,70 @@
-# Steven Noack - Landing Page
+# stevennoack.de - Refactored
 
-Matrix-themed personal landing page built with Astro.
+## 📦 Installation
 
-## 🎯 Features
-
-- Matrix-inspired design with animated background
-- Responsive hero section with professional photo
-- Clean, modern typography with Inter font
-- Optimized for performance and SEO
-
-## 🚀 Tech Stack
-
-- **Astro** - Static Site Generator
-- **TypeScript** - Type Safety
-- **Deployed on** - Cloudflare Pages
-
-## 📦 Development
 ```bash
-npm install          # Install dependencies
-npm run dev          # Start dev server at localhost:4321
-npm run build        # Build for production
-npm run preview      # Preview production build
+# 1. Backup deiner aktuellen index.astro (WICHTIG!)
+cd ~/dev/stevennoack.de
+cp src/pages/index.astro src/pages/index.astro.BACKUP
+
+# 2. Entpacke dieses Archiv über dein Projekt
+tar -xzf stevennoack-refactored.tar.gz -C ~/dev/stevennoack.de/
+
+# 3. Teste es
+npm run dev
 ```
 
-## 🌐 Live Site
+## 📁 Was ist neu?
 
-Visit: [stevennoack.de](https://stevennoack.de)
+```
+src/
+├── data/               ← Deine echten Inhalte
+│   ├── nfo-content.js
+│   ├── about-content.js
+│   └── projects.js
+│
+├── scripts/            ← Wiederverwendbare Module
+│   ├── matrix-rain.js
+│   └── typewriter.js
+│
+├── styles/
+│   └── global.css
+│
+├── layouts/
+│   └── BaseLayout.astro
+│
+├── components/         ← 8 Components
+│   ├── MatrixBackground.astro
+│   ├── NFOBox.astro
+│   ├── Hero.astro
+│   ├── AboutSection.astro
+│   ├── ProjectCard.astro
+│   ├── ProjectsGrid.astro
+│   ├── ContactSection.astro
+│   └── Footer.astro
+│
+└── pages/
+    └── index.astro     ← 25 Zeilen statt 700+!
+```
 
----
+## ✅ Was du noch prüfen musst:
 
-**Steven Noack** | Entrepreneur | Tech Enthusiast | Privacy AI OS
+1. **Foto**: `/public/steven-noack.png` muss existieren
+2. **Favicon**: `/public/favicon.svg` muss existieren
+
+## 🔄 Rollback (falls nötig):
+
+```bash
+cd ~/dev/stevennoack.de
+cp src/pages/index.astro.BACKUP src/pages/index.astro
+```
+
+## 🚀 Deploy:
+
+```bash
+git add .
+git commit -m "Refactored to component-based architecture"
+git push origin main
+```
+
+Built with ❤️ and Matrix vibes!

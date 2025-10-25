@@ -1,0 +1,46 @@
+---
+/**
+ * About Section Component
+ * @description Stevens complete journey from 1986 to today
+ */
+
+import { aboutContent } from '@/data/about-content.js';
+---
+
+<section id="about" class="section">
+  <h2 class="section-title">{aboutContent.title}</h2>
+  <div class="about-content">
+    <p class="about-story">{aboutContent.story}</p>
+  </div>
+</section>
+
+<style>
+  .section {
+    padding: 4rem 0;
+    border-top: 1px solid var(--border-color);
+  }
+
+  .section-title {
+    font-size: clamp(2rem, 5vw, 3rem);
+    color: var(--matrix-green);
+    margin-bottom: 3rem;
+    font-weight: 700;
+  }
+
+  .about-content {
+    max-width: 800px;
+  }
+
+  .about-story {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    line-height: 1.8;
+    white-space: pre-line;
+  }
+
+  @media (max-width: 768px) {
+    .section {
+      padding: 3rem 0;
+    }
+  }
+</style>

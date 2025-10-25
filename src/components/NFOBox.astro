@@ -1,0 +1,186 @@
+---
+/**
+ * NFO Box Component
+ * @description ASCII Art box with CRT effect and typewriter animation
+ */
+import { nfoContent } from '@/data/nfo-content.js';
+
+interface Props {
+  speed?: number;
+  delay?: number;
+}
+
+const { speed = 10, delay = 300 } = Astro.props;
+const content = nfoContent;
+---
+
+<div class="nfo-container">
+  <div class="crt-screen">
+    <div class="scanline-1"></div>
+    <div class="scanline-2"></div>
+    <div class="scanline-3"></div>
+    <div class="noise"></div>
+    <div 
+      class="nfo-box" 
+      id="nfo-content"
+      data-content={content}
+      data-speed={speed}
+      data-delay={delay}
+    ></div>
+  </div>
+</div>
+
+<style>
+  .nfo-container {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  /* CRT Screen Effect */
+  .crt-screen {
+    position: relative;
+    background: rgba(0, 20, 0, 0.95);
+    border: 2px solid var(--matrix-green);
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 
+      0 0 60px rgba(0, 255, 65, 0.4),
+      inset 0 0 40px rgba(0, 255, 65, 0.15);
+    overflow: hidden;
+  }
+
+  /* Multiple Scanlines with Different Speeds */
+  .scanline-1,
+  .scanline-2,
+  .scanline-3 {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 255, 65, 0) 0%,
+      rgba(0, 255, 65, 0.9) 50%,
+      rgba(0, 255, 65, 0) 100%
+    );
+    pointer-events: none;
+    z-index: 100;
+  }
+
+  .scanline-1 {
+    animation: scanline-slow 4s linear infinite;
+    opacity: 0.7;
+  }
+
+  .scanline-2 {
+    animation: scanline-medium 6s linear infinite 2s;
+    opacity: 0.5;
+  }
+
+  .scanline-3 {
+    animation: scanline-fast 8s linear infinite 4s;
+    opacity: 0.4;
+  }
+
+  @keyframes scanline-slow {
+    0% { top: 0%; }
+    100% { top: 100%; }
+  }
+
+  @keyframes scanline-medium {
+    0% { top: 0%; }
+    100% { top: 100%; }
+  }
+
+  @keyframes scanline-fast {
+    0% { top: 0%; }
+    100% { top: 100%; }
+  }
+
+  /* CRT Screen Noise */
+  .noise {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.15) 0px,
+      rgba(0, 0, 0, 0.15) 1px,
+      transparent 1px,
+      transparent 2px
+    );
+    pointer-events: none;
+    opacity: 0.03;
+    z-index: 50;
+  }
+
+  /* CRT Flicker Effect */
+  .crt-screen::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 255, 65, 0.02);
+    animation: flicker 0.15s infinite;
+    pointer-events: none;
+  }
+
+  @keyframes flicker {
+    0% { opacity: 0.97; }
+    50% { opacity: 0.99; }
+    100% { opacity: 0.98; }
+  }
+
+  /* NFO Box ASCII */
+  .nfo-box {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+    line-height: 1.2;
+    white-space: pre;
+    color: var(--matrix-green);
+    text-shadow: 
+      0 0 5px rgba(0, 255, 65, 0.8),
+      0 0 10px rgba(0, 255, 65, 0.4);
+    overflow: hidden;
+    position: relative;
+    z-index: 10;
+  }
+
+  @media (max-width: 768px) {
+    .crt-screen {
+      padding: 1.5rem;
+    }
+    .nfo-box {
+      font-size: 11px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .crt-screen {
+      padding: 1rem;
+    }
+    .nfo-box {
+      font-size: 9px;
+    }
+  }
+</style>
+
+<script>
+  import { Typewriter } from '@/scripts/typewriter.js';
+  
+  const element = document.getElementById('nfo-content');
+  const content = element?.dataset.content || '';
+  const speed = parseInt(element?.dataset.speed || '10');
+  const delay = parseInt(element?.dataset.delay || '300');
+  
+  if (element && content) {
+    const typewriter = new Typewriter('nfo-content', content, { speed, delay });
+    typewriter.start();
+  }
+</script>

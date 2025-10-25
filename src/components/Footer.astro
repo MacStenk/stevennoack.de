@@ -1,0 +1,25 @@
+---
+/**
+ * Footer Component
+ * @description Site footer with copyright
+ */
+
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <p>
+    &copy; {currentYear} Steven Noack. Built with Astro. Self-hosted with pride.
+  </p>
+</footer>
+
+<style>
+  .footer {
+    text-align: center;
+    padding: 3rem 0;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    border-top: 1px solid var(--border-color);
+    margin-top: 4rem;
+  }
+</style>
