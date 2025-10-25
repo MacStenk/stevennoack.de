@@ -1,98 +1,193 @@
 ---
 /**
  * Project Card Component
- * @description Single project card
+ * @description Individual project card with Markdown content via slot
  */
-
 interface Props {
   title: string;
-  status: string;
-  description: string;
+  status: "Active" | "Building" | "Planned" | "Archived";
+  url?: string;
   techTags: string[];
 }
 
-const { title, status, description, techTags } = Astro.props;
+const { title, status, url, techTags } = Astro.props;
+
+const statusColors = {
+  Active: "var(--matrix-green)",
+  Building: "rgba(255, 200, 0, 0.9)",
+  Planned: "rgba(100, 150, 255, 0.9)",
+  Archived: "rgba(150, 150, 150, 0.7)",
+};
 ---
 
 <div class="project-card">
   <div class="project-header">
-    <h3>{title}</h3>
-    <span class="project-status">{status}</span>
+    <h3 class="project-title">
+      {
+        url ? (
+          <a href={url} target="_blank" rel="noopener noreferrer">
+            {title}
+          </a>
+        ) : (
+          title
+        )
+      }
+    </h3>
+    <span class="project-status" style={`color: ${statusColors[status]}`}>
+      [{status}]
+    </span>
   </div>
-  <p>{description}</p>
-  <div class="project-tech">
-    {techTags.map(tag => (
-      <span class="tech-tag">{tag}</span>
-    ))}
+
+  <div class="project-description">
+    <slot />
+  </div>
+
+  <div class="project-tags">
+    {techTags.map((tag) => <span class="tech-tag">{tag}</span>)}
   </div>
 </div>
 
 <style>
   .project-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border-color);
-    padding: 2rem;
+    background: rgba(23, 23, 23, 0.85);
+    border: 1px solid rgba(0, 255, 65, 0.3);
+    border-radius: 8px;
+    padding: 1.5rem;
     transition: all 0.3s ease;
+  }
+
+  .project-card {
     position: relative;
+    background: rgba(0, 20, 0, 0.85);
+    border: 1px solid rgba(0, 255, 65, 0.3);
+    border-radius: 8px;
+    padding: 1.5rem;
   }
 
   .project-card::before {
     content: "";
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background: var(--matrix-green);
-    transform: scaleX(0);
-    transition: transform 0.3s ease;
-  }
-
-  .project-card:hover {
-    border-color: var(--matrix-green);
-    transform: translateY(-5px);
+    inset: -2px;
+    border-radius: 8px;
+    padding: 2px;
+    background: linear-gradient(
+      45deg,
+      transparent,
+      var(--matrix-green),
+      transparent
+    );
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.4s;
   }
 
   .project-card:hover::before {
-    transform: scaleX(1);
+    opacity: 1;
+    animation: border-spin 2s linear infinite;
+  }
+
+  @keyframes border-spin {
+    to {
+      transform: rotate(360deg);
+    }
   }
 
   .project-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     margin-bottom: 1rem;
+    gap: 1rem;
   }
 
-  .project-card h3 {
-    font-size: 1.3rem;
+  .project-title {
+    font-size: 1.2rem;
     color: var(--matrix-green);
+    font-family: "Courier New", monospace;
+    margin: 0;
+    flex: 1;
+  }
+
+  .project-title a {
+    color: var(--matrix-green);
+    text-decoration: none;
+    text-shadow: 0 0 5px rgba(0, 255, 65, 0.5);
+    transition: all 0.3s ease;
+  }
+
+  .project-title a:hover {
+    text-shadow: 0 0 10px rgba(0, 255, 65, 0.8);
+    text-decoration: none;
   }
 
   .project-status {
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-    border: 1px solid var(--border-color);
-    padding: 0.25rem 0.75rem;
+    font-size: 0.85rem;
+    font-family: "Courier New", monospace;
+    font-weight: bold;
+    white-space: nowrap;
   }
 
-  .project-card p {
-    color: var(--text-secondary);
-    margin-bottom: 1.5rem;
+  .project-description {
+    ccolor: rgba(200, 200, 200, 0.85);
+    font-family: "Courier New", monospace;
     font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
   }
 
-  .project-tech {
+  /* Style Markdown content in slot */
+  .project-description :global(p) {
+    margin-bottom: 0.8rem;
+  }
+
+  .project-description :global(strong) {
+    color: rgba(220, 220, 220, 1);
+    font-weight: bold;
+  }
+
+  .project-description :global(p:last-child) {
+    margin-bottom: 0;
+  }
+
+  .project-tags {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
   }
 
   .tech-tag {
-    font-size: 0.75rem;
-    color: var(--matrix-green);
-    border: 1px solid var(--matrix-green);
-    padding: 0.25rem 0.75rem;
     background: rgba(0, 255, 65, 0.1);
+    color: rgba(0, 255, 65, 0.9);
+    padding: 0.3rem 0.8rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-family: "Courier New", monospace;
+    border: 1px solid rgba(0, 255, 65, 0.2);
+  }
+
+  @media (max-width: 768px) {
+    .project-card {
+      padding: 1.2rem;
+    }
+
+    .project-header {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .project-title {
+      font-size: 1.1rem;
+    }
+
+    .project-description {
+      font-size: 0.9rem;
+    }
   }
 </style>

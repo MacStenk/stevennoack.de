@@ -4,13 +4,14 @@
  * @description Main landing page - Clean component-based structure
  */
 
-import BaseLayout from '@/layouts/BaseLayout.astro';
-import MatrixBackground from '@/components/MatrixBackground.astro';
-import Hero from '@/components/Hero.astro';
-import AboutSection from '@/components/AboutSection.astro';
-import ProjectsGrid from '@/components/ProjectsGrid.astro';
-import ContactSection from '@/components/ContactSection.astro';
-import Footer from '@/components/Footer.astro';
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import MatrixBackground from "@/components/MatrixBackground.astro";
+import Hero from "@/components/Hero.astro";
+import AboutSection from "@/components/AboutSection.astro";
+import ProjectsGrid from "@/components/ProjectsGrid.astro";
+import ContactSection from "@/components/ContactSection.astro";
+import Footer from "@/components/Footer.astro";
+import BackgroundAudio from "@/components/BackgroundAudio.astro";
 ---
 
 <BaseLayout>
@@ -21,5 +22,12 @@ import Footer from '@/components/Footer.astro';
     <ProjectsGrid />
     <ContactSection />
     <Footer />
+
+    <!-- Background Audio - unten hinzufügen -->
+    <BackgroundAudio
+      audioUrl="/audio/techno-loop.m4a"
+      initialVolume={0.15}
+      autoplay={true}
+    />
   </div>
 </BaseLayout>

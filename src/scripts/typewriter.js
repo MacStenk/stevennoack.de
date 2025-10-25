@@ -10,8 +10,8 @@ export class Typewriter {
     if (!this.element) return;
     
     this.content = content;
-    this.speed = options.speed || 10;
-    this.delay = options.delay || 300;
+    this.speed = options.speed || 25;
+    this.delay = options.delay || 0;
     this.charIndex = 0;
     this.isRunning = false;
     this.onComplete = options.onComplete || null;

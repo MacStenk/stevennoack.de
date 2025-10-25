@@ -2,16 +2,29 @@
 /**
  * NFO Box Component
  * @description ASCII Art box with CRT effect and typewriter animation
+ * Now reads from Markdown Content Collection!
  */
-import { nfoContent } from '@/data/nfo-content.js';
+import { getEntry } from "astro:content";
 
 interface Props {
   speed?: number;
   delay?: number;
 }
 
-const { speed = 10, delay = 300 } = Astro.props;
-const content = nfoContent;
+const { speed, delay } = Astro.props;
+
+// Load NFO content from Content Collection
+const nfoEntry = await getEntry("nfo", "content");
+const { Content } = await nfoEntry.render();
+
+// Use frontmatter values or props
+const typewriterSpeed = speed ?? nfoEntry.data.typewriterSpeed;
+const typewriterDelay = delay ?? nfoEntry.data.typewriterDelay;
+
+// Extract the code block content (ASCII art)
+const rawContent = nfoEntry.body;
+const codeBlockMatch = rawContent.match(/```\n([\s\S]*?)\n```/);
+const asciiArt = codeBlockMatch ? codeBlockMatch[1] : rawContent;
 ---
 
 <div class="nfo-container">
@@ -20,13 +33,14 @@ const content = nfoContent;
     <div class="scanline-2"></div>
     <div class="scanline-3"></div>
     <div class="noise"></div>
-    <div 
-      class="nfo-box" 
+    <div
+      class="nfo-box"
       id="nfo-content"
-      data-content={content}
-      data-speed={speed}
-      data-delay={delay}
-    ></div>
+      data-content={asciiArt}
+      data-speed={typewriterSpeed}
+      data-delay={typewriterDelay}
+    >
+    </div>
   </div>
 </div>
 
@@ -45,7 +59,7 @@ const content = nfoContent;
     border: 2px solid var(--matrix-green);
     border-radius: 12px;
     padding: 2rem;
-    box-shadow: 
+    box-shadow:
       0 0 60px rgba(0, 255, 65, 0.4),
       inset 0 0 40px rgba(0, 255, 65, 0.15);
     overflow: hidden;
@@ -85,18 +99,30 @@ const content = nfoContent;
   }
 
   @keyframes scanline-slow {
-    0% { top: 0%; }
-    100% { top: 100%; }
+    0% {
+      top: 0%;
+    }
+    100% {
+      top: 100%;
+    }
   }
 
   @keyframes scanline-medium {
-    0% { top: 0%; }
-    100% { top: 100%; }
+    0% {
+      top: 0%;
+    }
+    100% {
+      top: 100%;
+    }
   }
 
   @keyframes scanline-fast {
-    0% { top: 0%; }
-    100% { top: 100%; }
+    0% {
+      top: 0%;
+    }
+    100% {
+      top: 100%;
+    }
   }
 
   /* CRT Screen Noise */
@@ -120,7 +146,7 @@ const content = nfoContent;
 
   /* CRT Flicker Effect */
   .crt-screen::after {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
@@ -132,21 +158,27 @@ const content = nfoContent;
   }
 
   @keyframes flicker {
-    0% { opacity: 0.97; }
-    50% { opacity: 0.99; }
-    100% { opacity: 0.98; }
+    0% {
+      opacity: 0.97;
+    }
+    50% {
+      opacity: 0.99;
+    }
+    100% {
+      opacity: 0.98;
+    }
   }
 
   /* NFO Box ASCII */
   .nfo-box {
-    font-family: 'Courier New', Courier, monospace;
+    font-family: "Courier New", Courier, monospace;
     font-size: 14px;
     line-height: 1.2;
     white-space: pre;
     color: var(--matrix-green);
-    text-shadow: 
+    text-shadow:
       0 0 5px rgba(0, 255, 65, 0.8),
-      0 0 10px rgba(0, 255, 65, 0.4);
+      0 0 10px rgba(180, 180, 180, 0.4);
     overflow: hidden;
     position: relative;
     z-index: 10;
@@ -172,15 +204,15 @@ const content = nfoContent;
 </style>
 
 <script>
-  import { Typewriter } from '@/scripts/typewriter.js';
-  
-  const element = document.getElementById('nfo-content');
-  const content = element?.dataset.content || '';
-  const speed = parseInt(element?.dataset.speed || '10');
-  const delay = parseInt(element?.dataset.delay || '300');
-  
+  import { Typewriter } from "@/scripts/typewriter.js";
+
+  const element = document.getElementById("nfo-content");
+  const content = element?.dataset.content || "";
+  const speed = parseInt(element?.dataset.speed || "10");
+  const delay = parseInt(element?.dataset.delay || "300");
+
   if (element && content) {
-    const typewriter = new Typewriter('nfo-content', content, { speed, delay });
+    const typewriter = new Typewriter("nfo-content", content, { speed, delay });
     typewriter.start();
   }
 </script>
