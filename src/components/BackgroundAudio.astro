@@ -1,186 +1,214 @@
 ---
 /**
- * Background Audio Component - Muted Autoplay Version
- * @description Ambient background music with muted autoplay and unmute controls
+ * Background Audio Component - iOS Compatible Version
+ * @description Audio player with proper iOS/Mobile Safari support
+ * 
+ * Features:
+ * - User-interaction triggered audio (iOS requirement)
+ * - Touch event support for mobile
+ * - Multiple audio format support
+ * - Visual feedback for interaction needed
+ * - Silent Mode detection
+ * - Graceful error handling
  */
+
 interface Props {
   audioUrl: string;
+  audioUrlOgg?: string;  // Optional OGG fallback
+  audioUrlM4a?: string;  // Optional M4A for iOS (preferred)
   initialVolume?: number;
 }
 
-const {
-  audioUrl,
-  initialVolume = 0.15, // 15% Volume when unmuted
+const { 
+  audioUrl,        // MP3 version
+  audioUrlOgg,     // OGG fallback
+  audioUrlM4a,     // M4A for iOS (best compatibility)
+  initialVolume = 0.15  // 15% Volume when unmuted
 } = Astro.props;
 ---
 
 <div class="audio-controls" id="audio-controls">
-  <button id="mute-toggle" class="audio-btn pulse" aria-label="Unmute/Mute">
+  <!-- Start Audio Hint (visible until user interacts) -->
+  <div class="audio-start-hint" id="audio-start-hint">
+    <button id="start-audio-btn" class="start-audio-button">
+      <span class="tap-icon">👆</span>
+      <span class="hint-text">Tap to enable audio</span>
+    </button>
+  </div>
+
+  <!-- Mute/Unmute Button (visible after audio starts) -->
+  <button id="mute-toggle" class="audio-btn pulse" aria-label="Unmute" style="display: none;">
     <span class="icon muted-icon">🔇</span>
     <span class="icon unmuted-icon" style="display: none;">🔊</span>
   </button>
-
+  
+  <!-- Volume Control (appears after unmute) -->
   <div class="volume-control" id="volume-control" style="display: none;">
-    <input
-      type="range"
-      id="volume-slider"
+    <input 
+      type="range" 
+      id="volume-slider" 
       class="volume-slider"
-      min="0"
-      max="100"
+      min="0" 
+      max="100" 
       value={initialVolume * 100}
-      aria-label="Volume"
     />
-    <span id="volume-value" class="volume-value"
-      >{Math.round(initialVolume * 100)}%</span
-    >
+    <span id="volume-value">{Math.round(initialVolume * 100)}%</span>
   </div>
 
-  <div class="audio-hint" id="audio-hint">
-    <span class="hint-text">Click to enable sound</span>
+  <!-- Status Messages -->
+  <div class="audio-status" id="audio-status" style="display: none;">
+    <span id="status-text"></span>
   </div>
 </div>
 
-<audio
-  id="background-audio"
-  loop
+<!-- Audio Element with multiple format support -->
+<audio 
+  id="background-audio" 
+  loop 
   preload="auto"
   muted
   data-initial-volume={initialVolume}
 >
+  <!-- iOS bevorzugt M4A (AAC codec) -->
+  {audioUrlM4a && <source src={audioUrlM4a} type="audio/mp4" />}
+  
+  <!-- Standard MP3 -->
   <source src={audioUrl} type="audio/mpeg" />
-  Your browser does not support the audio element.
+  
+  <!-- OGG Fallback für Firefox -->
+  {audioUrlOgg && <source src={audioUrlOgg} type="audio/ogg" />}
 </audio>
 
 <style>
   .audio-controls {
     position: fixed;
-    bottom: 2rem; /* Abstand von unten */
-    right: 2rem; /* Abstand von rechts */
-    /* Für links: */
-    /* left: 2rem; */
-    /* right: auto; */
+    bottom: 2rem;
+    right: 2rem;
     display: flex;
     align-items: center;
     gap: 1rem;
-    background: rgba(0, 20, 0, 0.95);
-    border: 1px solid var(--matrix-green);
-    border-radius: 8px;
-    padding: 0.8rem 1.2rem;
-    box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
     z-index: 1000;
-    backdrop-filter: blur(10px);
   }
 
-  .audio-btn {
+  /* Start Audio Hint */
+  .audio-start-hint {
+    background: rgba(0, 20, 0, 0.98);
+    border: 2px solid var(--matrix-green, #00ff41);
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+    box-shadow: 
+      0 0 30px rgba(0, 255, 65, 0.4),
+      inset 0 0 20px rgba(0, 255, 65, 0.1);
+    backdrop-filter: blur(10px);
+    animation: gentle-pulse 2s ease-in-out infinite;
+  }
+
+  .start-audio-button {
     background: none;
-    border: 1px solid var(--matrix-green);
-    color: var(--matrix-green);
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
+    border: none;
+    color: var(--matrix-green, #00ff41);
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: 'Courier New', monospace;
+    font-size: 1rem;
+    padding: 0;
+    transition: all 0.3s ease;
+  }
+
+  .start-audio-button:hover {
+    transform: scale(1.05);
+    filter: brightness(1.2);
+  }
+
+  .start-audio-button:active {
+    transform: scale(0.95);
+  }
+
+  .tap-icon {
+    font-size: 1.5rem;
+    animation: tap-bounce 1.5s ease-in-out infinite;
+  }
+
+  .hint-text {
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+  }
+
+  /* Main Control Container (after audio started) */
+  .audio-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid var(--matrix-green, #00ff41);
+    background: rgba(0, 20, 0, 0.95);
+    color: var(--matrix-green, #00ff41);
+    cursor: pointer;
+    font-size: 22px;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: all 0.3s ease;
-    font-size: 20px;
     position: relative;
+    box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+    backdrop-filter: blur(10px);
   }
 
   .audio-btn:hover {
-    background: rgba(0, 255, 65, 0.1);
-    box-shadow: 0 0 15px rgba(0, 255, 65, 0.6);
+    transform: scale(1.1);
+    box-shadow: 0 0 30px rgba(0, 255, 65, 0.5);
   }
 
   .audio-btn:active {
     transform: scale(0.95);
   }
 
-  /* Pulse Animation für Unmute Button */
+  /* Pulse Animation (when muted) */
   .audio-btn.pulse {
-    animation: pulse 2s ease-in-out infinite;
+    animation: pulse-glow 2s ease-in-out infinite;
   }
 
-  @keyframes pulse {
-    0%,
-    100% {
-      box-shadow: 0 0 10px rgba(0, 255, 65, 0.4);
-    }
-    50% {
-      box-shadow: 0 0 20px rgba(0, 255, 65, 0.7);
-    }
-  }
-
-  .audio-btn.pulse::after {
-    content: "";
+  .audio-btn.pulse::before {
+    content: '';
     position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     width: 100%;
     height: 100%;
     border-radius: 50%;
-    border: 2px solid var(--matrix-green);
+    background: radial-gradient(circle, rgba(0, 255, 65, 0.3) 0%, transparent 70%);
     animation: ripple 2s ease-out infinite;
   }
 
-  @keyframes ripple {
-    0% {
-      transform: scale(1);
-      opacity: 1;
-    }
-    100% {
-      transform: scale(1.5);
-      opacity: 0;
-    }
-  }
-
-  .icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .audio-hint {
-    font-family: "Courier New", monospace;
-    color: var(--matrix-green);
-    font-size: 12px;
-    white-space: nowrap;
-    opacity: 0.9;
-    animation: hint-fade 3s ease-in-out infinite;
-  }
-
-  @keyframes hint-fade {
-    0%,
-    100% {
-      opacity: 0.6;
-    }
-    50% {
-      opacity: 1;
-    }
-  }
-
+  /* Volume Control */
   .volume-control {
     display: flex;
     align-items: center;
-    gap: 0.8rem;
-    animation: slideIn 0.3s ease-out;
-  }
-
-  @keyframes slideIn {
-    from {
-      opacity: 0;
-      transform: translateX(-10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
+    gap: 0.75rem;
+    background: rgba(0, 20, 0, 0.95);
+    border: 1px solid var(--matrix-green, #00ff41);
+    border-radius: 20px;
+    padding: 0.5rem 1rem;
+    box-shadow: 0 0 15px rgba(0, 255, 65, 0.2);
+    backdrop-filter: blur(10px);
+    animation: slide-in 0.3s ease-out;
   }
 
   .volume-slider {
-    width: 100px;
+    width: 80px;
     height: 4px;
     -webkit-appearance: none;
     appearance: none;
-    background: rgba(0, 255, 65, 0.2);
+    background: linear-gradient(
+      to right,
+      var(--matrix-green, #00ff41) 0%,
+      var(--matrix-green, #00ff41) calc(var(--value, 15) * 1%),
+      rgba(0, 255, 65, 0.2) calc(var(--value, 15) * 1%),
+      rgba(0, 255, 65, 0.2) 100%
+    );
     border-radius: 2px;
     outline: none;
     cursor: pointer;
@@ -191,166 +219,320 @@ const {
     appearance: none;
     width: 14px;
     height: 14px;
-    background: var(--matrix-green);
     border-radius: 50%;
+    background: var(--matrix-green, #00ff41);
     cursor: pointer;
-    box-shadow: 0 0 5px rgba(0, 255, 65, 0.8);
+    box-shadow: 0 0 8px rgba(0, 255, 65, 0.6);
+    transition: all 0.2s ease;
+  }
+
+  .volume-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 12px rgba(0, 255, 65, 0.8);
   }
 
   .volume-slider::-moz-range-thumb {
     width: 14px;
     height: 14px;
-    background: var(--matrix-green);
     border-radius: 50%;
+    background: var(--matrix-green, #00ff41);
     cursor: pointer;
     border: none;
-    box-shadow: 0 0 5px rgba(0, 255, 65, 0.8);
+    box-shadow: 0 0 8px rgba(0, 255, 65, 0.6);
   }
 
-  .volume-slider:hover::-webkit-slider-thumb {
-    box-shadow: 0 0 10px rgba(0, 255, 65, 1);
-  }
-
-  .volume-slider:hover::-moz-range-thumb {
-    box-shadow: 0 0 10px rgba(0, 255, 65, 1);
-  }
-
-  .volume-value {
-    font-family: "Courier New", monospace;
-    color: var(--matrix-green);
-    font-size: 12px;
-    min-width: 35px;
+  #volume-value {
+    font-family: 'Courier New', monospace;
+    font-size: 0.85rem;
+    color: var(--matrix-green, #00ff41);
+    min-width: 40px;
     text-align: right;
   }
 
+  /* Status Messages */
+  .audio-status {
+    background: rgba(0, 20, 0, 0.95);
+    border: 1px solid var(--matrix-green, #00ff41);
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85rem;
+    color: var(--matrix-green, #00ff41);
+    box-shadow: 0 0 15px rgba(0, 255, 65, 0.2);
+    animation: fade-in 0.3s ease-out;
+  }
+
+  /* Animations */
+  @keyframes gentle-pulse {
+    0%, 100% {
+      box-shadow: 
+        0 0 30px rgba(0, 255, 65, 0.4),
+        inset 0 0 20px rgba(0, 255, 65, 0.1);
+    }
+    50% {
+      box-shadow: 
+        0 0 40px rgba(0, 255, 65, 0.6),
+        inset 0 0 30px rgba(0, 255, 65, 0.2);
+    }
+  }
+
+  @keyframes tap-bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% {
+      box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+    }
+    50% {
+      box-shadow: 0 0 30px rgba(0, 255, 65, 0.6);
+    }
+  }
+
+  @keyframes ripple {
+    0% {
+      width: 100%;
+      height: 100%;
+      opacity: 1;
+    }
+    100% {
+      width: 200%;
+      height: 200%;
+      opacity: 0;
+    }
+  }
+
+  @keyframes slide-in {
+    from {
+      opacity: 0;
+      transform: translateX(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* Mobile Optimization */
   @media (max-width: 768px) {
     .audio-controls {
       bottom: 1rem;
       right: 1rem;
-      padding: 0.6rem 1rem;
-      gap: 0.8rem;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+
+    .audio-start-hint {
+      padding: 0.75rem 1rem;
+    }
+
+    .hint-text {
+      font-size: 0.9rem;
     }
 
     .audio-btn {
-      width: 40px;
-      height: 40px;
-      font-size: 18px;
-    }
-
-    .audio-hint {
-      font-size: 11px;
-    }
-
-    .volume-slider {
-      width: 80px;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .audio-controls {
-      flex-direction: column;
-      gap: 0.6rem;
-      padding: 0.8rem;
+      width: 48px;
+      height: 48px;
+      font-size: 20px;
     }
 
     .volume-control {
-      width: 100%;
-      justify-content: space-between;
+      padding: 0.4rem 0.8rem;
     }
 
     .volume-slider {
-      flex: 1;
+      width: 60px;
     }
+  }
 
-    .audio-hint {
-      font-size: 10px;
+  /* Reduce Motion for Accessibility */
+  @media (prefers-reduced-motion: reduce) {
+    .audio-start-hint,
+    .audio-btn.pulse,
+    .tap-icon {
+      animation: none;
     }
   }
 </style>
 
 <script>
-  // Muted Autoplay Audio Controls
-  const audio = document.getElementById("background-audio") as HTMLAudioElement;
-  const muteToggleBtn = document.getElementById("mute-toggle");
-  const mutedIcon = document.querySelector(".muted-icon") as HTMLElement;
-  const unmutedIcon = document.querySelector(".unmuted-icon") as HTMLElement;
-  const volumeControl = document.getElementById(
-    "volume-control"
-  ) as HTMLElement;
-  const audioHint = document.getElementById("audio-hint") as HTMLElement;
-  const volumeSlider = document.getElementById(
-    "volume-slider"
-  ) as HTMLInputElement;
-  const volumeValue = document.getElementById("volume-value") as HTMLElement;
+  // iOS Audio Implementation with proper unlock pattern
+  
+  let audioStarted = false;
+  let isMuted = true;
+  let audio: HTMLAudioElement | null = null;
+  
+  // Elements
+  const audioElement = document.getElementById('background-audio') as HTMLAudioElement;
+  const startHint = document.getElementById('audio-start-hint') as HTMLElement;
+  const startBtn = document.getElementById('start-audio-btn') as HTMLButtonElement;
+  const muteToggle = document.getElementById('mute-toggle') as HTMLButtonElement;
+  const volumeControl = document.getElementById('volume-control') as HTMLElement;
+  const volumeSlider = document.getElementById('volume-slider') as HTMLInputElement;
+  const volumeValue = document.getElementById('volume-value') as HTMLElement;
+  const statusDiv = document.getElementById('audio-status') as HTMLElement;
+  const statusText = document.getElementById('status-text') as HTMLElement;
+  
+  const mutedIcon = muteToggle?.querySelector('.muted-icon') as HTMLElement;
+  const unmutedIcon = muteToggle?.querySelector('.unmuted-icon') as HTMLElement;
+  
+  const initialVolume = parseFloat(audioElement?.dataset.initialVolume || '0.15');
 
-  if (audio && muteToggleBtn && volumeSlider) {
-    const initialVolume = parseFloat(audio.dataset.initialVolume || "0.15");
-    let isMuted = true;
+  // Show status message temporarily
+  function showStatus(message: string, duration = 3000) {
+    if (!statusDiv || !statusText) return;
+    statusText.textContent = message;
+    statusDiv.style.display = 'block';
+    setTimeout(() => {
+      statusDiv.style.display = 'none';
+    }, duration);
+  }
 
-    // Start muted autoplay
-    audio.muted = true;
-    audio.volume = initialVolume;
+  // Update volume slider visual state
+  function updateVolumeSlider() {
+    if (!volumeSlider || !audio) return;
+    const value = audio.volume * 100;
+    volumeSlider.style.setProperty('--value', value.toString());
+  }
 
-    // Try to start playback (muted autoplay is always allowed)
-    const playPromise = audio.play();
+  // Update button state
+  function updateButton() {
+    if (!muteToggle || !mutedIcon || !unmutedIcon) return;
+    
+    if (isMuted) {
+      mutedIcon.style.display = 'inline';
+      unmutedIcon.style.display = 'none';
+      muteToggle.classList.add('pulse');
+      muteToggle.setAttribute('aria-label', 'Unmute');
+    } else {
+      mutedIcon.style.display = 'none';
+      unmutedIcon.style.display = 'inline';
+      muteToggle.classList.remove('pulse');
+      muteToggle.setAttribute('aria-label', 'Mute');
+    }
+  }
 
-    if (playPromise !== undefined) {
-      playPromise.catch(() => {
-        console.log("Autoplay failed, waiting for user interaction");
+  // iOS Audio Unlock - THE CRITICAL FUNCTION
+  async function unlockAudio() {
+    if (audioStarted || !audioElement) return;
+    
+    try {
+      console.log('🎵 Attempting to unlock audio...');
+      
+      // iOS requires this exact sequence:
+      // 1. Set to muted
+      audioElement.muted = true;
+      audioElement.volume = initialVolume;
+      
+      // 2. Try to play
+      const playPromise = audioElement.play();
+      
+      if (playPromise !== undefined) {
+        await playPromise;
+        
+        // Success!
+        audioStarted = true;
+        audio = audioElement;
+        console.log('✅ Audio unlocked successfully!');
+        
+        // Hide start hint
+        if (startHint) startHint.style.display = 'none';
+        
+        // Show mute button
+        if (muteToggle) muteToggle.style.display = 'flex';
+        
+        // Show success message
+        showStatus('🎵 Audio ready! Click 🔇 to unmute');
+        
+        updateButton();
+        updateVolumeSlider();
+        
+      }
+    } catch (error: any) {
+      console.error('❌ Audio unlock failed:', error);
+      
+      // Provide helpful error messages
+      if (error.name === 'NotAllowedError') {
+        showStatus('⚠️ Please enable sound in your device settings', 5000);
+      } else if (error.name === 'NotSupportedError') {
+        showStatus('⚠️ Audio format not supported on this device', 5000);
+      } else {
+        showStatus('⚠️ Could not start audio. Check device settings.', 5000);
+      }
+    }
+  }
+
+  // Start button click handler
+  startBtn?.addEventListener('click', (e) => {
+    e.preventDefault();
+    unlockAudio();
+  });
+
+  // IMPORTANT: Also listen to touch events for mobile
+  startBtn?.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    unlockAudio();
+  }, { passive: false });
+
+  // Mute/Unmute toggle
+  muteToggle?.addEventListener('click', () => {
+    if (!audio) return;
+    
+    isMuted = !isMuted;
+    audio.muted = isMuted;
+    
+    if (!isMuted) {
+      // Unmuted - show volume control
+      volumeControl.style.display = 'flex';
+    } else {
+      // Muted - hide volume control
+      volumeControl.style.display = 'none';
+    }
+    
+    updateButton();
+  });
+
+  // Volume slider control
+  volumeSlider?.addEventListener('input', (e) => {
+    if (!audio) return;
+    const target = e.target as HTMLInputElement;
+    const volume = parseInt(target.value) / 100;
+    audio.volume = volume;
+    volumeValue.textContent = `${Math.round(volume * 100)}%`;
+    updateVolumeSlider();
+  });
+
+  // Detect iOS Silent Mode (best effort)
+  // Note: This is not 100% reliable, but provides helpful feedback
+  if (audioElement) {
+    audioElement.addEventListener('error', (e) => {
+      console.error('Audio error:', e);
+      showStatus('⚠️ Audio error. Check device volume/silent mode.', 5000);
+    });
+  }
+
+  // Auto-attempt unlock on any user interaction (fallback)
+  // This helps on some devices that need interaction before play()
+  let hasTriedAutoUnlock = false;
+  function attemptAutoUnlock() {
+    if (!hasTriedAutoUnlock && !audioStarted) {
+      hasTriedAutoUnlock = true;
+      // Don't await - just trigger it
+      unlockAudio().catch(() => {
+        // Silent fail - user can still use the button
       });
     }
-
-    // Mute/Unmute toggle
-    muteToggleBtn.addEventListener("click", () => {
-      if (isMuted) {
-        // Unmute
-        audio.muted = false;
-        isMuted = false;
-
-        // Update UI
-        mutedIcon.style.display = "none";
-        unmutedIcon.style.display = "flex";
-        muteToggleBtn.classList.remove("pulse");
-        volumeControl.style.display = "flex";
-        audioHint.style.display = "none";
-
-        // Ensure audio is playing
-        if (audio.paused) {
-          audio.play();
-        }
-      } else {
-        // Mute
-        audio.muted = true;
-        isMuted = true;
-
-        // Update UI
-        mutedIcon.style.display = "flex";
-        unmutedIcon.style.display = "none";
-        muteToggleBtn.classList.add("pulse");
-        volumeControl.style.display = "none";
-        audioHint.style.display = "block";
-      }
-    });
-
-    // Volume control
-    volumeSlider.addEventListener("input", (e) => {
-      const target = e.target as HTMLInputElement;
-      const volume = parseInt(target.value) / 100;
-      audio.volume = volume;
-      volumeValue.textContent = `${target.value}%`;
-    });
-
-    // Hide hint after 10 seconds if still muted
-    setTimeout(() => {
-      if (isMuted && audioHint) {
-        audioHint.style.transition = "opacity 1s ease-out";
-        audioHint.style.opacity = "0";
-        setTimeout(() => {
-          if (isMuted) {
-            audioHint.style.display = "none";
-          }
-        }, 1000);
-      }
-    }, 10000);
   }
+
+  // Listen for any interaction as fallback
+  document.addEventListener('click', attemptAutoUnlock, { once: true });
+  document.addEventListener('touchstart', attemptAutoUnlock, { once: true, passive: true });
+
+  console.log('🎵 Background Audio Component loaded (iOS-compatible mode)');
 </script>
