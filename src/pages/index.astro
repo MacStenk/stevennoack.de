@@ -11,7 +11,6 @@ import AboutSection from "@/components/AboutSection.astro";
 import ProjectsGrid from "@/components/ProjectsGrid.astro";
 import ContactSection from "@/components/ContactSection.astro";
 import Footer from "@/components/Footer.astro";
-import BackgroundAudio from "@/components/BackgroundAudio.astro";
 ---
 
 <BaseLayout>
@@ -22,12 +21,5 @@ import BackgroundAudio from "@/components/BackgroundAudio.astro";
     <ProjectsGrid />
     <ContactSection />
     <Footer />
-
-    <!-- Background Audio - unten hinzufügen -->
-    <BackgroundAudio
-      audioUrl="/audio/techno-loop.m4a"
-      initialVolume={0.15}
-      autoplay={true}
-    />
   </div>
 </BaseLayout>
