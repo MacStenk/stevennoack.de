@@ -14,6 +14,10 @@ import { nfoContent } from '@/data/nfo-content.js';
   </div>
 
   <NFOBox content={nfoContent} speed={10} delay={300} />
+
+  <a href="/blog" class="blog-button">
+    <span class="button-text">→ Blog</span>
+  </a>
 </section>
 
 <style>
@@ -52,6 +56,51 @@ import { nfoContent } from '@/data/nfo-content.js';
     }
   }
 
+  /* Blog Button */
+  .blog-button {
+    display: inline-block;
+    margin-top: 2rem;
+    padding: 1rem 2rem;
+    background: transparent;
+    border: 2px solid var(--matrix-green);
+    color: var(--matrix-green);
+    font-family: 'Courier New', monospace;
+    font-size: 1.2rem;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .blog-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: var(--matrix-green);
+    transition: left 0.3s ease;
+    z-index: -1;
+  }
+
+  .blog-button:hover {
+    color: #000;
+    box-shadow: 0 0 20px var(--matrix-green);
+  }
+
+  .blog-button:hover::before {
+    left: 0;
+  }
+
+  .button-text {
+    position: relative;
+    z-index: 1;
+  }
+
   @media (max-width: 768px) {
     .hero {
       padding: 2rem 0;
@@ -60,6 +109,12 @@ import { nfoContent } from '@/data/nfo-content.js';
     .hero-photo {
       width: 150px;
       height: 150px;
+    }
+
+    .blog-button {
+      font-size: 1rem;
+      padding: 0.8rem 1.5rem;
+      margin-top: 1.5rem;
     }
   }
 </style>
