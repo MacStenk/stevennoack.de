@@ -82,8 +82,8 @@ export type Query = {
   collections: Array<Collection>;
   node: Node;
   document: DocumentNode;
-  posts: Posts;
-  postsConnection: PostsConnection;
+  blog: Blog;
+  blogConnection: BlogConnection;
 };
 
 
@@ -108,22 +108,22 @@ export type QueryDocumentArgs = {
 };
 
 
-export type QueryPostsArgs = {
+export type QueryBlogArgs = {
   relativePath?: InputMaybe<Scalars['String']['input']>;
 };
 
 
-export type QueryPostsConnectionArgs = {
+export type QueryBlogConnectionArgs = {
   before?: InputMaybe<Scalars['String']['input']>;
   after?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Float']['input']>;
   last?: InputMaybe<Scalars['Float']['input']>;
   sort?: InputMaybe<Scalars['String']['input']>;
-  filter?: InputMaybe<PostsFilter>;
+  filter?: InputMaybe<BlogFilter>;
 };
 
 export type DocumentFilter = {
-  posts?: InputMaybe<PostsFilter>;
+  blog?: InputMaybe<BlogFilter>;
 };
 
 export type DocumentConnectionEdges = {
@@ -163,10 +163,10 @@ export type CollectionDocumentsArgs = {
   folder?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type DocumentNode = Posts | Folder;
+export type DocumentNode = Blog | Folder;
 
-export type Posts = Node & Document & {
-  __typename?: 'Posts';
+export type Blog = Node & Document & {
+  __typename?: 'Blog';
   title: Scalars['String']['output'];
   description?: Maybe<Scalars['String']['output']>;
   pubDate: Scalars['String']['output'];
@@ -197,7 +197,7 @@ export type RichTextFilter = {
   exists?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
-export type PostsFilter = {
+export type BlogFilter = {
   title?: InputMaybe<StringFilter>;
   description?: InputMaybe<StringFilter>;
   pubDate?: InputMaybe<StringFilter>;
@@ -207,17 +207,17 @@ export type PostsFilter = {
   body?: InputMaybe<RichTextFilter>;
 };
 
-export type PostsConnectionEdges = {
-  __typename?: 'PostsConnectionEdges';
+export type BlogConnectionEdges = {
+  __typename?: 'BlogConnectionEdges';
   cursor: Scalars['String']['output'];
-  node?: Maybe<Posts>;
+  node?: Maybe<Blog>;
 };
 
-export type PostsConnection = Connection & {
-  __typename?: 'PostsConnection';
+export type BlogConnection = Connection & {
+  __typename?: 'BlogConnection';
   pageInfo: PageInfo;
   totalCount: Scalars['Float']['output'];
-  edges?: Maybe<Array<Maybe<PostsConnectionEdges>>>;
+  edges?: Maybe<Array<Maybe<BlogConnectionEdges>>>;
 };
 
 export type Mutation = {
@@ -227,8 +227,8 @@ export type Mutation = {
   deleteDocument: DocumentNode;
   createDocument: DocumentNode;
   createFolder: DocumentNode;
-  updatePosts: Posts;
-  createPosts: Posts;
+  updateBlog: Blog;
+  createBlog: Blog;
 };
 
 
@@ -265,27 +265,27 @@ export type MutationCreateFolderArgs = {
 };
 
 
-export type MutationUpdatePostsArgs = {
+export type MutationUpdateBlogArgs = {
   relativePath: Scalars['String']['input'];
-  params: PostsMutation;
+  params: BlogMutation;
 };
 
 
-export type MutationCreatePostsArgs = {
+export type MutationCreateBlogArgs = {
   relativePath: Scalars['String']['input'];
-  params: PostsMutation;
+  params: BlogMutation;
 };
 
 export type DocumentUpdateMutation = {
-  posts?: InputMaybe<PostsMutation>;
+  blog?: InputMaybe<BlogMutation>;
   relativePath?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type DocumentMutation = {
-  posts?: InputMaybe<PostsMutation>;
+  blog?: InputMaybe<BlogMutation>;
 };
 
-export type PostsMutation = {
+export type BlogMutation = {
   title?: InputMaybe<Scalars['String']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
   pubDate?: InputMaybe<Scalars['String']['input']>;
@@ -295,29 +295,29 @@ export type PostsMutation = {
   body?: InputMaybe<Scalars['JSON']['input']>;
 };
 
-export type PostsPartsFragment = { __typename: 'Posts', title: string, description?: string | null, pubDate: string, author?: string | null, tags?: Array<string | null> | null, draft?: boolean | null, body?: any | null };
+export type BlogPartsFragment = { __typename: 'Blog', title: string, description?: string | null, pubDate: string, author?: string | null, tags?: Array<string | null> | null, draft?: boolean | null, body?: any | null };
 
-export type PostsQueryVariables = Exact<{
+export type BlogQueryVariables = Exact<{
   relativePath: Scalars['String']['input'];
 }>;
 
 
-export type PostsQuery = { __typename?: 'Query', posts: { __typename: 'Posts', id: string, title: string, description?: string | null, pubDate: string, author?: string | null, tags?: Array<string | null> | null, draft?: boolean | null, body?: any | null, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string } } };
+export type BlogQuery = { __typename?: 'Query', blog: { __typename: 'Blog', id: string, title: string, description?: string | null, pubDate: string, author?: string | null, tags?: Array<string | null> | null, draft?: boolean | null, body?: any | null, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string } } };
 
-export type PostsConnectionQueryVariables = Exact<{
+export type BlogConnectionQueryVariables = Exact<{
   before?: InputMaybe<Scalars['String']['input']>;
   after?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Float']['input']>;
   last?: InputMaybe<Scalars['Float']['input']>;
   sort?: InputMaybe<Scalars['String']['input']>;
-  filter?: InputMaybe<PostsFilter>;
+  filter?: InputMaybe<BlogFilter>;
 }>;
 
 
-export type PostsConnectionQuery = { __typename?: 'Query', postsConnection: { __typename?: 'PostsConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasPreviousPage: boolean, hasNextPage: boolean, startCursor: string, endCursor: string }, edges?: Array<{ __typename?: 'PostsConnectionEdges', cursor: string, node?: { __typename: 'Posts', id: string, title: string, description?: string | null, pubDate: string, author?: string | null, tags?: Array<string | null> | null, draft?: boolean | null, body?: any | null, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string } } | null } | null> | null } };
+export type BlogConnectionQuery = { __typename?: 'Query', blogConnection: { __typename?: 'BlogConnection', totalCount: number, pageInfo: { __typename?: 'PageInfo', hasPreviousPage: boolean, hasNextPage: boolean, startCursor: string, endCursor: string }, edges?: Array<{ __typename?: 'BlogConnectionEdges', cursor: string, node?: { __typename: 'Blog', id: string, title: string, description?: string | null, pubDate: string, author?: string | null, tags?: Array<string | null> | null, draft?: boolean | null, body?: any | null, _sys: { __typename?: 'SystemInfo', filename: string, basename: string, hasReferences?: boolean | null, breadcrumbs: Array<string>, path: string, relativePath: string, extension: string } } | null } | null> | null } };
 
-export const PostsPartsFragmentDoc = gql`
-    fragment PostsParts on Posts {
+export const BlogPartsFragmentDoc = gql`
+    fragment BlogParts on Blog {
   __typename
   title
   description
@@ -328,9 +328,9 @@ export const PostsPartsFragmentDoc = gql`
   body
 }
     `;
-export const PostsDocument = gql`
-    query posts($relativePath: String!) {
-  posts(relativePath: $relativePath) {
+export const BlogDocument = gql`
+    query blog($relativePath: String!) {
+  blog(relativePath: $relativePath) {
     ... on Document {
       _sys {
         filename
@@ -343,13 +343,13 @@ export const PostsDocument = gql`
       }
       id
     }
-    ...PostsParts
+    ...BlogParts
   }
 }
-    ${PostsPartsFragmentDoc}`;
-export const PostsConnectionDocument = gql`
-    query postsConnection($before: String, $after: String, $first: Float, $last: Float, $sort: String, $filter: PostsFilter) {
-  postsConnection(
+    ${BlogPartsFragmentDoc}`;
+export const BlogConnectionDocument = gql`
+    query blogConnection($before: String, $after: String, $first: Float, $last: Float, $sort: String, $filter: BlogFilter) {
+  blogConnection(
     before: $before
     after: $after
     first: $first
@@ -379,20 +379,20 @@ export const PostsConnectionDocument = gql`
           }
           id
         }
-        ...PostsParts
+        ...BlogParts
       }
     }
   }
 }
-    ${PostsPartsFragmentDoc}`;
+    ${BlogPartsFragmentDoc}`;
 export type Requester<C= {}> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R>
   export function getSdk<C>(requester: Requester<C>) {
     return {
-      posts(variables: PostsQueryVariables, options?: C): Promise<{data: PostsQuery, errors?: { message: string, locations: { line: number, column: number }[], path: string[] }[], variables: PostsQueryVariables, query: string}> {
-        return requester<{data: PostsQuery, errors?: { message: string, locations: { line: number, column: number }[], path: string[] }[], variables: PostsQueryVariables, query: string}, PostsQueryVariables>(PostsDocument, variables, options);
+      blog(variables: BlogQueryVariables, options?: C): Promise<{data: BlogQuery, errors?: { message: string, locations: { line: number, column: number }[], path: string[] }[], variables: BlogQueryVariables, query: string}> {
+        return requester<{data: BlogQuery, errors?: { message: string, locations: { line: number, column: number }[], path: string[] }[], variables: BlogQueryVariables, query: string}, BlogQueryVariables>(BlogDocument, variables, options);
       },
-    postsConnection(variables?: PostsConnectionQueryVariables, options?: C): Promise<{data: PostsConnectionQuery, errors?: { message: string, locations: { line: number, column: number }[], path: string[] }[], variables: PostsConnectionQueryVariables, query: string}> {
-        return requester<{data: PostsConnectionQuery, errors?: { message: string, locations: { line: number, column: number }[], path: string[] }[], variables: PostsConnectionQueryVariables, query: string}, PostsConnectionQueryVariables>(PostsConnectionDocument, variables, options);
+    blogConnection(variables?: BlogConnectionQueryVariables, options?: C): Promise<{data: BlogConnectionQuery, errors?: { message: string, locations: { line: number, column: number }[], path: string[] }[], variables: BlogConnectionQueryVariables, query: string}> {
+        return requester<{data: BlogConnectionQuery, errors?: { message: string, locations: { line: number, column: number }[], path: string[] }[], variables: BlogConnectionQueryVariables, query: string}, BlogConnectionQueryVariables>(BlogConnectionDocument, variables, options);
       }
     };
   }

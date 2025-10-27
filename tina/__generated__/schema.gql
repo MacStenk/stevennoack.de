@@ -54,12 +54,12 @@ type Query {
   collections: [Collection!]!
   node(id: String): Node!
   document(collection: String, relativePath: String): DocumentNode!
-  posts(relativePath: String): Posts!
-  postsConnection(before: String, after: String, first: Float, last: Float, sort: String, filter: PostsFilter): PostsConnection!
+  blog(relativePath: String): Blog!
+  blogConnection(before: String, after: String, first: Float, last: Float, sort: String, filter: BlogFilter): BlogConnection!
 }
 
 input DocumentFilter {
-  posts: PostsFilter
+  blog: BlogFilter
 }
 
 type DocumentConnectionEdges {
@@ -85,9 +85,9 @@ type Collection {
   documents(before: String, after: String, first: Float, last: Float, sort: String, filter: DocumentFilter, folder: String): DocumentConnection!
 }
 
-union DocumentNode = Posts | Folder
+union DocumentNode = Blog | Folder
 
-type Posts implements Node & Document {
+type Blog implements Node & Document {
   title: String!
   description: String
   pubDate: String!
@@ -118,7 +118,7 @@ input RichTextFilter {
   exists: Boolean
 }
 
-input PostsFilter {
+input BlogFilter {
   title: StringFilter
   description: StringFilter
   pubDate: StringFilter
@@ -128,15 +128,15 @@ input PostsFilter {
   body: RichTextFilter
 }
 
-type PostsConnectionEdges {
+type BlogConnectionEdges {
   cursor: String!
-  node: Posts
+  node: Blog
 }
 
-type PostsConnection implements Connection {
+type BlogConnection implements Connection {
   pageInfo: PageInfo!
   totalCount: Float!
-  edges: [PostsConnectionEdges]
+  edges: [BlogConnectionEdges]
 }
 
 type Mutation {
@@ -145,20 +145,20 @@ type Mutation {
   deleteDocument(collection: String, relativePath: String!): DocumentNode!
   createDocument(collection: String, relativePath: String!, params: DocumentMutation!): DocumentNode!
   createFolder(collection: String, relativePath: String!): DocumentNode!
-  updatePosts(relativePath: String!, params: PostsMutation!): Posts!
-  createPosts(relativePath: String!, params: PostsMutation!): Posts!
+  updateBlog(relativePath: String!, params: BlogMutation!): Blog!
+  createBlog(relativePath: String!, params: BlogMutation!): Blog!
 }
 
 input DocumentUpdateMutation {
-  posts: PostsMutation
+  blog: BlogMutation
   relativePath: String
 }
 
 input DocumentMutation {
-  posts: PostsMutation
+  blog: BlogMutation
 }
 
-input PostsMutation {
+input BlogMutation {
   title: String
   description: String
   pubDate: String
