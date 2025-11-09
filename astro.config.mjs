@@ -1,5 +1,7 @@
 import { defineConfig } from 'astro/config';
+import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
-  // Config here
+  site: 'https://stevennoack.de',
+  integrations: [sitemap()]
 });
