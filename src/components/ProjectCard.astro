@@ -2,6 +2,7 @@
 /**
  * Project Card Component
  * @description Individual project card with Markdown content via slot
+ * UPDATED: Subtle minimal hover animation instead of spinning border
  */
 interface Props {
   title: string;
@@ -25,7 +26,7 @@ const statusColors = {
     <h3 class="project-title">
       {
         url ? (
-          <a href={url} target="_blank" rel="noopener noreferrer">
+          <a href={url} target="_blank" rel="noopener noreferrer" class="project-link">
             {title}
           </a>
         ) : (
@@ -49,54 +50,22 @@ const statusColors = {
 
 <style>
   .project-card {
-    background: rgba(23, 23, 23, 0.85);
+    position: relative;
+    background: rgba(0, 20, 0, 0.85);
     border: 1px solid rgba(0, 255, 65, 0.3);
     border-radius: 8px;
     padding: 1.5rem;
     transition: all 0.3s ease;
   }
 
-  .project-card {
-    position: relative;
-    background: rgba(0, 20, 0, 0.85);
-    border: 1px solid rgba(0, 255, 65, 0.3);
-    border-radius: 8px;
-    padding: 1.5rem;
-  }
-
-  .project-card::before {
-    content: "";
-    position: absolute;
-    inset: -2px;
-    border-radius: 8px;
-    padding: 2px;
-    background: linear-gradient(
-      45deg,
-      transparent,
-      var(--matrix-green),
-      transparent
-    );
-    -webkit-mask:
-      linear-gradient(#fff 0 0) content-box,
-      linear-gradient(#fff 0 0);
-    mask:
-      linear-gradient(#fff 0 0) content-box,
-      linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    opacity: 0;
-    transition: opacity 0.4s;
-  }
-
-  .project-card:hover::before {
-    opacity: 1;
-    animation: border-spin 2s linear infinite;
-  }
-
-  @keyframes border-spin {
-    to {
-      transform: rotate(360deg);
-    }
+  /* Subtle hover animation - lift + glow */
+  .project-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(0, 255, 65, 0.6);
+    box-shadow: 
+      0 4px 20px rgba(0, 255, 65, 0.15),
+      0 0 40px rgba(0, 255, 65, 0.1);
+    background: rgba(0, 25, 0, 0.9);
   }
 
   .project-header {
@@ -115,16 +84,17 @@ const statusColors = {
     flex: 1;
   }
 
-  .project-title a {
-    color: var(--matrix-green);
-    text-decoration: none;
+  /* Override default link styles */
+  .project-title .project-link {
+    color: var(--matrix-green) !important;
+    text-decoration: none !important;
     text-shadow: 0 0 5px rgba(0, 255, 65, 0.5);
     transition: all 0.3s ease;
   }
 
-  .project-title a:hover {
+  .project-title .project-link:hover {
     text-shadow: 0 0 10px rgba(0, 255, 65, 0.8);
-    text-decoration: none;
+    text-decoration: none !important;
   }
 
   .project-status {
@@ -135,7 +105,7 @@ const statusColors = {
   }
 
   .project-description {
-    ccolor: rgba(200, 200, 200, 0.85);
+    color: rgba(200, 200, 200, 0.85);
     font-family: "Courier New", monospace;
     font-size: 0.95rem;
     line-height: 1.6;
@@ -170,11 +140,23 @@ const statusColors = {
     font-size: 0.8rem;
     font-family: "Courier New", monospace;
     border: 1px solid rgba(0, 255, 65, 0.2);
+    transition: all 0.2s ease;
+  }
+
+  /* Subtle tag hover */
+  .project-card:hover .tech-tag {
+    background: rgba(0, 255, 65, 0.15);
+    border-color: rgba(0, 255, 65, 0.4);
   }
 
   @media (max-width: 768px) {
     .project-card {
       padding: 1.2rem;
+    }
+
+    /* Reduce hover effect on mobile */
+    .project-card:hover {
+      transform: translateY(-2px);
     }
 
     .project-header {
