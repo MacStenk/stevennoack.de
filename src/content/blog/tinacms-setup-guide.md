@@ -13,8 +13,6 @@ tags:
   - Headless CMS
 ---
 
-# TinaCMS Setup - Die definitive Anleitung
-
 **Für Astro + Cloudflare Pages + GitHub**
 
 Nach 2 Stunden Debugging und Trial-and-Error habe ich ALLE Stolpersteine dokumentiert. Mit dieser Anleitung schaffst du das Setup in 5-10 Minuten!
@@ -687,7 +685,6 @@ Diese Anleitung basiert auf Real-World Setup und hat mir 2 Stunden Trial-and-Err
 
 🎉 **Happy Editing!** 🎉
 
+\## Test ✨
 
- \## Test ✨
-
-   TinaCMS Auto-Commit funktioniert!
+TinaCMS Auto-Commit funktioniert!
