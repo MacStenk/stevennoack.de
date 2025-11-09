@@ -1,4 +1,6 @@
 ---
+import EmailProtection from '../components/EmailProtection.astro';
+
 const schemaOrg = {
   "@context": "https://schema.org",
   "@type": "Person",
@@ -537,7 +539,7 @@ const schemaOrg = {
         <p><strong class="glow">Steven Noack</strong></p>
         <p>(ehemals Steven Fischer, Frankfurt/Oder)</p>
         <p>Alt Tucheband, Brandenburg, Deutschland</p>
-        <p><a href="mailto:kontakt@stevennoack.de">kontakt@stevennoack.de</a></p>
+        <p><EmailProtection email="kontakt@stevennoack.de" /></p>
         
         <p style="margin-top: 20px;">
           <a href="https://linkedin.com/in/stevennoack" target="_blank">LinkedIn</a> | 

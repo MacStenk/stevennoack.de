@@ -1,0 +1,111 @@
+---
+// EmailProtection.astro
+// Schützt Email-Adressen vor Spam-Bots
+// Methode 1: Reverse (rückwärts)
+// Methode 2: ROT13 Obfuscation
+
+interface Props {
+  email: string;
+  method?: 'reverse' | 'rot13' | 'both';
+  class?: string;
+}
+
+const { email, method = 'both', class: className = '' } = Astro.props;
+
+// ROT13 Encoding
+function rot13(str: string): string {
+  return str.replace(/[a-zA-Z]/g, (char) => {
+    const start = char <= 'Z' ? 65 : 97;
+    return String.fromCharCode(((char.charCodeAt(0) - start + 13) % 26) + start);
+  });
+}
+
+// Email rückwärts
+const reversedEmail = email.split('').reverse().join('');
+
+// ROT13 encoded
+const rot13Email = rot13(email);
+
+// Unique ID für diese Komponente
+const uniqueId = `email-${Math.random().toString(36).substr(2, 9)}`;
+---
+
+<!-- Email Link mit Schutz -->
+<span 
+  id={uniqueId}
+  class={`email-protected ${className}`} 
+  data-reversed={reversedEmail}
+  data-rot13={rot13Email}
+>
+  <!-- Placeholder - wird von JS ersetzt -->
+  <span class="email-placeholder">
+    [Email-Adresse wird geladen...]
+  </span>
+</span>
+
+<!-- Fallback für Nutzer ohne JavaScript -->
+<noscript>
+  <span class="text-sm">
+    (Bitte aktivieren Sie JavaScript, um die Email-Adresse zu sehen)
+  </span>
+</noscript>
+
+<script define:vars={{ uniqueId }}>
+  // Sofort nach dem Laden ausführen
+  (function() {
+    const element = document.getElementById(uniqueId);
+    if (!element) return;
+    
+    const reversed = element.getAttribute('data-reversed');
+    const rot13Attr = element.getAttribute('data-rot13');
+    
+    let email = '';
+    
+    // Methode 1: Reverse
+    if (reversed) {
+      email = reversed.split('').reverse().join('');
+    }
+    
+    // Methode 2: ROT13 (als Fallback)
+    if (!email && rot13Attr) {
+      email = rot13Attr.replace(/[a-zA-Z]/g, (char) => {
+        const start = char <= 'Z' ? 65 : 97;
+        return String.fromCharCode(((char.charCodeAt(0) - start + 13) % 26) + start);
+      });
+    }
+    
+    if (email) {
+      // Ersetze Placeholder mit echtem Link
+      const link = document.createElement('a');
+      link.href = `mailto:${email}`;
+      link.textContent = email;
+      link.style.color = '#0f0';
+      link.style.textDecoration = 'none';
+      link.style.borderBottom = '1px dotted #0f0';
+      
+      link.addEventListener('mouseenter', function() {
+        this.style.textShadow = '0 0 10px rgba(0, 255, 0, 0.8)';
+      });
+      
+      link.addEventListener('mouseleave', function() {
+        this.style.textShadow = 'none';
+      });
+      
+      // Ersetze den gesamten Inhalt
+      element.innerHTML = '';
+      element.appendChild(link);
+    }
+  })();
+</script>
+
+<style>
+  .email-protected {
+    display: inline-block;
+  }
+  
+  .email-placeholder {
+    font-style: italic;
+    opacity: 0.7;
+    color: #0f0;
+  }
+</style>
