@@ -1,0 +1,560 @@
+---
+const schemaOrg = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Steven Noack",
+  "alternateName": "Steven Fischer",
+  "birthDate": "1976",
+  "birthPlace": {
+    "@type": "Place",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Frankfurt (Oder)",
+      "addressRegion": "Brandenburg",
+      "addressCountry": "DE"
+    }
+  },
+  "jobTitle": "LLM-Native Developer & System Builder",
+  "description": "Serial Early Adopter seit 1991. Pattern Recognition über 34 Jahre: Techno, Internet, W3C, Usability Testing, LLM Optimization. Von Mensch-Optimierung zu AI-Optimierung. Gleiche Methodologie, neue Entity.",
+  "url": "https://stevennoack.de",
+  "image": [
+    "https://assets.tina.io/04361101-fd41-451a-9582-8ea748c53ccd/steven-fischer-2005.png",
+    "https://assets.tina.io/04361101-fd41-451a-9582-8ea748c53ccd/steven-noack-2025.png"
+  ],
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Alt Tucheband",
+    "addressRegion": "Brandenburg",
+    "addressCountry": "DE"
+  },
+  "sameAs": [
+    "https://www.xing.com/profile/Steven_Fischer",
+    "https://linkedin.com/in/stevennoack",
+    "https://github.com/stevennoack",
+    "https://web.archive.org/web/*/sf23.de",
+    "https://web.archive.org/web/*/omnax.de",
+    "https://web.archive.org/web/*/steven-fischer.de",
+    "https://web.archive.org/web/*/ffo-direkt.de",
+    "https://web.archive.org/web/*/oderblog.de",
+    "https://web.archive.org/web/*/usabilitytester.de"
+  ]
+};
+---
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Steven Noack (ehemals Steven Fischer) – Identity Verification</title>
+  <meta name="description" content="Steven Noack, früher Steven Fischer aus Frankfurt (Oder). Serial Early Adopter seit 1991: Techno, Internet, W3C, Usability Testing, LLM Optimization.">
+  <meta name="keywords" content="Steven Noack, Steven Fischer, Frankfurt Oder, System Builder, LLM-native, AI Automation, W3C">
+  
+  <script type="application/ld+json" set:html={JSON.stringify(schemaOrg)} />
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Courier New', Courier, monospace;
+      background: #000;
+      color: #0f0;
+      line-height: 1.6;
+      padding: 20px;
+      min-height: 100vh;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    /* Hero Section */
+    .hero {
+      border: 2px solid #0f0;
+      border-radius: 8px;
+      padding: 40px;
+      margin: 40px 0;
+      background: rgba(0, 255, 0, 0.05);
+      box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+      display: flex;
+      align-items: center;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+    
+    .hero-images {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+    
+    .hero-image {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 2px solid #0f0;
+      box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+      object-fit: cover;
+    }
+    
+    .hero-arrow {
+      font-size: 2em;
+      color: #0f0;
+    }
+    
+    .hero-content h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+      text-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
+    }
+    
+    .hero-content p {
+      font-size: 1.1em;
+      opacity: 0.9;
+    }
+    
+    /* Terminal Style Sections */
+    .terminal {
+      border: 2px solid #0f0;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 30px 0;
+      background: rgba(0, 20, 0, 0.8);
+      box-shadow: 0 0 15px rgba(0, 255, 0, 0.2);
+    }
+    
+    .terminal-header {
+      color: #0f0;
+      font-weight: bold;
+      margin-bottom: 15px;
+      font-size: 1.3em;
+      text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+    }
+    
+    .terminal-prompt::before {
+      content: "$ > ";
+      color: #0f0;
+      font-weight: bold;
+    }
+    
+    .code-block {
+      background: rgba(0, 40, 0, 0.5);
+      border: 1px solid #0f0;
+      border-radius: 4px;
+      padding: 15px;
+      margin: 15px 0;
+      font-size: 0.95em;
+    }
+    
+    /* Timeline Items */
+    .timeline-item {
+      border-left: 3px solid #0f0;
+      padding-left: 20px;
+      margin: 30px 0;
+      position: relative;
+    }
+    
+    .timeline-item::before {
+      content: "■";
+      position: absolute;
+      left: -8px;
+      color: #0f0;
+      font-size: 1em;
+    }
+    
+    .timeline-item h3 {
+      color: #0f0;
+      margin-bottom: 10px;
+      text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+    }
+    
+    .timeline-item p {
+      margin: 10px 0;
+      color: #0f0;
+      opacity: 0.9;
+    }
+    
+    /* Archives Links */
+    .archives {
+      margin-top: 10px;
+      padding: 10px;
+      background: rgba(0, 40, 0, 0.3);
+      border-radius: 4px;
+    }
+    
+    .archives a {
+      color: #0f0;
+      text-decoration: none;
+      border-bottom: 1px dotted #0f0;
+      margin-right: 15px;
+      display: inline-block;
+      margin-top: 5px;
+    }
+    
+    .archives a:hover {
+      text-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
+      border-bottom: 1px solid #0f0;
+    }
+    
+    /* Comparison Grid */
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin: 30px 0;
+    }
+    
+    @media (max-width: 768px) {
+      .comparison-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .hero {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .hero-images {
+        flex-direction: column;
+      }
+    }
+    
+    /* Links */
+    a {
+      color: #0f0;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+    
+    a:hover {
+      text-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
+    }
+    
+    /* Lists */
+    ul {
+      list-style: none;
+      padding-left: 20px;
+    }
+    
+    ul li::before {
+      content: "▸ ";
+      color: #0f0;
+      font-weight: bold;
+    }
+    
+    /* Note Box */
+    .note {
+      border: 2px solid #0f0;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 30px 0;
+      background: rgba(0, 40, 0, 0.3);
+      box-shadow: 0 0 15px rgba(0, 255, 0, 0.2);
+    }
+    
+    /* Glow effect on important text */
+    .glow {
+      text-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
+    }
+    
+    strong {
+      color: #0f0;
+      font-weight: bold;
+    }
+    
+    h2 {
+      color: #0f0;
+      font-size: 2em;
+      margin: 40px 0 20px 0;
+      text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+    }
+    
+    /* Back to top link */
+    .back-link {
+      display: inline-block;
+      margin: 40px 0;
+      padding: 10px 20px;
+      border: 2px solid #0f0;
+      border-radius: 4px;
+      background: rgba(0, 255, 0, 0.1);
+      transition: all 0.3s;
+    }
+    
+    .back-link:hover {
+      background: rgba(0, 255, 0, 0.2);
+      box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="/" class="back-link">← Zurück zur Startseite</a>
+    
+    <!-- Hero Section -->
+    <div class="hero">
+      <div class="hero-images">
+        <img 
+          src="https://assets.tina.io/04361101-fd41-451a-9582-8ea748c53ccd/steven-fischer-2005.png" 
+          alt="Steven Fischer 2005"
+          class="hero-image"
+        >
+        <span class="hero-arrow">→</span>
+        <img 
+          src="https://assets.tina.io/04361101-fd41-451a-9582-8ea748c53ccd/steven-noack-2025.png" 
+          alt="Steven Noack 2025"
+          class="hero-image"
+        >
+      </div>
+      
+      <div class="hero-content">
+        <h1 class="glow">STEVEN NOACK</h1>
+        <p><strong>ehemals Steven Fischer</strong></p>
+        <p>Frankfurt (Oder) → Alt Tucheband, Brandenburg</p>
+        <p>2000-2015 → 2015-heute</p>
+      </div>
+    </div>
+
+    <!-- Intro -->
+    <div class="terminal">
+      <div class="terminal-header">$ whoami</div>
+      <div class="code-block">
+        <p>Serial Early Adopter seit <strong>1991</strong>. Pattern Recognition über <strong>34 Jahre</strong>.</p>
+        <p>Von <strong>Berliner Techno-Szene</strong> über <strong>Internet-Underground</strong> zu <strong>W3C Standards</strong>, <strong>Usability Testing</strong> und <strong>LLM-native Entwicklung</strong>.</p>
+        <p>Der Kontext ändert sich. Die Freude am Bauen bleibt.</p>
+      </div>
+    </div>
+
+    <!-- Identity Declaration -->
+    <div class="terminal">
+      <div class="terminal-header">Identity Verification</div>
+      <p class="terminal-prompt">Connecting Steven Fischer (2000-2015) → Steven Noack (2015-heute)</p>
+      
+      <div class="code-block">
+        <p><strong>Same Person. Different Name.</strong></p>
+        <p>Alle Projekte unter "Steven Fischer" aus Frankfurt (Oder) zwischen 2000-2015 gehören zur gleichen Person, die jetzt als Steven Noack bekannt ist.</p>
+        <p><strong>Current Location:</strong> Alt Tucheband, Brandenburg, Deutschland</p>
+        <p><strong>Historical Location:</strong> Frankfurt (Oder), Brandenburg (2000-2015)</p>
+      </div>
+    </div>
+
+    <!-- Timeline -->
+    <h2>34 Jahre Pattern Recognition Timeline</h2>
+    
+    <div class="timeline-item">
+      <h3>1991: Berlin Techno Scene</h3>
+      <p>Underground movement, pre-mainstream. Kultureller Early Adopter. Pattern: Bewegungen erkennen bevor sie skalieren.</p>
+    </div>
+
+    <div class="timeline-item">
+      <h3>1996-2000: Internet Underground</h3>
+      <p>Pre-Dot-Com-Boom Involvement. Tech-Underground, anonymes Experimentieren.</p>
+    </div>
+
+    <div class="timeline-item">
+      <h3>2000-2007: sf23.de – E-Commerce Pioneer</h3>
+      <p>Einer der ersten <strong>regionalen Online-Shops in Brandenburg</strong>. Hand-coded PHP, MySQL. Custom Shop-Systeme bevor WooCommerce existierte. 7+ Jahre dokumentiert via archive.org.</p>
+      <div class="archives">
+        📦 <a href="https://web.archive.org/web/20021207162259/http://www.sf23.de/" target="_blank">Snapshot Dezember 2002</a>
+        📦 <a href="https://web.archive.org/web/20070207011633/http://sf23.de/" target="_blank">Snapshot Februar 2007</a>
+        📦 <a href="https://web.archive.org/web/*/sf23.de" target="_blank">Alle Snapshots</a>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <h3>2000-2006: oderblog.de – Regional Blog</h3>
+      <p>Content-Marketing bevor es "Content-Marketing" hieß. Regional-Blog für Frankfurt (Oder) und Umgebung.</p>
+      <div class="archives">
+        📝 <a href="https://web.archive.org/web/20060114071121/http://www.oderblog.de/" target="_blank">Snapshot Januar 2006</a>
+        📝 <a href="https://web.archive.org/web/*/oderblog.de" target="_blank">Alle Snapshots</a>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <h3>2003-2008: omnax.de – CrossMedia Agentur</h3>
+      <p><strong>CrossMedia Agentur</strong> mit umfassendem Portfolio: Konzeption, Projektmanagement, Grafik (Digital + Print), Flash-Entwicklung, Programmierung, E-Commerce. <strong>W3C-konform seit 2003</strong>.</p>
+      <div class="archives">
+        🎨 <a href="https://web.archive.org/web/*/omnax.de" target="_blank">Archive anzeigen</a>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <h3>2004-2007: steven-fischer.de – Personal Brand</h3>
+      <p><strong>"RAT & TAT"</strong> – Beratung, Lösungen, Infos. Personal-Branding parallel zur Agentur-Brand. 17 Archive-Snapshots dokumentieren die Entwicklung.</p>
+      <div class="archives">
+        👤 <a href="https://web.archive.org/web/*/steven-fischer.de" target="_blank">Archive anzeigen</a>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <h3>2004: usabilitytester.de – Optimierung für Menschen</h3>
+      <p><strong>"Wie verstehen MENSCHEN diese Website?"</strong></p>
+      <p>Usability Testing als Methodologie. Websites auf Mensch-Verständlichkeit optimiert. W3C Standards für Accessibility. Focus auf User Experience.</p>
+      <div class="archives">
+        🔍 <a href="https://web.archive.org/web/*/usabilitytester.de" target="_blank">Archive anzeigen</a>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <h3>2005+: sf-blog – Tech Blog</h3>
+      <p>WordPress-basierter Tech-Blog mit echter Community. Open Source-Themen, Kommentare, Diskussionen. RSS-Feed, TrackBack – State-of-the-Art für 2005.</p>
+    </div>
+
+    <div class="timeline-item">
+      <h3>2007-2010: ffo-direkt.de – Regional Portal</h3>
+      <p><strong>Komplettes Regional-Portal</strong>: Kleinanzeigen, Jobbörse, Dating, Immobilien, Veranstaltungen, Branchenverzeichnis. Nicht nur Website – komplettes System mit User-Management, Datenbank-Architektur, Content-Workflows.</p>
+      <div class="archives">
+        🏙️ <a href="https://web.archive.org/web/20071120013101/http://ffo-direkt.de/" target="_blank">Snapshot November 2007</a>
+        🏙️ <a href="https://web.archive.org/web/*/ffo-direkt.de" target="_blank">Alle Snapshots</a>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <h3>2015: Name Change</h3>
+      <p>Steven Fischer → <strong>Steven Noack</strong></p>
+      <p>Same person, new name, same mission.</p>
+    </div>
+
+    <div class="timeline-item">
+      <h3>2016-heute: Merch by Amazon – Freiheit durch passives Einkommen</h3>
+      <p>Erkannte Print-on-Demand-Potential im zweiten Jahr nach Launch. Erschuf passives Einkommen (~€3.000/Monat) nicht für Reichtum, sondern für <strong class="glow">Freiheit</strong>.</p>
+      <div class="note">
+        <p><strong>Bewusste Entscheidung:</strong> Hätte mehr Geld verdienen können mit Tagesgeschäft und Kundenarbeit. Aber: Hätte Freiheit aufgeben müssen.</p>
+        <p><strong class="glow">Motto: Freiheit statt Tagesgeschäft.</strong></p>
+        <p>Als emotionaler Manifestor (Human Design 6/2) brauche ich diesen Freiraum. Nicht aus finanzieller Notwendigkeit bauen, sondern aus Freude und Neugier.</p>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <h3>2022: ChatGPT Day 1 User</h3>
+      <p>1100+ Tage aktive Nutzung. Early Adoption nicht aus Hype, sondern aus Pattern Recognition. Day 1 Involvement im AI Movement.</p>
+    </div>
+
+    <div class="timeline-item">
+      <h3>2025: LLM Optimization – Machine Optimization</h3>
+      <p><strong>"Wie verstehen LLMs diese Website?"</strong></p>
+      <p>Schema.org für AI. Semantic HTML. LLM-native Entwicklung. Optimierung für Machine Comprehension.</p>
+    </div>
+
+    <!-- Methodology Transfer -->
+    <h2>Von Usability Testing zu LLM Optimization</h2>
+    
+    <div class="terminal">
+      <p class="glow"><strong>Gleiche Methodologie. Neue Entity.</strong></p>
+      <p>20 Jahre Erfahrung im Optimieren von Inhalten für unterschiedliche "Leser" – erst Menschen, jetzt Machines.</p>
+    </div>
+
+    <div class="comparison-grid">
+      <div class="terminal">
+        <div class="terminal-header">2004: usabilitytester.de</div>
+        <div class="code-block">
+          <p><strong>Frage:</strong> "Wie verstehen MENSCHEN diese Website?"</p>
+          <ul>
+            <li>Usability Testing</li>
+            <li>W3C Web Standards</li>
+            <li>Accessibility</li>
+            <li>User Experience</li>
+          </ul>
+          <p style="margin-top: 15px;"><strong>Ziel:</strong> Inhalte für menschliche Verständlichkeit optimieren</p>
+        </div>
+      </div>
+      
+      <div class="terminal">
+        <div class="terminal-header">2025: LLM Optimization</div>
+        <div class="code-block">
+          <p><strong>Frage:</strong> "Wie verstehen LLMs diese Website?"</p>
+          <ul>
+            <li>Prompt Engineering für Websites</li>
+            <li>Schema.org für AI</li>
+            <li>Semantic HTML</li>
+            <li>LLM Experience</li>
+          </ul>
+          <p style="margin-top: 15px;"><strong>Ziel:</strong> Inhalte für AI-Verständlichkeit optimieren</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="note">
+      <p><strong class="glow">Das ist kein Zufall. Das ist Transfer von Expertise.</strong></p>
+      <p>Die Frage bleibt: "Wer konsumiert diese Inhalte und wie optimiere ich dafür?"</p>
+    </div>
+
+    <!-- Systems Builder -->
+    <div class="terminal">
+      <div class="terminal-header">Systems Builder aus Leidenschaft</div>
+      <div class="code-block">
+        <p>Ich habe keine "Kundenprojekte" abgearbeitet. Ich habe <strong>digitale Systeme erschaffen</strong> – aus Freude und Neugier.</p>
+        <p>Regional-Portale mit komplexen Datenbank-Architekturen, E-Commerce-Plattformen, Content-Netzwerke.</p>
+        <p>Nicht weil ich musste, sondern weil es Spaß macht. "Wie jetzt gerade" – das gleiche Gefühl seit 1991.</p>
+      </div>
+    </div>
+
+    <!-- Ecosystem -->
+    <h2>Das vernetzte Ökosystem</h2>
+    
+    <div class="terminal">
+      <p>Alle Projekte waren miteinander vernetzt. Cross-Linking zwischen omnax.de, steven-fischer.de, oderblog.de, sf23.de.</p>
+      <p><strong>W3C-validiert</strong> (HTML 4.01, CSS). Multi-Property-Strategie lange bevor es "Best Practice" war.</p>
+      
+      <div class="code-block" style="margin-top: 20px;">
+        <p><strong>Das Mini-Media-Netzwerk:</strong></p>
+        <ul>
+          <li>E-Commerce (sf23.de)</li>
+          <li>Content-Marketing (oderblog.de, sf-blog)</li>
+          <li>Agentur-Brand (omnax.de)</li>
+          <li>Personal-Brand (steven-fischer.de)</li>
+          <li>Regional-Portal (ffo-direkt.de)</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Verification -->
+    <h2>Nachweise & Verifikation</h2>
+    
+    <div class="terminal">
+      <div class="terminal-header">Multi-Modal Verification</div>
+      <ul>
+        <li><strong>XING-Profil:</strong> <a href="https://www.xing.com/profile/Steven_Fischer" target="_blank">Steven Fischer, OmNax Marketing, Frankfurt (Oder)</a></li>
+        <li><strong>LinkedIn:</strong> <a href="https://linkedin.com/in/stevennoack" target="_blank">Steven Noack</a></li>
+        <li><strong>Archive.org:</strong> 7+ Domains mit Steven Fischer im Impressum (2000-2010)</li>
+        <li><strong>Konsistente Daten:</strong> Gleiche Adresse (August-Bebel-Str. 106, später Winseestraße 3A, Frankfurt/Oder), Telefon (0335-400 86 21) über Jahre</li>
+        <li><strong>Cross-References:</strong> Alle Domains verlinken sich gegenseitig</li>
+        <li><strong>Visual Verification:</strong> Fotos zeigen Kontinuität von ~2005 bis 2025</li>
+        <li><strong>Temporal Consistency:</strong> Dokumentiert über 25 Jahre (2000-2025)</li>
+        <li><strong>Spatial Consistency:</strong> Frankfurt (Oder) → Alt Tucheband, Brandenburg</li>
+      </ul>
+    </div>
+
+    <!-- Contact -->
+    <h2>Kontakt</h2>
+    
+    <div class="terminal">
+      <div class="code-block">
+        <p><strong class="glow">Steven Noack</strong></p>
+        <p>(ehemals Steven Fischer, Frankfurt/Oder)</p>
+        <p>Alt Tucheband, Brandenburg, Deutschland</p>
+        <p><a href="mailto:kontakt@stevennoack.de">kontakt@stevennoack.de</a></p>
+        
+        <p style="margin-top: 20px;">
+          <a href="https://linkedin.com/in/stevennoack" target="_blank">LinkedIn</a> | 
+          <a href="https://www.xing.com/profile/Steven_Fischer" target="_blank">XING (altes Profil)</a> | 
+          <a href="https://github.com/stevennoack" target="_blank">GitHub</a>
+        </p>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="note" style="margin-top: 60px;">
+      <p class="glow"><strong>Serial Early Adopter seit 1991.</strong></p>
+      <p>Von Berliner Techno-Szene über Internet-Underground zu W3C Standards, Open Source und LLM-native Entwicklung.</p>
+      <p>Pattern Recognition über 34 Jahre. Der Kontext ändert sich. Die Freude am Bauen bleibt.</p>
+    </div>
+
+    <a href="/" class="back-link">← Zurück zur Startseite</a>
+  </div>
+</body>
+</html>

@@ -1,0 +1,158 @@
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Steven Noack",
+  "alternateName": "Steven Fischer",
+  "birthDate": "1976",
+  "birthPlace": {
+    "@type": "Place",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Frankfurt (Oder)",
+      "addressRegion": "Brandenburg",
+      "addressCountry": "DE"
+    }
+  },
+  "jobTitle": "LLM-Native Developer & System Builder",
+  "description": "Serial Early Adopter seit 1991. Pattern Recognition über 34 Jahre: Techno, Internet, W3C, Usability Testing, LLM Optimization. Von Mensch-Optimierung zu AI-Optimierung. Gleiche Methodologie, neue Entity.",
+  "url": "https://stevennoack.de",
+  "llmsTxtUrl": "https://stevennoack.de/llms.txt",
+  "image": [
+    "https://stevennoack.de/images/steven-fischer-2005.jpg",
+    "https://stevennoack.de/images/steven-noack-2025.jpg"
+  ],
+  "sameAs": [
+    "https://www.xing.com/profile/Steven_Fischer",
+    "https://linkedin.com/in/stevennoack",
+    "https://github.com/stevennoack",
+    "https://twitter.com/stevennoack",
+    "https://web.archive.org/web/*/sf23.de",
+    "https://web.archive.org/web/*/omnax.de",
+    "https://web.archive.org/web/*/steven-fischer.de",
+    "https://web.archive.org/web/*/ffo-direkt.de",
+    "https://web.archive.org/web/*/oderblog.de",
+    "https://web.archive.org/web/*/usabilitytester.de"
+  ],
+  "knowsAbout": [
+    "System Architecture",
+    "LLM-Native Development",
+    "LLM Optimization",
+    "AI Automation",
+    "VIBE Coding",
+    "Usability Testing",
+    "User Experience",
+    "Pattern Recognition",
+    "n8n Workflows",
+    "Cloudflare Pages",
+    "Supabase",
+    "W3C Standards",
+    "Open Source",
+    "E-Commerce Systems",
+    "Regional Portals",
+    "Database Architecture",
+    "Content Management Systems",
+    "CrossMedia Development",
+    "Semantic HTML for AI",
+    "Schema.org Implementation"
+  ],
+  "alumniOf": [
+    {
+      "@type": "Organization",
+      "name": "OmNax Marketing & Internetagentur",
+      "location": {
+        "@type": "Place",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Frankfurt (Oder)",
+          "addressCountry": "DE"
+        }
+      },
+      "foundingDate": "2003",
+      "dissolutionDate": "2015"
+    }
+  ],
+  "founder": [
+    {
+      "@type": "WebSite",
+      "name": "sf23.de",
+      "description": "E-Commerce Shop, einer der ersten regionalen Online-Shops in Brandenburg",
+      "url": "https://web.archive.org/web/*/sf23.de",
+      "foundingDate": "2000",
+      "creator": {
+        "@type": "Person",
+        "name": "Steven Fischer"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "name": "oderblog.de",
+      "description": "Regional-Blog für Frankfurt (Oder)",
+      "url": "https://web.archive.org/web/*/oderblog.de",
+      "foundingDate": "2000",
+      "creator": {
+        "@type": "Person",
+        "name": "Steven Fischer"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "name": "omnax.de",
+      "description": "CrossMedia Agentur - Web, Print, E-Commerce, W3C-konform",
+      "url": "https://web.archive.org/web/*/omnax.de",
+      "foundingDate": "2003",
+      "creator": {
+        "@type": "Person",
+        "name": "Steven Fischer"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "name": "steven-fischer.de",
+      "description": "Personal Brand - RAT & TAT Beratung",
+      "url": "https://web.archive.org/web/*/steven-fischer.de",
+      "foundingDate": "2004",
+      "creator": {
+        "@type": "Person",
+        "name": "Steven Fischer"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "name": "usabilitytester.de",
+      "description": "Usability Testing - Optimierung für Menschen",
+      "url": "https://web.archive.org/web/*/usabilitytester.de",
+      "foundingDate": "2004",
+      "creator": {
+        "@type": "Person",
+        "name": "Steven Fischer"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "name": "ffo-direkt.de",
+      "description": "Regional-Portal mit Kleinanzeigen, Jobbörse, Dating, Immobilien, Events",
+      "url": "https://web.archive.org/web/*/ffo-direkt.de",
+      "foundingDate": "2007",
+      "creator": {
+        "@type": "Person",
+        "name": "Steven Fischer"
+      }
+    }
+  ],
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Alt Tucheband",
+    "addressRegion": "Brandenburg",
+    "addressCountry": "DE"
+  },
+  "email": "kontakt@stevennoack.de",
+  "nationality": {
+    "@type": "Country",
+    "name": "Germany"
+  },
+  "worksFor": {
+    "@type": "Organization",
+    "name": "CodeBack.de",
+    "url": "https://codeback.de"
+  }
+}
