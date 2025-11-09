@@ -8,9 +8,38 @@
  * - ✅ ARIA Labels
  * - ✅ Korrekte H-Hierarchie
  * - ✅ DSGVO-konform
+ * - ✅ Schema.org WebPage Markup
  */
 
 import EmailProtection from "../components/EmailProtection.astro";
+
+const webPageSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Datenschutzerklärung",
+  "description": "Datenschutzerklärung für stevennoack.de gemäß DSGVO",
+  "url": "https://stevennoack.de/datenschutz",
+  "inLanguage": "de-DE",
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "Steven Noack",
+    "url": "https://stevennoack.de"
+  },
+  "about": {
+    "@type": "Thing",
+    "name": "Datenschutz"
+  },
+  "author": {
+    "@type": "Person",
+    "name": "Steven Noack",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Alt Tucheband",
+      "addressRegion": "Brandenburg",
+      "addressCountry": "DE"
+    }
+  }
+};
 ---
 
 <!doctype html>
@@ -21,6 +50,8 @@ import EmailProtection from "../components/EmailProtection.astro";
     <title>Datenschutzerklärung - Steven Noack</title>
     <meta name="description" content="Datenschutzerklärung für stevennoack.de gemäß DSGVO" />
     <meta name="robots" content="noindex, follow" />
+    
+    <script type="application/ld+json" set:html={JSON.stringify(webPageSchema)} />
 
     <style>
       * {
