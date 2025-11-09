@@ -1,0 +1,240 @@
+---
+/**
+ * Impressum Page - LLM Optimized
+ * @description Legal notice page for Germany (Impressumspflicht)
+ * 
+ * FEATURES:
+ * - ✅ Semantic HTML
+ * - ✅ Organization Schema.org
+ * - ✅ ARIA Labels
+ * - ✅ Korrekte H-Hierarchie
+ */
+
+import EmailProtection from "../components/EmailProtection.astro";
+
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Steven Noack",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Alt Tucheband",
+    "addressRegion": "Brandenburg",
+    "addressCountry": "DE"
+  },
+  "email": "kontakt@stevennoack.de",
+  "url": "https://stevennoack.de"
+};
+---
+
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Impressum - Steven Noack</title>
+    <meta name="description" content="Impressum und Kontaktdaten von Steven Noack" />
+    <meta name="robots" content="noindex, follow" />
+    
+    <script type="application/ld+json" set:html={JSON.stringify(organizationSchema)} />
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Courier New", Courier, monospace;
+        background: #000;
+        color: #0f0;
+        line-height: 1.6;
+        padding: 20px;
+        min-height: 100vh;
+      }
+
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+      }
+
+      .back-link {
+        display: inline-block;
+        margin-bottom: 2rem;
+        padding: 0.5rem 1rem;
+        border: 1px solid #0f0;
+        color: #0f0;
+        text-decoration: none;
+        transition: all 0.3s;
+      }
+
+      .back-link:hover {
+        background: #0f0;
+        color: #000;
+        box-shadow: 0 0 20px #0f0;
+      }
+
+      article {
+        border: 2px solid #0f0;
+        border-radius: 8px;
+        padding: 2rem;
+        background: rgba(0, 255, 0, 0.05);
+        box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
+      }
+
+      h1 {
+        color: #0f0;
+        font-size: 2.5rem;
+        margin-bottom: 2rem;
+        text-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
+      }
+
+      h2 {
+        color: #0f0;
+        font-size: 1.8rem;
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+        text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+      }
+
+      h3 {
+        color: #0f0;
+        font-size: 1.3rem;
+        margin-top: 1.5rem;
+        margin-bottom: 0.75rem;
+      }
+
+      section {
+        margin-bottom: 2rem;
+      }
+
+      p {
+        margin-bottom: 1rem;
+        line-height: 1.8;
+      }
+
+      strong {
+        color: #0f0;
+      }
+
+      a {
+        color: #0f0;
+        text-decoration: underline;
+        transition: all 0.3s;
+      }
+
+      a:hover {
+        text-shadow: 0 0 10px #0f0;
+      }
+
+      .contact-info {
+        background: rgba(0, 40, 0, 0.3);
+        border: 1px solid #0f0;
+        border-radius: 4px;
+        padding: 1.5rem;
+        margin: 1.5rem 0;
+      }
+
+      .disclaimer {
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 1px solid #0f0;
+        font-size: 0.9rem;
+        opacity: 0.8;
+      }
+
+      @media (max-width: 768px) {
+        body {
+          padding: 1rem;
+        }
+
+        article {
+          padding: 1.5rem;
+        }
+
+        h1 {
+          font-size: 2rem;
+        }
+
+        h2 {
+          font-size: 1.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="container" role="main">
+      <a href="/" class="back-link">← Zurück zur Startseite</a>
+
+      <article aria-labelledby="impressum-title">
+        <header>
+          <h1 id="impressum-title">Impressum</h1>
+        </header>
+
+        <section aria-labelledby="contact-heading">
+          <h2 id="contact-heading">Angaben gemäß § 5 TMG</h2>
+          <div class="contact-info">
+            <p>
+              <strong>Steven Noack</strong><br />
+              Alt Tucheband<br />
+              Brandenburg<br />
+              Deutschland
+            </p>
+          </div>
+        </section>
+
+        <section aria-labelledby="contact-details-heading">
+          <h2 id="contact-details-heading">Kontakt</h2>
+          <p>
+            <strong>E-Mail:</strong> <EmailProtection email="kontakt@stevennoack.de" />
+          </p>
+        </section>
+
+        <section aria-labelledby="verantwortlich-heading">
+          <h2 id="verantwortlich-heading">Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV</h2>
+          <p>
+            Steven Noack<br />
+            Alt Tucheband, Brandenburg<br />
+            Deutschland
+          </p>
+        </section>
+
+        <section aria-labelledby="haftung-heading">
+          <h2 id="haftung-heading">Haftungsausschluss</h2>
+          
+          <h3>Haftung für Inhalte</h3>
+          <p>
+            Die Inhalte unserer Seiten wurden mit größter Sorgfalt erstellt. Für die 
+            Richtigkeit, Vollständigkeit und Aktualität der Inhalte können wir jedoch 
+            keine Gewähr übernehmen. Als Diensteanbieter sind wir gemäß § 7 Abs.1 TMG 
+            für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. 
+            Nach §§ 8 bis 10 TMG sind wir als Diensteanbieter jedoch nicht verpflichtet, 
+            übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach 
+            Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen.
+          </p>
+
+          <h3>Haftung für Links</h3>
+          <p>
+            Unser Angebot enthält Links zu externen Webseiten Dritter, auf deren Inhalte 
+            wir keinen Einfluss haben. Deshalb können wir für diese fremden Inhalte auch 
+            keine Gewähr übernehmen. Für die Inhalte der verlinkten Seiten ist stets der 
+            jeweilige Anbieter oder Betreiber der Seiten verantwortlich.
+          </p>
+
+          <h3>Urheberrecht</h3>
+          <p>
+            Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten 
+            unterliegen dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, 
+            Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes 
+            bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers.
+          </p>
+        </section>
+
+        <footer class="disclaimer">
+          <p><em>Impressum erstellt gemäß den Anforderungen des Telemediengesetzes (TMG) und der Datenschutz-Grundverordnung (DSGVO).</em></p>
+        </footer>
+      </article>
+    </main>
+  </body>
+</html>

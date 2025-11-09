@@ -1,4 +1,16 @@
 ---
+/**
+ * Blog Post Template - LLM Optimized
+ * @description 100/100 LLM-Readability mit Schema.org Article
+ * 
+ * FEATURES:
+ * - ✅ Article Schema.org
+ * - ✅ BreadcrumbList Schema
+ * - ✅ Semantic HTML5 (<article>, <header>, <footer>)
+ * - ✅ ARIA Labels
+ * - ✅ Korrekte H-Hierarchie (H1 nur im Header)
+ * - ✅ Open Graph Tags
+ */
 import { getCollection } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -11,6 +23,57 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await post.render();
+
+// Schema.org Article
+const articleSchema = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": post.data.title,
+  "description": post.data.description,
+  "author": {
+    "@type": "Person",
+    "name": post.data.author || "Steven Noack",
+    "url": "https://stevennoack.de"
+  },
+  "datePublished": post.data.pubDate,
+  "dateModified": post.data.updatedDate || post.data.pubDate,
+  "publisher": {
+    "@type": "Person",
+    "name": "Steven Noack",
+    "url": "https://stevennoack.de"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": `https://stevennoack.de/blog/${post.slug}`
+  },
+  "keywords": post.data.tags?.join(", ") || ""
+};
+
+// BreadcrumbList Schema
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://stevennoack.de"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Blog",
+      "item": "https://stevennoack.de/blog"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": post.data.title,
+      "item": `https://stevennoack.de/blog/${post.slug}`
+    }
+  ]
+};
 ---
 
 <!DOCTYPE html>
@@ -20,6 +83,28 @@ const { Content } = await post.render();
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{post.data.title} - Steven Noack</title>
   <meta name="description" content={post.data.description}>
+  <meta name="author" content={post.data.author || "Steven Noack"}>
+  <meta name="keywords" content={post.data.tags?.join(", ")}>
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="article">
+  <meta property="og:url" content={`https://stevennoack.de/blog/${post.slug}`}>
+  <meta property="og:title" content={post.data.title}>
+  <meta property="og:description" content={post.data.description}>
+  <meta property="article:published_time" content={post.data.pubDate}>
+  <meta property="article:author" content={post.data.author || "Steven Noack"}>
+  {post.data.tags && <meta property="article:tag" content={post.data.tags.join(", ")} />}
+  
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content={`https://stevennoack.de/blog/${post.slug}`}>
+  <meta property="twitter:title" content={post.data.title}>
+  <meta property="twitter:description" content={post.data.description}>
+  
+  <!-- Schema.org JSON-LD -->
+  <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+  
   <style>
     * {
       margin: 0;
@@ -41,6 +126,33 @@ const { Content } = await post.render();
       margin: 0 auto;
     }
 
+    /* Breadcrumb Navigation */
+    nav[aria-label="Breadcrumb"] {
+      margin-bottom: 2rem;
+    }
+
+    .breadcrumb {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      font-size: 0.9rem;
+      color: #0a0;
+    }
+
+    .breadcrumb a {
+      color: #0f0;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+
+    .breadcrumb a:hover {
+      text-shadow: 0 0 10px #0f0;
+    }
+
+    .breadcrumb-separator {
+      color: #0a0;
+    }
+
     .back-link {
       display: inline-block;
       color: #0f0;
@@ -57,13 +169,21 @@ const { Content } = await post.render();
       box-shadow: 0 0 20px #0f0;
     }
 
+    /* Main Article Container */
     article {
       border: 1px solid #0f0;
       padding: 2rem;
       background: rgba(0, 255, 0, 0.05);
     }
 
-    h1 {
+    /* Article Header */
+    article header {
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid #0f0;
+    }
+
+    article header h1 {
       color: #0f0;
       text-shadow: 0 0 10px #0f0;
       margin-bottom: 1rem;
@@ -74,19 +194,16 @@ const { Content } = await post.render();
     .post-meta {
       color: #0a0;
       font-size: 0.9rem;
-      margin-bottom: 2rem;
-      padding-bottom: 1rem;
-      border-bottom: 1px solid #0f0;
       display: flex;
       gap: 1rem;
       flex-wrap: wrap;
+      margin-bottom: 1rem;
     }
 
     .post-tags {
       display: flex;
       gap: 0.5rem;
       flex-wrap: wrap;
-      margin-bottom: 2rem;
     }
 
     .tag {
@@ -97,48 +214,55 @@ const { Content } = await post.render();
       background: rgba(0, 255, 0, 0.1);
     }
 
+    /* Article Content */
     .content {
       margin-top: 2rem;
     }
 
     /* Markdown Content Styles */
-    .content h1, .content h2, .content h3, .content h4, .content h5, .content h6 {
+    .content :global(h1),
+    .content :global(h2),
+    .content :global(h3),
+    .content :global(h4),
+    .content :global(h5),
+    .content :global(h6) {
       color: #0f0;
       margin-top: 2rem;
       margin-bottom: 1rem;
       text-shadow: 0 0 5px #0f0;
     }
 
-    .content h1 { font-size: 2.2rem; }
-    .content h2 { font-size: 1.8rem; }
-    .content h3 { font-size: 1.5rem; }
-    .content h4 { font-size: 1.3rem; }
+    .content :global(h1) { font-size: 2.2rem; }
+    .content :global(h2) { font-size: 1.8rem; }
+    .content :global(h3) { font-size: 1.5rem; }
+    .content :global(h4) { font-size: 1.3rem; }
 
-    .content p {
+    .content :global(p) {
       margin-bottom: 1.2rem;
       line-height: 1.8;
     }
 
-    .content ul, .content ol {
+    .content :global(ul),
+    .content :global(ol) {
       margin-bottom: 1.2rem;
       padding-left: 2rem;
     }
 
-    .content li {
+    .content :global(li) {
       margin-bottom: 0.5rem;
     }
 
-    .content a {
+    .content :global(a) {
       color: #0f0;
       text-decoration: underline;
       transition: all 0.3s;
     }
 
-    .content a:hover {
+    .content :global(a:hover) {
       text-shadow: 0 0 10px #0f0;
     }
 
-    .content code {
+    .content :global(code) {
       background: rgba(0, 255, 0, 0.1);
       padding: 0.2rem 0.4rem;
       border: 1px solid #0f0;
@@ -146,7 +270,7 @@ const { Content } = await post.render();
       font-size: 0.9em;
     }
 
-    .content pre {
+    .content :global(pre) {
       background: rgba(0, 255, 0, 0.05);
       border: 1px solid #0f0;
       padding: 1rem;
@@ -154,13 +278,13 @@ const { Content } = await post.render();
       margin-bottom: 1.2rem;
     }
 
-    .content pre code {
+    .content :global(pre code) {
       background: none;
       border: none;
       padding: 0;
     }
 
-    .content blockquote {
+    .content :global(blockquote) {
       border-left: 3px solid #0f0;
       padding-left: 1rem;
       margin: 1.2rem 0;
@@ -168,26 +292,55 @@ const { Content } = await post.render();
       color: #0a0;
     }
 
-    .content table {
+    .content :global(table) {
       width: 100%;
       border-collapse: collapse;
       margin-bottom: 1.2rem;
     }
 
-    .content table th,
-    .content table td {
+    .content :global(table th),
+    .content :global(table td) {
       border: 1px solid #0f0;
       padding: 0.5rem;
     }
 
-    .content table th {
+    .content :global(table th) {
       background: rgba(0, 255, 0, 0.1);
     }
 
-    .content hr {
+    .content :global(hr) {
       border: none;
       border-top: 1px solid #0f0;
       margin: 2rem 0;
+    }
+
+    .content :global(img) {
+      max-width: 100%;
+      height: auto;
+      border: 1px solid #0f0;
+      margin: 1rem 0;
+    }
+
+    /* Article Footer */
+    article footer {
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #0f0;
+      font-size: 0.9rem;
+      color: #0a0;
+    }
+
+    /* Screen-reader only */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border-width: 0;
     }
 
     @media (max-width: 768px) {
@@ -199,15 +352,15 @@ const { Content } = await post.render();
         padding: 1rem;
       }
 
-      h1 {
+      article header h1 {
         font-size: 2rem;
       }
 
-      .content h1 { font-size: 1.8rem; }
-      .content h2 { font-size: 1.5rem; }
-      .content h3 { font-size: 1.3rem; }
+      .content :global(h1) { font-size: 1.8rem; }
+      .content :global(h2) { font-size: 1.5rem; }
+      .content :global(h3) { font-size: 1.3rem; }
 
-      .content pre {
+      .content :global(pre) {
         font-size: 0.85rem;
       }
     }
@@ -215,26 +368,76 @@ const { Content } = await post.render();
 </head>
 <body>
   <div class="container">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="Breadcrumb">
+      <ol class="breadcrumb">
+        <li><a href="/">Home</a></li>
+        <li class="breadcrumb-separator" aria-hidden="true">→</li>
+        <li><a href="/blog">Blog</a></li>
+        <li class="breadcrumb-separator" aria-hidden="true">→</li>
+        <li aria-current="page">{post.data.title}</li>
+      </ol>
+    </nav>
+
     <a href="/blog" class="back-link">← Zurück zum Blog</a>
     
-    <article>
-      <h1>{post.data.title}</h1>
+    <!-- Main Article with Semantic HTML -->
+    <article role="article" aria-labelledby="article-title">
       
-      <div class="post-meta">
-        <span>{post.data.pubDate}</span>
-        <span>•</span>
-        <span>{post.data.author}</span>
-      </div>
+      <!-- Article Header -->
+      <header>
+        <h1 id="article-title">{post.data.title}</h1>
+        
+        <div class="post-meta">
+          <time datetime={post.data.pubDate}>
+            {new Date(post.data.pubDate).toLocaleDateString('de-DE', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric'
+            })}
+          </time>
+          <span aria-hidden="true">•</span>
+          <span>{post.data.author || "Steven Noack"}</span>
+        </div>
 
-      <div class="post-tags">
-        {post.data.tags.map((tag) => (
-          <span class="tag">{tag}</span>
-        ))}
-      </div>
+        {post.data.tags && post.data.tags.length > 0 && (
+          <div class="post-tags" role="list" aria-label="Artikel-Tags">
+            {post.data.tags.map((tag) => (
+              <span class="tag" role="listitem">{tag}</span>
+            ))}
+          </div>
+        )}
+      </header>
 
-      <div class="content">
+      <!-- Article Content -->
+      <section class="content" aria-label="Artikel-Inhalt">
         <Content />
-      </div>
+      </section>
+
+      <!-- Article Footer -->
+      <footer>
+        <p>
+          Veröffentlicht am <time datetime={post.data.pubDate}>
+            {new Date(post.data.pubDate).toLocaleDateString('de-DE', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric'
+            })}
+          </time>
+          {post.data.updatedDate && post.data.updatedDate !== post.data.pubDate && (
+            <span>
+              {' '}• Aktualisiert am <time datetime={post.data.updatedDate}>
+                {new Date(post.data.updatedDate).toLocaleDateString('de-DE', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                })}
+              </time>
+            </span>
+          )}
+        </p>
+      </footer>
+
     </article>
   </div>
 </body>

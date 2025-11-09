@@ -1,4 +1,14 @@
 ---
+/**
+ * Blog Index Page - LLM Optimized
+ * @description 100/100 LLM-Readability mit Schema.org Blog
+ * 
+ * FEATURES:
+ * - ✅ Blog Schema.org
+ * - ✅ Semantic HTML (<main>, <article>, <header>)
+ * - ✅ ARIA Labels
+ * - ✅ Korrekte H-Hierarchie
+ */
 import { getCollection } from 'astro:content';
 
 const blogPosts = await getCollection('blog');
@@ -7,6 +17,31 @@ const blogPosts = await getCollection('blog');
 const sortedPosts = blogPosts.sort((a, b) => {
   return new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime();
 });
+
+// Schema.org Blog
+const blogSchema = {
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  "name": "Steven Noack Blog",
+  "description": "Artikel über LLM-native Entwicklung, System Building und Tech",
+  "url": "https://stevennoack.de/blog",
+  "author": {
+    "@type": "Person",
+    "name": "Steven Noack",
+    "url": "https://stevennoack.de"
+  },
+  "blogPost": sortedPosts.map(post => ({
+    "@type": "BlogPosting",
+    "headline": post.data.title,
+    "description": post.data.description,
+    "url": `https://stevennoack.de/blog/${post.slug}`,
+    "datePublished": post.data.pubDate,
+    "author": {
+      "@type": "Person",
+      "name": post.data.author || "Steven Noack"
+    }
+  }))
+};
 ---
 
 <!DOCTYPE html>
@@ -15,6 +50,23 @@ const sortedPosts = blogPosts.sort((a, b) => {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Blog - Steven Noack</title>
+  <meta name="description" content="Artikel über LLM-native Entwicklung, System Building, AI Automation und Tech von Steven Noack">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://stevennoack.de/blog">
+  <meta property="og:title" content="Blog - Steven Noack">
+  <meta property="og:description" content="Artikel über LLM-native Entwicklung, System Building, AI Automation und Tech">
+  
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://stevennoack.de/blog">
+  <meta property="twitter:title" content="Blog - Steven Noack">
+  <meta property="twitter:description" content="Artikel über LLM-native Entwicklung, System Building, AI Automation und Tech">
+  
+  <!-- Schema.org JSON-LD -->
+  <script type="application/ld+json" set:html={JSON.stringify(blogSchema)} />
+  
   <style>
     * {
       margin: 0;
@@ -35,13 +87,6 @@ const sortedPosts = blogPosts.sort((a, b) => {
       margin: 0 auto;
     }
 
-    h1 {
-      color: #0f0;
-      text-shadow: 0 0 10px #0f0;
-      margin-bottom: 2rem;
-      font-size: 2.5rem;
-    }
-
     .back-link {
       display: inline-block;
       color: #0f0;
@@ -56,6 +101,19 @@ const sortedPosts = blogPosts.sort((a, b) => {
       background: #0f0;
       color: #000;
       box-shadow: 0 0 20px #0f0;
+    }
+
+    header h1 {
+      color: #0f0;
+      text-shadow: 0 0 10px #0f0;
+      margin-bottom: 0.5rem;
+      font-size: 2.5rem;
+    }
+
+    header p {
+      color: #0a0;
+      margin-bottom: 3rem;
+      font-size: 1.1rem;
     }
 
     .blog-list {
@@ -117,12 +175,24 @@ const sortedPosts = blogPosts.sort((a, b) => {
       background: rgba(0, 255, 0, 0.1);
     }
 
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border-width: 0;
+    }
+
     @media (max-width: 768px) {
       body {
         padding: 1rem;
       }
 
-      h1 {
+      header h1 {
         font-size: 2rem;
       }
 
@@ -133,38 +203,53 @@ const sortedPosts = blogPosts.sort((a, b) => {
   </style>
 </head>
 <body>
-  <div class="container">
+  <main class="container" role="main">
     <a href="/" class="back-link">← Zurück zur Hauptseite</a>
     
-    <h1>Blog</h1>
+    <header>
+      <h1>Blog</h1>
+      <p>Artikel über LLM-native Entwicklung, System Building und Tech</p>
+    </header>
 
-    <div class="blog-list">
-      {sortedPosts.map((post) => (
-        <article class="blog-post">
-          <h2>
-            <a href={`/blog/${post.slug}`}>
-              {post.data.title}
-            </a>
-          </h2>
-          
-          <div class="post-meta">
-            <span>{post.data.pubDate}</span>
-            <span>•</span>
-            <span>{post.data.author}</span>
-          </div>
+    <section aria-labelledby="blog-posts-heading">
+      <h2 id="blog-posts-heading" class="sr-only">Alle Blog-Posts</h2>
+      
+      <div class="blog-list" role="list">
+        {sortedPosts.map((post) => (
+          <article class="blog-post" role="listitem" aria-labelledby={`post-${post.slug}`}>
+            <h2 id={`post-${post.slug}`}>
+              <a href={`/blog/${post.slug}`}>
+                {post.data.title}
+              </a>
+            </h2>
+            
+            <div class="post-meta">
+              <time datetime={post.data.pubDate}>
+                {new Date(post.data.pubDate).toLocaleDateString('de-DE', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                })}
+              </time>
+              <span aria-hidden="true">•</span>
+              <span>{post.data.author || "Steven Noack"}</span>
+            </div>
 
-          <p class="post-description">
-            {post.data.description}
-          </p>
+            <p class="post-description">
+              {post.data.description}
+            </p>
 
-          <div class="post-tags">
-            {post.data.tags.map((tag) => (
-              <span class="tag">{tag}</span>
-            ))}
-          </div>
-        </article>
-      ))}
-    </div>
-  </div>
+            {post.data.tags && post.data.tags.length > 0 && (
+              <div class="post-tags" role="list" aria-label="Post-Tags">
+                {post.data.tags.map((tag) => (
+                  <span class="tag" role="listitem">{tag}</span>
+                ))}
+              </div>
+            )}
+          </article>
+        ))}
+      </div>
+    </section>
+  </main>
 </body>
 </html>

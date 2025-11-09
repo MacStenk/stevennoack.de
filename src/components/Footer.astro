@@ -1,25 +1,182 @@
 ---
 /**
  * Footer Component
- * @description Site footer with copyright
+ * @description Site footer with legal links and tech stack info
+ * FIXED: Ensured links are clickable with proper z-index and pointer-events
  */
 
 const currentYear = new Date().getFullYear();
 ---
 
-<footer class="footer">
-  <p>
-    &copy; {currentYear} Steven Noack. Self-hosted with pride.
-  </p>
+<footer class="footer" role="contentinfo">
+  <div class="footer-content">
+    
+    <!-- Legal Links -->
+    <nav aria-label="Footer Navigation" class="footer-nav">
+      <ul class="footer-links">
+        <li><a href="/impressum" class="footer-link">Impressum</a></li>
+        <li><span class="separator">|</span></li>
+        <li><a href="/datenschutz" class="footer-link">Datenschutz</a></li>
+      </ul>
+    </nav>
+
+    <!-- JAMstack Info Box -->
+    <div class="tech-box">
+      <p class="tech-stack">
+        ⚡ <strong>JAMstack Architecture</strong><br />
+        Astro + Cloudflare Pages + Tina CMS Cloud<br />
+        <span class="optimized">LLM-optimiert mit <a href="https://codeback.de" target="_blank" rel="noopener" class="external-link">CodeBack.de</a></span>
+      </p>
+    </div>
+
+    <!-- Copyright -->
+    <p class="copyright">
+      &copy; {currentYear} Steven Noack. Built with freedom in mind.
+    </p>
+  </div>
 </footer>
 
 <style>
   .footer {
-    text-align: center;
-    padding: 3rem 0;
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-    border-top: 1px solid var(--border-color);
+    border-top: 2px solid #0f0;
     margin-top: 4rem;
+    padding: 2rem 1rem;
+    background: rgba(0, 0, 0, 0.8);
+    position: relative;
+    z-index: 10;
+  }
+
+  .footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+    z-index: 20;
+  }
+
+  /* Legal Links Navigation */
+  .footer-nav {
+    margin-bottom: 2rem;
+    position: relative;
+    z-index: 30;
+  }
+
+  .footer-links {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    font-size: 1rem;
+  }
+
+  .footer-links li {
+    position: relative;
+    z-index: 40;
+  }
+
+  /* CRITICAL: Ensure links are clickable */
+  .footer-link,
+  .external-link {
+    color: #0f0;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border: 1px solid #0f0;
+    transition: all 0.3s ease;
+    display: inline-block;
+    cursor: pointer !important;
+    pointer-events: auto !important;
+    position: relative;
+    z-index: 50;
+  }
+
+  .footer-link:hover,
+  .external-link:hover {
+    background: #0f0;
+    color: #000;
+    box-shadow: 0 0 15px #0f0;
+    text-shadow: none;
+  }
+
+  .separator {
+    color: #0f0;
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  /* Tech Stack Box */
+  .tech-box {
+    margin: 2rem auto;
+    padding: 1.5rem;
+    border: 2px solid #0f0;
+    border-radius: 8px;
+    background: rgba(0, 255, 0, 0.05);
+    max-width: 600px;
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
+    position: relative;
+    z-index: 20;
+  }
+
+  .tech-stack {
+    color: #0f0;
+    margin: 0;
+    line-height: 1.8;
+    font-size: 0.95rem;
+  }
+
+  .tech-stack strong {
+    font-size: 1.1rem;
+    text-shadow: 0 0 5px #0f0;
+  }
+
+  .optimized {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    opacity: 0.9;
+  }
+
+  .optimized .external-link {
+    border: none;
+    padding: 0;
+    text-decoration: underline;
+  }
+
+  .optimized .external-link:hover {
+    background: transparent;
+    color: #0f0;
+    text-shadow: 0 0 10px #0f0;
+  }
+
+  /* Copyright */
+  .copyright {
+    margin-top: 2rem;
+    color: #0a0;
+    font-size: 0.85rem;
+    opacity: 0.7;
+    pointer-events: none;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .footer-links {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .separator {
+      display: none;
+    }
+
+    .tech-box {
+      padding: 1rem;
+      font-size: 0.9rem;
+    }
+
+    .tech-stack strong {
+      font-size: 1rem;
+    }
   }
 </style>
