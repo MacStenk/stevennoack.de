@@ -1,0 +1,28 @@
+---
+/**
+ * ShiftedContent Component
+ * @description Server-side heading shift for Markdown content
+ * Transforms H1→H2, H2→H3, etc. during build
+ */
+
+const slotContent = await Astro.slots.render('default');
+
+function shiftHeadings(html: string): string {
+  // Shift headings in reverse order to avoid double-processing
+  return html
+    .replace(/<h5(\s[^>]*)?>/gi, '<h6$1>')
+    .replace(/<\/h5>/gi, '</h6>')
+    .replace(/<h4(\s[^>]*)?>/gi, '<h5$1>')
+    .replace(/<\/h4>/gi, '</h5>')
+    .replace(/<h3(\s[^>]*)?>/gi, '<h4$1>')
+    .replace(/<\/h3>/gi, '</h4>')
+    .replace(/<h2(\s[^>]*)?>/gi, '<h3$1>')
+    .replace(/<\/h2>/gi, '</h3>')
+    .replace(/<h1(\s[^>]*)?>/gi, '<h2$1>')
+    .replace(/<\/h1>/gi, '</h2>');
+}
+
+const shiftedContent = shiftHeadings(slotContent);
+---
+
+<Fragment set:html={shiftedContent} />
