@@ -2,7 +2,7 @@
 /**
  * Blog Post Template - LLM Optimized
  * @description 100/100 LLM-Readability mit Schema.org Article
- * 
+ *
  * FEATURES:
  * - ✅ Article Schema.org
  * - ✅ BreadcrumbList Schema
@@ -10,14 +10,14 @@
  * - ✅ ARIA Labels
  * - ✅ Nur EIN H1 pro Seite (Artikel-Titel im Header)
  * - ✅ Open Graph Tags
- * 
+ *
  * NOTE: Markdown content should NOT include H1 headings!
  * Start Markdown with H2 (##) as H1 is reserved for article title.
  */
-import { getCollection } from 'astro:content';
+import { getCollection } from "astro:content";
 
 export async function getStaticPaths() {
-  const blogPosts = await getCollection('blog');
+  const blogPosts = await getCollection("blog");
   return blogPosts.map((post) => ({
     params: { slug: post.slug },
     props: { post },
@@ -31,730 +31,782 @@ const { Content } = await post.render();
 const articleSchema = {
   "@context": "https://schema.org",
   "@type": "Article",
-  "headline": post.data.title,
-  "description": post.data.description,
-  "author": {
+  headline: post.data.title,
+  description: post.data.description,
+  author: {
     "@type": "Person",
-    "name": post.data.author || "Steven Noack",
-    "url": "https://stevennoack.de"
+    name: post.data.author || "Steven Noack",
+    url: "https://stevennoack.de",
   },
-  "datePublished": post.data.pubDate,
-  "dateModified": post.data.updatedDate || post.data.pubDate,
-  "publisher": {
+  datePublished: post.data.pubDate,
+  dateModified: post.data.updatedDate || post.data.pubDate,
+  publisher: {
     "@type": "Person",
-    "name": "Steven Noack",
-    "url": "https://stevennoack.de"
+    name: "Steven Noack",
+    url: "https://stevennoack.de",
   },
-  "mainEntityOfPage": {
+  mainEntityOfPage: {
     "@type": "WebPage",
-    "@id": `https://stevennoack.de/blog/${post.slug}`
+    "@id": `https://stevennoack.de/blog/${post.slug}`,
   },
-  "keywords": post.data.tags?.join(", ") || ""
+  keywords: post.data.tags?.join(", ") || "",
 };
 
 // BreadcrumbList Schema
 const breadcrumbSchema = {
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
-  "itemListElement": [
+  itemListElement: [
     {
       "@type": "ListItem",
-      "position": 1,
-      "name": "Home",
-      "item": "https://stevennoack.de"
+      position: 1,
+      name: "Home",
+      item: "https://stevennoack.de",
     },
     {
       "@type": "ListItem",
-      "position": 2,
-      "name": "Blog",
-      "item": "https://stevennoack.de/blog"
+      position: 2,
+      name: "Blog",
+      item: "https://stevennoack.de/blog",
     },
     {
       "@type": "ListItem",
-      "position": 3,
-      "name": post.data.title,
-      "item": `https://stevennoack.de/blog/${post.slug}`
-    }
-  ]
+      position: 3,
+      name: post.data.title,
+      item: `https://stevennoack.de/blog/${post.slug}`,
+    },
+  ],
 };
 ---
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="de">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{post.data.title} - Steven Noack</title>
-  <meta name="description" content={post.data.description}>
-  <meta name="author" content={post.data.author || "Steven Noack"}>
-  <meta name="keywords" content={post.data.tags?.join(", ")}>
-  
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="article">
-  <meta property="og:url" content={`https://stevennoack.de/blog/${post.slug}`}>
-  <meta property="og:title" content={post.data.title}>
-  <meta property="og:description" content={post.data.description}>
-  <meta property="article:published_time" content={post.data.pubDate}>
-  <meta property="article:author" content={post.data.author || "Steven Noack"}>
-  {post.data.tags && <meta property="article:tag" content={post.data.tags.join(", ")} />}
-  
-  <!-- Twitter -->
-  <meta property="twitter:card" content="summary_large_image">
-  <meta property="twitter:url" content={`https://stevennoack.de/blog/${post.slug}`}>
-  <meta property="twitter:title" content={post.data.title}>
-  <meta property="twitter:description" content={post.data.description}>
-  
-  <!-- Schema.org JSON-LD -->
-  <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
-  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
-  
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{post.data.title} - Steven Noack</title>
+    <meta name="description" content={post.data.description} />
+    <meta name="author" content={post.data.author || "Steven Noack"} />
+    <meta name="keywords" content={post.data.tags?.join(", ")} />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article" />
+    <meta
+      property="og:url"
+      content={`https://stevennoack.de/blog/${post.slug}`}
+    />
+    <meta property="og:title" content={post.data.title} />
+    <meta property="og:description" content={post.data.description} />
+    <meta property="article:published_time" content={post.data.pubDate} />
+    <meta
+      property="article:author"
+      content={post.data.author || "Steven Noack"}
+    />
+    {
+      post.data.tags && (
+        <meta property="article:tag" content={post.data.tags.join(", ")} />
+      )
     }
 
-    body {
-      background: #000;
-      color: #d4d4d4;
-      font-family: 'Courier New', monospace; /* Default: Terminal */
-      padding: 2rem;
-      min-height: 100vh;
-      line-height: 1.8;
-      font-size: 18px;
-      transition: background 0.3s, color 0.3s, font-family 0.3s;
-    }
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta
+      property="twitter:url"
+      content={`https://stevennoack.de/blog/${post.slug}`}
+    />
+    <meta property="twitter:title" content={post.data.title} />
+    <meta property="twitter:description" content={post.data.description} />
 
-    /* Font Variations */
-    body.font-sans {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
-    }
+    <!-- Schema.org JSON-LD -->
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(articleSchema)}
+    />
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(breadcrumbSchema)}
+    />
 
-    body.font-serif {
-      font-family: Georgia, 'Times New Roman', serif;
-      font-size: 19px; /* Serif etwas größer */
-      line-height: 1.9;
-    }
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-    /* Headers bleiben IMMER Courier (Terminal-Brand) */
-    article header h1,
-    .content :global(h2),
-    .content :global(h3),
-    .content :global(h4),
-    .content :global(h5),
-    .content :global(h6),
-    .content :global(code),
-    .content :global(pre),
-    .tag,
-    .mode-toggle,
-    .font-toggle {
-      font-family: 'Courier New', monospace !important;
-    }
-
-    /* Light Mode */
-    body.light-mode {
-      background: #fafafa;
-      color: #2a2a2a;
-    }
-
-    body.light-mode article {
-      background: rgba(0, 0, 0, 0.02);
-      border-color: #16a34a; /* Grün auch im Light Mode */
-    }
-
-    body.light-mode article header {
-      border-bottom-color: #16a34a;
-    }
-
-    body.light-mode article header h1,
-    body.light-mode .content :global(h2),
-    body.light-mode .content :global(h3),
-    body.light-mode .content :global(h4),
-    body.light-mode .content :global(h5),
-    body.light-mode .content :global(h6) {
-      color: #16a34a; /* Grün im Light Mode */
-    }
-
-    body.light-mode .breadcrumb a,
-    body.light-mode .back-link,
-    body.light-mode .content :global(a) {
-      color: #16a34a;
-    }
-
-    body.light-mode .tag {
-      border-color: #16a34a;
-      background: rgba(22, 163, 74, 0.1);
-    }
-
-    body.light-mode .content :global(code) {
-      background: rgba(22, 163, 74, 0.1);
-      border-color: #16a34a;
-    }
-
-    body.light-mode .content :global(pre) {
-      background: rgba(22, 163, 74, 0.05);
-      border-color: #16a34a;
-    }
-
-    body.light-mode .content :global(blockquote) {
-      border-left-color: #16a34a;
-      color: #4a4a4a;
-    }
-
-    body.light-mode .content :global(table th),
-    body.light-mode .content :global(table td) {
-      border-color: #16a34a;
-    }
-
-    body.light-mode .content :global(table th) {
-      background: rgba(22, 163, 74, 0.1);
-    }
-
-    body.light-mode .content :global(hr) {
-      border-top-color: #16a34a;
-    }
-
-    body.light-mode .content :global(img) {
-      border-color: #16a34a;
-    }
-
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-      padding-top: 4rem; /* Reduziert da Zahlen weg sind */
-    }
-
-    /* Breadcrumb Navigation */
-    nav[aria-label="Breadcrumb"] {
-      margin-bottom: 2rem;
-      margin-top: 0; /* Kein extra margin-top */
-    }
-
-    .breadcrumb {
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-      font-size: 0.9rem;
-      color: #0a0;
-      list-style: none; /* Keine Nummern! */
-    }
-
-    .breadcrumb li {
-      list-style: none; /* Sicherstellen dass KEINE Nummern erscheinen */
-    }
-
-    .breadcrumb a {
-      color: #0f0;
-      text-decoration: none;
-      transition: all 0.3s;
-    }
-
-    .breadcrumb a:hover {
-      /* Glow entfernt */
-      opacity: 0.8;
-    }
-
-    .breadcrumb-separator {
-      color: #0a0;
-    }
-
-    .back-link {
-      display: inline-block;
-      color: #0f0;
-      text-decoration: none;
-      margin-bottom: 2rem;
-      padding: 0.5rem 1rem;
-      border: 1px solid #0f0;
-      transition: all 0.3s;
-    }
-
-    .back-link:hover {
-      background: #0f0;
-      color: #000;
-      /* box-shadow Glow entfernt */
-    }
-
-    /* Main Article Container */
-    article {
-      border: 1px solid #0f0;
-      padding: 2rem;
-      background: rgba(0, 255, 0, 0.05);
-    }
-
-    /* Article Header */
-    article header {
-      margin-bottom: 2rem;
-      padding-bottom: 1.5rem;
-      border-bottom: 1px solid #0f0;
-    }
-
-    article header h1 {
-      color: #0f0;
-      /* text-shadow entfernt für weniger Glow */
-      margin-bottom: 1rem;
-      font-size: 2.5rem;
-      line-height: 1.2;
-    }
-
-    .post-meta {
-      color: #0a0;
-      font-size: 0.9rem;
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-      margin-bottom: 1rem;
-    }
-
-    .post-tags {
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-    }
-
-    .tag {
-      display: inline-block;
-      padding: 0.25rem 0.75rem;
-      border: 1px solid #0f0;
-      font-size: 0.85rem;
-      background: rgba(0, 255, 0, 0.1);
-    }
-
-    /* Article Content */
-    .content {
-      margin-top: 2rem;
-    }
-
-    /* Content Headings H2-H6 */
-    .content :global(h2) {
-      color: #0f0;
-      font-size: 1.8rem;
-      margin-top: 2rem;
-      margin-bottom: 1rem;
-      /* text-shadow entfernt */
-    }
-
-    .content :global(h3) {
-      color: #0f0;
-      font-size: 1.5rem;
-      margin-top: 1.5rem;
-      margin-bottom: 0.8rem;
-      /* text-shadow entfernt */
-    }
-
-    .content :global(h4) {
-      color: #0f0;
-      font-size: 1.3rem;
-      margin-top: 1.5rem;
-      margin-bottom: 0.8rem;
-    }
-
-    .content :global(h5) {
-      color: #0f0;
-      font-size: 1.1rem;
-      margin-top: 1rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .content :global(h6) {
-      color: #0f0;
-      font-size: 1rem;
-      margin-top: 1rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .content :global(p) {
-      margin-bottom: 1.5rem;
-      line-height: 1.9; /* Noch mehr Abstand für Body-Text */
-      max-width: 75ch; /* Optimale Zeilenlänge für Lesbarkeit */
-    }
-
-    .content :global(ul),
-    .content :global(ol) {
-      margin-bottom: 1.5rem;
-      padding-left: 2rem;
-      max-width: 75ch; /* Gleiche Breite wie Paragraphen */
-    }
-
-    .content :global(li) {
-      margin-bottom: 0.7rem;
-      line-height: 1.8; /* Bessere Lesbarkeit in Listen */
-    }
-
-    .content :global(a) {
-      color: #0f0;
-      text-decoration: underline;
-      transition: all 0.3s;
-    }
-
-    .content :global(a:hover) {
-      /* Glow bei Hover entfernt */
-      opacity: 0.8;
-    }
-
-    .content :global(code) {
-      background: rgba(0, 255, 0, 0.1);
-      padding: 0.2rem 0.4rem;
-      border: 1px solid #0f0;
-      font-family: 'Courier New', monospace;
-      font-size: 0.9em;
-    }
-
-    .content :global(pre) {
-      background: rgba(0, 255, 0, 0.05);
-      border: 1px solid #0f0;
-      padding: 1rem;
-      overflow-x: auto;
-      margin-bottom: 1.2rem;
-    }
-
-    .content :global(pre code) {
-      background: none;
-      border: none;
-      padding: 0;
-    }
-
-    .content :global(blockquote) {
-      border-left: 3px solid #0f0;
-      padding-left: 1.5rem;
-      margin: 2rem 0;
-      font-style: italic;
-      color: #b0b0b0; /* Helleres Grau für Zitate */
-      font-size: 1.1em; /* Leicht größer für Betonung */
-      max-width: 70ch;
-    }
-
-    .content :global(table) {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 1.2rem;
-    }
-
-    .content :global(table th),
-    .content :global(table td) {
-      border: 1px solid #0f0;
-      padding: 0.5rem;
-    }
-
-    .content :global(table th) {
-      background: rgba(0, 255, 0, 0.1);
-    }
-
-    .content :global(hr) {
-      border: none;
-      border-top: 1px solid #0f0;
-      margin: 2rem 0;
-    }
-
-    .content :global(img) {
-      max-width: 100%;
-      height: auto;
-      border: 1px solid #0f0;
-      margin: 1rem 0;
-    }
-
-    /* Article Footer */
-    article footer {
-      margin-top: 3rem;
-      padding-top: 1.5rem;
-      border-top: 1px solid #0f0;
-      font-size: 0.9rem;
-      color: #0a0;
-    }
-
-    /* Screen-reader only */
-    .sr-only {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      white-space: nowrap;
-      border-width: 0;
-    }
-
-    /* Dark/Light Mode Toggle */
-    .mode-toggle {
-      position: fixed;
-      top: 2rem;
-      right: 2rem;
-      background: none;
-      border: 2px solid #0f0;
-      color: #0f0;
-      padding: 0.5rem 1rem;
-      cursor: pointer;
-      font-family: 'Courier New', monospace;
-      font-size: 0.9rem;
-      transition: all 0.3s;
-      z-index: 1000;
-    }
-
-    .mode-toggle:hover {
-      background: #0f0;
-      color: #000;
-    }
-
-    body.light-mode .mode-toggle {
-      border-color: #16a34a;
-      color: #16a34a;
-    }
-
-    body.light-mode .mode-toggle:hover {
-      background: #16a34a;
-      color: #fff;
-    }
-
-    /* Font Toggle Button */
-    .font-toggle {
-      position: fixed;
-      top: 2rem;
-      right: 12rem; /* Links vom Mode-Toggle */
-      background: none;
-      border: 2px solid #0f0;
-      color: #0f0;
-      padding: 0.5rem 1rem;
-      cursor: pointer;
-      font-family: 'Courier New', monospace;
-      font-size: 0.9rem;
-      transition: all 0.3s;
-      z-index: 1000;
-    }
-
-    .font-toggle:hover {
-      background: #0f0;
-      color: #000;
-    }
-
-    body.light-mode .font-toggle {
-      border-color: #16a34a;
-      color: #16a34a;
-    }
-
-    body.light-mode .font-toggle:hover {
-      background: #16a34a;
-      color: #fff;
-    }
-
-    @media (max-width: 768px) {
       body {
-        padding: 1rem;
-        font-size: 16px;
+        background: #000;
+        color: #d4d4d4;
+        font-family: "Courier New", monospace; /* Default: Terminal */
+        padding: 2rem;
+        min-height: 100vh;
+        line-height: 1.8;
+        font-size: 18px;
+        transition:
+          background 0.3s,
+          color 0.3s,
+          font-family 0.3s;
+      }
+
+      /* Font Variations */
+      body.font-sans {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter",
+          "Roboto", "Helvetica Neue", Arial, sans-serif;
+      }
+
+      body.font-serif {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 19px; /* Serif etwas größer */
+        line-height: 1.9;
+      }
+
+      /* Headers bleiben IMMER Courier (Terminal-Brand) */
+      article header h1,
+      .content :global(h2),
+      .content :global(h3),
+      .content :global(h4),
+      .content :global(h5),
+      .content :global(h6),
+      .content :global(code),
+      .content :global(pre),
+      .tag,
+      .mode-toggle,
+      .font-toggle {
+        font-family: "Courier New", monospace !important;
+      }
+
+      /* Light Mode */
+      body.light-mode {
+        background: #fafafa;
+        color: #2a2a2a;
+      }
+
+      body.light-mode article {
+        background: rgba(0, 0, 0, 0.02);
+        border-color: #16a34a; /* Grün auch im Light Mode */
+      }
+
+      body.light-mode article header {
+        border-bottom-color: #16a34a;
+      }
+
+      body.light-mode article header h1,
+      body.light-mode .content :global(h2),
+      body.light-mode .content :global(h3),
+      body.light-mode .content :global(h4),
+      body.light-mode .content :global(h5),
+      body.light-mode .content :global(h6) {
+        color: #16a34a; /* Grün im Light Mode */
+      }
+
+      body.light-mode .breadcrumb a,
+      body.light-mode .back-link,
+      body.light-mode .content :global(a) {
+        color: #16a34a;
+      }
+
+      body.light-mode .tag {
+        border-color: #16a34a;
+        background: rgba(22, 163, 74, 0.1);
+      }
+
+      body.light-mode .content :global(code) {
+        background: rgba(22, 163, 74, 0.1);
+        border-color: #16a34a;
+      }
+
+      body.light-mode .content :global(pre) {
+        background: rgba(22, 163, 74, 0.05);
+        border-color: #16a34a;
+      }
+
+      body.light-mode .content :global(blockquote) {
+        border-left-color: #16a34a;
+        color: #4a4a4a;
+      }
+
+      body.light-mode .content :global(table th),
+      body.light-mode .content :global(table td) {
+        border-color: #16a34a;
+      }
+
+      body.light-mode .content :global(table th) {
+        background: rgba(22, 163, 74, 0.1);
+      }
+
+      body.light-mode .content :global(hr) {
+        border-top-color: #16a34a;
+      }
+
+      body.light-mode .content :global(img) {
+        border-color: #16a34a;
       }
 
       .container {
-        padding-top: 3.5rem; /* Etwas weniger auf Mobile */
+        max-width: 900px;
+        margin: 0 auto;
+        padding-top: 4rem; /* Reduziert da Zahlen weg sind */
       }
 
-      .mode-toggle {
-        top: 1rem;
-        right: 1rem;
-        padding: 0.4rem 0.8rem;
-        font-size: 0.85rem;
+      /* Breadcrumb Navigation */
+      nav[aria-label="Breadcrumb"] {
+        margin-bottom: 2rem;
+        margin-top: 0; /* Kein extra margin-top */
       }
 
-      .font-toggle {
-        top: 1rem;
-        right: auto;
-        left: 1rem; /* Auf Mobile: Links statt rechts */
-        padding: 0.4rem 0.8rem;
-        font-size: 0.85rem;
+      .breadcrumb {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        font-size: 0.9rem;
+        color: #0a0;
+        list-style: none; /* Keine Nummern! */
       }
 
+      .breadcrumb li {
+        list-style: none; /* Sicherstellen dass KEINE Nummern erscheinen */
+      }
+
+      .breadcrumb a {
+        color: #0f0;
+        text-decoration: none;
+        transition: all 0.3s;
+      }
+
+      .breadcrumb a:hover {
+        /* Glow entfernt */
+        opacity: 0.8;
+      }
+
+      .breadcrumb-separator {
+        color: #0a0;
+      }
+
+      .back-link {
+        display: inline-block;
+        color: #0f0;
+        text-decoration: none;
+        margin-bottom: 2rem;
+        padding: 0.5rem 1rem;
+        border: 1px solid #0f0;
+        transition: all 0.3s;
+      }
+
+      .back-link:hover {
+        background: #0f0;
+        color: #000;
+        /* box-shadow Glow entfernt */
+      }
+
+      /* Main Article Container */
       article {
-        padding: 1.5rem;
+        border: 1px solid #0f0;
+        padding: 2rem;
+        background: rgba(0, 255, 0, 0.05);
+      }
+
+      /* Article Header */
+      article header {
+        margin-bottom: 2rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid #0f0;
       }
 
       article header h1 {
-        font-size: 1.8rem;
-        line-height: 1.3;
+        color: #0f0;
+        /* text-shadow entfernt für weniger Glow */
+        margin-bottom: 1rem;
+        font-size: 2.5rem;
+        line-height: 1.2;
       }
 
-      .content :global(h2) { font-size: 1.5rem; }
-      .content :global(h3) { font-size: 1.3rem; }
-      .content :global(h4) { font-size: 1.1rem; }
+      .post-meta {
+        color: #0a0;
+        font-size: 0.9rem;
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin-bottom: 1rem;
+      }
 
-      .content :global(p),
+      .post-tags {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+      }
+
+      .tag {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        border: 1px solid #0f0;
+        font-size: 0.85rem;
+        background: rgba(0, 255, 0, 0.1);
+      }
+
+      /* Article Content */
+      .content {
+        margin-top: 2rem;
+      }
+
+      /* Content Headings H2-H6 */
+      .content :global(h2) {
+        color: #0f0;
+        font-size: 1.8rem;
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+        /* text-shadow entfernt */
+      }
+
+      .content :global(h3) {
+        color: #0f0;
+        font-size: 1.5rem;
+        margin-top: 1.5rem;
+        margin-bottom: 0.8rem;
+        /* text-shadow entfernt */
+      }
+
+      .content :global(h4) {
+        color: #0f0;
+        font-size: 1.3rem;
+        margin-top: 1.5rem;
+        margin-bottom: 0.8rem;
+      }
+
+      .content :global(h5) {
+        color: #0f0;
+        font-size: 1.1rem;
+        margin-top: 1rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .content :global(h6) {
+        color: #0f0;
+        font-size: 1rem;
+        margin-top: 1rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .content :global(p) {
+        margin-bottom: 1.5rem;
+        line-height: 1.9; /* Noch mehr Abstand für Body-Text */
+        max-width: 75ch; /* Optimale Zeilenlänge für Lesbarkeit */
+      }
+
       .content :global(ul),
-      .content :global(ol),
-      .content :global(blockquote) {
-        max-width: 100%; /* Volle Breite auf Mobile */
+      .content :global(ol) {
+        margin-bottom: 1.5rem;
+        padding-left: 2rem;
+        max-width: 75ch; /* Gleiche Breite wie Paragraphen */
+      }
+
+      .content :global(li) {
+        margin-bottom: 0.7rem;
+        line-height: 1.8; /* Bessere Lesbarkeit in Listen */
+      }
+
+      .content :global(a) {
+        color: #0f0;
+        text-decoration: underline;
+        transition: all 0.3s;
+      }
+
+      .content :global(a:hover) {
+        /* Glow bei Hover entfernt */
+        opacity: 0.8;
+      }
+
+      .content :global(code) {
+        background: rgba(0, 255, 0, 0.1);
+        padding: 0.2rem 0.4rem;
+        border: 1px solid #0f0;
+        font-family: "Courier New", monospace;
+        font-size: 0.9em;
       }
 
       .content :global(pre) {
-        font-size: 0.85rem;
+        background: rgba(0, 255, 0, 0.05);
+        border: 1px solid #0f0;
+        padding: 1rem;
+        overflow-x: auto;
+        margin-bottom: 1.2rem;
       }
-    }
-  </style>
-</head>
-<body>
-  <!-- Font Toggle -->
-  <button class="font-toggle" id="font-toggle" aria-label="Schriftart wechseln">
-    <span id="font-text">Terminal</span>
-  </button>
-  
-  <!-- Dark/Light Mode Toggle -->
-  <button class="mode-toggle" id="mode-toggle" aria-label="Dark/Light Mode umschalten">
-    <span id="mode-icon">☀️</span> <span id="mode-text">Light</span>
-  </button>
-  
-  <div class="container">
-    <!-- Breadcrumb Navigation -->
-    <nav aria-label="Breadcrumb">
-      <ol class="breadcrumb">
-        <li><a href="/">Home</a></li>
-        <li class="breadcrumb-separator" aria-hidden="true">→</li>
-        <li><a href="/blog">Blog</a></li>
-        <li class="breadcrumb-separator" aria-hidden="true">→</li>
-        <li aria-current="page">{post.data.title}</li>
-      </ol>
-    </nav>
 
-    <a href="/blog" class="back-link">← Zurück zum Blog</a>
-    
-    <!-- Main Article with Semantic HTML -->
-    <article role="article" aria-labelledby="article-title">
-      
-      <!-- Article Header with H1 (ONLY H1 on page) -->
-      <header>
-        <h1 id="article-title">{post.data.title}</h1>
-        
-        <div class="post-meta">
-          <time datetime={post.data.pubDate}>
-            {new Date(post.data.pubDate).toLocaleDateString('de-DE', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric'
-            })}
-          </time>
-          <span aria-hidden="true">•</span>
-          <span>{post.data.author || "Steven Noack"}</span>
-        </div>
+      .content :global(pre code) {
+        background: none;
+        border: none;
+        padding: 0;
+      }
 
-        {post.data.tags && post.data.tags.length > 0 && (
-          <div class="post-tags" role="list" aria-label="Artikel-Tags">
-            {post.data.tags.map((tag) => (
-              <span class="tag" role="listitem">{tag}</span>
-            ))}
+      .content :global(blockquote) {
+        border-left: 3px solid #0f0;
+        padding-left: 1.5rem;
+        margin: 2rem 0;
+        font-style: italic;
+        color: #b0b0b0; /* Helleres Grau für Zitate */
+        font-size: 1.1em; /* Leicht größer für Betonung */
+        max-width: 70ch;
+      }
+
+      .content :global(table) {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 1.2rem;
+      }
+
+      .content :global(table th),
+      .content :global(table td) {
+        border: 1px solid #0f0;
+        padding: 0.5rem;
+      }
+
+      .content :global(table th) {
+        background: rgba(0, 255, 0, 0.1);
+      }
+
+      .content :global(hr) {
+        border: none;
+        border-top: 1px solid #0f0;
+        margin: 2rem 0;
+      }
+
+      .content :global(img) {
+        max-width: 100%;
+        height: auto;
+        border: 1px solid #0f0;
+        margin: 1rem 0;
+      }
+
+      /* Article Footer */
+      article footer {
+        margin-top: 3rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid #0f0;
+        font-size: 0.9rem;
+        color: #0a0;
+      }
+
+      /* Screen-reader only */
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border-width: 0;
+      }
+
+      /* Dark/Light Mode Toggle */
+      .mode-toggle {
+        position: fixed;
+        top: 2rem;
+        right: 2rem;
+        background: none;
+        border: 2px solid #0f0;
+        color: #0f0;
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+        font-family: "Courier New", monospace;
+        font-size: 0.9rem;
+        transition: all 0.3s;
+        z-index: 1000;
+      }
+
+      .mode-toggle:hover {
+        background: #0f0;
+        color: #000;
+      }
+
+      body.light-mode .mode-toggle {
+        border-color: #16a34a;
+        color: #16a34a;
+      }
+
+      body.light-mode .mode-toggle:hover {
+        background: #16a34a;
+        color: #fff;
+      }
+
+      /* Font Toggle Button */
+      .font-toggle {
+        position: fixed;
+        top: 2rem;
+        right: 12rem; /* Links vom Mode-Toggle */
+        background: none;
+        border: 2px solid #0f0;
+        color: #0f0;
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+        font-family: "Courier New", monospace;
+        font-size: 0.9rem;
+        transition: all 0.3s;
+        z-index: 1000;
+      }
+
+      .font-toggle:hover {
+        background: #0f0;
+        color: #000;
+      }
+
+      body.light-mode .font-toggle {
+        border-color: #16a34a;
+        color: #16a34a;
+      }
+
+      body.light-mode .font-toggle:hover {
+        background: #16a34a;
+        color: #fff;
+      }
+
+      @media (max-width: 768px) {
+        body {
+          padding: 1rem;
+          font-size: 16px;
+        }
+
+        .container {
+          padding-top: 3.5rem; /* Etwas weniger auf Mobile */
+        }
+
+        .mode-toggle {
+          top: 1rem;
+          right: 1rem;
+          padding: 0.4rem 0.8rem;
+          font-size: 0.85rem;
+        }
+
+        .font-toggle {
+          top: 1rem;
+          right: auto;
+          left: 1rem; /* Auf Mobile: Links statt rechts */
+          padding: 0.4rem 0.8rem;
+          font-size: 0.85rem;
+        }
+
+        article {
+          padding: 1.5rem;
+        }
+
+        article header h1 {
+          font-size: 1.8rem;
+          line-height: 1.3;
+        }
+
+        .content :global(h2) {
+          font-size: 1.5rem;
+        }
+        .content :global(h3) {
+          font-size: 1.3rem;
+        }
+        .content :global(h4) {
+          font-size: 1.1rem;
+        }
+
+        .content :global(p),
+        .content :global(ul),
+        .content :global(ol),
+        .content :global(blockquote) {
+          max-width: 100%; /* Volle Breite auf Mobile */
+        }
+
+        .content :global(pre) {
+          font-size: 0.85rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Font Toggle -->
+    <button
+      class="font-toggle"
+      id="font-toggle"
+      aria-label="Schriftart wechseln"
+    >
+      <span id="font-text">Terminal</span>
+    </button>
+
+    <!-- Dark/Light Mode Toggle -->
+    <button
+      class="mode-toggle"
+      id="mode-toggle"
+      aria-label="Dark/Light Mode umschalten"
+    >
+      <span id="mode-icon">☀️</span>
+      <span id="mode-text">Light</span>
+    </button>
+
+    <div class="container">
+      <!-- Breadcrumb Navigation -->
+      <nav aria-label="Breadcrumb">
+        <ol class="breadcrumb">
+          <li><a href="/">Home</a></li>
+          <li class="breadcrumb-separator" aria-hidden="true">→</li>
+          <li><a href="/blog">Blog</a></li>
+          <li class="breadcrumb-separator" aria-hidden="true">→</li>
+          <li aria-current="page">{post.data.title}</li>
+        </ol>
+      </nav>
+
+      <a href="/blog" class="back-link">← Zurück zum Blog</a>
+
+      <!-- Main Article with Semantic HTML -->
+      <article role="article" aria-labelledby="article-title">
+        <!-- Article Header with H1 (ONLY H1 on page) -->
+        <header>
+          <h1 id="article-title">{post.data.title}</h1>
+
+          <div class="post-meta">
+            <time datetime={post.data.pubDate}>
+              {
+                new Date(post.data.pubDate).toLocaleDateString("de-DE", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })
+              }
+            </time>
+            <span aria-hidden="true">•</span>
+            <span>{post.data.author || "Steven Noack"}</span>
           </div>
-        )}
-      </header>
 
-      <!-- Article Content (Markdown should start with H2, not H1) -->
-      <section class="content" aria-label="Artikel-Inhalt">
-        <Content />
-      </section>
+          {
+            post.data.tags && post.data.tags.length > 0 && (
+              <div class="post-tags" role="list" aria-label="Artikel-Tags">
+                {post.data.tags.map((tag) => (
+                  <span class="tag" role="listitem">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            )
+          }
+        </header>
 
-      <!-- Article Footer -->
-      <footer>
-        <p>
-          Veröffentlicht am <time datetime={post.data.pubDate}>
-            {new Date(post.data.pubDate).toLocaleDateString('de-DE', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric'
-            })}
-          </time>
-          {post.data.updatedDate && post.data.updatedDate !== post.data.pubDate && (
-            <span>
-              {' '}• Aktualisiert am <time datetime={post.data.updatedDate}>
-                {new Date(post.data.updatedDate).toLocaleDateString('de-DE', {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric'
-                })}
-              </time>
-            </span>
-          )}
-        </p>
-      </footer>
+        <!-- Article Content (Markdown should start with H2, not H1) -->
+        <section class="content" aria-label="Artikel-Inhalt">
+          <Content />
+        </section>
 
-    </article>
-  </div>
+        <!-- Article Footer -->
+        <footer>
+          <p>
+            Veröffentlicht am <time datetime={post.data.pubDate}>
+              {
+                new Date(post.data.pubDate).toLocaleDateString("de-DE", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })
+              }
+            </time>
+            {
+              post.data.updatedDate &&
+                post.data.updatedDate !== post.data.pubDate && (
+                  <span>
+                    {" "}
+                    • Aktualisiert am{" "}
+                    <time datetime={post.data.updatedDate}>
+                      {new Date(post.data.updatedDate).toLocaleDateString(
+                        "de-DE",
+                        {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        },
+                      )}
+                    </time>
+                  </span>
+                )
+            }
+          </p>
+        </footer>
+      </article>
+    </div>
 
-  <!-- Dark/Light Mode Toggle Script -->
-  <script>
-    // Check for saved preference or default to dark
-    const savedMode = localStorage.getItem('colorMode') || 'dark';
-    const body = document.body;
-    const toggle = document.getElementById('mode-toggle');
-    const modeIcon = document.getElementById('mode-icon');
-    const modeText = document.getElementById('mode-text');
+    <!-- Dark/Light Mode Toggle Script -->
+    <script>
+      // Check for saved preference or default to dark
+      const savedMode = localStorage.getItem("colorMode") || "dark";
+      const body = document.body;
+      const toggle = document.getElementById("mode-toggle");
+      const modeIcon = document.getElementById("mode-icon");
+      const modeText = document.getElementById("mode-text");
 
-    // Apply saved mode on load
-    if (savedMode === 'light') {
-      body.classList.add('light-mode');
-      modeIcon.textContent = '🌙';
-      modeText.textContent = 'Dark';
-    }
-
-    // Toggle function
-    toggle.addEventListener('click', () => {
-      body.classList.toggle('light-mode');
-      
-      const isLight = body.classList.contains('light-mode');
-      
-      if (isLight) {
-        modeIcon.textContent = '🌙';
-        modeText.textContent = 'Dark';
-        localStorage.setItem('colorMode', 'light');
-      } else {
-        modeIcon.textContent = '☀️';
-        modeText.textContent = 'Light';
-        localStorage.setItem('colorMode', 'dark');
+      // Apply saved mode on load
+      if (savedMode === "light") {
+        body.classList.add("light-mode");
+        modeIcon.textContent = "🌙";
+        modeText.textContent = "Dark";
       }
-    });
-  </script>
 
-  <!-- Font Toggle Script -->
-  <script>
-    const body = document.body; // Body-Variable hinzugefügt!
-    const savedFont = localStorage.getItem('fontStyle') || 'terminal';
-    const fontToggle = document.getElementById('font-toggle');
-    const fontText = document.getElementById('font-text');
+      // Toggle function
+      toggle.addEventListener("click", () => {
+        body.classList.toggle("light-mode");
 
-    // Font options
-    const fonts = ['terminal', 'sans', 'serif'];
-    const fontNames = {
-      terminal: 'Terminal',
-      sans: 'Sans',
-      serif: 'Serif'
-    };
+        const isLight = body.classList.contains("light-mode");
 
-    let currentFontIndex = fonts.indexOf(savedFont);
+        if (isLight) {
+          modeIcon.textContent = "🌙";
+          modeText.textContent = "Dark";
+          localStorage.setItem("colorMode", "light");
+        } else {
+          modeIcon.textContent = "☀️";
+          modeText.textContent = "Light";
+          localStorage.setItem("colorMode", "dark");
+        }
+      });
+    </script>
 
-    // Apply saved font on load
-    if (savedFont === 'sans') {
-      body.classList.add('font-sans');
-      fontText.textContent = 'Sans';
-    } else if (savedFont === 'serif') {
-      body.classList.add('font-serif');
-      fontText.textContent = 'Serif';
-    }
+    <!-- Font Toggle Script -->
+    <script>
+      const body = document.body; // Body-Variable hinzugefügt!
+      const savedFont = localStorage.getItem("fontStyle") || "terminal";
+      const fontToggle = document.getElementById("font-toggle");
+      const fontText = document.getElementById("font-text");
 
-    // Cycle through fonts
-    fontToggle.addEventListener('click', () => {
-      // Remove all font classes
-      body.classList.remove('font-sans', 'font-serif');
-      
-      // Move to next font
-      currentFontIndex = (currentFontIndex + 1) % fonts.length;
-      const newFont = fonts[currentFontIndex];
-      
-      // Apply new font
-      if (newFont === 'sans') {
-        body.classList.add('font-sans');
-      } else if (newFont === 'serif') {
-        body.classList.add('font-serif');
+      // Font options
+      const fonts = ["terminal", "sans", "serif"];
+      const fontNames = {
+        terminal: "Terminal",
+        sans: "Sans",
+        serif: "Serif",
+      };
+
+      let currentFontIndex = fonts.indexOf(savedFont);
+
+      // Apply saved font on load
+      if (savedFont === "sans") {
+        body.classList.add("font-sans");
+        fontText.textContent = "Sans";
+      } else if (savedFont === "serif") {
+        body.classList.add("font-serif");
+        fontText.textContent = "Serif";
       }
-      
-      // Update button text
-      fontText.textContent = fontNames[newFont];
-      
-      // Save to localStorage
-      localStorage.setItem('fontStyle', newFont);
-    });
-  </script>
-</body>
+
+      // Cycle through fonts
+      fontToggle.addEventListener("click", () => {
+        // Remove all font classes
+        body.classList.remove("font-sans", "font-serif");
+
+        // Move to next font
+        currentFontIndex = (currentFontIndex + 1) % fonts.length;
+        const newFont = fonts[currentFontIndex];
+
+        // Apply new font
+        if (newFont === "sans") {
+          body.classList.add("font-sans");
+        } else if (newFont === "serif") {
+          body.classList.add("font-serif");
+        }
+
+        // Update button text
+        fontText.textContent = fontNames[newFont];
+
+        // Save to localStorage
+        localStorage.setItem("fontStyle", newFont);
+      });
+    </script>
+  </body>
 </html>

@@ -4,15 +4,14 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
-    "dev:tina": "tinacms dev -c \"astro dev\"",
-    "build": "tinacms build && astro build",
+    "build": "astro build",
     "preview": "astro preview",
     "build:check": "astro check && astro build"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.6.0",
-    "@tinacms/cli": "^1.11.0",
+    "@tailwindcss/vite": "^4.1.17",
     "astro": "^5.15.1",
-    "tinacms": "^2.9.0"
+    "tailwindcss": "^4.1.17"
   }
 }

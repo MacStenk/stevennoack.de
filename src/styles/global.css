@@ -1,74 +1,12 @@
-/**
- * Global Styles
- * @description CSS Variables, Reset, Base Styles
- */
+/* src/styles/global.css */
+@import "tailwindcss";
 
-/* ===== CSS Reset & Base ===== */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+@layer base {
+  html {
+    @apply scroll-smooth bg-[#0a0a0a] text-gray-200;
+  }
 
-/* ===== CSS Variables ===== */
-:root {
-  --matrix-green: #00ff41;
-  --dark-bg: #0a0a0a;
-  --darker-bg: #050505;
-  --card-bg: #111111;
-  --text-primary: #e0e0e0;
-  --text-secondary: #a0a0a0;
-  --border-color: #1a1a1a;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  font-family: "Courier New", Courier, monospace;
-  background: var(--dark-bg);
-  color: var(--text-primary);
-  line-height: 1.6;
-  overflow-x: hidden;
-}
-
-/* ===== Selection ===== */
-::selection {
-  background: var(--matrix-green);
-  color: #000;
-}
-
-::-moz-selection {
-  background: var(--matrix-green);
-  color: #000;
-}
-
-/* ===== Utilities ===== */
-/* Screen reader only - for accessibility */
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border-width: 0;
-}
-
-.container {
-  position: relative;
-  z-index: 1;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem;
-}
-
-/* ===== Responsive ===== */
-@media (max-width: 768px) {
-  .container {
-    padding: 1rem;
+  body {
+    @apply font-sans antialiased;
   }
 }

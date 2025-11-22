@@ -1,77 +1,73 @@
 ---
-/**
- * Base Layout
- * @description Main HTML structure
- */
+// src/layouts/BaseLayout.astro
+import "@fontsource/inter";
+import "@fontsource/jetbrains-mono";
+import "../styles/global.css";
 
 interface Props {
   title?: string;
   description?: string;
+  image?: string;
 }
 
 const {
-  title = "Steven Noack - Tech Pioneer",
-  description = "Tech Pioneer · Berlin Underground · Warez Scene · WoW Veteran · LLM Early Adopter"
+  title = "Steven Noack - System Builder",
+  description = "Digitale Architektur. Reduziert auf das Wesentliche. High-Performance Infrastrukturen für Unabhängigkeit.",
+  image = "https://stevennoack.de/steven-noack.png", // Fallback auf dein Profilbild
 } = Astro.props;
 
 const schemaOrg = {
   "@context": "https://schema.org",
   "@type": "Person",
-  "name": "Steven Noack",
-  "alternateName": "Steven Fischer",
-  "jobTitle": "LLM-Native Developer & System Builder",
-  "description": "Serial Early Adopter seit 1991. Pattern Recognition über 34 Jahre.",
-  "url": "https://stevennoack.de",
-  "image": "https://stevennoack.de/steven-noack.png",
-  "address": {
-    "@type": "PostalAddress",
-    "addressLocality": "Alt Tucheband",
-    "addressRegion": "Brandenburg",
-    "addressCountry": "DE"
-  },
-  "sameAs": [
-    "https://www.xing.com/profile/Steven_Fischer",
-    "https://linkedin.com/in/stevennoack",
-    "https://github.com/MacStenk"
-  ]
+  name: "Steven Noack",
+  alternateName: "Steven Fischer", // SEO-Bridge zur Vergangenheit
+  jobTitle: "System Architect",
+  url: "https://stevennoack.de",
+  image: image,
+  sameAs: [
+    "https://github.com/MacStenk",
+    "https://fediverse.stevennoack.de",
+    "https://stevennoack.substack.com",
+  ],
 };
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="de" class="dark">
   <head>
     <meta charset="utf-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+
+    <link
+      rel="help"
+      href="/llms.txt"
+      type="text/markdown"
+      title="LLM Context"
+    />
+
     <title>{title}</title>
     <meta name="description" content={description} />
-    
-    <!-- Open Graph / Facebook -->
+    <meta name="author" content="Steven Noack" />
+
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://stevennoack.de/" />
+    <meta property="og:url" content={Astro.url} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content="https://stevennoack.de/steven-noack.png" />
-    
-    <!-- Twitter -->
+    <meta property="og:image" content={image} />
+
     <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content="https://stevennoack.de/" />
+    <meta property="twitter:url" content={Astro.url} />
     <meta property="twitter:title" content={title} />
     <meta property="twitter:description" content={description} />
-    <meta property="twitter:image" content="https://stevennoack.de/steven-noack.png" />
-    
-    <!-- Additional SEO -->
-    <meta name="robots" content="index, follow" />
-    <meta name="author" content="Steven Noack" />
-    <link rel="canonical" href="https://stevennoack.de/" />
-    
+    <meta property="twitter:image" content={image} />
+
     <script type="application/ld+json" set:html={JSON.stringify(schemaOrg)} />
   </head>
-  <body>
+  <body class="bg-[#0a0a0a] text-gray-200 font-sans selection:bg-white/20">
     <slot />
   </body>
 </html>
-
-<style is:global>
-  @import '../styles/global.css';
-</style>

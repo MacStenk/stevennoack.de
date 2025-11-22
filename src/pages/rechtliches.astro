@@ -1,0 +1,192 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import EmailProtection from "@/components/EmailProtection.astro";
+
+const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: "Steven Noack",
+    taxID: "DE222642421",
+    address: {
+        "@type": "PostalAddress",
+        streetAddress: "Straße der Freundschaft 5A",
+        postalCode: "15328",
+        addressLocality: "Alt Tucheband",
+        addressCountry: "DE",
+    },
+    email: "kontakt@stevennoack.de",
+    url: "https://stevennoack.de",
+};
+---
+
+<BaseLayout title="Rechtliches | Steven Noack">
+    <main class="max-w-7xl mx-auto px-6 py-20 font-sans text-gray-400">
+        <script
+            type="application/ld+json"
+            set:html={JSON.stringify(organizationSchema)}
+        />
+
+        <div
+            class="mb-16 border-b border-white/10 pb-8 flex flex-col md:flex-row justify-between items-start md:items-end gap-4"
+        >
+            <div>
+                <a
+                    href="/"
+                    class="inline-block mb-4 text-sm font-mono text-gray-500 hover:text-white transition-colors"
+                    >← Zurück zur Zentrale</a
+                >
+                <h1 class="text-3xl md:text-4xl font-bold text-white font-mono">
+                    Rechtliche Hinweise
+                </h1>
+            </div>
+            <div
+                class="text-xs font-mono text-gray-500 uppercase tracking-widest"
+            >
+                USt-ID: DE222642421
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24">
+            <article class="space-y-10">
+                <h2
+                    class="text-xl text-white font-bold font-mono border-l-2 border-white pl-4"
+                >
+                    I. Impressum
+                </h2>
+
+                <section>
+                    <h3
+                        class="text-xs font-mono text-gray-500 uppercase tracking-widest mb-2"
+                    >
+                        Angaben gemäß § 5 TMG
+                    </h3>
+                    <p class="text-white text-lg leading-relaxed">
+                        Steven Noack<br />
+                        Straße der Freundschaft 5A<br />
+                        15328 Alt Tucheband
+                    </p>
+                </section>
+
+                <section>
+                    <h3
+                        class="text-xs font-mono text-gray-500 uppercase tracking-widest mb-2"
+                    >
+                        Kontakt
+                    </h3>
+                    <p class="text-lg">
+                        E-Mail: <span class="text-white"
+                            ><EmailProtection
+                                email="kontakt@stevennoack.de"
+                            /></span
+                        >
+                    </p>
+                </section>
+
+                <section>
+                    <h3
+                        class="text-xs font-mono text-gray-500 uppercase tracking-widest mb-2"
+                    >
+                        Umsatzsteuer-ID
+                    </h3>
+                    <p class="text-lg">
+                        Umsatzsteuer-Identifikationsnummer gemäß § 27 a
+                        Umsatzsteuergesetz:<br />
+                        <span
+                            class="text-white font-mono bg-white/5 px-2 py-1 rounded"
+                            >DE222642421</span
+                        >
+                    </p>
+                </section>
+
+                <section>
+                    <h3
+                        class="text-xs font-mono text-gray-500 uppercase tracking-widest mb-2"
+                    >
+                        Verantwortlich für den Inhalt
+                    </h3>
+                    <p class="text-lg">
+                        Steven Noack<br />
+                        (Anschrift wie oben)
+                    </p>
+                </section>
+
+                <section
+                    class="text-sm space-y-4 pt-8 border-t border-white/5 opacity-70"
+                >
+                    <p>
+                        <strong>EU-Streitschlichtung:</strong> Die Europäische Kommission
+                        stellt eine Plattform zur Online-Streitbeilegung (OS) bereit:
+                        <a
+                            href="https://ec.europa.eu/consumers/odr/"
+                            target="_blank"
+                            class="hover:text-white underline"
+                            >https://ec.europa.eu/consumers/odr/</a
+                        >.<br /> Ich bin nicht bereit oder verpflichtet, an Streitbeilegungsverfahren
+                        vor einer Verbraucherschlichtungsstelle teilzunehmen.
+                    </p>
+                </section>
+            </article>
+
+            <article class="space-y-10">
+                <h2
+                    class="text-xl text-white font-bold font-mono border-l-2 border-gray-700 pl-4"
+                >
+                    II. Datenschutz
+                </h2>
+
+                <div class="prose prose-invert prose-lg text-gray-400">
+                    <p class="text-xl text-gray-300">
+                        <strong>Kurzfassung:</strong> Ich tracke Sie nicht. Ich nutze
+                        keine Cookies. Ich speichere keine Daten, die nicht technisch
+                        zwingend notwendig sind.
+                    </p>
+
+                    <h3
+                        class="text-white font-bold mt-8 font-mono text-sm uppercase"
+                    >
+                        1. Hosting & Logfiles
+                    </h3>
+                    <p>
+                        Diese Seite wird bei <strong>Cloudflare Pages</strong> gehostet.
+                        Der Provider erhebt automatisch Informationen in Server-Log-Dateien,
+                        die Ihr Browser automatisch übermittelt (Browsertyp, Betriebssystem,
+                        Referrer URL, IP-Adresse, Uhrzeit).<br />
+                        <em
+                            >Grundlage: Art. 6 Abs. 1 lit. f DSGVO (Sicherheit &
+                            Stabilität).</em
+                        >
+                    </p>
+
+                    <h3
+                        class="text-white font-bold mt-8 font-mono text-sm uppercase"
+                    >
+                        2. Kontaktaufnahme
+                    </h3>
+                    <p>
+                        Wenn Sie mir per E-Mail schreiben, wird Ihre Anfrage
+                        inklusive der daraus hervorgehenden personenbezogenen
+                        Daten (Name, Anfrage) zum Zwecke der Bearbeitung bei mir
+                        gespeichert. Diese Daten gebe ich nicht ohne Ihre
+                        Einwilligung weiter.<br />
+                        <em
+                            >Grundlage: Art. 6 Abs. 1 lit. b DSGVO
+                            (Vertragsanbahnung).</em
+                        >
+                    </p>
+
+                    <h3
+                        class="text-white font-bold mt-8 font-mono text-sm uppercase"
+                    >
+                        3. Ihre Rechte
+                    </h3>
+                    <p>
+                        Sie haben jederzeit das Recht auf unentgeltliche
+                        Auskunft über Ihre gespeicherten personenbezogenen Daten
+                        sowie ein Recht auf Berichtigung, Sperrung oder Löschung
+                        dieser Daten.
+                    </p>
+                </div>
+            </article>
+        </div>
+    </main>
+</BaseLayout>
