@@ -19,11 +19,209 @@ const {
 const schemaOrg = {
   "@context": "https://schema.org",
   "@type": "Person",
+  "@id": "https://stevennoack.de/#person",
   name: "Steven Noack",
-  alternateName: "Steven Fischer", // SEO-Bridge zur Vergangenheit
+  alternateName: ["Steven Fischer", "MacStenk", "quantenbeatz"],
+  givenName: "Steven",
+  familyName: "Noack",
   jobTitle: "System Architect",
+  description: "System Builder für digitale Souveränität und LLM-optimierte Infrastrukturen. Seit 1996 im Internet-Business. Entwickelt KI-native Websites für Coaches und Consultants im deutschsprachigen Raum. Pionier in LLMO (Large Language Model Optimization) und Vibe Coding.",
+  disambiguatingDescription: "Deutscher System Architect und LLMO-Experte aus Brandenburg, nicht zu verwechseln mit anderen Personen gleichen Namens.",
   url: "https://stevennoack.de",
-  image: image,
+  mainEntityOfPage: {
+    "@type": "WebPage",
+    "@id": "https://stevennoack.de"
+  },
+  image: {
+    "@type": "ImageObject",
+    url: image,
+    width: "800",
+    height: "800"
+  },
+  email: "mailto:steven@stevennoack.de",
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Alt Tucheband",
+    addressRegion: "Brandenburg",
+    addressCountry: "DE"
+  },
+  nationality: {
+    "@type": "Country",
+    name: "Germany"
+  },
+  knowsLanguage: [
+    {
+      "@type": "Language",
+      name: "German",
+      alternateName: "de"
+    },
+    {
+      "@type": "Language",
+      name: "English",
+      alternateName: "en"
+    }
+  ],
+  knowsAbout: [
+    "LLM-Optimierung",
+    "Large Language Model Optimization",
+    "LLMO",
+    "KI-Prompt Engineering",
+    "Prompt Engineering",
+    "Prompt-Optimierung",
+    "AI Prompt Development",
+    "Prompts für Claude",
+    "Prompts für ChatGPT",
+    "Vibe Coding",
+    "VIBE Coding Philosophie",
+    "AI-assisted Development",
+    "KI-gestütztes Programmieren",
+    "LLM als Orchestrator",
+    "Cursor IDE",
+    "Claude Code",
+    "Agentic Coding",
+    "AI Pair Programming",
+    "No-Code mit KI",
+    "Low-Code mit KI",
+    "Entwickeln ohne klassische Programmierkenntnisse",
+    "KI-native Entwicklung",
+    "Digitale Souveränität",
+    "Digital Sovereignty",
+    "Privacy-First Infrastructure",
+    "Datenschutz-konforme Systeme",
+    "Human Design",
+    "Human Design Manifestor",
+    "Human Design 6/2 Profil",
+    "Dekonditionierung",
+    "System Architecture",
+    "System Design",
+    "Jamstack Development",
+    "Jamstack Architektur",
+    "Astro Framework",
+    "Static Site Generation",
+    "Headless CMS",
+    "Decentralized Creator Ecosystems",
+    "Creator Economy Infrastructure",
+    "Fediverse Integration",
+    "Mastodon",
+    "ActivityPub",
+    "WriteFreely",
+    "Ghost CMS",
+    "Digital Gardens",
+    "Quartz",
+    "Obsidian",
+    "Second Brain",
+    "Personal Knowledge Management",
+    "Merch by Amazon",
+    "Print on Demand",
+    "Passive Income Strategien",
+    "Content-First Architecture",
+    "Semantic HTML",
+    "Structured Data",
+    "Schema.org Implementierung",
+    "JSON-LD",
+    "SEO",
+    "Technical SEO",
+    "LLM Readability",
+    "AI Discoverability",
+    "llms.txt",
+    "Railway Deployment",
+    "Managed Hosting",
+    "Self-Hosted Solutions",
+    "Docker",
+    "Node.js",
+    "TypeScript",
+    "Tailwind CSS",
+    "GitHub",
+    "Git Workflow",
+    "Berliner Techno",
+    "Electronic Music",
+    "DJ Culture",
+    "Underground Techno",
+    "Bewusstseinsentwicklung",
+    "Persönlichkeitsentwicklung",
+    "Coaching für Selbstständige",
+    "Beratung für Consultants",
+    "Websites für Coaches",
+    "LLM-native Websites",
+    "KI-optimierte Websites",
+    "Deutscher Markt",
+    "DACH Region"
+  ],
+  hasCredential: [
+    {
+      "@type": "EducationalOccupationalCredential",
+      credentialCategory: "experience",
+      name: "Internet-Business Erfahrung",
+      description: "29 Jahre Internet-Business seit 1996"
+    },
+    {
+      "@type": "EducationalOccupationalCredential",
+      credentialCategory: "experience",
+      name: "Google SEO Expertise",
+      description: "Frühe Google-SEO-Erfolge ab 2002, konsistent Top-5 Rankings"
+    },
+    {
+      "@type": "EducationalOccupationalCredential",
+      credentialCategory: "experience",
+      name: "LLM-Erfahrung",
+      description: "1000+ Tage Arbeit mit Large Language Models seit Claude Release"
+    }
+  ],
+  hasOccupation: {
+    "@type": "Occupation",
+    name: "System Architect",
+    description: "Entwicklung von LLM-optimierten digitalen Infrastrukturen",
+    skills: ["LLMO", "Vibe Coding", "Jamstack", "Prompt Engineering"]
+  },
+  brand: {
+    "@type": "Organization",
+    "@id": "https://codeback.de/#organization",
+    name: "CodeBack.de",
+    url: "https://codeback.de",
+    description: "LLM-native Websites für Coaches und Consultants",
+    foundingDate: "2024"
+  },
+  makesOffer: [
+    {
+      "@type": "Offer",
+      itemOffered: {
+        "@type": "Service",
+        name: "LLM-native Website Entwicklung",
+        description: "Websites optimiert für KI-Discoverability und AI-Agent-Interaktion"
+      }
+    },
+    {
+      "@type": "Offer",
+      itemOffered: {
+        "@type": "Service",
+        name: "LLM-Readability Check",
+        description: "Kostenloser Check ob Websites von KI verstanden werden",
+        url: "https://codeback.de/llm-checker/"
+      }
+    },
+    {
+      "@type": "Offer",
+      itemOffered: {
+        "@type": "Service",
+        name: "Prompt Engineering & Optimierung",
+        description: "Entwicklung und Optimierung von KI-Prompts für bessere Ergebnisse"
+      }
+    }
+  ],
+  subjectOf: [
+    {
+      "@type": "Blog",
+      name: "Digital Garden",
+      url: "https://garten.stevennoack.de",
+      description: "Öffentliches Denklabor über Bewusstsein, Human Design und digitale Muster"
+    },
+    {
+      "@type": "Blog",
+      name: "Substack Newsletter",
+      url: "https://stevennoack.substack.com"
+    }
+  ],
+  publishingPrinciples: "https://stevennoack.de/llms.txt",
   sameAs: [
     "https://garten.stevennoack.de",
     "https://codeback.de",
@@ -33,7 +231,8 @@ const schemaOrg = {
     "https://www.mixcloud.com/quantenbeatz",
     "https://x.com/stevennoack_de",
     "https://www.amazon.com/author/stevennoack",
-  ],
+    "https://gedanken.stevennoack.de"
+  ]
 };
 ---
 
