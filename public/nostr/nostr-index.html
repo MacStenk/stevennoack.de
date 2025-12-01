@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nostr | Steven Noack</title>
+    <meta name="description" content="Steven Noack auf Nostr - Dezentrale Kommunikation für digitale Souveränität">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0a0a0f;
+            color: #a0a0a0;
+            min-height: 100vh;
+            line-height: 1.7;
+        }
+        
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 60px 24px;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-bottom: 48px;
+            color: #505050;
+            text-decoration: none;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+            transition: color 0.2s;
+        }
+        
+        .back-link:hover {
+            color: #00d4ff;
+        }
+        
+        .profile {
+            margin-bottom: 64px;
+        }
+        
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-bottom: 32px;
+            border: 2px solid #1a1a24;
+            background: #12121a;
+        }
+        
+        .name {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 32px;
+            font-weight: 500;
+            color: #e0e0e0;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+        
+        .nip05 {
+            font-family: 'JetBrains Mono', monospace;
+            color: #00d4ff;
+            font-size: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .bio {
+            color: #707070;
+            font-size: 16px;
+            margin-bottom: 32px;
+            max-width: 500px;
+        }
+        
+        .links {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .links a {
+            color: #606060;
+            text-decoration: none;
+            padding: 8px 16px;
+            border: 1px solid #1a1a24;
+            font-size: 14px;
+            font-family: 'JetBrains Mono', monospace;
+            transition: all 0.2s;
+            background: #0d0d14;
+        }
+        
+        .links a:hover {
+            border-color: #00d4ff;
+            color: #00d4ff;
+        }
+        
+        .section {
+            margin-bottom: 48px;
+        }
+        
+        .section-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: #404040;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 16px;
+            padding-left: 12px;
+            border-left: 2px solid #1a1a24;
+        }
+        
+        .relay-box {
+            background: #0d0d14;
+            border: 1px solid #1a1a24;
+            padding: 20px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            color: #00d4ff;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .relay-box:hover {
+            border-color: #00d4ff33;
+            background: #10101a;
+        }
+        
+        .relay-box.copied {
+            border-color: #00d4ff;
+            color: #00ffaa;
+        }
+        
+        .relay-box span {
+            color: #404040;
+            font-size: 12px;
+            display: block;
+            margin-top: 8px;
+        }
+        
+        .posts-section h2 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: #404040;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 24px;
+            padding-left: 12px;
+            border-left: 2px solid #1a1a24;
+        }
+        
+        .post {
+            border-bottom: 1px solid #14141c;
+            padding: 24px 0;
+        }
+        
+        .post:first-child {
+            padding-top: 0;
+        }
+        
+        .post-content {
+            font-size: 15px;
+            color: #b0b0b0;
+            margin-bottom: 12px;
+            white-space: pre-wrap;
+            line-height: 1.8;
+        }
+        
+        .post-content a {
+            color: #00d4ff;
+            text-decoration: none;
+        }
+        
+        .post-content a:hover {
+            text-decoration: underline;
+        }
+        
+        .post-date {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: #404040;
+        }
+        
+        .loading {
+            color: #404040;
+            padding: 32px 0;
+            font-size: 14px;
+        }
+        
+        .loading a {
+            color: #00d4ff;
+            text-decoration: none;
+        }
+        
+        .footer {
+            margin-top: 80px;
+            padding-top: 32px;
+            border-top: 1px solid #14141c;
+            color: #303030;
+            font-size: 13px;
+        }
+        
+        .footer a {
+            color: #404040;
+            text-decoration: none;
+        }
+        
+        .footer a:hover {
+            color: #00d4ff;
+        }
+        
+        .badge {
+            display: inline-block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: #00d4ff;
+            background: #00d4ff10;
+            border: 1px solid #00d4ff20;
+            padding: 6px 12px;
+            margin-top: 24px;
+            letter-spacing: 0.5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="https://stevennoack.de" class="back-link">← stevennoack.de</a>
+        
+        <div class="profile">
+            <img src="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%2312121a%22 width=%22100%22 height=%22100%22/><text x=%2250%22 y=%2258%22 text-anchor=%22middle%22 fill=%22%2300d4ff%22 font-size=%2236%22 font-family=%22monospace%22>S</text></svg>" 
+                 alt="Steven Noack" 
+                 class="avatar"
+                 id="avatar">
+            <h1 class="name">Steven Noack</h1>
+            <p class="nip05">steven@stevennoack.de</p>
+            <p class="bio" id="bio">Digitale Souveränität für Creator. Technologie als Werkzeug für Autonomie.</p>
+            <div class="links">
+                <a href="https://stevennoack.de">Website</a>
+                <a href="https://codeback.de">CodeBack</a>
+                <a href="https://njump.me/npub1cxa0fa6vmq5evwpgk8dg6ul99ny5e2nd3hy5fa72g598t39nxy0surzuva" target="_blank">Nostr Profil →</a>
+            </div>
+            <div class="badge">SELF-HOSTED RELAY</div>
+        </div>
+        
+        <div class="section">
+            <div class="section-label">Relay</div>
+            <div class="relay-box" onclick="copyRelay()" id="relay-url">
+                wss://relay.stevennoack.de
+                <span>Klicken zum Kopieren</span>
+            </div>
+        </div>
+        
+        <div class="posts-section">
+            <h2>Posts</h2>
+            <div id="posts">
+                <div class="loading">Verbinde mit Relays...</div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Powered by <a href="https://github.com/nostr-protocol/nostr" target="_blank">Nostr Protocol</a></p>
+        </div>
+    </div>
+    
+    <script>
+        const PUBKEY = 'c1baf4f74cd829963828b1da8d73e52cc94caa6d8dc944f7ca450a75c4b3311f';
+        const RELAYS = [
+            'wss://relay.stevennoack.de',
+            'wss://relay.primal.net',
+            'wss://relay.damus.io',
+            'wss://nos.lol'
+        ];
+        
+        let posts = [];
+        
+        function copyRelay() {
+            navigator.clipboard.writeText('wss://relay.stevennoack.de');
+            const el = document.getElementById('relay-url');
+            el.innerHTML = '✓ Kopiert<span></span>';
+            el.classList.add('copied');
+            setTimeout(() => {
+                el.innerHTML = 'wss://relay.stevennoack.de<span>Klicken zum Kopieren</span>';
+                el.classList.remove('copied');
+            }, 2000);
+        }
+        
+        function formatDate(timestamp) {
+            const date = new Date(timestamp * 1000);
+            const now = new Date();
+            const diff = now - date;
+            
+            if (diff < 60000) return 'gerade eben';
+            if (diff < 3600000) return Math.floor(diff / 60000) + ' min';
+            if (diff < 86400000) return Math.floor(diff / 3600000) + ' std';
+            
+            return date.toLocaleDateString('de-DE', { 
+                day: 'numeric', 
+                month: 'short',
+                year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined
+            });
+        }
+        
+        function linkify(text) {
+            return text.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank">$1</a>');
+        }
+        
+        function renderPosts() {
+            const container = document.getElementById('posts');
+            
+            if (posts.length === 0) {
+                container.innerHTML = '<div class="loading">Keine Posts gefunden</div>';
+                return;
+            }
+            
+            const sorted = posts.sort((a, b) => b.created_at - a.created_at).slice(0, 10);
+            
+            container.innerHTML = sorted.map(post => `
+                <div class="post">
+                    <div class="post-content">${linkify(escapeHtml(post.content))}</div>
+                    <div class="post-date">${formatDate(post.created_at)}</div>
+                </div>
+            `).join('');
+        }
+        
+        function updateProfile(data) {
+            if (data.picture) {
+                document.getElementById('avatar').src = data.picture;
+            }
+            if (data.about) {
+                document.getElementById('bio').textContent = data.about;
+            }
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        function connectToRelay(url) {
+            try {
+                const ws = new WebSocket(url);
+                
+                ws.onopen = () => {
+                    ws.send(JSON.stringify(["REQ", "profile", { authors: [PUBKEY], kinds: [0], limit: 1 }]));
+                    ws.send(JSON.stringify(["REQ", "posts", { authors: [PUBKEY], kinds: [1], limit: 20 }]));
+                };
+                
+                ws.onmessage = (e) => {
+                    try {
+                        const data = JSON.parse(e.data);
+                        if (data[0] === 'EVENT' && data[2]) {
+                            const event = data[2];
+                            if (event.kind === 0) {
+                                try { updateProfile(JSON.parse(event.content)); } catch (err) {}
+                            }
+                            if (event.kind === 1 && !posts.find(p => p.id === event.id)) {
+                                posts.push(event);
+                                renderPosts();
+                            }
+                        }
+                    } catch (err) {}
+                };
+            } catch (err) {}
+        }
+        
+        RELAYS.forEach(relay => connectToRelay(relay));
+        
+        setTimeout(() => {
+            if (posts.length === 0) {
+                document.getElementById('posts').innerHTML = `
+                    <div class="loading">
+                        <a href="https://njump.me/npub1cxa0fa6vmq5evwpgk8dg6ul99ny5e2nd3hy5fa72g598t39nxy0surzuva">
+                            Profil auf njump.me ansehen →
+                        </a>
+                    </div>
+                `;
+            }
+        }, 5000);
+    </script>
+</body>
+</html>
