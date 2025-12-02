@@ -1,38 +1,34 @@
 ---
 export const prerender = false;
 
-import NDK, { NDKEvent } from "@nostr-dev-kit/ndk";
-import { nip19 } from "nostr-tools";
+import { nip19, SimplePool, type Event as NostrEvent } from "nostr-tools";
 import { marked } from "marked";
 import DOMPurify from "isomorphic-dompurify";
 
 const { id } = Astro.params;
 
-let event: NDKEvent | null = null;
+let event: NostrEvent | null = null;
 let contentHtml = "";
 let error = "";
 let title = "Nostr Reader";
 let authorName = "Unknown";
 let publishedDate = new Date();
 
+const RELAYS = [
+    "wss://relay.stevennoack.de",
+    "wss://relay.primal.net",
+    "wss://nos.lol",
+];
+
 if (!id) {
     return Astro.redirect("/nostr");
 }
 
 try {
-    // Initialize NDK
-    const ndk = new NDK({
-        explicitRelayUrls: [
-            "wss://relay.stevennoack.de",
-            "wss://relay.primal.net",
-            "wss://nos.lol",
-        ],
-    });
-
-    await ndk.connect();
+    const pool = new SimplePool();
 
     // Decode ID and fetch event
-    let filter = {};
+    let filter: any = {};
     try {
         const decoded = nip19.decode(id);
         if (decoded.type === "nevent") {
@@ -57,7 +53,15 @@ try {
         }
     }
 
-    event = await ndk.fetchEvent(filter);
+    // Fetch event with timeout
+    event = await Promise.race([
+        pool.get(RELAYS, filter),
+        new Promise<null>((_, reject) =>
+            setTimeout(() => reject(new Error("Timeout")), 5000),
+        ),
+    ]);
+
+    pool.close(RELAYS);
 
     if (!event) {
         error = "Event not found on relays.";
@@ -70,13 +74,6 @@ try {
         let cleanHtml = DOMPurify.sanitize(rawHtml);
 
         // Transform Callouts (Obsidian style > [!INFO])
-        // Standard marked output for "> [!INFO] Title\n> Content" is:
-        // <blockquote>
-        //   <p>[!INFO] Title</p>
-        //   <p>Content</p>
-        // </blockquote>
-
-        // We'll use regex to transform blockquotes with [!TYPE] markers
         cleanHtml = cleanHtml.replace(
             /<blockquote>\s*<p>\s*\[!(\w+)\](.*?)<\/p>([\s\S]*?)<\/blockquote>/gi,
             (match, type, title, content) => {
@@ -94,22 +91,18 @@ try {
         contentHtml = cleanHtml;
 
         // Metadata
-        // Try to get title from tags or content
         const titleTag = event.tags.find((t) => t[0] === "title");
         if (titleTag) {
             title = titleTag[1];
         } else {
-            // Fallback: First line of content or ID
+            // Fallback: First line of content
             title = content.split("\n")[0].substring(0, 50) + "...";
         }
 
-        // Author
-        const author = await event.author?.fetchProfile();
-        if (author) {
-            authorName = author.name || author.displayName || "Unknown";
-        }
+        // Author (simplified - no profile fetch to save resources)
+        authorName = event.pubkey.substring(0, 8) + "...";
 
-        publishedDate = new Date(event.created_at! * 1000);
+        publishedDate = new Date(event.created_at * 1000);
     }
 } catch (e) {
     console.error(e);

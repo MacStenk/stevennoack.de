@@ -13,7 +13,6 @@
     "@astrojs/sitemap": "^3.6.0",
     "@fontsource/inter": "^5.2.8",
     "@fontsource/jetbrains-mono": "^5.2.8",
-    "@nostr-dev-kit/ndk": "^2.18.1",
     "@tailwindcss/vite": "^4.1.17",
     "astro": "^5.15.1",
     "isomorphic-dompurify": "^2.33.0",
