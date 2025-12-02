@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="de" prefix="og: https://ogp.me/ns#">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Security Headers -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src wss://relay.stevennoack.de wss://relay.primal.net wss://relay.damus.io wss://nos.lol; img-src 'self' data: https:;">
+    
+    <!-- Primary Meta Tags -->
+    <title>Nostr | Steven Noack - Digitale Souveränität</title>
+    <meta name="title" content="Nostr | Steven Noack - Digitale Souveränität">
+    <meta name="description" content="Steven Noack auf Nostr - Dezentrale Kommunikation für digitale Souveränität. Self-hosted Relay, verifizierte Identität, volle Kontrolle.">
+    <meta name="keywords" content="Nostr, Steven Noack, Digitale Souveränität, Dezentral, Self-hosted, Relay, Creator, CodeBack">
+    <meta name="author" content="Steven Noack">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="German">
+    <meta name="revisit-after" content="7 days">
+    
+    <!-- Canonical -->
+    <link rel="canonical" href="https://stevennoack.de/nostr/">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="profile">
+    <meta property="og:url" content="https://stevennoack.de/nostr/">
+    <meta property="og:title" content="Steven Noack auf Nostr">
+    <meta property="og:description" content="Dezentrale Kommunikation für digitale Souveränität. Self-hosted Relay, verifizierte Identität, volle Kontrolle.">
+    <meta property="og:image" content="https://stevennoack.de/og-nostr.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:locale" content="de_DE">
+    <meta property="og:site_name" content="Steven Noack">
+    <meta property="profile:first_name" content="Steven">
+    <meta property="profile:last_name" content="Noack">
+    <meta property="profile:username" content="steven@stevennoack.de">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://stevennoack.de/nostr/">
+    <meta name="twitter:title" content="Steven Noack auf Nostr">
+    <meta name="twitter:description" content="Dezentrale Kommunikation für digitale Souveränität. Self-hosted Relay, verifizierte Identität, volle Kontrolle.">
+    <meta name="twitter:image" content="https://stevennoack.de/og-nostr.png">
+    
+    <!-- Nostr-specific Meta (NIP-07 discovery) -->
+    <meta name="nostr:name" content="Steven Noack">
+    <meta name="nostr:nip05" content="steven@stevennoack.de">
+    <meta name="nostr:pubkey" content="npub1cxa0fa6vmq5evwpgk8dg6ul99ny5e2nd3hy5fa72g598t39nxy0surzuva">
+    <meta name="nostr:relay" content="wss://relay.stevennoack.de">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%230a0a0f%22 width=%22100%22 height=%22100%22 rx=%2220%22/><text x=%2250%22 y=%2262%22 text-anchor=%22middle%22 fill=%22%2300d4ff%22 font-size=%2250%22 font-family=%22monospace%22>N</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%230a0a0f%22 width=%22100%22 height=%22100%22 rx=%2220%22/><text x=%2250%22 y=%2262%22 text-anchor=%22middle%22 fill=%22%2300d4ff%22 font-size=%2250%22 font-family=%22monospace%22>N</text></svg>">
+    
+    <!-- Theme -->
+    <meta name="theme-color" content="#0a0a0f">
+    <meta name="color-scheme" content="dark">
+    <meta name="msapplication-TileColor" content="#0a0a0f">
+    
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://relay.stevennoack.de">
+    <link rel="dns-prefetch" href="https://relay.primal.net">
+    
+    <!-- Schema.org JSON-LD -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "Person",
+                "@id": "https://stevennoack.de/#person",
+                "name": "Steven Noack",
+                "url": "https://stevennoack.de",
+                "sameAs": [
+                    "https://njump.me/npub1cxa0fa6vmq5evwpgk8dg6ul99ny5e2nd3hy5fa72g598t39nxy0surzuva",
+                    "https://codeback.de",
+                    "https://stevennoack.de/nostr/"
+                ],
+                "jobTitle": "System Builder",
+                "description": "Digitale Souveränität für Creator. Technologie als Werkzeug für Autonomie.",
+                "knowsAbout": [
+                    "Digitale Souveränität",
+                    "Nostr Protocol",
+                    "Dezentrale Systeme",
+                    "Human Design",
+                    "LLM Integration"
+                ],
+                "identifier": {
+                    "@type": "PropertyValue",
+                    "propertyID": "nostr",
+                    "value": "npub1cxa0fa6vmq5evwpgk8dg6ul99ny5e2nd3hy5fa72g598t39nxy0surzuva"
+                }
+            },
+            {
+                "@type": "WebPage",
+                "@id": "https://stevennoack.de/nostr/#webpage",
+                "url": "https://stevennoack.de/nostr/",
+                "name": "Steven Noack auf Nostr",
+                "description": "Dezentrale Kommunikation für digitale Souveränität. Self-hosted Relay, verifizierte Identität, volle Kontrolle.",
+                "isPartOf": {
+                    "@id": "https://stevennoack.de/#website"
+                },
+                "about": {
+                    "@id": "https://stevennoack.de/#person"
+                },
+                "inLanguage": "de-DE",
+                "datePublished": "2024-12-01",
+                "dateModified": "2024-12-02"
+            },
+            {
+                "@type": "WebSite",
+                "@id": "https://stevennoack.de/#website",
+                "url": "https://stevennoack.de",
+                "name": "Steven Noack",
+                "description": "Architektur der Souveränität - Technologie als Werkzeug für Autonomie",
+                "publisher": {
+                    "@id": "https://stevennoack.de/#person"
+                },
+                "inLanguage": "de-DE"
+            },
+            {
+                "@type": "ProfilePage",
+                "mainEntity": {
+                    "@id": "https://stevennoack.de/#person"
+                },
+                "dateCreated": "2024-12-01",
+                "dateModified": "2024-12-02"
+            },
+            {
+                "@type": "SoftwareApplication",
+                "name": "Steven's Nostr Relay",
+                "applicationCategory": "CommunicationApplication",
+                "operatingSystem": "Web",
+                "url": "wss://relay.stevennoack.de",
+                "description": "Personal Nostr relay - Creator Freedom Stack",
+                "author": {
+                    "@id": "https://stevennoack.de/#person"
+                },
+                "offers": {
+                    "@type": "Offer",
+                    "price": "0",
+                    "priceCurrency": "EUR"
+                }
+            }
+        ]
+    }
+    </script>
+    
+    <!-- Styles -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500&display=swap');
+        
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+            -webkit-text-size-adjust: 100%;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a0f;
+            color: #a0a0a0;
+            min-height: 100vh;
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 60px 24px;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-bottom: 48px;
+            color: #505050;
+            text-decoration: none;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+            transition: color 0.2s ease;
+        }
+        
+        .back-link:hover,
+        .back-link:focus {
+            color: #00d4ff;
+            outline: none;
+        }
+        
+        .back-link:focus-visible {
+            outline: 2px solid #00d4ff;
+            outline-offset: 4px;
+        }
+        
+        .profile {
+            margin-bottom: 64px;
+        }
+        
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin-bottom: 32px;
+            border: 2px solid #1a1a24;
+            background: #12121a;
+        }
+        
+        .name {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(24px, 5vw, 32px);
+            font-weight: 500;
+            color: #e0e0e0;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+        
+        .nip05 {
+            font-family: 'JetBrains Mono', monospace;
+            color: #00d4ff;
+            font-size: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .nip05 a {
+            color: inherit;
+            text-decoration: none;
+        }
+        
+        .bio {
+            color: #707070;
+            font-size: 16px;
+            margin-bottom: 32px;
+            max-width: 500px;
+        }
+        
+        .links {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .links a {
+            color: #606060;
+            text-decoration: none;
+            padding: 8px 16px;
+            border: 1px solid #1a1a24;
+            font-size: 14px;
+            font-family: 'JetBrains Mono', monospace;
+            transition: all 0.2s ease;
+            background: #0d0d14;
+        }
+        
+        .links a:hover,
+        .links a:focus {
+            border-color: #00d4ff;
+            color: #00d4ff;
+            outline: none;
+        }
+        
+        .section {
+            margin-bottom: 48px;
+        }
+        
+        .section-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: #404040;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 16px;
+            padding-left: 12px;
+            border-left: 2px solid #1a1a24;
+        }
+        
+        .relay-box {
+            background: #0d0d14;
+            border: 1px solid #1a1a24;
+            padding: 20px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            color: #00d4ff;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .relay-box:hover,
+        .relay-box:focus {
+            border-color: #00d4ff33;
+            background: #10101a;
+            outline: none;
+        }
+        
+        .relay-box.copied {
+            border-color: #00d4ff;
+            color: #00ffaa;
+        }
+        
+        .relay-box span {
+            color: #404040;
+            font-size: 12px;
+            display: block;
+            margin-top: 8px;
+        }
+        
+        .posts-section h2 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: #404040;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 24px;
+            padding-left: 12px;
+            border-left: 2px solid #1a1a24;
+        }
+        
+        .post {
+            border-bottom: 1px solid #14141c;
+            padding: 24px 0;
+        }
+        
+        .post:first-child {
+            padding-top: 0;
+        }
+        
+        .posts-hidden {
+            display: none;
+        }
+        
+        .posts-hidden.expanded {
+            display: block;
+        }
+        
+        .expand-btn {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            color: #505050;
+            background: #0d0d14;
+            border: 1px solid #1a1a24;
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 100%;
+            text-align: center;
+            margin-top: 16px;
+        }
+        
+        .expand-btn:hover,
+        .expand-btn:focus {
+            border-color: #00d4ff33;
+            color: #00d4ff;
+            outline: none;
+        }
+        
+        .expand-btn .count {
+            color: #404040;
+            margin-left: 8px;
+        }
+        
+        .post-content {
+            font-size: 15px;
+            color: #b0b0b0;
+            margin-bottom: 12px;
+            white-space: pre-wrap;
+            line-height: 1.8;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+        
+        .post-content a {
+            color: #00d4ff;
+            text-decoration: none;
+        }
+        
+        .post-content a:hover {
+            text-decoration: underline;
+        }
+        
+        .post-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .post-date {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: #404040;
+        }
+        
+        .post-link {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: #404040;
+            cursor: pointer;
+            padding: 4px 8px;
+            border: 1px solid transparent;
+            background: transparent;
+            transition: all 0.2s ease;
+        }
+        
+        .post-link:hover,
+        .post-link:focus {
+            color: #00d4ff;
+            border-color: #1a1a24;
+            outline: none;
+        }
+        
+        .post-link.copied {
+            color: #00ffaa;
+        }
+        
+        .loading {
+            color: #404040;
+            padding: 32px 0;
+            font-size: 14px;
+        }
+        
+        .loading a {
+            color: #00d4ff;
+            text-decoration: none;
+        }
+        
+        .footer {
+            margin-top: 80px;
+            padding-top: 32px;
+            border-top: 1px solid #14141c;
+            color: #303030;
+            font-size: 13px;
+        }
+        
+        .footer a {
+            color: #404040;
+            text-decoration: none;
+        }
+        
+        .footer a:hover {
+            color: #00d4ff;
+        }
+        
+        .badge {
+            display: inline-block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: #00d4ff;
+            background: #00d4ff10;
+            border: 1px solid #00d4ff20;
+            padding: 6px 12px;
+            margin-top: 24px;
+            letter-spacing: 0.5px;
+        }
+        
+        /* Accessibility: Reduced Motion */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            html {
+                scroll-behavior: auto;
+            }
+        }
+        
+        /* Print styles */
+        @media print {
+            body {
+                background: white;
+                color: black;
+            }
+            .back-link,
+            .post-link,
+            .relay-box span {
+                display: none;
+            }
+            .post {
+                break-inside: avoid;
+            }
+        }
+        
+        /* Focus visible for keyboard navigation */
+        :focus-visible {
+            outline: 2px solid #00d4ff;
+            outline-offset: 2px;
+        }
+        
+        /* Selection */
+        ::selection {
+            background: #00d4ff30;
+            color: #e0e0e0;
+        }
+    </style>
+</head>
+<body>
+    <a href="#main-content" class="skip-link" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;">Zum Inhalt springen</a>
+    
+    <main id="main-content" class="container" role="main">
+        <nav aria-label="Breadcrumb">
+            <a href="https://stevennoack.de" class="back-link">← stevennoack.de</a>
+        </nav>
+        
+        <article class="profile" itemscope itemtype="https://schema.org/Person">
+            <img src="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%2312121a%22 width=%22100%22 height=%22100%22/><text x=%2250%22 y=%2258%22 text-anchor=%22middle%22 fill=%22%2300d4ff%22 font-size=%2236%22 font-family=%22monospace%22>S</text></svg>" 
+                 alt="Steven Noack Profilbild" 
+                 class="avatar"
+                 id="avatar"
+                 itemprop="image"
+                 width="80"
+                 height="80"
+                 loading="eager">
+            <h1 class="name" itemprop="name">Steven Noack</h1>
+            <p class="nip05">
+                <a href="mailto:steven@stevennoack.de" itemprop="email">steven@stevennoack.de</a>
+            </p>
+            <p class="bio" id="bio" itemprop="description">Digitale Souveränität für Creator. Technologie als Werkzeug für Autonomie.</p>
+            <nav class="links" aria-label="Externe Links">
+                <a href="https://stevennoack.de" itemprop="url" rel="me">Website</a>
+                <a href="https://codeback.de" rel="me">CodeBack</a>
+                <a href="https://njump.me/npub1cxa0fa6vmq5evwpgk8dg6ul99ny5e2nd3hy5fa72g598t39nxy0surzuva" target="_blank" rel="noopener noreferrer me" itemprop="sameAs">Nostr Profil →</a>
+            </nav>
+            <div class="badge" role="status">SELF-HOSTED RELAY</div>
+        </article>
+        
+        <section class="section" aria-labelledby="relay-label">
+            <h2 class="section-label" id="relay-label">Relay</h2>
+            <div class="relay-box" 
+                 onclick="copyRelay()" 
+                 onkeydown="if(event.key==='Enter')copyRelay()"
+                 id="relay-url" 
+                 role="button" 
+                 tabindex="0"
+                 aria-label="Relay URL kopieren: wss://relay.stevennoack.de">
+                wss://relay.stevennoack.de
+                <span>Klicken zum Kopieren</span>
+            </div>
+        </section>
+        
+        <section class="posts-section" aria-labelledby="posts-label">
+            <h2 id="posts-label">Posts</h2>
+            <div id="posts" role="feed" aria-live="polite">
+                <div class="loading" aria-busy="true">Verbinde mit Relays...</div>
+            </div>
+        </section>
+        
+        <footer class="footer" role="contentinfo">
+            <p>Powered by <a href="https://github.com/nostr-protocol/nostr" target="_blank" rel="noopener noreferrer">Nostr Protocol</a></p>
+        </footer>
+    </main>
+    
+    <script>
+        const PUBKEY = 'c1baf4f74cd829963828b1da8d73e52cc94caa6d8dc944f7ca450a75c4b3311f';
+        const RELAYS = [
+            'wss://relay.stevennoack.de',
+            'wss://relay.primal.net',
+            'wss://relay.damus.io',
+            'wss://nos.lol'
+        ];
+        
+        let posts = [];
+        
+        function copyRelay() {
+            navigator.clipboard.writeText('wss://relay.stevennoack.de').then(() => {
+                const el = document.getElementById('relay-url');
+                el.innerHTML = '✓ Kopiert<span></span>';
+                el.classList.add('copied');
+                el.setAttribute('aria-label', 'Kopiert!');
+                setTimeout(() => {
+                    el.innerHTML = 'wss://relay.stevennoack.de<span>Klicken zum Kopieren</span>';
+                    el.classList.remove('copied');
+                    el.setAttribute('aria-label', 'Relay URL kopieren: wss://relay.stevennoack.de');
+                }, 2000);
+            });
+        }
+        
+        function copyPostLink(noteId, element) {
+            const link = 'https://njump.me/' + noteId;
+            navigator.clipboard.writeText(link).then(() => {
+                element.textContent = '✓ kopiert';
+                element.classList.add('copied');
+                element.setAttribute('aria-label', 'Link kopiert');
+                setTimeout(() => {
+                    element.textContent = 'Link kopieren';
+                    element.classList.remove('copied');
+                    element.setAttribute('aria-label', 'Post-Link kopieren');
+                }, 2000);
+            });
+        }
+        
+        function hexToNote(hex) {
+            const ALPHABET = 'qpzry9x8gf2tvdw0s3jn54khce6mua7l';
+            const data = [];
+            for (let i = 0; i < hex.length; i += 2) {
+                data.push(parseInt(hex.substr(i, 2), 16));
+            }
+            
+            let bits = 0;
+            let value = 0;
+            const result = [];
+            for (const byte of data) {
+                value = (value << 8) | byte;
+                bits += 8;
+                while (bits >= 5) {
+                    bits -= 5;
+                    result.push((value >> bits) & 31);
+                }
+            }
+            if (bits > 0) {
+                result.push((value << (5 - bits)) & 31);
+            }
+            
+            const hrp = 'note';
+            let chk = 1;
+            for (const c of hrp) {
+                chk = polymod(chk) ^ (c.charCodeAt(0) >> 5);
+            }
+            chk = polymod(chk);
+            for (const c of hrp) {
+                chk = polymod(chk) ^ (c.charCodeAt(0) & 31);
+            }
+            for (const v of result) {
+                chk = polymod(chk) ^ v;
+            }
+            for (let i = 0; i < 6; i++) {
+                chk = polymod(chk);
+            }
+            chk ^= 1;
+            const checksum = [];
+            for (let i = 0; i < 6; i++) {
+                checksum.push((chk >> (5 * (5 - i))) & 31);
+            }
+            
+            return hrp + '1' + [...result, ...checksum].map(d => ALPHABET[d]).join('');
+        }
+        
+        function polymod(pre) {
+            const b = pre >> 25;
+            return ((pre & 0x1ffffff) << 5) ^
+                (-((b >> 0) & 1) & 0x3b6a57b2) ^
+                (-((b >> 1) & 1) & 0x26508e6d) ^
+                (-((b >> 2) & 1) & 0x1ea119fa) ^
+                (-((b >> 3) & 1) & 0x3d4233dd) ^
+                (-((b >> 4) & 1) & 0x2a1462b3);
+        }
+        
+        function formatDate(timestamp) {
+            const date = new Date(timestamp * 1000);
+            const now = new Date();
+            const diff = now - date;
+            
+            if (diff < 60000) return 'gerade eben';
+            if (diff < 3600000) return Math.floor(diff / 60000) + ' min';
+            if (diff < 86400000) return Math.floor(diff / 3600000) + ' std';
+            
+            return date.toLocaleDateString('de-DE', { 
+                day: 'numeric', 
+                month: 'short',
+                year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined
+            });
+        }
+        
+        function linkify(text) {
+            return text.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        function renderPosts() {
+            const container = document.getElementById('posts');
+            
+            if (posts.length === 0) {
+                container.innerHTML = '<div class="loading">Keine Posts gefunden</div>';
+                return;
+            }
+            
+            const sorted = posts.sort((a, b) => b.created_at - a.created_at).slice(0, 10);
+            const visible = sorted.slice(0, 3);
+            const hidden = sorted.slice(3);
+            
+            let html = visible.map((post, index) => renderPost(post, index, sorted.length)).join('');
+            
+            if (hidden.length > 0) {
+                html += `
+                    <button class="expand-btn" onclick="togglePosts(this)" aria-expanded="false" aria-controls="hidden-posts" type="button">
+                        Ältere Posts anzeigen<span class="count">(${hidden.length})</span>
+                    </button>
+                    <div id="hidden-posts" class="posts-hidden" aria-hidden="true">
+                        ${hidden.map((post, index) => renderPost(post, index + 3, sorted.length)).join('')}
+                    </div>
+                `;
+            }
+            
+            container.innerHTML = html;
+        }
+        
+        function renderPost(post, index, total) {
+            const noteId = hexToNote(post.id);
+            const dateISO = new Date(post.created_at * 1000).toISOString();
+            return `
+                <article class="post" itemscope itemtype="https://schema.org/SocialMediaPosting" aria-posinset="${index + 1}" aria-setsize="${total}">
+                    <div class="post-content" itemprop="articleBody">${linkify(escapeHtml(post.content))}</div>
+                    <footer class="post-footer">
+                        <time class="post-date" datetime="${dateISO}" itemprop="datePublished">${formatDate(post.created_at)}</time>
+                        <button class="post-link" onclick="copyPostLink('${noteId}', this)" aria-label="Post-Link kopieren" type="button">Link kopieren</button>
+                    </footer>
+                    <meta itemprop="author" content="Steven Noack">
+                    <link itemprop="url" href="https://njump.me/${noteId}">
+                </article>
+            `;
+        }
+        
+        function togglePosts(btn) {
+            const hiddenPosts = document.getElementById('hidden-posts');
+            const isExpanded = hiddenPosts.classList.contains('expanded');
+            
+            if (isExpanded) {
+                hiddenPosts.classList.remove('expanded');
+                hiddenPosts.setAttribute('aria-hidden', 'true');
+                btn.setAttribute('aria-expanded', 'false');
+                btn.innerHTML = `Ältere Posts anzeigen<span class="count">(${hiddenPosts.children.length})</span>`;
+            } else {
+                hiddenPosts.classList.add('expanded');
+                hiddenPosts.setAttribute('aria-hidden', 'false');
+                btn.setAttribute('aria-expanded', 'true');
+                btn.innerHTML = 'Weniger anzeigen';
+            }
+        }
+        
+        function updateProfile(data) {
+            if (data.picture) {
+                document.getElementById('avatar').src = data.picture;
+            }
+            if (data.about) {
+                document.getElementById('bio').textContent = data.about;
+            }
+        }
+        
+        function connectToRelay(url) {
+            try {
+                const ws = new WebSocket(url);
+                
+                ws.onopen = () => {
+                    ws.send(JSON.stringify(["REQ", "profile", { authors: [PUBKEY], kinds: [0], limit: 1 }]));
+                    ws.send(JSON.stringify(["REQ", "posts", { authors: [PUBKEY], kinds: [1], limit: 20 }]));
+                };
+                
+                ws.onmessage = (e) => {
+                    try {
+                        const data = JSON.parse(e.data);
+                        if (data[0] === 'EVENT' && data[2]) {
+                            const event = data[2];
+                            if (event.kind === 0) {
+                                try { updateProfile(JSON.parse(event.content)); } catch (err) {}
+                            }
+                            if (event.kind === 1 && !posts.find(p => p.id === event.id)) {
+                                posts.push(event);
+                                renderPosts();
+                            }
+                        }
+                    } catch (err) {}
+                };
+                
+                ws.onerror = () => {};
+                ws.onclose = () => {};
+            } catch (err) {}
+        }
+        
+        // Initialize
+        RELAYS.forEach(relay => connectToRelay(relay));
+        
+        // Fallback
+        setTimeout(() => {
+            if (posts.length === 0) {
+                document.getElementById('posts').innerHTML = `
+                    <div class="loading">
+                        <a href="https://njump.me/npub1cxa0fa6vmq5evwpgk8dg6ul99ny5e2nd3hy5fa72g598t39nxy0surzuva">
+                            Profil auf njump.me ansehen →
+                        </a>
+                    </div>
+                `;
+            }
+        }, 5000);
+    </script>
+</body>
+</html>
