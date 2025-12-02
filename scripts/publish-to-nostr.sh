@@ -20,6 +20,21 @@ D_TAG=$(grep '^slug:' "$ARTICLE_PATH" | sed 's/^slug: *//;s/"//g')
 SUMMARY=$(grep '^description:' "$ARTICLE_PATH" | sed 's/^description: *"\(.*\)"/\1/')
 IMAGE=$(grep '^heroImage:' "$ARTICLE_PATH" | sed 's/^heroImage: *//;s/"//g')
 
+# Extract tags (supports: tags: ["tag1", "tag2"] or tags: [tag1, tag2])
+TAGS_LINE=$(grep '^tags:' "$ARTICLE_PATH" | head -1)
+TAGS=()
+if [ -n "$TAGS_LINE" ]; then
+  # Extract content between brackets, remove quotes, split by comma
+  TAGS_RAW=$(echo "$TAGS_LINE" | sed 's/^tags: *\[//;s/\].*//;s/"//g;s/,/ /g')
+  for tag in $TAGS_RAW; do
+    # Trim whitespace
+    tag=$(echo "$tag" | xargs)
+    if [ -n "$tag" ]; then
+      TAGS+=("$tag")
+    fi
+  done
+fi
+
 if [ -z "$TITLE" ] || [ -z "$D_TAG" ]; then
   echo "❌ Error: Could not extract title or slug from frontmatter"
   exit 1
@@ -57,6 +72,9 @@ echo "  D-Tag: $D_TAG"
 if [ -n "$IMAGE" ]; then
   echo "  Image: $IMAGE"
 fi
+if [ ${#TAGS[@]} -gt 0 ]; then
+  echo "  Tags: ${TAGS[*]}"
+fi
 echo "  Content: $(echo "$CONTENT" | wc -c | tr -d ' ') bytes"
 echo "  Relays: ${#RELAYS[@]}"
 echo ""
@@ -75,6 +93,11 @@ CMD="$CMD --sec $NOSTR_NSEC"
 if [ -n "$IMAGE" ]; then
   CMD="$CMD --tag image=$(printf %q "$IMAGE")"
 fi
+
+# Add hashtags as t tags
+for tag in "${TAGS[@]}"; do
+  CMD="$CMD --tag t=$(printf %q "$tag")"
+done
 
 # Add relays individually
 for relay in "${RELAYS[@]}"; do
@@ -145,6 +168,7 @@ cat > "$LOG_FILE" << EOF
 Title: $TITLE
 Slug: $D_TAG
 Published: $TIMESTAMP
+Tags: ${TAGS[*]}
 
 ## Event IDs
 naddr:  $NADDR   ← TEILE DIESEN (immer aktuelle Version)
@@ -160,7 +184,7 @@ Your site: https://stevennoack.de/nostr/read/$NADDR
 
 ## Metadata
 Content size: $(echo "$CONTENT" | wc -c | tr -d ' ') bytes
-Relays: ${RELAYS[@]}
+Relays: ${RELAYS[*]}
 EOF
 
 echo "💾 Log saved: $LOG_FILE"
