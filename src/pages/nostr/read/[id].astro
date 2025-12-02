@@ -12,6 +12,7 @@ let error = "";
 let title = "Nostr Reader";
 let authorName = "Unknown";
 let publishedDate = new Date();
+let heroImage = "";
 
 const RELAYS = [
     "wss://relay.stevennoack.de",
@@ -127,6 +128,11 @@ try {
             title = content.split("\n")[0].substring(0, 50) + "...";
         }
 
+        const imageTag = event.tags.find((t) => t[0] === "image");
+        if (imageTag) {
+            heroImage = imageTag[1];
+        }
+
         // Author (simplified - no profile fetch to save resources)
         authorName = event.pubkey.substring(0, 8) + "...";
 
@@ -144,6 +150,7 @@ const articleSchema = event
           "@context": "https://schema.org",
           "@type": "Article",
           headline: title,
+          image: heroImage ? [heroImage] : undefined,
           author: {
               "@type": "Person",
               name: authorName,
@@ -171,6 +178,7 @@ const articleSchema = event
             property="og:url"
             content={`https://stevennoack.de/nostr/read/${id}`}
         />
+        {heroImage && <meta property="og:image" content={heroImage} />}
 
         {
             event && (
@@ -252,6 +260,14 @@ const articleSchema = event
                                     [Source]
                                 </a>
                             </div>
+
+                            {heroImage && (
+                                <img
+                                    src={heroImage}
+                                    alt={title}
+                                    class="w-full h-auto object-cover rounded-lg shadow-md mb-8"
+                                />
+                            )}
 
                             <h1>{title}</h1>
 
