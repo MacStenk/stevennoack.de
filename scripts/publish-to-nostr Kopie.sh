@@ -2,6 +2,8 @@
 # publish-to-nostr.sh - Publish Markdown articles to Nostr
 # Usage: ./publish-to-nostr.sh /path/to/article.md
 
+# set -e removed for better error handling
+
 ARTICLE_PATH="$1"
 
 if [ -z "$ARTICLE_PATH" ]; then
@@ -29,7 +31,7 @@ fi
 CONTENT=$(awk '/^---$/{ if (++count == 2) {p=1; next} } p' "$ARTICLE_PATH")
 
 # Get nsec from macOS Keychain (secure!)
-echo "🔑 Loading nsec from Keychain..."
+echo "🔐 Loading nsec from Keychain..."
 NOSTR_NSEC=$(security find-generic-password -a "$USER" -s "nostr-nsec" -w 2>/dev/null)
 
 if [ -z "$NOSTR_NSEC" ]; then
@@ -63,7 +65,10 @@ echo ""
 
 # Publish with nak
 # Kind 30023 = Long-form Content
+# Relays are passed as arguments at the end
+# Capture the event JSON output to extract the event ID
 
+# Construct command string carefully using printf %q to escape special characters
 CMD="nak event -k 30023"
 CMD="$CMD --content $(printf %q "$CONTENT")"
 CMD="$CMD --tag title=$(printf %q "$TITLE")"
@@ -82,6 +87,7 @@ for relay in "${RELAYS[@]}"; do
 done
 
 # Execute the command
+# Capture stderr too (2>&1) to ensure we get output even if nak writes to stderr
 EVENT_OUTPUT=$(eval "$CMD" 2>&1)
 
 # Extract event ID from JSON output
@@ -98,22 +104,17 @@ echo "✅ Published successfully!"
 echo ""
 
 # Generate both nevent and naddr
-# WICHTIG: nak key public gibt HEX zurück, nicht npub!
-PUBKEY_HEX=$(nak key public "$NOSTR_NSEC")
-NPUB=$(nak encode npub "$PUBKEY_HEX")
+NPUB=$(nak key public "$NOSTR_NSEC")
 
-# nevent with relays (zeigt auf dieses spezifische Event)
+# nevent with relays (this is what works!)
 NEVENT=$(nak encode nevent "$EVENT_ID" \
-  --author "$PUBKEY_HEX" \
+  --author "$NPUB" \
   --relay "wss://relay.stevennoack.de" \
   --relay "wss://relay.primal.net" \
   --relay "wss://nos.lol")
 
-# naddr with relays (zeigt immer auf neueste Version!)
-NADDR=$(nak encode naddr \
-  --kind 30023 \
-  --pubkey "$PUBKEY_HEX" \
-  --identifier "$D_TAG" \
+# naddr with relays (for reference)
+NADDR=$(nak encode naddr --kind 30023 --pubkey "$NPUB" --identifier "$D_TAG" \
   --relay "wss://relay.stevennoack.de" \
   --relay "wss://relay.primal.net" \
   --relay "wss://nos.lol")
@@ -124,14 +125,11 @@ echo "📋 Event IDs:"
 echo "  nevent: $NEVENT"
 echo "  naddr:  $NADDR"
 echo "  hex:    $EVENT_ID"
-echo "  npub:   $NPUB"
 echo ""
-echo "🔗 View on:"
-echo "  • njump (naddr): https://njump.me/$NADDR"
-echo "  • Habla:         https://habla.news/a/$NADDR"
-echo "  • Your site:     https://stevennoack.de/nostr/read/$NADDR"
-echo ""
-echo "  (nevent für diese Version: https://njump.me/$NEVENT)"
+echo "🔗 View on (using nevent):"
+echo "  • njump:     https://njump.me/$NEVENT"
+echo "  • Habla:     https://habla.news/a/$NPUB/$D_TAG"
+echo "  • Your site: https://stevennoack.de/nostr/read/$NEVENT"
 
 # Save publishing log
 LOG_DIR="$HOME/dev/mein-garten/nostr-artikel/.published"
@@ -147,20 +145,20 @@ Slug: $D_TAG
 Published: $TIMESTAMP
 
 ## Event IDs
-naddr:  $NADDR   ← TEILE DIESEN (immer aktuelle Version)
-nevent: $NEVENT  ← Diese spezifische Version
+nevent: $NEVENT
+naddr:  $NADDR
 hex:    $EVENT_ID
 npub:   $NPUB
-pubkey: $PUBKEY_HEX
 
-## URLs
-njump:     https://njump.me/$NADDR
-Habla:     https://habla.news/a/$NADDR
-Your site: https://stevennoack.de/nostr/read/$NADDR
+## URLs (use nevent!)
+njump:     https://njump.me/$NEVENT
+Habla:     https://habla.news/a/$NPUB/$D_TAG
+Your site: https://stevennoack.de/nostr/read/$NEVENT
 
 ## Metadata
 Content size: $(echo "$CONTENT" | wc -c | tr -d ' ') bytes
 Relays: ${RELAYS[@]}
 EOF
 
+echo ""
 echo "💾 Log saved: $LOG_FILE"
