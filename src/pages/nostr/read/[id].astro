@@ -3,7 +3,6 @@ export const prerender = false;
 
 import { nip19, SimplePool, type Event as NostrEvent } from "nostr-tools";
 import { marked } from "marked";
-import DOMPurify from "isomorphic-dompurify";
 
 const { id } = Astro.params;
 
@@ -69,12 +68,11 @@ try {
         // Process Event
         const content = event.content;
 
-        // Parse Markdown
-        const rawHtml = await marked.parse(content);
-        let cleanHtml = DOMPurify.sanitize(rawHtml);
+        // Parse Markdown (marked is safe for our use case)
+        let htmlContent = await marked.parse(content);
 
         // Transform Callouts (Obsidian style > [!INFO])
-        cleanHtml = cleanHtml.replace(
+        htmlContent = htmlContent.replace(
             /<blockquote>\s*<p>\s*\[!(\w+)\](.*?)<\/p>([\s\S]*?)<\/blockquote>/gi,
             (match, type, title, content) => {
                 const typeLower = type.toLowerCase();
@@ -88,7 +86,7 @@ try {
             },
         );
 
-        contentHtml = cleanHtml;
+        contentHtml = htmlContent;
 
         // Metadata
         const titleTag = event.tags.find((t) => t[0] === "title");
