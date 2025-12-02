@@ -1,0 +1,440 @@
+---
+/**
+ * Nostr Artikel Template - LLM Optimized
+ * @description Long-form Artikel (Kind 30023) mit Schema.org Article
+ */
+import { getCollection } from "astro:content";
+
+export async function getStaticPaths() {
+  const articles = await getCollection("nostr-artikel");
+  return articles.map((article) => ({
+    params: { slug: article.slug },
+    props: { article },
+  }));
+}
+
+const { article } = Astro.props;
+const { Content } = await article.render();
+
+// Schema.org Article
+const articleSchema = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  headline: article.data.title,
+  description: article.data.description,
+  author: {
+    "@type": "Person",
+    name: article.data.author || "Steven Noack",
+    url: "https://stevennoack.de/nostr",
+    identifier: article.data.author_npub,
+  },
+  datePublished: article.data.date,
+  dateModified: article.data.modified || article.data.date,
+  publisher: {
+    "@type": "Person",
+    name: "Steven Noack",
+    url: "https://stevennoack.de",
+  },
+  image: article.data.heroImage,
+  mainEntityOfPage: {
+    "@type": "WebPage",
+    "@id": `https://stevennoack.de/nostr/artikel/${article.slug}`,
+  },
+  keywords: article.data.tags?.join(", ") || "",
+};
+
+// BreadcrumbList Schema
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: "Home",
+      item: "https://stevennoack.de",
+    },
+    {
+      "@type": "ListItem",
+      position: 2,
+      name: "Nostr",
+      item: "https://stevennoack.de/nostr",
+    },
+    {
+      "@type": "ListItem",
+      position: 3,
+      name: article.data.title,
+      item: `https://stevennoack.de/nostr/artikel/${article.slug}`,
+    },
+  ],
+};
+---
+
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{article.data.title} - Steven Noack</title>
+    <meta name="description" content={article.data.description} />
+    <meta name="author" content={article.data.author || "Steven Noack"} />
+    <meta name="keywords" content={article.data.tags?.join(", ")} />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article" />
+    <meta
+      property="og:url"
+      content={`https://stevennoack.de/nostr/artikel/${article.slug}`}
+    />
+    <meta property="og:title" content={article.data.title} />
+    <meta property="og:description" content={article.data.description} />
+    <meta property="og:image" content={article.data.ogImage} />
+    <meta
+      property="article:published_time"
+      content={article.data.date.toISOString()}
+    />
+    <meta
+      property="article:author"
+      content={article.data.author || "Steven Noack"}
+    />
+    {
+      article.data.tags && (
+        <meta property="article:tag" content={article.data.tags.join(", ")} />
+      )
+    }
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta
+      property="twitter:url"
+      content={`https://stevennoack.de/nostr/artikel/${article.slug}`}
+    />
+    <meta property="twitter:title" content={article.data.title} />
+    <meta property="twitter:description" content={article.data.description} />
+    <meta property="twitter:image" content={article.data.ogImage} />
+
+    <!-- Nostr Meta -->
+    {
+      article.data.author_npub && (
+        <meta name="nostr:author" content={article.data.author_npub} />
+      )
+    }
+    {
+      article.data.author_nip05 && (
+        <meta name="nostr:nip05" content={article.data.author_nip05} />
+      )
+    }
+    {
+      article.data.nostr?.note_id && (
+        <meta name="nostr:note" content={article.data.nostr.note_id} />
+      )
+    }
+
+    <!-- Schema.org JSON-LD -->
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(articleSchema)}
+    />
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(breadcrumbSchema)}
+    />
+
+    <style is:global>
+      @import "../../../styles/nostr-article.css";
+    </style>
+  </head>
+</html>
+<body>
+  <!-- Font Toggle -->
+  <button class="font-toggle" id="font-toggle" aria-label="Schriftart wechseln">
+    <span id="font-text">Terminal</span>
+  </button>
+
+  <!-- Dark/Light Mode Toggle -->
+  <button
+    class="mode-toggle"
+    id="mode-toggle"
+    aria-label="Dark/Light Mode umschalten"
+  >
+    <span id="mode-icon">☀️</span>
+    <span id="mode-text">Light</span>
+  </button>
+
+  <div class="container">
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="Breadcrumb">
+      <ol class="breadcrumb">
+        <li><a href="/">Home</a></li>
+        <li class="breadcrumb-separator" aria-hidden="true">→</li>
+        <li><a href="/nostr">Nostr</a></li>
+        <li class="breadcrumb-separator" aria-hidden="true">→</li>
+        <li aria-current="page">{article.data.title}</li>
+      </ol>
+    </nav>
+
+    <a href="/nostr" class="back-link">← Zurück zu Nostr</a>
+
+    <!-- Main Article -->
+    <article role="article" aria-labelledby="article-title">
+      <!-- Hero Image -->
+      {
+        article.data.heroImage && (
+          <div class="hero-image">
+            <img
+              src={article.data.heroImage}
+              alt={article.data.heroImageAlt || article.data.title}
+            />
+            {article.data.heroImageCaption && (
+              <p class="hero-caption">{article.data.heroImageCaption}</p>
+            )}
+          </div>
+        )
+      }
+
+      <!-- Article Header -->
+      <header>
+        <!-- Nostr Badge -->
+        {
+          article.data.nostr?.published && (
+            <div class="nostr-badge">
+              ⚡ Auf Nostr veröffentlicht
+              {article.data.nostr.note_id && (
+                <a
+                  href={`https://njump.me/${article.data.nostr.note_id}`}
+                  target="_blank"
+                  rel="noopener"
+                >
+                  [Event]
+                </a>
+              )}
+            </div>
+          )
+        }
+
+        <h1 id="article-title">{article.data.title}</h1>
+
+        {
+          article.data.subtitle && (
+            <p class="subtitle">{article.data.subtitle}</p>
+          )
+        }
+
+        <div class="post-meta">
+          <time datetime={article.data.date.toISOString()}>
+            {
+              article.data.date.toLocaleDateString("de-DE", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })
+            }
+          </time>
+          <span aria-hidden="true">•</span>
+          <span>{article.data.author || "Steven Noack"}</span>
+          {
+            article.data.reading_time && (
+              <>
+                <span aria-hidden="true">•</span>
+                <span>{article.data.reading_time} Lesezeit</span>
+              </>
+            )
+          }
+        </div>
+
+        {
+          article.data.tags && article.data.tags.length > 0 && (
+            <div class="post-tags" role="list" aria-label="Artikel-Tags">
+              {article.data.tags.map((tag) => (
+                <span class="tag" role="listitem">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )
+        }
+
+        {
+          article.data.series && (
+            <div class="series-info">
+              Serie: {article.data.series}
+              {article.data.part && ` – Teil ${article.data.part}`}
+            </div>
+          )
+        }
+      </header>
+
+      <!-- Article Content -->
+      <section class="content" aria-label="Artikel-Inhalt">
+        <Content />
+      </section>
+
+      <!-- Article Footer -->
+      <footer>
+        <p>
+          Veröffentlicht am{" "}
+          <time datetime={article.data.date.toISOString()}>
+            {
+              article.data.date.toLocaleDateString("de-DE", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })
+            }
+          </time>
+        </p>
+
+        <div class="author-info">
+          <span>Autor: {article.data.author || "Steven Noack"}</span>
+          {
+            article.data.author_nip05 && (
+              <span>
+                NIP-05:{" "}
+                <a href={`https://njump.me/${article.data.author_npub}`}>
+                  {article.data.author_nip05}
+                </a>
+              </span>
+            )
+          }
+          {
+            article.data.author_npub && (
+              <span>
+                Nostr: <a href="/nostr">stevennoack.de/nostr</a>
+              </span>
+            )
+          }
+        </div>
+      </footer>
+    </article>
+  </div>
+
+  <!-- Scripts -->
+  <script>
+    const savedMode = localStorage.getItem("colorMode") || "dark";
+    const body = document.body;
+    const toggle = document.getElementById("mode-toggle");
+    const modeIcon = document.getElementById("mode-icon");
+    const modeText = document.getElementById("mode-text");
+
+    if (savedMode === "light") {
+      body.classList.add("light-mode");
+      modeIcon.textContent = "🌙";
+      modeText.textContent = "Dark";
+    }
+
+    toggle.addEventListener("click", () => {
+      body.classList.toggle("light-mode");
+      const isLight = body.classList.contains("light-mode");
+      if (isLight) {
+        modeIcon.textContent = "🌙";
+        modeText.textContent = "Dark";
+        localStorage.setItem("colorMode", "light");
+      } else {
+        modeIcon.textContent = "☀️";
+        modeText.textContent = "Light";
+        localStorage.setItem("colorMode", "dark");
+      }
+    });
+  </script>
+
+  <script>
+    const fontBody = document.body;
+    const savedFont = localStorage.getItem("fontStyle") || "terminal";
+    const fontToggle = document.getElementById("font-toggle");
+    const fontText = document.getElementById("font-text");
+
+    const fonts = ["terminal", "sans", "serif"];
+    const fontNames = { terminal: "Terminal", sans: "Sans", serif: "Serif" };
+
+    let currentFontIndex = fonts.indexOf(savedFont);
+
+    if (savedFont === "sans") {
+      fontBody.classList.add("font-sans");
+      fontText.textContent = "Sans";
+    } else if (savedFont === "serif") {
+      fontBody.classList.add("font-serif");
+      fontText.textContent = "Serif";
+    }
+
+    fontToggle.addEventListener("click", () => {
+      fontBody.classList.remove("font-sans", "font-serif");
+      currentFontIndex = (currentFontIndex + 1) % fonts.length;
+      const newFont = fonts[currentFontIndex];
+      if (newFont === "sans") fontBody.classList.add("font-sans");
+      else if (newFont === "serif") fontBody.classList.add("font-serif");
+      fontText.textContent = fontNames[newFont];
+      localStorage.setItem("fontStyle", newFont);
+    });
+  </script>
+
+  <!-- Obsidian Callouts → Collapsible -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const blockquotes = document.querySelectorAll(".content blockquote");
+
+      blockquotes.forEach((bq) => {
+        const firstP = bq.querySelector("p:first-child");
+        if (!firstP) return;
+
+        const text = firstP.innerHTML;
+        const calloutMatch = text.match(/^\[!(\w+)\](-)?/);
+        if (!calloutMatch) return;
+
+        const calloutType = calloutMatch[1].toLowerCase();
+        const isCollapsed = calloutMatch[2] === "-";
+
+        // Extract title - everything after [!type]- until < or end
+        let title;
+        const afterMarker = text.replace(/^\[!\w+\]-?\s*/, "");
+        const boldMatch = afterMarker.match(/^\*\*(.+?)\*\*/);
+
+        if (boldMatch) {
+          title = boldMatch[1];
+        } else {
+          // Take text until first < (HTML tag) or end of line
+          const plainMatch = afterMarker.match(/^([^<]+)/);
+          title = plainMatch
+            ? plainMatch[1].trim()
+            : calloutType.charAt(0).toUpperCase() + calloutType.slice(1);
+        }
+
+        if (!title)
+          title = calloutType.charAt(0).toUpperCase() + calloutType.slice(1);
+
+        const details = document.createElement("details");
+        details.className = "callout callout-" + calloutType;
+        if (!isCollapsed) details.open = true;
+
+        const summary = document.createElement("summary");
+        summary.innerHTML = title;
+
+        const content = document.createElement("div");
+        content.className = "callout-content";
+
+        const children = Array.from(bq.children);
+        children.forEach((child, index) => {
+          if (index === 0) {
+            let cleanedHTML = child.innerHTML;
+            cleanedHTML = cleanedHTML.replace(
+              /^\[!\w+\]-?\s*\*\*(.+?)\*\*\s*/,
+              "",
+            );
+            cleanedHTML = cleanedHTML.replace(/^\[!\w+\]-?\s*[^<]+/, "");
+            cleanedHTML = cleanedHTML.replace(/^<br\s*\/?>\s*/, "").trim();
+            if (cleanedHTML) {
+              const div = document.createElement("div");
+              div.innerHTML = cleanedHTML;
+              content.appendChild(div);
+            }
+          } else {
+            content.appendChild(child.cloneNode(true));
+          }
+        });
+
+        details.appendChild(summary);
+        details.appendChild(content);
+        bq.parentNode.replaceChild(details, bq);
+      });
+    });
+  </script>
+</body>

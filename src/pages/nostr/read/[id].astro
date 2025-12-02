@@ -1,0 +1,398 @@
+---
+export const prerender = false;
+
+import NDK, { NDKEvent } from "@nostr-dev-kit/ndk";
+import { nip19 } from "nostr-tools";
+import { marked } from "marked";
+import createDOMPurify from "dompurify";
+import { JSDOM } from "jsdom";
+
+const { id } = Astro.params;
+
+let event: NDKEvent | null = null;
+let contentHtml = "";
+let error = "";
+let title = "Nostr Reader";
+let authorName = "Unknown";
+let publishedDate = new Date();
+
+if (!id) {
+    return Astro.redirect("/nostr");
+}
+
+try {
+    // Initialize NDK
+    const ndk = new NDK({
+        explicitRelayUrls: [
+            "wss://relay.stevennoack.de",
+            "wss://relay.primal.net",
+            "wss://nos.lol",
+        ],
+    });
+
+    await ndk.connect();
+
+    // Decode ID and fetch event
+    let filter = {};
+    try {
+        const decoded = nip19.decode(id);
+        if (decoded.type === "nevent") {
+            filter = { ids: [decoded.data.id] };
+        } else if (decoded.type === "note") {
+            filter = { ids: [decoded.data] };
+        } else if (decoded.type === "naddr") {
+            filter = {
+                kinds: [decoded.data.kind],
+                authors: [decoded.data.pubkey],
+                "#d": [decoded.data.identifier],
+            };
+        } else {
+            throw new Error("Unsupported ID type: " + decoded.type);
+        }
+    } catch (e) {
+        // If decoding fails, assume it's a raw hex ID
+        if (/^[0-9a-f]{64}$/.test(id)) {
+            filter = { ids: [id] };
+        } else {
+            throw new Error("Invalid ID format");
+        }
+    }
+
+    event = await ndk.fetchEvent(filter);
+
+    if (!event) {
+        error = "Event not found on relays.";
+    } else {
+        // Process Event
+        const content = event.content;
+
+        // Parse Markdown
+        const window = new JSDOM("").window;
+        const DOMPurify = createDOMPurify(window);
+        const rawHtml = await marked.parse(content);
+        let cleanHtml = DOMPurify.sanitize(rawHtml);
+
+        // Transform Callouts (Obsidian style > [!INFO])
+        // We do this by replacing blockquotes that start with [!TYPE]
+        const calloutRegex = /<blockquote>\s*<p>\s*\[!(\w+)\]\s*(.*?)\s*<\/p>/g;
+
+        // We need to process the HTML string to find blockquotes and transform them.
+        // A simple regex replacement on the HTML might be fragile but sufficient for standard marked output.
+        // Standard marked output for "> [!INFO] Title\n> Content" is:
+        // <blockquote>
+        //   <p>[!INFO] Title</p>
+        //   <p>Content</p>
+        // </blockquote>
+
+        cleanHtml = cleanHtml.replace(
+            /<blockquote>\s*<p>\s*\[!(\w+)\](.*?)\s*<\/p>/g,
+            (match, type, title) => {
+                const typeLower = type.toLowerCase();
+                const titleText = title.trim() || type;
+                return `<div class="callout callout-${typeLower}">
+        <details open>
+          <summary>${titleText}</summary>
+          <div class="callout-content">`;
+            },
+        );
+
+        // Close the divs. The regex above only replaces the opening part.
+        // We need to close the div and details where the blockquote ends.
+        // This is tricky with regex.
+        // Better approach: Use JSDOM to manipulate the DOM.
+
+        const dom = new JSDOM(cleanHtml);
+        const doc = dom.window.document;
+
+        const blockquotes = doc.querySelectorAll("blockquote");
+        blockquotes.forEach((bq) => {
+            const firstP = bq.querySelector("p");
+            if (
+                firstP &&
+                firstP.textContent &&
+                firstP.textContent.trim().startsWith("[!")
+            ) {
+                const match = firstP.textContent
+                    .trim()
+                    .match(/^\[!(\w+)\](.*)/);
+                if (match) {
+                    const type = match[1].toLowerCase();
+                    const titleText = match[2].trim() || match[1];
+
+                    // Create new structure
+                    const wrapper = doc.createElement("div");
+                    wrapper.className = `callout callout-${type}`;
+
+                    const details = doc.createElement("details");
+                    details.open = true;
+
+                    const summary = doc.createElement("summary");
+                    summary.textContent = titleText;
+
+                    const contentDiv = doc.createElement("div");
+                    contentDiv.className = "callout-content";
+
+                    // Move all children of blockquote (except first P) to contentDiv
+                    // Actually, if the first P has content after the title, we should keep it?
+                    // Usually Obsidian format is "> [!INFO] Title" on one line.
+                    // The rest of the content is in following paragraphs.
+
+                    // Remove the first P (title line)
+                    bq.removeChild(firstP);
+
+                    // Move remaining children
+                    while (bq.firstChild) {
+                        contentDiv.appendChild(bq.firstChild);
+                    }
+
+                    details.appendChild(summary);
+                    details.appendChild(contentDiv);
+                    wrapper.appendChild(details);
+
+                    // Replace blockquote with wrapper
+                    bq.parentNode?.replaceChild(wrapper, bq);
+                }
+            }
+        });
+
+        contentHtml = doc.body.innerHTML;
+
+        // Metadata
+        // Try to get title from tags or content
+        const titleTag = event.tags.find((t) => t[0] === "title");
+        if (titleTag) {
+            title = titleTag[1];
+        } else {
+            // Fallback: First line of content or ID
+            title = content.split("\n")[0].substring(0, 50) + "...";
+        }
+
+        // Author
+        const author = await event.author?.fetchProfile();
+        if (author) {
+            authorName = author.name || author.displayName || "Unknown";
+        }
+
+        publishedDate = new Date(event.created_at! * 1000);
+    }
+} catch (e) {
+    console.error(e);
+    error =
+        "Error loading event: " + (e instanceof Error ? e.message : String(e));
+}
+
+// Schema.org Article
+const articleSchema = event
+    ? {
+          "@context": "https://schema.org",
+          "@type": "Article",
+          headline: title,
+          author: {
+              "@type": "Person",
+              name: authorName,
+          },
+          datePublished: publishedDate.toISOString(),
+          mainEntityOfPage: {
+              "@type": "WebPage",
+              "@id": `https://stevennoack.de/nostr/read/${id}`,
+          },
+      }
+    : {};
+---
+
+<!doctype html>
+<html lang="de">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>{title} - Nostr Reader</title>
+
+        <!-- Open Graph -->
+        <meta property="og:title" content={title} />
+        <meta property="og:type" content="article" />
+        <meta
+            property="og:url"
+            content={`https://stevennoack.de/nostr/read/${id}`}
+        />
+
+        {
+            event && (
+                <>
+                    <meta
+                        property="article:published_time"
+                        content={publishedDate.toISOString()}
+                    />
+                    <meta property="article:author" content={authorName} />
+                    <meta name="nostr:event" content={event.id} />
+                </>
+            )
+        }
+
+        <script
+            type="application/ld+json"
+            set:html={JSON.stringify(articleSchema)}
+        />
+
+        <style is:global>
+            @import "../../../styles/nostr-article.css";
+        </style>
+    </head>
+    <body>
+        <!-- Font Toggle -->
+        <button
+            class="font-toggle"
+            id="font-toggle"
+            aria-label="Schriftart wechseln"
+        >
+            <span id="font-text">Terminal</span>
+        </button>
+
+        <!-- Dark/Light Mode Toggle -->
+        <button
+            class="mode-toggle"
+            id="mode-toggle"
+            aria-label="Dark/Light Mode umschalten"
+        >
+            <span id="mode-icon">☀️</span>
+            <span id="mode-text">Light</span>
+        </button>
+
+        <div class="container">
+            <!-- Breadcrumb Navigation -->
+            <nav aria-label="Breadcrumb">
+                <ol class="breadcrumb">
+                    <li><a href="/">Home</a></li>
+                    <li class="breadcrumb-separator" aria-hidden="true">→</li>
+                    <li><a href="/nostr">Nostr</a></li>
+                    <li class="breadcrumb-separator" aria-hidden="true">→</li>
+                    <li aria-current="page">Reader</li>
+                </ol>
+            </nav>
+
+            <a href="/nostr" class="back-link">← Zurück zu Nostr</a>
+
+            {
+                error ? (
+                    <div class="callout callout-summary">
+                        <details open>
+                            <summary>Error</summary>
+                            <div class="callout-content">
+                                <p>{error}</p>
+                                <p>ID: {id}</p>
+                            </div>
+                        </details>
+                    </div>
+                ) : (
+                    <article role="article">
+                        <header>
+                            <div class="nostr-badge">
+                                ⚡ Live from Nostr
+                                <a
+                                    href={`https://njump.me/${id}`}
+                                    target="_blank"
+                                    rel="noopener"
+                                >
+                                    [Source]
+                                </a>
+                            </div>
+
+                            <h1>{title}</h1>
+
+                            <div class="post-meta">
+                                <time datetime={publishedDate.toISOString()}>
+                                    {publishedDate.toLocaleDateString("de-DE", {
+                                        year: "numeric",
+                                        month: "long",
+                                        day: "numeric",
+                                        hour: "2-digit",
+                                        minute: "2-digit",
+                                    })}
+                                </time>
+                                <span aria-hidden="true">•</span>
+                                <span>{authorName}</span>
+                            </div>
+                        </header>
+
+                        <div class="content" set:html={contentHtml} />
+
+                        <footer>
+                            <div class="author-info">
+                                <p>Author: {authorName}</p>
+                                {event?.pubkey && (
+                                    <p class="text-sm text-gray-500">
+                                        {event.pubkey}
+                                    </p>
+                                )}
+                            </div>
+                        </footer>
+                    </article>
+                )
+            }
+        </div>
+
+        <script>
+            // Toggle Logic (Copied from [slug].astro or we should extract this too)
+            // Since we didn't extract the JS, we'll inline it here for now.
+            // Ideally this should be in a shared script or layout.
+
+            const modeToggle = document.getElementById("mode-toggle");
+            const modeIcon = document.getElementById("mode-icon");
+            const modeText = document.getElementById("mode-text");
+            const body = document.body;
+
+            // Check local storage
+            const currentMode = localStorage.getItem("theme");
+            if (currentMode === "light") {
+                body.classList.add("light-mode");
+                modeIcon.textContent = "🌙";
+                modeText.textContent = "Dark";
+            }
+
+            modeToggle?.addEventListener("click", () => {
+                body.classList.toggle("light-mode");
+                const isLight = body.classList.contains("light-mode");
+                localStorage.setItem("theme", isLight ? "light" : "dark");
+                modeIcon.textContent = isLight ? "🌙" : "☀️";
+                modeText.textContent = isLight ? "Dark" : "Light";
+            });
+
+            const fontToggle = document.getElementById("font-toggle");
+            const fontText = document.getElementById("font-text");
+            const fonts = ["Terminal", "Sans", "Serif"];
+            let currentFontIndex = 0;
+
+            // Check local storage
+            const savedFont = localStorage.getItem("font");
+            if (savedFont) {
+                if (savedFont === "sans") {
+                    body.classList.add("font-sans");
+                    currentFontIndex = 1;
+                    fontText.textContent = "Sans";
+                } else if (savedFont === "serif") {
+                    body.classList.add("font-serif");
+                    currentFontIndex = 2;
+                    fontText.textContent = "Serif";
+                }
+            }
+
+            fontToggle?.addEventListener("click", () => {
+                currentFontIndex = (currentFontIndex + 1) % fonts.length;
+                const font = fonts[currentFontIndex];
+
+                body.classList.remove("font-sans", "font-serif");
+
+                if (font === "Sans") {
+                    body.classList.add("font-sans");
+                    localStorage.setItem("font", "sans");
+                } else if (font === "Serif") {
+                    body.classList.add("font-serif");
+                    localStorage.setItem("font", "serif");
+                } else {
+                    localStorage.setItem("font", "terminal");
+                }
+
+                fontText.textContent = font;
+            });
+        </script>
+    </body>
+</html>
