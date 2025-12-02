@@ -436,15 +436,6 @@
             color: #00d4ff;
         }
         
-        .footer-links {
-            margin-top: 12px;
-        }
-        
-        .nostr-link {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 12px;
-        }
-        
         .badge {
             display: inline-block;
             font-family: 'JetBrains Mono', monospace;
@@ -661,7 +652,7 @@
             <div class="detail-row">
                 <span class="detail-label">NIP-05 Address</span>
                 <div class="detail-value copyable" onclick="copyText('steven@stevennoack.de', this)">
-                    <code>steven@stevennoack.de</code>
+                    <code><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="0477706172616a4477706172616a6a6b65676f2a6061">[email&#160;protected]</a></code>
                     <span class="copy-hint">kopieren</span>
                 </div>
             </div>
@@ -711,13 +702,13 @@
         
         <footer class="footer" role="contentinfo">
             <p>Powered by <a href="https://github.com/nostr-protocol/nostr" target="_blank" rel="noopener noreferrer">Nostr Protocol</a></p>
-            <p class="footer-links">
-                <a href="nostr:npub1cxa0fa6vmq5evwpgk8dg6ul99ny5e2nd3hy5fa72g598t39nxy0surzuva" class="nostr-link">In Nostr-Client öffnen →</a>
+            <p style="margin-top: 12px;">
+                <a href="nostr:npub1cxa0fa6vmq5evwpgk8dg6ul99ny5e2nd3hy5fa72g598t39nxy0surzuva" style="font-family: 'JetBrains Mono', monospace; font-size: 12px;">In Nostr-Client öffnen →</a>
             </p>
         </footer>
     </main>
     
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
         const PUBKEY = 'c1baf4f74cd829963828b1da8d73e52cc94caa6d8dc944f7ca450a75c4b3311f';
         const RELAYS = [
             'wss://relay.stevennoack.de',
@@ -975,9 +966,17 @@
         // Initialize
         RELAYS.forEach(relay => connectToRelay(relay));
         
-        // Fallback
+        // Fallback after 5 seconds
         setTimeout(() => {
             if (posts.length === 0) {
                 document.getElementById('posts').innerHTML = `
                     <div class="loading">
-                        <a href="https://njump.me/npub1cxa0fa6vmq5
+                        Verbindung zu Relays wird hergestellt...
+                    </div>
+                `;
+            }
+        }, 5000);
+    </script>
+</body>
+</html>
+    
