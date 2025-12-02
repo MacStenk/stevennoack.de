@@ -262,11 +262,9 @@ const articleSchema = event
                             </div>
 
                             {heroImage && (
-                                <img
-                                    src={heroImage}
-                                    alt={title}
-                                    class="w-full h-auto object-cover rounded-lg shadow-md mb-8"
-                                />
+                                <div class="hero-image">
+                                    <img src={heroImage} alt={title} />
+                                </div>
                             )}
 
                             <h1>{title}</h1>
