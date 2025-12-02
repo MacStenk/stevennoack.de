@@ -4,8 +4,7 @@ export const prerender = false;
 import NDK, { NDKEvent } from "@nostr-dev-kit/ndk";
 import { nip19 } from "nostr-tools";
 import { marked } from "marked";
-import createDOMPurify from "dompurify";
-import { JSDOM } from "jsdom";
+import DOMPurify from "isomorphic-dompurify";
 
 const { id } = Astro.params;
 
@@ -67,95 +66,32 @@ try {
         const content = event.content;
 
         // Parse Markdown
-        const window = new JSDOM("").window;
-        const DOMPurify = createDOMPurify(window);
         const rawHtml = await marked.parse(content);
         let cleanHtml = DOMPurify.sanitize(rawHtml);
 
         // Transform Callouts (Obsidian style > [!INFO])
-        // We do this by replacing blockquotes that start with [!TYPE]
-        const calloutRegex = /<blockquote>\s*<p>\s*\[!(\w+)\]\s*(.*?)\s*<\/p>/g;
-
-        // We need to process the HTML string to find blockquotes and transform them.
-        // A simple regex replacement on the HTML might be fragile but sufficient for standard marked output.
         // Standard marked output for "> [!INFO] Title\n> Content" is:
         // <blockquote>
         //   <p>[!INFO] Title</p>
         //   <p>Content</p>
         // </blockquote>
 
+        // We'll use regex to transform blockquotes with [!TYPE] markers
         cleanHtml = cleanHtml.replace(
-            /<blockquote>\s*<p>\s*\[!(\w+)\](.*?)\s*<\/p>/g,
-            (match, type, title) => {
+            /<blockquote>\s*<p>\s*\[!(\w+)\](.*?)<\/p>([\s\S]*?)<\/blockquote>/gi,
+            (match, type, title, content) => {
                 const typeLower = type.toLowerCase();
                 const titleText = title.trim() || type;
                 return `<div class="callout callout-${typeLower}">
-        <details open>
-          <summary>${titleText}</summary>
-          <div class="callout-content">`;
+          <details open>
+            <summary>${titleText}</summary>
+            <div class="callout-content">${content}</div>
+          </details>
+        </div>`;
             },
         );
 
-        // Close the divs. The regex above only replaces the opening part.
-        // We need to close the div and details where the blockquote ends.
-        // This is tricky with regex.
-        // Better approach: Use JSDOM to manipulate the DOM.
-
-        const dom = new JSDOM(cleanHtml);
-        const doc = dom.window.document;
-
-        const blockquotes = doc.querySelectorAll("blockquote");
-        blockquotes.forEach((bq) => {
-            const firstP = bq.querySelector("p");
-            if (
-                firstP &&
-                firstP.textContent &&
-                firstP.textContent.trim().startsWith("[!")
-            ) {
-                const match = firstP.textContent
-                    .trim()
-                    .match(/^\[!(\w+)\](.*)/);
-                if (match) {
-                    const type = match[1].toLowerCase();
-                    const titleText = match[2].trim() || match[1];
-
-                    // Create new structure
-                    const wrapper = doc.createElement("div");
-                    wrapper.className = `callout callout-${type}`;
-
-                    const details = doc.createElement("details");
-                    details.open = true;
-
-                    const summary = doc.createElement("summary");
-                    summary.textContent = titleText;
-
-                    const contentDiv = doc.createElement("div");
-                    contentDiv.className = "callout-content";
-
-                    // Move all children of blockquote (except first P) to contentDiv
-                    // Actually, if the first P has content after the title, we should keep it?
-                    // Usually Obsidian format is "> [!INFO] Title" on one line.
-                    // The rest of the content is in following paragraphs.
-
-                    // Remove the first P (title line)
-                    bq.removeChild(firstP);
-
-                    // Move remaining children
-                    while (bq.firstChild) {
-                        contentDiv.appendChild(bq.firstChild);
-                    }
-
-                    details.appendChild(summary);
-                    details.appendChild(contentDiv);
-                    wrapper.appendChild(details);
-
-                    // Replace blockquote with wrapper
-                    bq.parentNode?.replaceChild(wrapper, bq);
-                }
-            }
-        });
-
-        contentHtml = doc.body.innerHTML;
+        contentHtml = cleanHtml;
 
         // Metadata
         // Try to get title from tags or content

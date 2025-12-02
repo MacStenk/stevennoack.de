@@ -16,8 +16,7 @@
     "@nostr-dev-kit/ndk": "^2.18.1",
     "@tailwindcss/vite": "^4.1.17",
     "astro": "^5.15.1",
-    "dompurify": "^3.3.0",
-    "jsdom": "^27.2.0",
+    "isomorphic-dompurify": "^2.33.0",
     "marked": "^17.0.1",
     "nostr-tools": "^2.18.2",
     "tailwindcss": "^4.1.17"
