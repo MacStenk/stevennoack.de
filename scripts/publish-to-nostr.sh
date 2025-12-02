@@ -2,7 +2,7 @@
 # publish-to-nostr.sh - Publish Markdown articles to Nostr
 # Usage: ./publish-to-nostr.sh /path/to/article.md
 
-set -e
+# set -e removed for better error handling
 
 ARTICLE_PATH="$1"
 
@@ -20,6 +20,7 @@ fi
 TITLE=$(grep '^title:' "$ARTICLE_PATH" | sed 's/^title: *"\(.*\)"/\1/')
 D_TAG=$(grep '^slug:' "$ARTICLE_PATH" | sed 's/^slug: *//;s/"//g')
 SUMMARY=$(grep '^description:' "$ARTICLE_PATH" | sed 's/^description: *"\(.*\)"/\1/')
+IMAGE=$(grep '^heroImage:' "$ARTICLE_PATH" | sed 's/^heroImage: *//;s/"//g')
 
 if [ -z "$TITLE" ] || [ -z "$D_TAG" ]; then
   echo "❌ Error: Could not extract title or slug from frontmatter"
@@ -55,6 +56,9 @@ RELAYS=(
 echo "📝 Publishing to Nostr:"
 echo "  Title: $TITLE"
 echo "  D-Tag: $D_TAG"
+if [ -n "$IMAGE" ]; then
+  echo "  Image: $IMAGE"
+fi
 echo "  Content: $(echo "$CONTENT" | wc -c | tr -d ' ') bytes"
 echo "  Relays: ${#RELAYS[@]}"
 echo ""
@@ -63,17 +67,39 @@ echo ""
 # Kind 30023 = Long-form Content
 # Relays are passed as arguments at the end
 # Capture the event JSON output to extract the event ID
-EVENT_OUTPUT=$(nak event -k 30023 \
-  --content "$CONTENT" \
-  --tag "title=$TITLE" \
-  --tag "d=$D_TAG" \
-  --tag "summary=$SUMMARY" \
-  --tag "published_at=$(date +%s)" \
-  --sec "$NOSTR_NSEC" \
-  "${RELAYS[@]}")
+
+# Construct command string carefully using printf %q to escape special characters
+CMD="nak event -k 30023"
+CMD="$CMD --content $(printf %q "$CONTENT")"
+CMD="$CMD --tag title=$(printf %q "$TITLE")"
+CMD="$CMD --tag d=$(printf %q "$D_TAG")"
+CMD="$CMD --tag summary=$(printf %q "$SUMMARY")"
+CMD="$CMD --tag published_at=$(date +%s)"
+CMD="$CMD --sec $NOSTR_NSEC"
+
+if [ -n "$IMAGE" ]; then
+  CMD="$CMD --tag image=$(printf %q "$IMAGE")"
+fi
+
+# Add relays individually
+for relay in "${RELAYS[@]}"; do
+  CMD="$CMD $relay"
+done
+
+echo "DEBUG: Starting publish..."
+# Execute the command
+EVENT_OUTPUT=$(eval "$CMD" 2>&1)
+echo "DEBUG: Command executed."
 
 # Extract event ID from JSON output
 EVENT_ID=$(echo "$EVENT_OUTPUT" | grep -o '"id":"[^"]*"' | head -1 | cut -d'"' -f4)
+echo "DEBUG: ID extracted: $EVENT_ID"
+
+if [ -z "$EVENT_ID" ]; then
+  echo "❌ Error: Could not extract Event ID. Output:"
+  echo "$EVENT_OUTPUT"
+  exit 1
+fi
 
 echo ""
 echo "✅ Published successfully!"
@@ -98,16 +124,14 @@ NADDR=$(nak encode naddr --kind 30023 --pubkey "$NPUB" --identifier "$D_TAG" \
 TIMESTAMP=$(date "+%Y-%m-%d %H:%M:%S")
 
 echo "📋 Event IDs:"
-echo "  nevent: $NEVENT (← use this everywhere!)"
+echo "  nevent: $NEVENT"
+echo "  naddr:  $NADDR"
 echo "  hex:    $EVENT_ID"
 echo ""
-echo "🔗 URLs:"
-echo "  • Your site: https://stevennoack.de/nostr/read/$NEVENT"
-echo "  • Habla:     https://habla.news/a/$NPUB/$D_TAG"
+echo "🔗 View on (using nevent):"
 echo "  • njump:     https://njump.me/$NEVENT"
-echo ""
-echo "⚠️  Note: naddr doesn't work reliably with nostr-tools"
-echo "    Use nevent for all URLs!"
+echo "  • Habla:     https://habla.news/a/$NPUB/$D_TAG"
+echo "  • Your site: https://stevennoack.de/nostr/read/$NEVENT"
 
 # Save publishing log
 LOG_DIR="$HOME/dev/mein-garten/nostr-artikel/.published"
@@ -123,17 +147,15 @@ Slug: $D_TAG
 Published: $TIMESTAMP
 
 ## Event IDs
-naddr:  $NADDR (primary - always latest version)
-nevent: $NEVENT (specific version)
+nevent: $NEVENT
+naddr:  $NADDR
 hex:    $EVENT_ID
 npub:   $NPUB
 
-## Primary URLs (use these!)
-Your site: https://stevennoack.de/nostr/read/$NADDR
-Habla:     https://habla.news/a/$NPUB/$D_TAG
-
-## Fallback URLs
+## URLs (use nevent!)
 njump:     https://njump.me/$NEVENT
+Habla:     https://habla.news/a/$NPUB/$D_TAG
+Your site: https://stevennoack.de/nostr/read/$NEVENT
 
 ## Metadata
 Content size: $(echo "$CONTENT" | wc -c | tr -d ' ') bytes
