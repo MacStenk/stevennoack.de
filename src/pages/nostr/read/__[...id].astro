@@ -596,16 +596,14 @@ const articleSchema = event
                                 </div>
 
                                 <div class="verification-badges">
-                                    {naddr && (
-                                        <a 
-                                            href={`https://njump.me/${naddr}`}
-                                            target="_blank"
-                                            rel="noopener"
-                                            class="badge"
-                                        >
-                                            Source
-                                        </a>
-                                    )}
+                                    <a 
+                                        href={`https://njump.me/${nevent}`}
+                                        target="_blank"
+                                        rel="noopener"
+                                        class="badge"
+                                    >
+                                        Source
+                                    </a>
                                     {naddr && (
                                         <button 
                                             class="badge"
@@ -615,16 +613,14 @@ const articleSchema = event
                                             naddr kopieren
                                         </button>
                                     )}
-                                    {naddr && (
-                                        <a 
-                                            href={`/api/nostr/${naddr}.json`}
-                                            target="_blank"
-                                            rel="noopener"
-                                            class="badge"
-                                        >
-                                            Raw JSON
-                                        </a>
-                                    )}
+                                    <a 
+                                        href={`https://njump.me/${nevent}?json=true`}
+                                        target="_blank"
+                                        rel="noopener"
+                                        class="badge"
+                                    >
+                                        Raw JSON
+                                    </a>
                                 </div>
                             </div>
                         </footer>
