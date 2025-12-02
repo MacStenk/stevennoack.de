@@ -72,15 +72,45 @@ try {
         let htmlContent = await marked.parse(content);
 
         // Transform Callouts (Obsidian style > [!INFO])
+        // All callouts are collapsed by default for cleaner reading
         htmlContent = htmlContent.replace(
-            /<blockquote>\s*<p>\s*\[!(\w+)\](.*?)<\/p>([\s\S]*?)<\/blockquote>/gi,
-            (match, type, title, content) => {
+            /<blockquote>\s*<p>\s*\[!(\w+)\](-?)([\s\S]*?)<\/p>([\s\S]*?)<\/blockquote>/gi,
+            (match, type, collapsed, titleLine, restContent) => {
                 const typeLower = type.toLowerCase();
-                const titleText = title.trim() || type;
+
+                // Title is the first line (or part before <br> or \n)
+                // If titleLine contains HTML tags like <strong>, keep them
+                let titleText = titleLine.trim();
+
+                // If there is content in the first p tag (separated by <br> or \n), append it to restContent
+                const splitRegex = /(?:<br\s*\/?>|\n)/i;
+                if (splitRegex.test(titleText)) {
+                    const parts = titleText.split(splitRegex);
+                    titleText = parts[0].trim();
+                    // Re-join the rest, replacing newlines with <br> for proper rendering if needed
+                    // But usually we just want to keep the rest as is, but we split by regex so we need to be careful.
+                    // Actually, simpler: find index of first split match.
+                    const firstSeparatorIndex = titleLine.search(splitRegex);
+                    if (firstSeparatorIndex !== -1) {
+                        titleText = titleLine
+                            .substring(0, firstSeparatorIndex)
+                            .trim();
+                        const contentInP = titleLine
+                            .substring(firstSeparatorIndex)
+                            .replace(/^(\n|<br\s*\/?>)+/i, "");
+                        restContent = contentInP + restContent;
+                    }
+                }
+
+                // Default title if empty
+                if (!titleText || titleText === "<br>") {
+                    titleText = type.charAt(0).toUpperCase() + type.slice(1);
+                }
+
                 return `<div class="callout callout-${typeLower}">
-          <details open>
+          <details>
             <summary>${titleText}</summary>
-            <div class="callout-content">${content}</div>
+            <div class="callout-content">${restContent}</div>
           </details>
         </div>`;
             },
