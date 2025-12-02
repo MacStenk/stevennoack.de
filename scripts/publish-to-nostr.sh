@@ -86,14 +86,12 @@ for relay in "${RELAYS[@]}"; do
   CMD="$CMD $relay"
 done
 
-echo "DEBUG: Starting publish..."
 # Execute the command
+# Capture stderr too (2>&1) to ensure we get output even if nak writes to stderr
 EVENT_OUTPUT=$(eval "$CMD" 2>&1)
-echo "DEBUG: Command executed."
 
 # Extract event ID from JSON output
 EVENT_ID=$(echo "$EVENT_OUTPUT" | grep -o '"id":"[^"]*"' | head -1 | cut -d'"' -f4)
-echo "DEBUG: ID extracted: $EVENT_ID"
 
 if [ -z "$EVENT_ID" ]; then
   echo "❌ Error: Could not extract Event ID. Output:"
