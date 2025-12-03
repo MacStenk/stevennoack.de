@@ -21,7 +21,7 @@ part: 1
 date: 2025-12-02
 created: 2025-12-03T17:00
 modified: 2025-12-03T17:30
-published_at: null
+published_at: ""
 
 # === STATISTIKEN ===
 word_count: 4000
@@ -46,7 +46,7 @@ nostr:
   kind: 30023
   d_tag: terminal-quatsch
   published: false # noch nicht auf Nostr
-  note_id: null  # ← noch keine ID mit/in ""
+  note_id: ""  # ← noch keine ID mit/in ""
   relays:
     - wss://relay.stevennoack.de
     - wss://relay.primal.net
@@ -55,12 +55,12 @@ nostr:
 # === GARTEN ===
 garten:
   published: false
-  url: null
+  url: ""
 
 # === SUBSTACK ===
 substack:
   published: false
-  url: null
+  url: ""
 
 # === AUTOR ===
 author: Steven Noack
