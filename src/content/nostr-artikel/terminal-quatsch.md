@@ -68,12 +68,7 @@ author_nip05: steven@stevennoack.de
 author_npub: npub1cxa0fa6vmq5evwpgk8dg6ul99ny5e2nd3hy5fa72g598t39nxy0surzuva
 ---
 
-![Infografik Terminal Quatsch: Dreigeteiltes Bild zeigt links ausgelaugten Boden mit welkem Brokkoli, mittig einen leeren Social-Media-Feed mit hohlen Phrasen, rechts ein leuchtendes Terminal-Fenster mit grünem Cursor – alle drei durch eine geschwungene Linie verbunden die auf das Wort CODE zuläuft](https://cdn.stevennoack.de/nostr/images/gedanken/2025/terminal-quatsch.webp)
-*Leere Böden, leere Feeds & Terminal.*
-
----
-
-> [!author]- **Über diese Analyse**
+> [!author]- **Über DAS**
 > **Autor:** Steven Noack  
 > **Website:** [stevennoack.de](https://stevennoack.de)  
 > **Recherche:** Dezember 2025  
@@ -96,17 +91,9 @@ author_npub: npub1cxa0fa6vmq5evwpgk8dg6ul99ny5e2nd3hy5fa72g598t39nxy0surzuva
 
 ---
 
-
 <!-- ═══════════════════════════════════════════════════════════════════════ -->
 <!-- ARTIKEL-CONTENT HIER EINFÜGEN                                           -->
 <!-- ═══════════════════════════════════════════════════════════════════════ -->
-
-
-# Terminal Quatsch
-
-**Über leere Böden, leere Feeds und die Rückkehr des Codes**
-
----
 
 ## Eine E-Mail
 
