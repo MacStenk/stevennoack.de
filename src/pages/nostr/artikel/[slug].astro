@@ -49,82 +49,67 @@ const content = article.body || "";
 const wordCount = content.split(/\s+/).filter(word => word.length > 0).length;
 const readingTime = Math.ceil(wordCount / 200);
 
-// Schema.org Article - Erweitert
-const articleSchema = {
-  "@context": "https://schema.org",
-  "@type": "Article",
-  "@id": `${pageUrl}/#article`,
-  headline: article.data.title,
-  description: article.data.description,
-  image: article.data.heroImage,
-  wordCount: wordCount,
-  timeRequired: `PT${readingTime}M`,
-  inLanguage: "de-DE",
-  isAccessibleForFree: true,
-  license: "https://creativecommons.org/licenses/by/4.0/",
-  copyrightYear: articleDate.getFullYear(),
-  author: {
-    "@type": "Person",
-    "@id": `${SITE_URL}/#author`,
-    name: article.data.author || "Steven Noack",
-    url: `${SITE_URL}/nostr`,
-    identifier: [
-      {
-        "@type": "PropertyValue",
-        propertyID: "nostr:npub",
-        value: AUTHOR_NPUB,
-      },
-      {
-        "@type": "PropertyValue",
-        propertyID: "nostr:nip05",
-        value: "steven@stevennoack.de",
-      },
-    ],
-    sameAs: [
-      `https://njump.me/${AUTHOR_NPUB}`,
-      SITE_URL,
-    ],
-  },
-  publisher: {
-    "@type": "Organization",
-    "@id": `${SITE_URL}/#organization`,
-    name: SITE_NAME,
-    url: SITE_URL,
-    logo: {
-      "@type": "ImageObject",
-      url: `${SITE_URL}/favicon.svg`,
-    },
-  },
-  datePublished: articleDate.toISOString(),
-  dateModified: modifiedDate.toISOString(),
-  mainEntityOfPage: {
-    "@type": "WebPage",
-    "@id": pageUrl,
-  },
-  keywords: article.data.tags?.join(", ") || "",
-  // Nostr-spezifische Identifier
+// ============================================
+// COMPREHENSIVE SCHEMA.ORG + KNOWLEDGE GRAPH
+// ============================================
+
+// Person Schema (Author)
+const authorSchema = {
+  "@type": "Person",
+  "@id": `${SITE_URL}/#author`,
+  name: article.data.author || "Steven Noack",
+  url: `${SITE_URL}/nostr`,
+  image: "https://stevennoack.de/images/steven-noack.jpg",
+  description: "System Builder. Dekonditionierung für Mensch und Maschine.",
   identifier: [
     {
       "@type": "PropertyValue",
-      propertyID: "nostr:naddr",
-      value: naddr,
+      propertyID: "nostr:npub",
+      value: AUTHOR_NPUB,
     },
     {
       "@type": "PropertyValue",
-      propertyID: "nostr:d-tag",
-      value: article.slug,
+      propertyID: "nostr:nip05",
+      value: "steven@stevennoack.de",
     },
   ],
-  // Verknüpfung zu anderen Versionen
   sameAs: [
-    `https://njump.me/${naddr}`,
-    dynamicUrl,
+    `https://njump.me/${AUTHOR_NPUB}`,
+    SITE_URL,
+    "https://github.com/MacStenk",
   ],
 };
 
+// Organization Schema (Publisher)
+const publisherSchema = {
+  "@type": "Organization",
+  "@id": `${SITE_URL}/#organization`,
+  name: SITE_NAME,
+  url: SITE_URL,
+  logo: {
+    "@type": "ImageObject",
+    url: `${SITE_URL}/favicon.svg`,
+    width: 512,
+    height: 512,
+  },
+  sameAs: [
+    `https://njump.me/${AUTHOR_NPUB}`,
+    "https://github.com/MacStenk",
+  ],
+};
+
+// ImageObject Schema (Hero Image)
+const imageSchema = article.data.heroImage ? {
+  "@type": "ImageObject",
+  "@id": `${pageUrl}/#primaryimage`,
+  url: article.data.heroImage,
+  contentUrl: article.data.heroImage,
+  caption: article.data.title,
+  representativeOfPage: true,
+} : null;
+
 // BreadcrumbList Schema
 const breadcrumbSchema = {
-  "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   "@id": `${pageUrl}/#breadcrumb`,
   itemListElement: [
@@ -147,6 +132,103 @@ const breadcrumbSchema = {
       item: pageUrl,
     },
   ],
+};
+
+// WebPage Schema
+const webPageSchema = {
+  "@type": "WebPage",
+  "@id": pageUrl,
+  url: pageUrl,
+  name: `${article.data.title} - ${SITE_NAME}`,
+  description: article.data.description,
+  isPartOf: { "@id": `${SITE_URL}/#website` },
+  primaryImageOfPage: imageSchema ? { "@id": `${pageUrl}/#primaryimage` } : undefined,
+  breadcrumb: { "@id": `${pageUrl}/#breadcrumb` },
+  inLanguage: "de-DE",
+  potentialAction: [
+    {
+      "@type": "ReadAction",
+      target: [pageUrl],
+    },
+  ],
+};
+
+// Website Schema
+const websiteSchema = {
+  "@type": "WebSite",
+  "@id": `${SITE_URL}/#website`,
+  url: SITE_URL,
+  name: SITE_NAME,
+  description: "Dekonditionierung. Für Mensch und Maschine.",
+  publisher: { "@id": `${SITE_URL}/#organization` },
+  inLanguage: "de-DE",
+};
+
+// Main Article Schema - Umfangreich
+const articleSchema = {
+  "@type": "Article",
+  "@id": `${pageUrl}/#article`,
+  headline: article.data.title,
+  name: article.data.title,
+  description: article.data.description,
+  image: imageSchema ? { "@id": `${pageUrl}/#primaryimage` } : undefined,
+  author: { "@id": `${SITE_URL}/#author` },
+  publisher: { "@id": `${SITE_URL}/#organization` },
+  datePublished: articleDate.toISOString(),
+  dateModified: modifiedDate.toISOString(),
+  dateCreated: articleDate.toISOString(),
+  mainEntityOfPage: { "@id": pageUrl },
+  isPartOf: { "@id": `${SITE_URL}/#website` },
+  inLanguage: "de-DE",
+  wordCount: wordCount,
+  timeRequired: `PT${readingTime}M`,
+  keywords: article.data.tags?.join(", ") || "",
+  articleSection: article.data.category || "Nostr",
+  isAccessibleForFree: true,
+  license: "https://creativecommons.org/licenses/by/4.0/",
+  copyrightYear: articleDate.getFullYear(),
+  copyrightHolder: { "@id": `${SITE_URL}/#author` },
+  
+  // Nostr-spezifische Identifier
+  identifier: [
+    {
+      "@type": "PropertyValue",
+      propertyID: "nostr:naddr",
+      value: naddr,
+    },
+    {
+      "@type": "PropertyValue",
+      propertyID: "nostr:d-tag",
+      value: article.slug,
+    },
+  ],
+  
+  // Verknüpfung zu anderen Versionen (dynamische Seite ist Kopie, njump ist Verifizierung)
+  sameAs: [
+    `https://njump.me/${naddr}`,
+  ],
+  
+  // Relays als distribution
+  distribution: RELAYS.map(relay => ({
+    "@type": "DataDownload",
+    contentUrl: relay,
+    encodingFormat: "application/json",
+    description: `Nostr Relay: ${relay}`,
+  })),
+};
+
+// Combined Graph - Alle Schemas verknüpft
+const schemaGraph = {
+  "@context": "https://schema.org",
+  "@graph": [
+    websiteSchema,
+    publisherSchema,
+    authorSchema,
+    imageSchema,
+    breadcrumbSchema,
+    webPageSchema,
+    articleSchema,
+  ].filter(Boolean),
 };
 ---
 
@@ -195,9 +277,8 @@ const breadcrumbSchema = {
     <meta name="nostr:naddr" content={naddr} />
     <meta name="nostr:d-tag" content={article.slug} />
 
-    <!-- Schema.org JSON-LD -->
-    <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
-    <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+    <!-- Schema.org JSON-LD (Knowledge Graph) -->
+    <script type="application/ld+json" set:html={JSON.stringify(schemaGraph)} />
 
     <style is:global>
       @import "../../../styles/nostr-article.css";
