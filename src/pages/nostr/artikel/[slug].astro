@@ -17,6 +17,10 @@ export async function getStaticPaths() {
 const { article } = Astro.props;
 const { Content } = await article.render();
 
+// Convert date strings to Date objects
+const articleDate = new Date(article.data.date);
+const modifiedDate = article.data.modified ? new Date(article.data.modified) : articleDate;
+
 // Constants
 const SITE_URL = "https://stevennoack.de";
 const SITE_NAME = "Steven Noack";
@@ -58,7 +62,7 @@ const articleSchema = {
   inLanguage: "de-DE",
   isAccessibleForFree: true,
   license: "https://creativecommons.org/licenses/by/4.0/",
-  copyrightYear: article.data.date.getFullYear(),
+  copyrightYear: articleDate.getFullYear(),
   author: {
     "@type": "Person",
     "@id": `${SITE_URL}/#author`,
@@ -91,8 +95,8 @@ const articleSchema = {
       url: `${SITE_URL}/favicon.svg`,
     },
   },
-  datePublished: article.data.date.toISOString(),
-  dateModified: (article.data.modified || article.data.date).toISOString(),
+  datePublished: articleDate.toISOString(),
+  dateModified: modifiedDate.toISOString(),
   mainEntityOfPage: {
     "@type": "WebPage",
     "@id": pageUrl,
@@ -171,8 +175,8 @@ const breadcrumbSchema = {
     <meta property="og:image" content={article.data.ogImage || article.data.heroImage} />
     <meta property="og:site_name" content={SITE_NAME} />
     <meta property="og:locale" content="de_DE" />
-    <meta property="article:published_time" content={article.data.date.toISOString()} />
-    <meta property="article:modified_time" content={(article.data.modified || article.data.date).toISOString()} />
+    <meta property="article:published_time" content={articleDate.toISOString()} />
+    <meta property="article:modified_time" content={modifiedDate.toISOString()} />
     <meta property="article:author" content={article.data.author || "Steven Noack"} />
     {article.data.tags?.map((tag) => (
       <meta property="article:tag" content={tag} />
@@ -417,9 +421,9 @@ const breadcrumbSchema = {
         }
 
         <div class="post-meta">
-          <time datetime={article.data.date.toISOString()} itemprop="datePublished">
+          <time datetime={articleDate.toISOString()} itemprop="datePublished">
             {
-              article.data.date.toLocaleDateString("de-DE", {
+              articleDate.toLocaleDateString("de-DE", {
                 year: "numeric",
                 month: "long",
                 day: "numeric",
