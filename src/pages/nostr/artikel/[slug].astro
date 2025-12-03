@@ -4,6 +4,7 @@
  * @description Long-form Artikel (Kind 30023) mit Schema.org Article
  */
 import { getCollection } from "astro:content";
+import { nip19 } from "nostr-tools";
 
 export async function getStaticPaths() {
   const articles = await getCollection("nostr-artikel");
@@ -16,55 +17,130 @@ export async function getStaticPaths() {
 const { article } = Astro.props;
 const { Content } = await article.render();
 
-// Schema.org Article
+// Constants
+const SITE_URL = "https://stevennoack.de";
+const SITE_NAME = "Steven Noack";
+const AUTHOR_PUBKEY = "c1baf4f74cd829963828b1da8d73e52cc94caa6d8dc944f7ca450a75c4b3311f";
+const AUTHOR_NPUB = "npub1cxa0fa6vmq5evwpgk8dg6ul99ny5e2nd3hy5fa72g598t39nxy0surzuva";
+const RELAYS = [
+  "wss://relay.stevennoack.de",
+  "wss://relay.primal.net", 
+  "wss://nos.lol",
+];
+
+// Generate naddr for this article
+const naddr = nip19.naddrEncode({
+  kind: 30023,
+  pubkey: AUTHOR_PUBKEY,
+  identifier: article.slug,
+  relays: RELAYS,
+});
+
+const pageUrl = `${SITE_URL}/nostr/artikel/${article.slug}`;
+const dynamicUrl = `${SITE_URL}/nostr/read/${naddr}`;
+const jsonApiUrl = `${SITE_URL}/api/nostr/${naddr}.json`;
+
+// Calculate word count and reading time
+const content = article.body || "";
+const wordCount = content.split(/\s+/).filter(word => word.length > 0).length;
+const readingTime = Math.ceil(wordCount / 200);
+
+// Schema.org Article - Erweitert
 const articleSchema = {
   "@context": "https://schema.org",
   "@type": "Article",
+  "@id": `${pageUrl}/#article`,
   headline: article.data.title,
   description: article.data.description,
+  image: article.data.heroImage,
+  wordCount: wordCount,
+  timeRequired: `PT${readingTime}M`,
+  inLanguage: "de-DE",
+  isAccessibleForFree: true,
+  license: "https://creativecommons.org/licenses/by/4.0/",
+  copyrightYear: article.data.date.getFullYear(),
   author: {
     "@type": "Person",
+    "@id": `${SITE_URL}/#author`,
     name: article.data.author || "Steven Noack",
-    url: "https://stevennoack.de/nostr",
-    identifier: article.data.author_npub,
+    url: `${SITE_URL}/nostr`,
+    identifier: [
+      {
+        "@type": "PropertyValue",
+        propertyID: "nostr:npub",
+        value: AUTHOR_NPUB,
+      },
+      {
+        "@type": "PropertyValue",
+        propertyID: "nostr:nip05",
+        value: "steven@stevennoack.de",
+      },
+    ],
+    sameAs: [
+      `https://njump.me/${AUTHOR_NPUB}`,
+      SITE_URL,
+    ],
   },
-  datePublished: article.data.date,
-  dateModified: article.data.modified || article.data.date,
   publisher: {
-    "@type": "Person",
-    name: "Steven Noack",
-    url: "https://stevennoack.de",
+    "@type": "Organization",
+    "@id": `${SITE_URL}/#organization`,
+    name: SITE_NAME,
+    url: SITE_URL,
+    logo: {
+      "@type": "ImageObject",
+      url: `${SITE_URL}/favicon.svg`,
+    },
   },
-  image: article.data.heroImage,
+  datePublished: article.data.date.toISOString(),
+  dateModified: (article.data.modified || article.data.date).toISOString(),
   mainEntityOfPage: {
     "@type": "WebPage",
-    "@id": `https://stevennoack.de/nostr/artikel/${article.slug}`,
+    "@id": pageUrl,
   },
   keywords: article.data.tags?.join(", ") || "",
+  // Nostr-spezifische Identifier
+  identifier: [
+    {
+      "@type": "PropertyValue",
+      propertyID: "nostr:naddr",
+      value: naddr,
+    },
+    {
+      "@type": "PropertyValue",
+      propertyID: "nostr:d-tag",
+      value: article.slug,
+    },
+  ],
+  // Verknüpfung zu anderen Versionen
+  sameAs: [
+    `https://njump.me/${naddr}`,
+    dynamicUrl,
+  ],
 };
 
 // BreadcrumbList Schema
 const breadcrumbSchema = {
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
+  "@id": `${pageUrl}/#breadcrumb`,
   itemListElement: [
     {
       "@type": "ListItem",
       position: 1,
       name: "Home",
-      item: "https://stevennoack.de",
+      item: SITE_URL,
     },
     {
       "@type": "ListItem",
       position: 2,
       name: "Nostr",
-      item: "https://stevennoack.de/nostr",
+      item: `${SITE_URL}/nostr`,
     },
     {
       "@type": "ListItem",
       position: 3,
       name: article.data.title,
-      item: `https://stevennoack.de/nostr/artikel/${article.slug}`,
+      item: pageUrl,
     },
   ],
 };
@@ -79,69 +155,184 @@ const breadcrumbSchema = {
     <meta name="description" content={article.data.description} />
     <meta name="author" content={article.data.author || "Steven Noack"} />
     <meta name="keywords" content={article.data.tags?.join(", ")} />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Canonical -->
+    <link rel="canonical" href={pageUrl} />
+    
+    <!-- Alternate Formats -->
+    <link rel="alternate" type="application/json" href={jsonApiUrl} title="JSON (Nostr Event)" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="article" />
-    <meta
-      property="og:url"
-      content={`https://stevennoack.de/nostr/artikel/${article.slug}`}
-    />
+    <meta property="og:url" content={pageUrl} />
     <meta property="og:title" content={article.data.title} />
     <meta property="og:description" content={article.data.description} />
-    <meta property="og:image" content={article.data.ogImage} />
-    <meta
-      property="article:published_time"
-      content={article.data.date.toISOString()}
-    />
-    <meta
-      property="article:author"
-      content={article.data.author || "Steven Noack"}
-    />
-    {
-      article.data.tags && (
-        <meta property="article:tag" content={article.data.tags.join(", ")} />
-      )
-    }
+    <meta property="og:image" content={article.data.ogImage || article.data.heroImage} />
+    <meta property="og:site_name" content={SITE_NAME} />
+    <meta property="og:locale" content="de_DE" />
+    <meta property="article:published_time" content={article.data.date.toISOString()} />
+    <meta property="article:modified_time" content={(article.data.modified || article.data.date).toISOString()} />
+    <meta property="article:author" content={article.data.author || "Steven Noack"} />
+    {article.data.tags?.map((tag) => (
+      <meta property="article:tag" content={tag} />
+    ))}
 
     <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta
-      property="twitter:url"
-      content={`https://stevennoack.de/nostr/artikel/${article.slug}`}
-    />
-    <meta property="twitter:title" content={article.data.title} />
-    <meta property="twitter:description" content={article.data.description} />
-    <meta property="twitter:image" content={article.data.ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={pageUrl} />
+    <meta name="twitter:title" content={article.data.title} />
+    <meta name="twitter:description" content={article.data.description} />
+    <meta name="twitter:image" content={article.data.ogImage || article.data.heroImage} />
 
     <!-- Nostr Meta -->
-    {
-      article.data.author_npub && (
-        <meta name="nostr:author" content={article.data.author_npub} />
-      )
-    }
-    {
-      article.data.author_nip05 && (
-        <meta name="nostr:nip05" content={article.data.author_nip05} />
-      )
-    }
-    {
-      article.data.nostr?.note_id && (
-        <meta name="nostr:note" content={article.data.nostr.note_id} />
-      )
-    }
+    <meta name="nostr:author" content={AUTHOR_NPUB} />
+    <meta name="nostr:nip05" content="steven@stevennoack.de" />
+    <meta name="nostr:naddr" content={naddr} />
+    <meta name="nostr:d-tag" content={article.slug} />
 
     <!-- Schema.org JSON-LD -->
-    <script
-      type="application/ld+json"
-      set:html={JSON.stringify(articleSchema)}
-    />
-    <script
-      type="application/ld+json"
-      set:html={JSON.stringify(breadcrumbSchema)}
-    />
+    <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
 
     <style is:global>
       @import "../../../styles/nostr-article.css";
+
+      /* Verification Section */
+      .verification-section {
+        margin-top: 2rem;
+        padding: 1rem;
+        border: 1px solid rgba(0, 212, 255, 0.15);
+        border-radius: 8px;
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .verification-header {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+        font-size: 0.8rem;
+        color: #00d4ff;
+        font-family: monospace;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .verification-grid {
+        display: grid;
+        gap: 0.75rem;
+      }
+
+      .verification-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .verification-label {
+        font-size: 0.7rem;
+        color: #666;
+        font-family: monospace;
+        text-transform: uppercase;
+        min-width: 60px;
+      }
+
+      .verification-value {
+        font-size: 0.75rem;
+        color: #888;
+        font-family: monospace;
+        word-break: break-all;
+        flex: 1;
+      }
+
+      .verification-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 1rem;
+      }
+
+      /* Badge Styles */
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.25rem 0.6rem;
+        font-size: 0.75rem;
+        font-family: monospace;
+        border: 1px solid rgba(0, 212, 255, 0.3);
+        border-radius: 4px;
+        background: transparent;
+        color: #00d4ff;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        cursor: pointer;
+      }
+
+      .badge:hover {
+        border-color: #00d4ff;
+        background: rgba(0, 212, 255, 0.1);
+      }
+
+      /* License Section */
+      .license-section {
+        margin-top: 1.5rem;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(0, 212, 255, 0.1);
+      }
+
+      .badge-license {
+        border-color: rgba(100, 200, 100, 0.4);
+        color: #64c864;
+      }
+
+      .badge-license:hover {
+        border-color: #64c864;
+        background: rgba(100, 200, 100, 0.1);
+      }
+
+      .license-text {
+        margin-top: 0.75rem;
+        font-size: 0.75rem;
+        color: #666;
+        line-height: 1.5;
+      }
+
+      /* Light mode */
+      .light-mode .verification-section {
+        background: rgba(0, 0, 0, 0.03);
+        border-color: rgba(0, 150, 200, 0.15);
+      }
+
+      .light-mode .verification-value {
+        color: #555;
+      }
+
+      .light-mode .badge {
+        border-color: rgba(0, 150, 200, 0.4);
+        color: #0099aa;
+      }
+
+      .light-mode .badge:hover {
+        border-color: #0099aa;
+        background: rgba(0, 150, 200, 0.1);
+      }
+
+      .light-mode .badge-license {
+        border-color: rgba(80, 160, 80, 0.4);
+        color: #4a9a4a;
+      }
+
+      .light-mode .badge-license:hover {
+        border-color: #4a9a4a;
+        background: rgba(80, 160, 80, 0.1);
+      }
+
+      .light-mode .license-text {
+        color: #555;
+      }
     </style>
   </head>
 </html>
@@ -164,19 +355,30 @@ const breadcrumbSchema = {
   <div class="container">
     <!-- Breadcrumb Navigation -->
     <nav aria-label="Breadcrumb">
-      <ol class="breadcrumb">
-        <li><a href="/">Home</a></li>
+      <ol class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a itemprop="item" href="/"><span itemprop="name">Home</span></a>
+          <meta itemprop="position" content="1" />
+        </li>
         <li class="breadcrumb-separator" aria-hidden="true">→</li>
-        <li><a href="/nostr">Nostr</a></li>
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a itemprop="item" href="/nostr"><span itemprop="name">Nostr</span></a>
+          <meta itemprop="position" content="2" />
+        </li>
         <li class="breadcrumb-separator" aria-hidden="true">→</li>
-        <li aria-current="page">{article.data.title}</li>
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" aria-current="page">
+          <span itemprop="name">{article.data.title}</span>
+          <meta itemprop="position" content="3" />
+        </li>
       </ol>
     </nav>
 
     <a href="/nostr" class="back-link">← Zurück zu Nostr</a>
 
     <!-- Main Article -->
-    <article role="article" aria-labelledby="article-title">
+    <article role="article" aria-labelledby="article-title" itemscope itemtype="https://schema.org/Article">
+      <meta itemprop="mainEntityOfPage" content={pageUrl} />
+      
       <!-- Hero Image -->
       {
         article.data.heroImage && (
@@ -184,6 +386,7 @@ const breadcrumbSchema = {
             <img
               src={article.data.heroImage}
               alt={article.data.heroImageAlt || article.data.title}
+              itemprop="image"
             />
             {article.data.heroImageCaption && (
               <p class="hero-caption">{article.data.heroImageCaption}</p>
@@ -195,24 +398,17 @@ const breadcrumbSchema = {
       <!-- Article Header -->
       <header>
         <!-- Nostr Badge -->
-        {
-          article.data.nostr?.published && (
-            <div class="nostr-badge">
-              ⚡ Auf Nostr veröffentlicht
-              {article.data.nostr.note_id && (
-                <a
-                  href={`https://njump.me/${article.data.nostr.note_id}`}
-                  target="_blank"
-                  rel="noopener"
-                >
-                  [Event]
-                </a>
-              )}
-            </div>
-          )
-        }
+        <div class="nostr-badge">
+          ⚡ Live from Nostr
+          <a
+            href={dynamicUrl}
+            rel="noopener"
+          >
+            [Source]
+          </a>
+        </div>
 
-        <h1 id="article-title">{article.data.title}</h1>
+        <h1 id="article-title" itemprop="headline">{article.data.title}</h1>
 
         {
           article.data.subtitle && (
@@ -221,7 +417,7 @@ const breadcrumbSchema = {
         }
 
         <div class="post-meta">
-          <time datetime={article.data.date.toISOString()}>
+          <time datetime={article.data.date.toISOString()} itemprop="datePublished">
             {
               article.data.date.toLocaleDateString("de-DE", {
                 year: "numeric",
@@ -231,15 +427,11 @@ const breadcrumbSchema = {
             }
           </time>
           <span aria-hidden="true">•</span>
-          <span>{article.data.author || "Steven Noack"}</span>
-          {
-            article.data.reading_time && (
-              <>
-                <span aria-hidden="true">•</span>
-                <span>{article.data.reading_time} Lesezeit</span>
-              </>
-            )
-          }
+          <span itemprop="author" itemscope itemtype="https://schema.org/Person">
+            <span itemprop="name">{article.data.author || "Steven Noack"}</span>
+          </span>
+          <span aria-hidden="true">•</span>
+          <span>{readingTime} Min. Lesezeit</span>
         </div>
 
         {
@@ -265,44 +457,93 @@ const breadcrumbSchema = {
       </header>
 
       <!-- Article Content -->
-      <section class="content" aria-label="Artikel-Inhalt">
+      <section class="content" aria-label="Artikel-Inhalt" itemprop="articleBody">
         <Content />
       </section>
+      
+      <meta itemprop="wordCount" content={wordCount.toString()} />
+      <meta itemprop="inLanguage" content="de" />
 
       <!-- Article Footer -->
       <footer>
-        <p>
-          Veröffentlicht am{" "}
-          <time datetime={article.data.date.toISOString()}>
-            {
-              article.data.date.toLocaleDateString("de-DE", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })
-            }
-          </time>
-        </p>
-
         <div class="author-info">
           <span>Autor: {article.data.author || "Steven Noack"}</span>
-          {
-            article.data.author_nip05 && (
-              <span>
-                NIP-05:{" "}
-                <a href={`https://njump.me/${article.data.author_npub}`}>
-                  {article.data.author_nip05}
-                </a>
-              </span>
-            )
-          }
-          {
-            article.data.author_npub && (
-              <span>
-                Nostr: <a href="/nostr">stevennoack.de/nostr</a>
-              </span>
-            )
-          }
+          <span>
+            NIP-05: <a href={`https://njump.me/${AUTHOR_NPUB}`}>steven@stevennoack.de</a>
+          </span>
+          <span>
+            Nostr: <a href="/nostr">stevennoack.de/nostr</a>
+          </span>
+        </div>
+
+        <!-- Verification Section -->
+        <div class="verification-section">
+          <div class="verification-header">
+            <span>⚡</span>
+            <span>Verifiziert auf Nostr</span>
+          </div>
+          
+          <div class="verification-grid">
+            <div class="verification-row">
+              <span class="verification-label">naddr</span>
+              <span class="verification-value">{naddr.substring(0, 20)}...{naddr.substring(naddr.length - 8)}</span>
+            </div>
+            <div class="verification-row">
+              <span class="verification-label">d-tag</span>
+              <span class="verification-value">{article.slug}</span>
+            </div>
+            <div class="verification-row">
+              <span class="verification-label">Relays</span>
+              <span class="verification-value">{RELAYS.map(r => r.replace('wss://', '')).join(', ')}</span>
+            </div>
+          </div>
+
+          <div class="verification-badges">
+            <a 
+              href={`https://njump.me/${naddr}`}
+              target="_blank"
+              rel="noopener"
+              class="badge"
+            >
+              Source
+            </a>
+            <a 
+              href={dynamicUrl}
+              class="badge"
+            >
+              Live Reader
+            </a>
+            <button 
+              class="badge"
+              data-copy={naddr}
+              id="copy-naddr"
+            >
+              naddr kopieren
+            </button>
+            <a 
+              href={jsonApiUrl}
+              target="_blank"
+              rel="noopener"
+              class="badge"
+            >
+              Raw JSON
+            </a>
+          </div>
+
+          <div class="license-section">
+            <a 
+              href="https://creativecommons.org/licenses/by/4.0/deed.de"
+              target="_blank"
+              rel="noopener license"
+              class="badge badge-license"
+            >
+              CC BY 4.0
+            </a>
+            <p class="license-text">
+              Dieser Text steht frei zur Verfügung – auch kommerziell. 
+              Bedingung: Namensnennung und Link zur Quelle.
+            </p>
+          </div>
         </div>
       </footer>
     </article>
@@ -367,6 +608,21 @@ const breadcrumbSchema = {
     });
   </script>
 
+  <!-- Copy naddr -->
+  <script>
+    const copyBtn = document.getElementById("copy-naddr");
+    if (copyBtn) {
+      copyBtn.addEventListener("click", () => {
+        const naddr = copyBtn.dataset.copy;
+        navigator.clipboard.writeText(naddr);
+        copyBtn.textContent = "Kopiert!";
+        setTimeout(() => {
+          copyBtn.textContent = "naddr kopieren";
+        }, 2000);
+      });
+    }
+  </script>
+
   <!-- Obsidian Callouts → Collapsible -->
   <script>
     document.addEventListener("DOMContentLoaded", () => {
@@ -383,7 +639,6 @@ const breadcrumbSchema = {
         const calloutType = calloutMatch[1].toLowerCase();
         const isCollapsed = calloutMatch[2] === "-";
 
-        // Extract title - everything after [!type]- until < or end
         let title;
         const afterMarker = text.replace(/^\[!\w+\]-?\s*/, "");
         const boldMatch = afterMarker.match(/^\*\*(.+?)\*\*/);
@@ -391,7 +646,6 @@ const breadcrumbSchema = {
         if (boldMatch) {
           title = boldMatch[1];
         } else {
-          // Take text until first < (HTML tag) or end of line
           const plainMatch = afterMarker.match(/^([^<]+)/);
           title = plainMatch
             ? plainMatch[1].trim()
