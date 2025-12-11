@@ -1,0 +1,1 @@
+./publish-to-nostr.sh ../src/content/nostr-artikel/terminal-quatsch.md
