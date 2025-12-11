@@ -110,7 +110,7 @@
                 },
                 "inLanguage": "de-DE",
                 "datePublished": "2024-12-01",
-                "dateModified": "2024-12-02"
+                "dateModified": "2025-12-11"
             },
             {
                 "@type": "WebSite",
@@ -129,7 +129,7 @@
                     "@id": "https://stevennoack.de/#person"
                 },
                 "dateCreated": "2024-12-01",
-                "dateModified": "2024-12-02"
+                "dateModified": "2025-12-11"
             },
             {
                 "@type": "SoftwareApplication",
@@ -566,6 +566,41 @@
             margin-left: 4px;
         }
         
+        /* Article List */
+        .article-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .article-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            background: #0d0d14;
+            border: 1px solid #1a1a24;
+            padding: 16px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        
+        .article-item:hover,
+        .article-item:focus {
+            border-color: #00d4ff33;
+            outline: none;
+        }
+        
+        .article-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            color: #00d4ff;
+        }
+        
+        .article-meta {
+            font-size: 13px;
+            color: #505050;
+        }
+        
         /* Accessibility: Reduced Motion */
         @media (prefers-reduced-motion: reduce) {
             *,
@@ -690,6 +725,36 @@
                     <span class="relay-status online"></span>
                     relay.damus.io
                 </div>
+            </div>
+        </section>
+        
+        <section class="section" aria-labelledby="infrastructure-label">
+            <h2 class="section-label" id="infrastructure-label">Infrastruktur</h2>
+            <div class="relay-list">
+                <div class="relay-tag" onclick="copyText('wss://nip46.stevennoack.de', this)">
+                    <span class="relay-status online"></span>
+                    nip46.stevennoack.de
+                    <span class="relay-badge">bunker</span>
+                </div>
+                <div class="relay-tag" onclick="copyText('steven@stevennoack.de', this)">
+                    <span class="relay-status online"></span>
+                    steven@stevennoack.de
+                    <span class="relay-badge">lightning</span>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section" aria-labelledby="articles-label">
+            <h2 class="section-label" id="articles-label">Artikel</h2>
+            <div class="article-list">
+                <a href="/nostr/artikel/dekonditionierung-warum-wir-verlernen-muessen" class="article-item">
+                    <span class="article-title">Dekonditionierung – Warum wir verlernen müssen, abhängig zu sein</span>
+                    <span class="article-meta">Digitale Souveränität & Plattform-Unabhängigkeit</span>
+                </a>
+                <a href="/nostr/artikel/bilder-metadaten-branding" class="article-item">
+                    <span class="article-title">Deine Bilder sprechen nicht. Noch nicht.</span>
+                    <span class="article-meta">Bild-Metadaten für Creator</span>
+                </a>
             </div>
         </section>
         
