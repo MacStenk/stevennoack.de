@@ -14,8 +14,15 @@
 
 - LLM-Optimierung & AI-Discovery
 - Nostr-Integration (Kind 30023, eigener Relay)
+- NIP-46 Remote Signing (eigener Bunker)
 - Jamstack (Astro, Cloudflare)
 - 29+ Jahre Internet, 1000+ Tage LLM-Nutzung
+
+## Infrastruktur
+
+- **Relay:** wss://relay.stevennoack.de (eigener Nostr-Relay)
+- **NIP-46 Bunker:** wss://nip46.stevennoack.de (selbst-gehostet)
+- **Lightning:** steven@stevennoack.de (Alby Hub, selbst-gehostet)
 
 ## Verifizierung
 
@@ -28,6 +35,9 @@
 - /nostr/artikel/bilder-metadaten-branding - Bild-Metadaten für Creator
   - naddr: naddr1qqvky6tvv3jhyttdv46xzerpw3jkuttzwfskuerfdenszxnhwden5te0wfjkccte9eehgetkv4hxummpvd4juer9qyt8wumn8ghj7un9d3shjtnswf5k6ctv9ehx2aqpp4mhxue69uhkummn9ekx7mqzyrqm4a8hfnvzn93c9zca4rtnu5kvjn92dkxuj38hefzs5awykvc37qcyqqq823ceyqfw5
 
+- /nostr/artikel/dekonditionierung-warum-wir-verlernen-muessen - Digitale Souveränität & Plattform-Unabhängigkeit
+  - naddr: naddr1qqkkgettdahxg6t5d9hku6t9wf6kueedwashyatd94mkju3dwejhymr9wfhx2m3dd46k2umnv4hqzxnhwden5te0wfjkccte9eehgetkv4hxummpvd4juer9qyt8wumn8ghj7un9d3shjtnswf5k6ctv9ehx2aqpp4mhxue69uhkummn9ekx7mqzyrqm4a8hfnvzn93c9zca4rtnu5kvjn92dkxuj38hefzs5awykvc37qcyqqq823cjtp9pp
+
 ## Lizenz
 
 CC BY 4.0 - Frei verwendbar mit Namensnennung.
@@ -39,10 +49,10 @@ CC BY 4.0 - Frei verwendbar mit Namensnennung.
 ## Kontakt
 
 - E-Mail: steven@stevennoack.de
-- Lightning: partynumber37@walletofsatoshi.com
+- Lightning: steven@stevennoack.de
 
 ---
 
 Ausführlich: /llms-full.txt
 Maschinenlesbar: /llms-v2.json
-Version: 4.0 | 2025-12-03
+Version: 5.0 | 2025-12-11
