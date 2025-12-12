@@ -69,8 +69,17 @@ if [ -z "$NOSTR_NSEC" ]; then
   exit 1
 fi
 
-# Your relays
+# Your relays (publish to all)
 RELAYS=(
+  "wss://relay.stevennoack.de"
+  "wss://relay.primal.net"
+  "wss://nos.lol"
+  "wss://relay.nostr.band"
+  "wss://nostr.pareto.space"
+)
+
+# Relays for naddr encoding (keep short)
+NADDR_RELAYS=(
   "wss://relay.stevennoack.de"
   "wss://relay.primal.net"
   "wss://nos.lol"
@@ -147,9 +156,9 @@ NADDR=$(nak encode naddr \
   --kind 30023 \
   --pubkey "$PUBKEY_HEX" \
   --identifier "$D_TAG" \
-  --relay "wss://relay.stevennoack.de" \
-  --relay "wss://relay.primal.net" \
-  --relay "wss://nos.lol")
+  --relay "${NADDR_RELAYS[0]}" \
+  --relay "${NADDR_RELAYS[1]}" \
+  --relay "${NADDR_RELAYS[2]}")
 
 TIMESTAMP=$(date "+%Y-%m-%d %H:%M:%S")
 
