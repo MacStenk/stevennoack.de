@@ -20,8 +20,8 @@ series: "Digitale Souveränität für Creator"
 part: 3
 # === TIMESTAMPS ===
 date: 2025-12-13
-created: 2025-12-13
-modified: 2025-12-13
+created: "2025-12-13"
+modified: "2025-12-13"
 published_at: ""
 # === STATISTIKEN ===
 word_count: 2200
