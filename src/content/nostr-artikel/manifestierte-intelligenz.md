@@ -3,7 +3,7 @@ title: "Manifestierte Intelligenz"
 subtitle: "Oder: Warum 'künstlich' das falsche Wort ist"
 description: "Was passiert wenn man aufhört KI als Tool zu sehen - und anfängt sie als manifestierte Intelligenz zu verstehen. Ein Erfahrungsbericht aus Brandenburg."
 author: "Steven Noack"
-pubDate: 2026-01-07
+date: 2026-01-07
 heroImage: "https://cdn.visionfusen.org/images/manifestierte-intelligenz.vf1063-54af218a.webp"
 heroImageHash: "54af218a16bb88e80a3a76b874acf3f586f3562f3baec705f6ae2681a0227f9a"
 heroImageEvent: "42511cbbe4bc2adb264d576646b2a288c424cf5ef5f0805e80ec02ee69ae49d5"
