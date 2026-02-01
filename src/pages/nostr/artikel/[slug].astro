@@ -5,6 +5,7 @@
  */
 import { getCollection } from "astro:content";
 import { nip19 } from "nostr-tools";
+import unlockContentUrl from "../../../scripts/unlock-content.js?url";
 
 export async function getStaticPaths() {
   const articles = await getCollection("nostr-artikel");
@@ -635,6 +636,8 @@ const schemaGraph = {
       </footer>
     </article>
   </div>
+
+  <script type="module" src={unlockContentUrl}></script>
 
   <!-- Scripts -->
   <script>

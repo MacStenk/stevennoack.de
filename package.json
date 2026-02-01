@@ -15,8 +15,12 @@
     "@fontsource/jetbrains-mono": "^5.2.8",
     "@tailwindcss/vite": "^4.1.17",
     "astro": "^5.15.1",
+    "hast-util-to-html": "^9.0.5",
     "marked": "^17.0.1",
+    "mdast-util-to-hast": "^13.2.1",
     "nostr-tools": "^2.18.2",
-    "tailwindcss": "^4.1.17"
+    "remark-directive": "^4.0.0",
+    "tailwindcss": "^4.1.17",
+    "unist-util-visit": "^5.1.0"
   }
 }

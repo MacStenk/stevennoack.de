@@ -3,6 +3,7 @@ export const prerender = false;
 
 import { nip19, SimplePool, type Event as NostrEvent } from "nostr-tools";
 import { marked } from "marked";
+import unlockContentUrl from "../../../scripts/unlock-content.js?url";
 
 const { id } = Astro.params;
 
@@ -1019,5 +1020,7 @@ const ogTags = {
                 fontText.textContent = font;
             });
         </script>
+
+        <script type="module" src={unlockContentUrl}></script>
     </body>
 </html>

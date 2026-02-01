@@ -612,6 +612,84 @@ body.light-mode .font-toggle {
   color: var(--heading);
 }
 
+/* Locked content */
+.locked-content {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1rem;
+  margin: 1.6rem 0;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+body.light-mode .locked-content {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.locked-teaser {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--muted);
+  margin-bottom: 0.75rem;
+}
+
+.locked-teaser svg {
+  color: var(--accent);
+  flex: 0 0 auto;
+}
+
+.locked-teaser p {
+  margin: 0;
+}
+
+.locked-unlock-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.locked-unlock-form input[type="password"] {
+  flex: 1 1 220px;
+  min-width: 200px;
+  padding: 0.55rem 0.75rem;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.18);
+  color: var(--text);
+  font-size: 0.9rem;
+}
+
+body.light-mode .locked-unlock-form input[type="password"] {
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.locked-unlock-form button {
+  padding: 0.55rem 0.9rem;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--accent);
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.locked-unlock-form button:hover {
+  border-color: var(--accent);
+  background: var(--accent-2);
+}
+
+.locked-error {
+  flex-basis: 100%;
+  margin: 0.2rem 0 0 0;
+  font-size: 0.85rem;
+  color: #ef4444;
+}
+
+.locked-body {
+  margin-top: 1rem;
+}
+
 @media (max-width: 768px) {
   body {
     padding: 1rem;
