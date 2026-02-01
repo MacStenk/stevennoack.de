@@ -426,7 +426,8 @@ const schemaGraph = {
 <body>
   <!-- Font Toggle -->
   <button class="font-toggle" id="font-toggle" aria-label="Schriftart wechseln">
-    <span id="font-text">Terminal</span>
+    <span id="font-icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" x2="15" y1="20" y2="20"/><line x1="12" x2="12" y1="4" y2="20"/></svg></span>
+    <span id="font-text">Sans</span>
   </button>
 
   <!-- Dark/Light Mode Toggle -->
@@ -435,8 +436,8 @@ const schemaGraph = {
     id="mode-toggle"
     aria-label="Dark/Light Mode umschalten"
   >
-    <span id="mode-icon">☀️</span>
-    <span id="mode-text">Light</span>
+    <span id="mode-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg></span>
+    <span id="mode-text">Dark</span>
   </button>
 
   <div class="container">
@@ -466,33 +467,18 @@ const schemaGraph = {
     <article role="article" aria-labelledby="article-title" itemscope itemtype="https://schema.org/Article">
       <meta itemprop="mainEntityOfPage" content={pageUrl} />
       
-      <!-- Hero Image -->
-      {
-        article.data.heroImage && (
-          <div class="hero-image">
-            <img
-              src={article.data.heroImage}
-              alt={article.data.heroImageAlt || article.data.title}
-              itemprop="image"
-            />
-            {article.data.heroImageCaption && (
-              <p class="hero-caption">{article.data.heroImageCaption}</p>
-            )}
-          </div>
-        )
-      }
-
-      <!-- Article Header -->
+      <!-- Article Header (Substack/Medium-style) -->
       <header>
-        <!-- Nostr Badge -->
+        {
+          article.data.category && (
+            <div class="category-label">{article.data.category.toUpperCase()}</div>
+          )
+        }
+
+        <!-- Nostr Badge (kept, but subtle) -->
         <div class="nostr-badge">
-          ⚡ Live from Nostr
-          <a
-            href={dynamicUrl}
-            rel="noopener"
-          >
-            [Source]
-          </a>
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>
+          Live from Nostr <a href={dynamicUrl} rel="noopener">[Source]</a>
         </div>
 
         <h1 id="article-title" itemprop="headline">{article.data.title}</h1>
@@ -504,6 +490,10 @@ const schemaGraph = {
         }
 
         <div class="post-meta">
+          <span itemprop="author" itemscope itemtype="https://schema.org/Person">
+            <span itemprop="name">{article.data.author || "Steven Noack"}</span>
+          </span>
+          <span aria-hidden="true">·</span>
           <time datetime={articleDate.toISOString()} itemprop="datePublished">
             {
               articleDate.toLocaleDateString("de-DE", {
@@ -513,12 +503,6 @@ const schemaGraph = {
               })
             }
           </time>
-          <span aria-hidden="true">•</span>
-          <span itemprop="author" itemscope itemtype="https://schema.org/Person">
-            <span itemprop="name">{article.data.author || "Steven Noack"}</span>
-          </span>
-          <span aria-hidden="true">•</span>
-          <span>{readingTime} Min. Lesezeit</span>
         </div>
 
         {
@@ -543,6 +527,22 @@ const schemaGraph = {
         }
       </header>
 
+      <!-- Hero Image -->
+      {
+        article.data.heroImage && (
+          <div class="hero-image">
+            <img
+              src={article.data.heroImage}
+              alt={article.data.heroImageAlt || article.data.title}
+              itemprop="image"
+            />
+            {article.data.heroImageCaption && (
+              <p class="hero-caption">{article.data.heroImageCaption}</p>
+            )}
+          </div>
+        )
+      }
+
       <!-- Article Content -->
       <section class="content" aria-label="Artikel-Inhalt" itemprop="articleBody">
         <Content />
@@ -566,7 +566,7 @@ const schemaGraph = {
         <!-- Verification Section -->
         <div class="verification-section">
           <div class="verification-header">
-            <span>⚡</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>
             <span>Verifiziert auf Nostr</span>
           </div>
           
@@ -638,60 +638,64 @@ const schemaGraph = {
 
   <!-- Scripts -->
   <script>
-    const savedMode = localStorage.getItem("colorMode") || "dark";
+    const savedMode = localStorage.getItem("colorMode") || "light";
     const body = document.body;
     const toggle = document.getElementById("mode-toggle");
     const modeIcon = document.getElementById("mode-icon");
     const modeText = document.getElementById("mode-text");
 
-    if (savedMode === "light") {
-      body.classList.add("light-mode");
-      modeIcon.textContent = "🌙";
-      modeText.textContent = "Dark";
-    }
+    // Lucide icons as inline SVG
+    const sunIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>`;
+    const moonIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>`;
+
+    const updateModeUI = (isLight) => {
+      if (isLight) {
+        body.classList.add("light-mode");
+        modeIcon.innerHTML = moonIcon;
+        modeText.textContent = "Dark";
+      } else {
+        body.classList.remove("light-mode");
+        modeIcon.innerHTML = sunIcon;
+        modeText.textContent = "Light";
+      }
+    };
+
+    // Apply saved or default mode
+    updateModeUI(savedMode === "light");
 
     toggle.addEventListener("click", () => {
-      body.classList.toggle("light-mode");
-      const isLight = body.classList.contains("light-mode");
-      if (isLight) {
-        modeIcon.textContent = "🌙";
-        modeText.textContent = "Dark";
-        localStorage.setItem("colorMode", "light");
-      } else {
-        modeIcon.textContent = "☀️";
-        modeText.textContent = "Light";
-        localStorage.setItem("colorMode", "dark");
-      }
+      const isLight = !body.classList.contains("light-mode");
+      updateModeUI(isLight);
+      localStorage.setItem("colorMode", isLight ? "light" : "dark");
     });
   </script>
 
   <script>
     const fontBody = document.body;
-    const savedFont = localStorage.getItem("fontStyle") || "terminal";
+    const savedFont = localStorage.getItem("fontStyle") || "sans";
     const fontToggle = document.getElementById("font-toggle");
     const fontText = document.getElementById("font-text");
 
-    const fonts = ["terminal", "sans", "serif"];
-    const fontNames = { terminal: "Terminal", sans: "Sans", serif: "Serif" };
+    // Sans is default (no class). Optional toggles: serif + terminal.
+    const fonts = ["sans", "serif", "terminal"];
+    const fontNames = { sans: "Sans", serif: "Serif", terminal: "Terminal" };
 
     let currentFontIndex = fonts.indexOf(savedFont);
+    if (currentFontIndex === -1) currentFontIndex = 0;
 
-    if (savedFont === "sans") {
-      fontBody.classList.add("font-sans");
-      fontText.textContent = "Sans";
-    } else if (savedFont === "serif") {
-      fontBody.classList.add("font-serif");
-      fontText.textContent = "Serif";
-    }
+    const applyFont = (font) => {
+      fontBody.classList.remove("font-serif", "font-terminal");
+      if (font === "serif") fontBody.classList.add("font-serif");
+      if (font === "terminal") fontBody.classList.add("font-terminal");
+      fontText.textContent = fontNames[font] || "Sans";
+      localStorage.setItem("fontStyle", font);
+    };
+
+    applyFont(fonts[currentFontIndex]);
 
     fontToggle.addEventListener("click", () => {
-      fontBody.classList.remove("font-sans", "font-serif");
       currentFontIndex = (currentFontIndex + 1) % fonts.length;
-      const newFont = fonts[currentFontIndex];
-      if (newFont === "sans") fontBody.classList.add("font-sans");
-      else if (newFont === "serif") fontBody.classList.add("font-serif");
-      fontText.textContent = fontNames[newFont];
-      localStorage.setItem("fontStyle", newFont);
+      applyFont(fonts[currentFontIndex]);
     });
   </script>
 
@@ -708,6 +712,81 @@ const schemaGraph = {
         }, 2000);
       });
     }
+  </script>
+
+  <!-- Remove duplicate H1 from content (already in header) -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const headerTitle = document.getElementById("article-title")?.textContent?.trim();
+      const contentH1 = document.querySelector(".content h1");
+      if (contentH1 && headerTitle && contentH1.textContent.trim() === headerTitle) {
+        contentH1.remove();
+      }
+    });
+  </script>
+
+  <!-- Code Block Enhancement: Language label + Copy button -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const codeIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>`;
+      const copyIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>`;
+      const checkIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>`;
+
+      const preElements = document.querySelectorAll(".content pre");
+
+      preElements.forEach((pre) => {
+        // Skip if already wrapped
+        if (pre.parentElement?.classList.contains("code-block")) return;
+
+        const code = pre.querySelector("code");
+        let lang = "code";
+
+        // Extract language from class (e.g., "language-bash")
+        if (code) {
+          const langClass = Array.from(code.classList).find(c => c.startsWith("language-"));
+          if (langClass) {
+            lang = langClass.replace("language-", "");
+          }
+        }
+
+        // Create wrapper
+        const wrapper = document.createElement("div");
+        wrapper.className = "code-block";
+
+        // Create header
+        const header = document.createElement("div");
+        header.className = "code-block-header";
+
+        // Language label
+        const langLabel = document.createElement("span");
+        langLabel.className = "code-lang";
+        langLabel.innerHTML = `${codeIcon} ${lang}`;
+
+        // Copy button
+        const copyBtn = document.createElement("button");
+        copyBtn.className = "code-copy-btn";
+        copyBtn.innerHTML = `${copyIcon} Copy`;
+        copyBtn.addEventListener("click", () => {
+          const text = code ? code.textContent : pre.textContent;
+          navigator.clipboard.writeText(text).then(() => {
+            copyBtn.innerHTML = `${checkIcon} Copied`;
+            copyBtn.classList.add("copied");
+            setTimeout(() => {
+              copyBtn.innerHTML = `${copyIcon} Copy`;
+              copyBtn.classList.remove("copied");
+            }, 2000);
+          });
+        });
+
+        header.appendChild(langLabel);
+        header.appendChild(copyBtn);
+
+        // Wrap
+        pre.parentNode.insertBefore(wrapper, pre);
+        wrapper.appendChild(header);
+        wrapper.appendChild(pre);
+      });
+    });
   </script>
 
   <!-- Obsidian Callouts → Collapsible -->
