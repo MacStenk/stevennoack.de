@@ -642,6 +642,18 @@ body.light-mode .locked-content {
   margin: 0;
 }
 
+.locked-teaser.unlocked {
+  color: #22c55e;
+  font-size: 0.85rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.locked-teaser.unlocked svg {
+  color: #22c55e;
+}
+
 .locked-unlock-form {
   display: flex;
   flex-wrap: wrap;

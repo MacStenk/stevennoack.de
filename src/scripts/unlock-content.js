@@ -98,8 +98,20 @@ function setupLockedBlock(container) {
       const html = await decryptPayload({ payload, password });
       body.innerHTML = html;
       body.hidden = false;
-      if (teaser) teaser.hidden = true;
-      form.hidden = true;
+      
+      // Hide form and replace teaser with "unlocked" badge
+      form.remove();
+      if (teaser) {
+        teaser.innerHTML = `
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M7 10V8a5 5 0 0 1 9.33-2.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M6 10h12a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="2"/>
+            <path d="M12 14v3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <p>Entsperrt</p>
+        `;
+        teaser.classList.add('unlocked');
+      }
     } catch (err) {
       if (errorEl) {
         errorEl.textContent = 'Falsches Passwort.';
