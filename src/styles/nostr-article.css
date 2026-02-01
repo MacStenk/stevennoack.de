@@ -693,9 +693,24 @@ body.light-mode .locked-unlock-form input[type="password"] {
 
 .locked-error {
   flex-basis: 100%;
-  margin: 0.2rem 0 0 0;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.75rem 0 0 0;
+  padding: 0.6rem 0.85rem;
   font-size: 0.85rem;
   color: #ef4444;
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 8px;
+  display: none;
+}
+
+.locked-error:not([hidden]) {
+  display: flex;
+}
+
+.locked-error svg {
+  flex-shrink: 0;
 }
 
 .locked-body {

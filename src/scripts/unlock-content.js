@@ -1,3 +1,62 @@
+// Simple HTML sanitizer (XSS protection for Live Reader)
+function sanitizeHtml(html) {
+  const ALLOWED_TAGS = [
+    'p', 'br', 'hr', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+    'ul', 'ol', 'li', 'blockquote', 'pre', 'code',
+    'strong', 'em', 'b', 'i', 'u', 's', 'mark', 'small', 'sub', 'sup',
+    'a', 'img', 'figure', 'figcaption',
+    'table', 'thead', 'tbody', 'tr', 'th', 'td',
+    'div', 'span', 'section', 'article', 'details', 'summary',
+  ];
+  const ALLOWED_ATTRS = {
+    'a': ['href', 'title', 'target', 'rel'],
+    'img': ['src', 'alt', 'title', 'width', 'height', 'loading'],
+    '*': ['class', 'id'],
+  };
+  
+  const template = document.createElement('template');
+  template.innerHTML = html;
+  
+  function clean(node) {
+    if (node.nodeType === Node.TEXT_NODE) return;
+    if (node.nodeType !== Node.ELEMENT_NODE) {
+      node.remove();
+      return;
+    }
+    
+    const tag = node.tagName.toLowerCase();
+    if (!ALLOWED_TAGS.includes(tag)) {
+      // Replace with text content
+      const text = document.createTextNode(node.textContent);
+      node.replaceWith(text);
+      return;
+    }
+    
+    // Clean attributes
+    const allowed = [...(ALLOWED_ATTRS[tag] || []), ...(ALLOWED_ATTRS['*'] || [])];
+    for (const attr of [...node.attributes]) {
+      if (!allowed.includes(attr.name)) {
+        node.removeAttribute(attr.name);
+      }
+      // Block javascript: URLs
+      if (['href', 'src'].includes(attr.name) && attr.value.toLowerCase().startsWith('javascript:')) {
+        node.removeAttribute(attr.name);
+      }
+    }
+    
+    // Recursively clean children
+    for (const child of [...node.childNodes]) {
+      clean(child);
+    }
+  }
+  
+  for (const child of [...template.content.childNodes]) {
+    clean(child);
+  }
+  
+  return template.innerHTML;
+}
+
 function b64ToBytes(b64) {
   const bin = atob(b64);
   const bytes = new Uint8Array(bin.length);
@@ -96,7 +155,8 @@ function setupLockedBlock(container) {
 
     try {
       const html = await decryptPayload({ payload, password });
-      body.innerHTML = html;
+      // Sanitize HTML to prevent XSS (important for Live Reader with relay content)
+      body.innerHTML = sanitizeHtml(html);
       body.hidden = false;
       
       // Hide form and replace teaser with "unlocked" badge
@@ -114,7 +174,14 @@ function setupLockedBlock(container) {
       }
     } catch (err) {
       if (errorEl) {
-        errorEl.textContent = 'Falsches Passwort.';
+        errorEl.innerHTML = `
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+            <path d="M12 8v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="12" cy="16" r="1" fill="currentColor"/>
+          </svg>
+          <span>Falsches Passwort – bitte erneut versuchen.</span>
+        `;
         errorEl.hidden = false;
       }
       input.disabled = false;
