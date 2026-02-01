@@ -14,6 +14,9 @@ function utf8Decode(bytes) {
 }
 
 async function deriveAesKey({ password, salt, iter, hash }) {
+  // WebCrypto expects "SHA-256" not "sha256"
+  const hashName = hash.toUpperCase().replace('SHA', 'SHA-');
+  
   const baseKey = await crypto.subtle.importKey(
     'raw',
     utf8Encode(password),
@@ -27,7 +30,7 @@ async function deriveAesKey({ password, salt, iter, hash }) {
       name: 'PBKDF2',
       salt,
       iterations: iter,
-      hash: { name: hash.toUpperCase() },
+      hash: hashName,
     },
     baseKey,
     { name: 'AES-GCM', length: 256 },
