@@ -1,0 +1,45 @@
+---
+export const prerender = false;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sentry Test</title>
+  </head>
+  <body style="font-family: system-ui, sans-serif; padding: 24px;">
+    <h1>Sentry Test</h1>
+
+    <p>
+      This page triggers a client-side error and calls the server-side API route.
+      Check your Sentry project for events.
+    </p>
+
+    <div style="display:flex; gap: 12px; flex-wrap: wrap;">
+      <button id="client-error">Trigger client error</button>
+      <button id="server-error">Trigger server error</button>
+    </div>
+
+    <pre id="out" style="margin-top:16px; background:#111; color:#eee; padding:12px; border-radius:8px; overflow:auto;"></pre>
+
+    <script>
+      const out = document.getElementById('out');
+      function log(msg) {
+        out.textContent += `${msg}\n`;
+      }
+
+      document.getElementById('client-error')?.addEventListener('click', () => {
+        throw new Error('Sentry client test error (stevennoack.de)');
+      });
+
+      document.getElementById('server-error')?.addEventListener('click', async () => {
+        log('Calling /api/sentry-test ...');
+        const res = await fetch('/api/sentry-test');
+        const text = await res.text();
+        log(`Status: ${res.status}`);
+        log(text);
+      });
+    </script>
+  </body>
+</html>

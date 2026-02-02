@@ -23,3 +23,7 @@ pnpm-debug.log*
 # jetbrains setting folder
 .idea/
 nebulous-nova/
+
+# repo-intel index
+.repo-intel.sqlite
+.repo-intel.sqlite-*

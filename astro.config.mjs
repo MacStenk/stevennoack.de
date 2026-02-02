@@ -1,6 +1,7 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import cloudflare from '@astrojs/cloudflare';
+import sentry from '@sentry/astro';
 
 import tailwindcss from '@tailwindcss/vite';
 
@@ -9,7 +10,7 @@ import remarkLock from './src/plugins/remark-lock.mjs';
 
 export default defineConfig({
   site: 'https://stevennoack.de',
-  integrations: [sitemap()],
+  integrations: [sentry(), sitemap()],
   adapter: cloudflare({
     platformProxy: {
       enabled: true,
