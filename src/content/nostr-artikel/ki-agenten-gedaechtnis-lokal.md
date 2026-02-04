@@ -45,7 +45,7 @@ ogImageAlt: "KI-Agenten Gedächtnis – Neuronales Netzwerk trifft digitale Stru
 
 # === PUBLISHING STATUS ===
 status: published
-canonical_url: "https://stevennoack.de/nostr-artikel/ki-agenten-gedaechtnis-lokal"
+canonical_url: "https://stevennoack.de/nostr/artikel/ki-agenten-gedaechtnis-lokal"
 
 # === NOSTR (Kind 30023 = Long-form) ===
 nostr:
