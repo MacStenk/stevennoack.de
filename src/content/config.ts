@@ -76,6 +76,11 @@ const nostrArtikel = defineCollection({
     author: z.string().optional(),
     author_nip05: z.string().optional(),
     author_npub: z.string().optional(),
+    // Nostr Signatur für LLM-Verifizierung
+    sig: z.string().optional(),
+    // VisionFusen Hero Image Metadaten
+    heroImageHash: z.string().optional(),
+    heroImageEvent: z.string().optional(),
   }),
 });
 

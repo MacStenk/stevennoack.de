@@ -135,8 +135,32 @@ if [ -z "$EVENT_ID" ]; then
   exit 1
 fi
 
+# Extract signature from event output
+EVENT_SIG=$(echo "$EVENT_OUTPUT" | grep -o '"sig":"[^"]*"' | head -1 | cut -d'"' -f4)
+
 echo ""
 echo "✅ Published successfully!"
+
+# === AUTO-UPDATE SIG IN FRONTMATTER ===
+if [ -n "$EVENT_SIG" ]; then
+  echo ""
+  echo "🔐 Updating sig in frontmatter..."
+  
+  # Check if sig field already exists
+  if grep -q '^sig:' "$ARTICLE_PATH"; then
+    # Update existing sig
+    sed -i '' "s|^sig:.*|sig: \"$EVENT_SIG\"|" "$ARTICLE_PATH"
+    echo "  ✅ sig updated"
+  else
+    # Add sig after description line
+    sed -i '' "/^description:/a\\
+sig: \"$EVENT_SIG\"
+" "$ARTICLE_PATH"
+    echo "  ✅ sig added"
+  fi
+  
+  echo "  → ${EVENT_SIG:0:16}...${EVENT_SIG: -8}"
+fi
 echo ""
 
 # Generate both nevent and naddr
@@ -167,6 +191,7 @@ echo "  nevent: $NEVENT"
 echo "  naddr:  $NADDR"
 echo "  hex:    $EVENT_ID"
 echo "  npub:   $NPUB"
+echo "  sig:    ${EVENT_SIG:0:16}...${EVENT_SIG: -8}"
 echo ""
 echo "🔗 View on:"
 echo "  • njump (naddr): https://njump.me/$NADDR"
@@ -195,6 +220,7 @@ nevent: $NEVENT  ← Diese spezifische Version
 hex:    $EVENT_ID
 npub:   $NPUB
 pubkey: $PUBKEY_HEX
+sig:    $EVENT_SIG
 
 ## URLs
 njump:     https://njump.me/$NADDR
