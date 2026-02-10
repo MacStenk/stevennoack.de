@@ -5,6 +5,7 @@ subtitle: "Die VisionFusen Bild-Signatur Pipeline – so einfach erklärt, dass 
 slug: bild-signatur-pipeline-erklaert
 description: "Digitale Bild-Signierung verständlich erklärt: Unsichtbare Stempel, Fingerabdrücke und digitale Notare. Plus: Der komplette technische Workflow."
 type: long-artikel
+sig: "fa71e4b387fbe126b76cb5ce21cbc25269593106fb8954349b8256c36f3a46068627c78fa64e8540b471e80b52054349634a3a2421a071a7453ea406ff526a74"
 
 # === KATEGORISIERUNG ===
 category: tutorial

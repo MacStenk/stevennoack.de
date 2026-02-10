@@ -5,6 +5,7 @@ subtitle: "Ein lokales Langzeitgedächtnis mit Vergessen, Träumen und Persönli
 slug: ki-agenten-gedaechtnis-lokal
 description: "Kein Cloud-Dienst, keine API-Kosten – ein komplettes Memory-System für KI-Agenten mit Qdrant, Decay, Dream Mode und biologisch inspirierter Architektur."
 type: long-artikel
+sig: "b1a759547df4be3765001173112b0810e54e52259b9845aa723ce01e114c8477c543d0623e5e2611dac1dda4bc2a19a37eea0876c9eea2d50f671e4d118576a2"
 
 # === KATEGORISIERUNG ===
 category: ai-collaboration
