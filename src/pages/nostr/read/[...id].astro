@@ -42,7 +42,7 @@ let followersCount: string = "—";
 let notesEvents: NostrEvent[] = [];
 let articleEvents: NostrEvent[] = [];
 let mediaEvents: NostrEvent[] = [];
-let articleEngagement: Record<string, { likes: number; reposts: number; zaps: number }> = {};
+let articleEngagement: Record<string, { likes: number; comments: number; quotes: number; reposts: number; zaps: number }> = {};
 
 const RELAYS = [
     "wss://relay.stevennoack.de",
@@ -242,19 +242,46 @@ try {
                     }
                     const addrs = Array.from(addrToId.keys());
 
-                    const init = () => ({ likes: 0, reposts: 0, zaps: 0 });
-                    const stats: Record<string, { likes: number; reposts: number; zaps: number }> = {};
+                    const init = () => ({ likes: 0, comments: 0, quotes: 0, reposts: 0, zaps: 0 });
+                    const stats: Record<string, { likes: number; comments: number; quotes: number; reposts: number; zaps: number }> = {};
                     const ensure = (id: string) => (stats[id] ||= init());
 
-                    const addCounts = (evs: NostrEvent[], field: "likes" | "reposts" | "zaps") => {
+                    const getReferencedArticleIds = (ev: NostrEvent): string[] => {
+                        const out = new Set<string>();
+                        for (const t of ev.tags || []) {
+                            if (t[0] === "e" && t[1] && idsSet.has(t[1])) out.add(t[1]);
+                            if (t[0] === "a" && t[1] && addrToId.has(t[1])) {
+                                const id = addrToId.get(t[1]);
+                                if (id) out.add(id);
+                            }
+                        }
+                        return Array.from(out);
+                    };
+
+                    const isQuote = (ev: NostrEvent) => (ev.tags || []).some((t) => t[0] === "q" && t[1]);
+
+                    const addCounts = (evs: NostrEvent[], field: "comments" | "reposts" | "zaps") => {
                         for (const ev of evs || []) {
-                            for (const t of ev.tags || []) {
-                                if (t[0] === "e" && t[1] && idsSet.has(t[1])) {
-                                    ensure(t[1])[field] += 1;
-                                }
-                                if (t[0] === "a" && t[1] && addrToId.has(t[1])) {
-                                    const id = addrToId.get(t[1]);
-                                    if (id) ensure(id)[field] += 1;
+                            // YakiHonne separates "quotes" (kind 1 + #q) from replies/comments.
+                            // Quote notes often also contain #e/#a; exclude them from comments.
+                            if (field === "comments" && isQuote(ev)) continue;
+                            const targets = getReferencedArticleIds(ev);
+                            for (const id of targets) ensure(id)[field] += 1;
+                        }
+                    };
+
+                    // Likes: only count NIP-25 "like" reactions (content === "+"), de-duped by pubkey per target.
+                    const likePubkeysByTarget: Record<string, Set<string>> = {};
+                    const addLikes = (evs: NostrEvent[]) => {
+                        for (const ev of evs || []) {
+                            if ((ev.content || "").trim() !== "+") continue;
+                            const targets = getReferencedArticleIds(ev);
+                            for (const id of targets) {
+                                ensure(id);
+                                (likePubkeysByTarget[id] ||= new Set());
+                                if (!likePubkeysByTarget[id].has(ev.pubkey)) {
+                                    likePubkeysByTarget[id].add(ev.pubkey);
+                                    stats[id].likes += 1;
                                 }
                             }
                         }
@@ -264,20 +291,35 @@ try {
                         setTimeout(() => reject(new Error("Timeout")), 10000),
                     );
 
-                    const [likesE, likesA, repostsE, repostsA, zapsE, zapsA] = await Promise.race([
+                    const limit = 2000;
+
+                    const [likesE, likesA, commentsE, commentsA, quotesQ, repostsE, repostsA, zapsE, zapsA] = await Promise.race([
                         Promise.all([
-                            articleIds.length ? pool.querySync(RELAYS, { kinds: [7], "#e": articleIds, limit: 500 }) : Promise.resolve([]),
-                            addrs.length ? pool.querySync(RELAYS, { kinds: [7], "#a": addrs, limit: 500 }) : Promise.resolve([]),
-                            articleIds.length ? pool.querySync(RELAYS, { kinds: [6], "#e": articleIds, limit: 500 }) : Promise.resolve([]),
-                            addrs.length ? pool.querySync(RELAYS, { kinds: [6], "#a": addrs, limit: 500 }) : Promise.resolve([]),
-                            articleIds.length ? pool.querySync(RELAYS, { kinds: [9735], "#e": articleIds, limit: 500 }) : Promise.resolve([]),
-                            addrs.length ? pool.querySync(RELAYS, { kinds: [9735], "#a": addrs, limit: 500 }) : Promise.resolve([]),
+                            articleIds.length ? pool.querySync(RELAYS, { kinds: [7], "#e": articleIds, limit }) : Promise.resolve([]),
+                            addrs.length ? pool.querySync(RELAYS, { kinds: [7], "#a": addrs, limit }) : Promise.resolve([]),
+                            articleIds.length ? pool.querySync(RELAYS, { kinds: [1], "#e": articleIds, limit }) : Promise.resolve([]),
+                            addrs.length ? pool.querySync(RELAYS, { kinds: [1], "#a": addrs, limit }) : Promise.resolve([]),
+                            articleIds.length ? pool.querySync(RELAYS, { kinds: [1], "#q": articleIds, limit }) : Promise.resolve([]),
+                            articleIds.length ? pool.querySync(RELAYS, { kinds: [6], "#e": articleIds, limit }) : Promise.resolve([]),
+                            addrs.length ? pool.querySync(RELAYS, { kinds: [6], "#a": addrs, limit }) : Promise.resolve([]),
+                            articleIds.length ? pool.querySync(RELAYS, { kinds: [9735], "#e": articleIds, limit }) : Promise.resolve([]),
+                            addrs.length ? pool.querySync(RELAYS, { kinds: [9735], "#a": addrs, limit }) : Promise.resolve([]),
                         ]),
                         timeout,
                     ]);
 
-                    addCounts(likesE, "likes");
-                    addCounts(likesA, "likes");
+                    addLikes(likesE);
+                    addLikes(likesA);
+                    addCounts(commentsE, "comments");
+                    addCounts(commentsA, "comments");
+
+                    // Quotes: kind 1 + #q referencing the quoted event id.
+                    for (const ev of quotesQ || []) {
+                        for (const t of ev.tags || []) {
+                            if (t[0] === "q" && t[1] && idsSet.has(t[1])) ensure(t[1]).quotes += 1;
+                        }
+                    }
+
                     addCounts(repostsE, "reposts");
                     addCounts(repostsA, "reposts");
                     addCounts(zapsE, "zaps");
@@ -1754,7 +1796,11 @@ const ogTags = {
                                                                 </span>
                                                                 <span class="stat" title="Comments">
                                                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a4 4 0 0 1-4 4H7l-4 4V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/></svg>
-                                                                    <span>0</span>
+                                                                    <span>{articleEngagement[e.id]?.comments ?? 0}</span>
+                                                                </span>
+                                                                <span class="stat" title="Quotes">
+                                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.5 10.5h-2A2.5 2.5 0 0 0 3 13v5h5v-5H6.5a2 2 0 0 1 1-1.73"/><path d="M17.5 10.5h-2A2.5 2.5 0 0 0 13 13v5h5v-5h-1.5a2 2 0 0 1 1-1.73"/></svg>
+                                                                    <span>{articleEngagement[e.id]?.quotes ?? 0}</span>
                                                                 </span>
                                                                 <span class="stat" title="Reposts">
                                                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
