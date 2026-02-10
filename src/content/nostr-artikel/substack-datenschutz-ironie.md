@@ -5,7 +5,7 @@ subtitle: "700.000 Datensätze geleakt, E-Mail-Hashes an Google, und niemand ste
 slug: substack-datenschutz-ironie
 description: "Substack-Nutzer diskutieren WhatsApp-Datenschutz auf einer Plattform mit Klartext-E-Mails im Quellcode, ungesalzenem MD5-Hashing und einem Data Breach von 700.000 Datensätzen."
 type: long-artikel
-sig: "eae8d90a393415ed126734b8f3067e8c3a445fe1149c1cb35afcdbf3eb35dab1fc0f2e54b09bd7b94c51bafde3d7458515c195d0aea02595364dd8664fdeae63"
+sig: "c0c43ac34d95c0c6ef48801cee7349d77c90d18538cc0499c5a0e98ed336c05df14d1d76053aec1c91ca4dcea3505ed5f0a68140fad8366bcafa756c093a1d8d"
 
 # === KATEGORISIERUNG ===
 category: souveränität
@@ -34,14 +34,14 @@ word_count: 1789
 reading_time: 9min
 
 # === HERO IMAGE (von VisionFusen signiert) ===
-heroImage: https://cdn.visionfusen.org/images/substack-skandal-zeitungsschlagzeile.vf1063-e1d48aa2.webp
+heroImage: https://cdn.visionfusen.org/images/substack-skandal-zeitungsschlagzeile.vf1063-61097189.webp
 heroImageAlt: "Zusammengefaltete Zeitung auf dunklem Holztisch mit roter Schlagzeile SUBSTACK-SKANDAL 700.000 Datensätze geleakt, im Hintergrund ein Laptop mit Programmcode und eine weiße Kaffeetasse"
 heroImageCaption: "700.000 Datensätze geleakt – und deine E-Mail steht im Quellcode"
-heroImageHash: "e1d48aa211ceeb325aeb21df7eec7959801a0e57f5d5c9e0e7bda7b8fbd59bbe"
-heroImageEvent: "2f205f7e07f9cb6189761df0398d36dafcdb1541e6190f0fba456627d29b297c"
+heroImageHash: "61097189437d5d3eb18e83b82f5b379bc182420bd8e432e8fcbf2a124e727bec"
+heroImageEvent: "e354c7062cb8b3af56bed1a91093299bdb743b3b708591b9a8795f4c73356445"
 
 # === OPEN GRAPH / SOCIAL ===
-ogImage: https://cdn.visionfusen.org/images/substack-skandal-zeitungsschlagzeile.vf1063-e1d48aa2.webp
+ogImage: https://cdn.visionfusen.org/images/substack-skandal-zeitungsschlagzeile.vf1063-61097189.webp
 ogImageAlt: "Substack-Skandal: Die Ironie der Datenschutz-Debatte"
 
 # === PUBLISHING STATUS ===
@@ -53,7 +53,7 @@ nostr:
   kind: 30023
   d_tag: substack-datenschutz-ironie
   published: true
-  note_id: "b3624b8eeec9d5122c1bbdcc53468ab4a749bd7a688245c369c354b8b84a10ab"
+  note_id: "418f1f21d3fb2e788c608655411e1ac33c4febb22e1e915b0ca8b2b05285846d"
   naddr: "naddr1qqdhxatzwd6xzcmt94jxzar9deekx6r4w3az66tjdahxjegprfmhxue69uhhyetvv9ujuum5v4mx2mnwdaskx6ewv3jsz9nhwden5te0wfjkccte9ec8y6tdv9kzumn9wsqs6amnwvaz7tmwdaejumr0dspzpsd67nm5ekpfjcuz3vw634e72txffj4xmrwfgnmu53g2whztxvglqvzqqqr4gug3fllz"
   relays:
     - wss://relay.stevennoack.de
