@@ -2,6 +2,7 @@
 title: "Terminal Quatsch: Über leere Böden, leere Feeds und die Rückkehr des Codes"
 slug: terminal-quatsch
 description: "Von Kaiser Wilhelms Pferd bis zum KI-Prompt: Warum 'Brauche ich nicht' noch nie ein gutes Argument war – und was leere Böden mit leeren Feeds verbindet."
+sig: "bae1c95a6f81f2810b793046c0c10fa928286bdd525be410fbbef9a3cf233feef753003d776c25dd8028cfd34f2bfe376f414d3e4f8992e961f2ab7e5051a364"
 category: gedanken
 tags:
   - essay

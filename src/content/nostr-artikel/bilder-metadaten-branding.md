@@ -4,6 +4,7 @@ subtitle: "Warum Metadaten das unsichtbare Branding sind, das 99% der Creator ve
 slug: bilder-metadaten-branding
 description: "Jedes Bild das du postest, könnte deinen Namen tragen. Die meisten tun es nicht. Eine Anleitung für digitale Souveränität – mit einem Terminal-Befehl."
 type: long-artikel
+sig: "ffb39f45b70c195e7b3bbd214f02e85d47cc49a64d9de465259c84ae026d0eca753206bd8a1ac6b9a2e47a1f49132f02f99b972ade5ace8486781fd7a9e93d4e"
 
 # === KATEGORISIERUNG ===
 category: souveränität

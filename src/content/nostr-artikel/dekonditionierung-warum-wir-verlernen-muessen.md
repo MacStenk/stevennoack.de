@@ -4,6 +4,7 @@ subtitle: "Vom Hamsterrad zur digitalen Souveränität"
 slug: dekonditionierung-warum-wir-verlernen-muessen
 description: "Wir wurden konditioniert, abhängig zu sein. Von Plattformen, Algorithmen, Validierung. Dekonditionierung bedeutet: Das erkennen. Und dann loslassen."
 type: long-artikel
+sig: "32f2992148d15ede1f60873a6ec3e61e353dad91f624fd507848b27622f846883bbbf3c2ca0dea699f875e729aaa1e7d44be9f4e03e73ffaf5eeb10f461561a0"
 # === KATEGORISIERUNG ===
 category: souveränität
 tags:

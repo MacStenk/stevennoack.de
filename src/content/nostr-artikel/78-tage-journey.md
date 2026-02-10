@@ -5,6 +5,7 @@ subtitle: "Wie ich mit 50 ohne Plan ein AI-System gebaut habe, das sich selbst e
 slug: 78-tage-journey
 description: "78 Tage Zusammenarbeit mit Claude AI. Von ersten Prompts zu einem selbstgebauten Gedächtnis-System mit Neo4j, Multi-Agent Architektur und VIBE Coding. Eine Geschichte über Vertrauen, Iteration und die Zukunft der Mensch-KI Zusammenarbeit."
 type: long-artikel
+sig: "043b97b0588739cae555928f1da6844a2ea5f999b413d39babb5f285b05a90a937f4d80c40d332f449ca9fe0b2c7e198f77baa62c80c9b172d7f2551133523c2"
 
 # === KATEGORISIERUNG ===
 category: ai-collaboration
