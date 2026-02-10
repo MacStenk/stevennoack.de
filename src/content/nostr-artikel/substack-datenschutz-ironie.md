@@ -21,7 +21,7 @@ tags:
   - dsgvo
   - digitale-souveränität
 series: ""
-part:
+part: 0
 
 # === TIMESTAMPS ===
 date: 2026-02-10
