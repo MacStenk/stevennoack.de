@@ -42,6 +42,7 @@ let followersCount: string = "—";
 let notesEvents: NostrEvent[] = [];
 let articleEvents: NostrEvent[] = [];
 let mediaEvents: NostrEvent[] = [];
+let articleEngagement: Record<string, { likes: number; reposts: number; zaps: number }> = {};
 
 const RELAYS = [
     "wss://relay.stevennoack.de",
@@ -226,6 +227,68 @@ try {
 
                 notesEvents = (notes || []).sort((a, b) => (b.created_at || 0) - (a.created_at || 0)).slice(0, 20);
                 articleEvents = (articles || []).sort((a, b) => (b.created_at || 0) - (a.created_at || 0)).slice(0, 20);
+
+                // Phase 2: Engagement stats for articles (SSR)
+                try {
+                    const articleIds = articleEvents.map((e) => e.id).filter(Boolean);
+                    const idsSet = new Set(articleIds);
+
+                    const addrToId = new Map<string, string>();
+                    for (const e of articleEvents) {
+                        const d = getTagValue(e, "d");
+                        if (!d) continue;
+                        const addr = `${e.kind}:${e.pubkey}:${d}`;
+                        addrToId.set(addr, e.id);
+                    }
+                    const addrs = Array.from(addrToId.keys());
+
+                    const init = () => ({ likes: 0, reposts: 0, zaps: 0 });
+                    const stats: Record<string, { likes: number; reposts: number; zaps: number }> = {};
+                    const ensure = (id: string) => (stats[id] ||= init());
+
+                    const addCounts = (evs: NostrEvent[], field: "likes" | "reposts" | "zaps") => {
+                        for (const ev of evs || []) {
+                            for (const t of ev.tags || []) {
+                                if (t[0] === "e" && t[1] && idsSet.has(t[1])) {
+                                    ensure(t[1])[field] += 1;
+                                }
+                                if (t[0] === "a" && t[1] && addrToId.has(t[1])) {
+                                    const id = addrToId.get(t[1]);
+                                    if (id) ensure(id)[field] += 1;
+                                }
+                            }
+                        }
+                    };
+
+                    const timeout = new Promise<never>((_, reject) =>
+                        setTimeout(() => reject(new Error("Timeout")), 10000),
+                    );
+
+                    const [likesE, likesA, repostsE, repostsA, zapsE, zapsA] = await Promise.race([
+                        Promise.all([
+                            articleIds.length ? pool.querySync(RELAYS, { kinds: [7], "#e": articleIds, limit: 500 }) : Promise.resolve([]),
+                            addrs.length ? pool.querySync(RELAYS, { kinds: [7], "#a": addrs, limit: 500 }) : Promise.resolve([]),
+                            articleIds.length ? pool.querySync(RELAYS, { kinds: [6], "#e": articleIds, limit: 500 }) : Promise.resolve([]),
+                            addrs.length ? pool.querySync(RELAYS, { kinds: [6], "#a": addrs, limit: 500 }) : Promise.resolve([]),
+                            articleIds.length ? pool.querySync(RELAYS, { kinds: [9735], "#e": articleIds, limit: 500 }) : Promise.resolve([]),
+                            addrs.length ? pool.querySync(RELAYS, { kinds: [9735], "#a": addrs, limit: 500 }) : Promise.resolve([]),
+                        ]),
+                        timeout,
+                    ]);
+
+                    addCounts(likesE, "likes");
+                    addCounts(likesA, "likes");
+                    addCounts(repostsE, "reposts");
+                    addCounts(repostsA, "reposts");
+                    addCounts(zapsE, "zaps");
+                    addCounts(zapsA, "zaps");
+
+                    for (const id of articleIds) ensure(id);
+
+                    articleEngagement = stats;
+                } catch (e) {
+                    console.error("Engagement stats fetch error:", e);
+                }
             } catch (e) {
                 console.error("Profile content fetch error:", e);
             }
@@ -1504,7 +1567,7 @@ const ogTags = {
                                                             <div class="article-card-stats" aria-hidden="true">
                                                                 <span class="stat" title="Likes">
                                                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3.36.83-4.5 2.09A6 6 0 0 0 7.5 3A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
-                                                                    <span>0</span>
+                                                                    <span>{articleEngagement[e.id]?.likes ?? 0}</span>
                                                                 </span>
                                                                 <span class="stat" title="Comments">
                                                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a4 4 0 0 1-4 4H7l-4 4V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/></svg>
@@ -1512,11 +1575,11 @@ const ogTags = {
                                                                 </span>
                                                                 <span class="stat" title="Reposts">
                                                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
-                                                                    <span>0</span>
+                                                                    <span>{articleEngagement[e.id]?.reposts ?? 0}</span>
                                                                 </span>
                                                                 <span class="stat" title="Zaps">
                                                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-                                                                    <span>0</span>
+                                                                    <span>{articleEngagement[e.id]?.zaps ?? 0}</span>
                                                                 </span>
                                                             </div>
 
