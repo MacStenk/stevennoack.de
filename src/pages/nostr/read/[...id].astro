@@ -964,6 +964,7 @@ const ogTags = {
                 border-bottom-color: #00d4ff;
             }
 
+            /* default (notes/media): simple grid cards */
             .content-grid {
                 display: grid;
                 grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -977,7 +978,7 @@ const ogTags = {
                 border-radius: 10px;
                 border: 1px solid rgba(0, 212, 255, 0.15);
                 background: rgba(0, 212, 255, 0.03);
-                transition: border-color 0.15s ease, background 0.15s ease;
+                transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease;
                 color: inherit;
                 overflow: hidden;
             }
@@ -985,6 +986,7 @@ const ogTags = {
             .content-card:hover {
                 border-color: rgba(0, 212, 255, 0.35);
                 background: rgba(0, 212, 255, 0.06);
+                transform: translateY(-1px);
             }
 
             .content-card-hero {
@@ -1014,6 +1016,206 @@ const ogTags = {
                 font-family: monospace;
             }
 
+            /* Articles list: YakiHonne-ish horizontal cards */
+            .article-list {
+                display: flex;
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .article-card {
+                display: grid;
+                grid-template-columns: 1fr 140px;
+                gap: 0.9rem;
+                padding: 0.95rem;
+                border-radius: 12px;
+                border: 1px solid rgba(0, 212, 255, 0.14);
+                background: rgba(0, 212, 255, 0.025);
+                text-decoration: none;
+                color: inherit;
+                transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease;
+                overflow: hidden;
+                align-items: start;
+            }
+
+            .article-card:hover {
+                border-color: rgba(0, 212, 255, 0.35);
+                background: rgba(0, 212, 255, 0.05);
+                transform: translateY(-1px);
+            }
+
+            .article-card-main {
+                min-width: 0;
+                display: flex;
+                flex-direction: column;
+                gap: 0.55rem;
+            }
+
+            .article-card-author {
+                display: flex;
+                align-items: center;
+                gap: 0.6rem;
+                min-width: 0;
+            }
+
+            .article-card-avatar {
+                width: 32px;
+                height: 32px;
+                border-radius: 999px;
+                object-fit: cover;
+                border: 1px solid rgba(0, 212, 255, 0.25);
+                flex: 0 0 auto;
+                background: rgba(0, 212, 255, 0.08);
+            }
+
+            .article-card-author-text {
+                min-width: 0;
+                display: flex;
+                flex-direction: column;
+                gap: 0.15rem;
+            }
+
+            .article-card-author-name {
+                font-size: 0.9rem;
+                font-weight: 600;
+                color: #d6f7ff;
+                display: inline-flex;
+                align-items: center;
+                gap: 0.35rem;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 100%;
+            }
+
+            .article-card-verified {
+                color: #00d4ff;
+                display: inline-flex;
+                align-items: center;
+                flex: 0 0 auto;
+            }
+
+            .article-card-submeta {
+                font-size: 0.75rem;
+                color: #7a7a7a;
+                font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+                display: inline-flex;
+                gap: 0.45rem;
+                align-items: center;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .article-card-title {
+                margin: 0;
+                font-size: 1.05rem;
+                line-height: 1.25;
+                font-weight: 700;
+                color: #00d4ff;
+            }
+
+            .article-card-summary {
+                margin: 0;
+                font-size: 0.9rem;
+                line-height: 1.45;
+                color: #9aa0a6;
+                display: -webkit-box;
+                -webkit-line-clamp: 3;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+            }
+
+            .article-card-footer {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 0.75rem;
+                margin-top: 0.15rem;
+            }
+
+            .article-card-stats {
+                display: flex;
+                align-items: center;
+                gap: 0.85rem;
+                color: #8b8b8b;
+                font-size: 0.8rem;
+                user-select: none;
+            }
+
+            .stat {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.35rem;
+            }
+
+            .stat svg {
+                width: 16px;
+                height: 16px;
+                opacity: 0.85;
+            }
+
+            .article-card-more {
+                appearance: none;
+                border: 1px solid rgba(0, 212, 255, 0.16);
+                background: rgba(0, 0, 0, 0.15);
+                color: #bdbdbd;
+                border-radius: 10px;
+                padding: 0.25rem 0.45rem;
+                line-height: 1;
+                cursor: pointer;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .article-card-more:hover {
+                border-color: rgba(0, 212, 255, 0.35);
+                color: #e6fbff;
+                background: rgba(0, 212, 255, 0.06);
+            }
+
+            .article-card-media {
+                width: 140px;
+                height: 110px;
+                border-radius: 10px;
+                overflow: hidden;
+                border: 1px solid rgba(0, 212, 255, 0.12);
+                background: rgba(0, 0, 0, 0.25);
+                align-self: center;
+            }
+
+            .article-card-media img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                display: block;
+            }
+
+            .article-card-media.placeholder {
+                display: grid;
+                place-items: center;
+                color: rgba(0, 212, 255, 0.55);
+                font-size: 0.75rem;
+                font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            }
+
+            @media (max-width: 640px) {
+                .article-card {
+                    grid-template-columns: 1fr;
+                }
+
+                .article-card-media {
+                    width: 100%;
+                    height: 160px;
+                    order: -1;
+                }
+
+                .article-card-title {
+                    font-size: 1.02rem;
+                }
+            }
+
             .content-empty {
                 padding: 1rem;
                 border-radius: 10px;
@@ -1037,6 +1239,34 @@ const ogTags = {
 
             .light-mode .content-card-title {
                 color: #007f99;
+            }
+
+            .light-mode .article-card {
+                background: rgba(0, 150, 200, 0.02);
+                border-color: rgba(0, 150, 200, 0.18);
+            }
+
+            .light-mode .article-card:hover {
+                background: rgba(0, 150, 200, 0.04);
+                border-color: rgba(0, 150, 200, 0.32);
+            }
+
+            .light-mode .article-card-title {
+                color: #007f99;
+            }
+
+            .light-mode .article-card-author-name {
+                color: #0b2a33;
+            }
+
+            .light-mode .article-card-summary {
+                color: #4b5563;
+            }
+
+            .light-mode .article-card-more {
+                background: rgba(0, 0, 0, 0.03);
+                border-color: rgba(0, 150, 200, 0.18);
+                color: #556;
             }
 
             .light-mode .content-empty {
@@ -1220,24 +1450,95 @@ const ogTags = {
                             </section>
 
                             <section class="tab-panel" data-panel="articles" hidden style="margin-top: 1rem;">
-                                <div class="content-grid">
+                                <div class="article-list">
                                     {articleEvents.length > 0 ? (
                                         articleEvents.map((e) => {
                                             const aTitle = getTagValue(e, "title") || getFirstLine(e.content) || "Untitled";
+                                            const aSummary = getTagValue(e, "summary") || "";
                                             const aImage = getTagValue(e, "image");
+                                            const publishedAtTag = getTagValue(e, "published_at");
+                                            const ts = publishedAtTag ? Number(publishedAtTag) : (e.created_at || 0);
+                                            const relTime = ts ? formatRelativeTime(ts) : "";
+                                            const rt = estimateReadingTimeMinutes(e.content);
+
                                             return (
-                                                <a class="content-card" href={eventPermalink(e)}>
-                                                    {aImage && (
-                                                        <div class="content-card-hero">
+                                                <a class="article-card" href={eventPermalink(e)}>
+                                                    <div class="article-card-main">
+                                                        <div class="article-card-author">
+                                                            {authorPicture ? (
+                                                                <img class="article-card-avatar" src={authorPicture} alt={authorName} loading="lazy" />
+                                                            ) : (
+                                                                <div class="article-card-avatar" aria-hidden="true" style="display:grid; place-items:center; font-weight:700; color:#001014; background:rgba(0,212,255,0.85);">
+                                                                    {authorName.charAt(0).toUpperCase()}
+                                                                </div>
+                                                            )}
+                                                            <div class="article-card-author-text">
+                                                                <div class="article-card-author-name">
+                                                                    <span>{authorName}</span>
+                                                                    {authorNip05 && (
+                                                                        <span class="article-card-verified" title={`Verified via NIP-05: ${authorNip05}`} aria-label="Verified">
+                                                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                                                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                                                                                <path d="M22 4 12 14.01l-3-3" />
+                                                                            </svg>
+                                                                        </span>
+                                                                    )}
+                                                                </div>
+                                                                <div class="article-card-submeta">
+                                                                    {relTime && <span>{relTime}</span>}
+                                                                    {relTime && <span aria-hidden="true">•</span>}
+                                                                    <span>{rt} min read</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <h3 class="article-card-title">{aTitle}</h3>
+
+                                                        {aSummary ? (
+                                                            <p class="article-card-summary">{aSummary}</p>
+                                                        ) : (
+                                                            <p class="article-card-summary">{getFirstLine(e.content).substring(0, 220) || "(no summary)"}</p>
+                                                        )}
+
+                                                        <div class="article-card-footer">
+                                                            <div class="article-card-stats" aria-hidden="true">
+                                                                <span class="stat" title="Likes">
+                                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3.36.83-4.5 2.09A6 6 0 0 0 7.5 3A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+                                                                    <span>0</span>
+                                                                </span>
+                                                                <span class="stat" title="Comments">
+                                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a4 4 0 0 1-4 4H7l-4 4V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/></svg>
+                                                                    <span>0</span>
+                                                                </span>
+                                                                <span class="stat" title="Reposts">
+                                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+                                                                    <span>0</span>
+                                                                </span>
+                                                                <span class="stat" title="Zaps">
+                                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                                                                    <span>0</span>
+                                                                </span>
+                                                            </div>
+
+                                                            <span class="article-card-more" aria-hidden="true">
+                                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                                    <circle cx="12" cy="12" r="1" />
+                                                                    <circle cx="19" cy="12" r="1" />
+                                                                    <circle cx="5" cy="12" r="1" />
+                                                                </svg>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+
+                                                    {aImage ? (
+                                                        <div class="article-card-media">
                                                             <img src={aImage} alt={aTitle} loading="lazy" />
                                                         </div>
+                                                    ) : (
+                                                        <div class="article-card-media placeholder" aria-hidden="true">
+                                                            No image
+                                                        </div>
                                                     )}
-                                                    <div class="content-card-title">{aTitle}</div>
-                                                    <div class="content-card-meta">
-                                                        <time datetime={new Date(e.created_at * 1000).toISOString()}>
-                                                            {formatDate(e.created_at)}
-                                                        </time>
-                                                    </div>
                                                 </a>
                                             );
                                         })
