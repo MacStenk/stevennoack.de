@@ -1,0 +1,182 @@
+---
+/**
+ * NostrClientPicker - "Öffne in..." Dropdown für Nostr Events
+ * Zeigt passende Clients basierend auf Event Kind
+ */
+interface Props {
+  code: string;  // naddr, nevent, npub, etc.
+  kind?: number; // Event kind für Client-Filterung
+}
+
+const { code, kind = 1 } = Astro.props;
+
+import clients from "../data/nostr-clients.json";
+
+// Get clients for this kind
+const kindKey = String(kind);
+const clientIds = clients.kindMappings[kindKey] || clients.kindMappings["default"];
+
+// Build client list with URLs
+const availableClients = clientIds
+  .map((id: string) => {
+    const client = clients.clients[id];
+    if (!client) return null;
+    return {
+      id,
+      ...client,
+      url: client.base.replace("{code}", code)
+    };
+  })
+  .filter(Boolean);
+
+// Group by platform
+const webClients = availableClients.filter((c: any) => c.platform === "web");
+const iosClients = availableClients.filter((c: any) => c.platform === "ios");
+const androidClients = availableClients.filter((c: any) => c.platform === "android");
+const nativeClients = availableClients.filter((c: any) => c.platform === "native");
+---
+
+<div class="client-picker">
+  <button class="client-picker-trigger badge" id="client-picker-btn">
+    Öffne in...
+    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="m6 9 6 6 6-6"/>
+    </svg>
+  </button>
+  
+  <div class="client-picker-dropdown" id="client-picker-dropdown">
+    {nativeClients.length > 0 && (
+      <div class="client-group">
+        <div class="client-group-label">Native</div>
+        {nativeClients.map((client: any) => (
+          <a href={client.url} class="client-option">{client.name}</a>
+        ))}
+      </div>
+    )}
+    
+    {webClients.length > 0 && (
+      <div class="client-group">
+        <div class="client-group-label">Web</div>
+        {webClients.map((client: any) => (
+          <a href={client.url} target="_blank" rel="noopener" class="client-option">{client.name}</a>
+        ))}
+      </div>
+    )}
+    
+    {iosClients.length > 0 && (
+      <div class="client-group">
+        <div class="client-group-label">iOS</div>
+        {iosClients.map((client: any) => (
+          <a href={client.url} class="client-option">{client.name}</a>
+        ))}
+      </div>
+    )}
+    
+    {androidClients.length > 0 && (
+      <div class="client-group">
+        <div class="client-group-label">Android</div>
+        {androidClients.map((client: any) => (
+          <a href={client.url} class="client-option">{client.name}</a>
+        ))}
+      </div>
+    )}
+  </div>
+</div>
+
+<style>
+  .client-picker {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .client-picker-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    cursor: pointer;
+  }
+  
+  .client-picker-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 0.5rem;
+    min-width: 160px;
+    background: #1a1a1a;
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 8px;
+    padding: 0.5rem 0;
+    z-index: 100;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+  
+  .client-picker-dropdown.open {
+    display: block;
+  }
+  
+  .client-group {
+    padding: 0.25rem 0;
+  }
+  
+  .client-group:not(:last-child) {
+    border-bottom: 1px solid rgba(0, 212, 255, 0.1);
+  }
+  
+  .client-group-label {
+    padding: 0.25rem 1rem;
+    font-size: 0.65rem;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-family: monospace;
+  }
+  
+  .client-option {
+    display: block;
+    padding: 0.5rem 1rem;
+    color: #ccc;
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: background 0.15s ease;
+  }
+  
+  .client-option:hover {
+    background: rgba(0, 212, 255, 0.1);
+    color: #00d4ff;
+  }
+  
+  /* Light mode */
+  :global(.light-mode) .client-picker-dropdown {
+    background: #fff;
+    border-color: rgba(0, 150, 200, 0.3);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  :global(.light-mode) .client-option {
+    color: #333;
+  }
+  
+  :global(.light-mode) .client-option:hover {
+    background: rgba(0, 150, 200, 0.1);
+    color: #0099aa;
+  }
+</style>
+
+<script>
+  const btn = document.getElementById('client-picker-btn');
+  const dropdown = document.getElementById('client-picker-dropdown');
+  
+  btn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    dropdown?.classList.toggle('open');
+  });
+  
+  document.addEventListener('click', () => {
+    dropdown?.classList.remove('open');
+  });
+  
+  dropdown?.addEventListener('click', (e) => {
+    e.stopPropagation();
+  });
+</script>

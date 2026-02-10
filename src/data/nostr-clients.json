@@ -1,0 +1,80 @@
+{
+  "clients": {
+    "native": {
+      "name": "Native App",
+      "base": "nostr:{code}",
+      "platform": "native"
+    },
+    "primal-web": {
+      "name": "Primal",
+      "base": "https://primal.net/e/{code}",
+      "platform": "web"
+    },
+    "habla": {
+      "name": "Habla",
+      "base": "https://habla.news/a/{code}",
+      "platform": "web"
+    },
+    "yakihonne": {
+      "name": "YakiHonne",
+      "base": "https://yakihonne.com/{code}",
+      "platform": "web"
+    },
+    "nostrudel": {
+      "name": "noStrudel",
+      "base": "https://nostrudel.ninja/#/l/{code}",
+      "platform": "web"
+    },
+    "coracle": {
+      "name": "Coracle",
+      "base": "https://coracle.social/{code}",
+      "platform": "web"
+    },
+    "njump": {
+      "name": "njump",
+      "base": "https://njump.me/{code}",
+      "platform": "web"
+    },
+    "damus": {
+      "name": "Damus",
+      "base": "damus:{code}",
+      "platform": "ios"
+    },
+    "nos": {
+      "name": "Nos",
+      "base": "nos:{code}",
+      "platform": "ios"
+    },
+    "nostur": {
+      "name": "Nostur",
+      "base": "nostur:{code}",
+      "platform": "ios"
+    },
+    "primal-ios": {
+      "name": "Primal",
+      "base": "primal:{code}",
+      "platform": "ios"
+    },
+    "amethyst": {
+      "name": "Amethyst",
+      "base": "intent:{code}#Intent;scheme=nostr;package=com.vitorpamplona.amethyst;end",
+      "platform": "android"
+    },
+    "primal-android": {
+      "name": "Primal",
+      "base": "intent:{code}#Intent;scheme=nostr;package=net.primal.android;end",
+      "platform": "android"
+    },
+    "yakihonne-android": {
+      "name": "YakiHonne",
+      "base": "intent:{code}#Intent;scheme=nostr;package=com.yakihonne.yakihonne;end",
+      "platform": "android"
+    }
+  },
+  "kindMappings": {
+    "1": ["native", "primal-web", "nostrudel", "coracle", "njump", "damus", "nos", "nostur", "primal-ios", "amethyst", "primal-android"],
+    "30023": ["habla", "yakihonne", "primal-web", "nostrudel", "coracle", "njump", "damus", "nos", "amethyst", "yakihonne-android"],
+    "0": ["native", "primal-web", "nostrudel", "njump", "damus", "nos", "amethyst", "primal-android"],
+    "default": ["native", "njump", "primal-web", "nostrudel", "coracle"]
+  }
+}

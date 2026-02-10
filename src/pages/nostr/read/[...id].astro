@@ -4,10 +4,13 @@ export const prerender = false;
 import { nip19, SimplePool, type Event as NostrEvent } from "nostr-tools";
 import { marked } from "marked";
 import unlockContentUrl from "../../../scripts/unlock-content.js?url";
+import NostrClientPicker from "../../../components/NostrClientPicker.astro";
 
 const { id } = Astro.params;
 
 let event: NostrEvent | null = null;
+let profileEvent: NostrEvent | null = null;
+let isProfile = false;
 let contentHtml = "";
 let error = "";
 let title = "Nostr Reader";
@@ -29,14 +32,93 @@ let tags: string[] = [];
 let wordCount = 0;
 let readingTime = 0;
 
+// Profile specific
+let profilePubkey = "";
+let profileCode = "";
+
+// Profile Phase 2
+let followingCount: number | null = null;
+let followersCount: string = "—";
+let notesEvents: NostrEvent[] = [];
+let articleEvents: NostrEvent[] = [];
+let mediaEvents: NostrEvent[] = [];
+
 const RELAYS = [
     "wss://relay.stevennoack.de",
     "wss://relay.primal.net",
     "wss://nos.lol",
+    "wss://relay.damus.io",
+    "wss://relay.nostr.band",
 ];
 
 const SITE_URL = "https://stevennoack.de";
 const SITE_NAME = "Steven Noack";
+
+function getTagValue(ev: NostrEvent, name: string): string {
+    const t = ev.tags.find((x) => x[0] === name);
+    return t?.[1] || "";
+}
+
+function getFirstLine(text: string): string {
+    const line = (text || "").split("\n").map((l) => l.trim()).find(Boolean);
+    return line || "";
+}
+
+function formatDate(ts: number): string {
+    return new Date(ts * 1000).toLocaleDateString("de-DE", {
+        year: "numeric",
+        month: "short",
+        day: "2-digit",
+    });
+}
+
+function formatRelativeTime(tsSeconds: number): string {
+    const diffMs = Date.now() - tsSeconds * 1000;
+    const diffSec = Math.max(0, Math.floor(diffMs / 1000));
+
+    const min = Math.floor(diffSec / 60);
+    const hr = Math.floor(min / 60);
+    const day = Math.floor(hr / 24);
+
+    if (diffSec < 60) return `${diffSec}s ago`;
+    if (min < 60) return `${min}m ago`;
+    if (hr < 24) return `${hr}h ago`;
+    if (day < 7) return `${day}d ago`;
+
+    // fallback: show date for older posts
+    return formatDate(tsSeconds);
+}
+
+function estimateReadingTimeMinutes(text: string): number {
+    const plainText = (text || "").replace(/[#*`>\[\]()]|\s+/g, " ").trim();
+    const wc = plainText ? plainText.split(" ").filter(Boolean).length : 0;
+    return Math.max(1, Math.ceil(wc / 200));
+}
+
+function eventPermalink(ev: NostrEvent): string {
+    // Prefer naddr for addressable events (like kind 30023)
+    const d = getTagValue(ev, "d");
+    if (d) {
+        try {
+            const code = nip19.naddrEncode({
+                kind: ev.kind,
+                pubkey: ev.pubkey,
+                identifier: d,
+                relays: RELAYS,
+            });
+            return `/nostr/read/${code}`;
+        } catch {
+            // fallthrough
+        }
+    }
+
+    try {
+        const code = nip19.neventEncode({ id: ev.id, author: ev.pubkey, relays: RELAYS });
+        return `/nostr/read/${code}`;
+    } catch {
+        return `/nostr/read/${ev.id}`;
+    }
+}
 
 if (!id) {
     return Astro.redirect("/nostr");
@@ -45,11 +127,23 @@ if (!id) {
 try {
     const pool = new SimplePool();
 
-    // Decode ID and fetch event
+    // Decode ID
     let filter: any = {};
+
     try {
         const decoded = nip19.decode(id);
-        if (decoded.type === "nevent") {
+
+        if (decoded.type === "npub") {
+            isProfile = true;
+            profilePubkey = decoded.data;
+            profileCode = nip19.npubEncode(profilePubkey);
+            filter = { kinds: [0], authors: [profilePubkey] };
+        } else if (decoded.type === "nprofile") {
+            isProfile = true;
+            profilePubkey = decoded.data.pubkey;
+            profileCode = id;
+            filter = { kinds: [0], authors: [profilePubkey] };
+        } else if (decoded.type === "nevent") {
             filter = { ids: [decoded.data.id] };
         } else if (decoded.type === "note") {
             filter = { ids: [decoded.data] };
@@ -63,7 +157,7 @@ try {
             throw new Error("Unsupported ID type: " + decoded.type);
         }
     } catch (e) {
-        // If decoding fails, assume it's a raw hex ID
+        // If decoding fails, assume it's a raw hex ID (event)
         if (/^[0-9a-f]{64}$/.test(id)) {
             filter = { ids: [id] };
         } else {
@@ -71,137 +165,209 @@ try {
         }
     }
 
-    // Fetch event with timeout
-    event = await Promise.race([
-        pool.get(RELAYS, filter),
-        new Promise<null>((_, reject) =>
-            setTimeout(() => reject(new Error("Timeout")), 5000),
-        ),
-    ]);
+    if (isProfile) {
+        // Fetch kind 0 profile metadata with timeout (10s, relays can be slow)
+        profileEvent = await Promise.race([
+            pool.get(RELAYS, filter),
+            new Promise<null>((_, reject) =>
+                setTimeout(() => reject(new Error("Timeout")), 10000),
+            ),
+        ]);
 
-    if (!event) {
-        pool.close(RELAYS);
-        error = "Event not found on relays.";
-    } else {
-        // Store event ID
-        eventId = event.id;
-
-        // Generate nevent
-        nevent = nip19.neventEncode({
-            id: event.id,
-            author: event.pubkey,
-            relays: RELAYS,
-        });
-
-        // Get d-tag for naddr
-        const dTagEntry = event.tags.find((t) => t[0] === "d");
-        if (dTagEntry) {
-            dTag = dTagEntry[1];
-            // Generate naddr
-            naddr = nip19.naddrEncode({
-                kind: event.kind,
-                pubkey: event.pubkey,
-                identifier: dTag,
-                relays: RELAYS,
-            });
-        }
-
-        // Get summary
-        const summaryTag = event.tags.find((t) => t[0] === "summary");
-        if (summaryTag) {
-            summary = summaryTag[1];
-        }
-
-        // Get tags/keywords
-        const tTags = event.tags.filter((t) => t[0] === "t");
-        tags = tTags.map((t) => t[1]);
-
-        // Fetch author profile (kind 0)
-        try {
-            const profileEvent = await Promise.race([
-                pool.get(RELAYS, { kinds: [0], authors: [event.pubkey] }),
-                new Promise<null>((resolve) => setTimeout(() => resolve(null), 3000)),
-            ]);
-
-            if (profileEvent) {
-                const profile = JSON.parse(profileEvent.content);
+        if (!profileEvent) {
+            pool.close(RELAYS);
+            error = "Profile not found on relays.";
+        } else {
+            // Parse profile
+            try {
+                const profile = JSON.parse(profileEvent.content || "{}");
                 authorName = profile.display_name || profile.name || profile.username || "Unknown";
                 authorPicture = profile.picture || "";
                 authorLightning = profile.lud16 || profile.lud06 || "";
                 authorNip05 = profile.nip05 || "";
                 authorAbout = profile.about || "";
                 authorWebsite = profile.website || "";
-            } else {
-                // Fallback: show shortened pubkey
+            } catch (profileParseError) {
+                console.error("Profile parse error:", profileParseError);
+            }
+
+            authorNpub = nip19.npubEncode(profilePubkey);
+            title = `${authorName} - Profil`;
+            summary = authorAbout;
+            publishedDate = new Date(profileEvent.created_at * 1000);
+
+            // Phase 2: Following count (kind 3 contact list)
+            try {
+                const contactList = await Promise.race([
+                    pool.get(RELAYS, { kinds: [3], authors: [profilePubkey] }),
+                    new Promise<null>((_, reject) =>
+                        setTimeout(() => reject(new Error("Timeout")), 10000),
+                    ),
+                ]);
+
+                if (contactList) {
+                    followingCount = contactList.tags.filter((t) => t[0] === "p").length;
+                }
+            } catch (e) {
+                console.error("Contact list fetch error:", e);
+            }
+
+            // Phase 2: Profile content for tabs (SSR fetch, switching is client-side)
+            try {
+                const [notes, articles] = await Promise.race([
+                    Promise.all([
+                        pool.querySync(RELAYS, { kinds: [1], authors: [profilePubkey], limit: 20 }),
+                        pool.querySync(RELAYS, { kinds: [30023], authors: [profilePubkey], limit: 20 })
+                    ]),
+                    new Promise<[NostrEvent[], NostrEvent[]]>((_, reject) =>
+                        setTimeout(() => reject(new Error("Timeout")), 10000)
+                    )
+                ]);
+
+                notesEvents = (notes || []).sort((a, b) => (b.created_at || 0) - (a.created_at || 0)).slice(0, 20);
+                articleEvents = (articles || []).sort((a, b) => (b.created_at || 0) - (a.created_at || 0)).slice(0, 20);
+            } catch (e) {
+                console.error("Profile content fetch error:", e);
+            }
+
+            // Media is optional for now
+            mediaEvents = [];
+
+            pool.close(RELAYS);
+        }
+    } else {
+        // Fetch event with timeout (10s, relays can be slow)
+        event = await Promise.race([
+            pool.get(RELAYS, filter),
+            new Promise<null>((_, reject) =>
+                setTimeout(() => reject(new Error("Timeout")), 10000),
+            ),
+        ]);
+
+        if (!event) {
+            pool.close(RELAYS);
+            error = "Event not found on relays.";
+        } else {
+            // Store event ID
+            eventId = event.id;
+
+            // Generate nevent
+            nevent = nip19.neventEncode({
+                id: event.id,
+                author: event.pubkey,
+                relays: RELAYS,
+            });
+
+            // Get d-tag for naddr
+            const dTagEntry = event.tags.find((t) => t[0] === "d");
+            if (dTagEntry) {
+                dTag = dTagEntry[1];
+                // Generate naddr
+                naddr = nip19.naddrEncode({
+                    kind: event.kind,
+                    pubkey: event.pubkey,
+                    identifier: dTag,
+                    relays: RELAYS,
+                });
+            }
+
+            // Get summary
+            const summaryTag = event.tags.find((t) => t[0] === "summary");
+            if (summaryTag) {
+                summary = summaryTag[1];
+            }
+
+            // Get tags/keywords
+            const tTags = event.tags.filter((t) => t[0] === "t");
+            tags = tTags.map((t) => t[1]);
+
+            // Fetch author profile (kind 0)
+            try {
+                const profileEventInner = await Promise.race([
+                    pool.get(RELAYS, { kinds: [0], authors: [event.pubkey] }),
+                    new Promise<null>((resolve) => setTimeout(() => resolve(null), 3000)),
+                ]);
+
+                if (profileEventInner) {
+                    const profile = JSON.parse(profileEventInner.content);
+                    authorName = profile.display_name || profile.name || profile.username || "Unknown";
+                    authorPicture = profile.picture || "";
+                    authorLightning = profile.lud16 || profile.lud06 || "";
+                    authorNip05 = profile.nip05 || "";
+                    authorAbout = profile.about || "";
+                    authorWebsite = profile.website || "";
+                } else {
+                    // Fallback: show shortened pubkey
+                    authorName = event.pubkey.substring(0, 8) + "...";
+                }
+            } catch (profileError) {
+                // Profile fetch failed, use fallback
+                console.error("Profile fetch error:", profileError);
                 authorName = event.pubkey.substring(0, 8) + "...";
             }
-        } catch (profileError) {
-            // Profile fetch failed, use fallback
-            console.error("Profile fetch error:", profileError);
-            authorName = event.pubkey.substring(0, 8) + "...";
-        }
 
-        // Generate npub for author link
-        authorNpub = nip19.npubEncode(event.pubkey);
+            // Generate npub for author link
+            authorNpub = nip19.npubEncode(event.pubkey);
 
-        pool.close(RELAYS);
+            pool.close(RELAYS);
 
-        // Process Event
-        const content = event.content;
+            // Process Event
+            const content = event.content;
 
-        // Calculate word count and reading time
-        const plainText = content.replace(/[#*`>\[\]()]/g, '');
-        wordCount = plainText.split(/\s+/).filter(word => word.length > 0).length;
-        readingTime = Math.ceil(wordCount / 200); // ~200 words per minute
+            // Calculate word count and reading time
+            const plainText = content.replace(/[#*`>\[\]()]/g, '');
+            wordCount = plainText.split(/\s+/).filter(word => word.length > 0).length;
+            readingTime = Math.ceil(wordCount / 200); // ~200 words per minute
 
-        // Parse Markdown (marked is safe for our use case)
-        let htmlContent = await marked.parse(content);
+            // Parse Markdown (marked is safe for our use case)
+            let htmlContent = await marked.parse(content);
 
-        // Transform Callouts (Obsidian style > [!INFO])
-        htmlContent = htmlContent.replace(
-            /<blockquote>\s*<p>\s*\[!(\w+)\](-?)([\s\S]*?)<\/p>([\s\S]*?)<\/blockquote>/gi,
-            (match, type, collapsed, titleLine, restContent) => {
-                const typeLower = type.toLowerCase();
-                let titleText = titleLine.trim();
-                const splitRegex = /(?:<br\s*\/?>|\n)/i;
-                if (splitRegex.test(titleText)) {
-                    const firstSeparatorIndex = titleLine.search(splitRegex);
-                    if (firstSeparatorIndex !== -1) {
-                        titleText = titleLine.substring(0, firstSeparatorIndex).trim();
-                        const contentInP = titleLine
-                            .substring(firstSeparatorIndex)
-                            .replace(/^(\n|<br\s*\/?>)+/i, "");
-                        restContent = contentInP + restContent;
+            // Transform Callouts (Obsidian style > [!INFO])
+            htmlContent = htmlContent.replace(
+                /<blockquote>\s*<p>\s*\[!(\w+)\](-?)([\s\S]*?)<\/p>([\s\S]*?)<\/blockquote>/gi,
+                (match, type, collapsed, titleLine, restContent) => {
+                    const typeLower = type.toLowerCase();
+                    let titleText = titleLine.trim();
+                    const splitRegex = /(?:<br\s*\/?>|\n)/i;
+                    if (splitRegex.test(titleText)) {
+                        const firstSeparatorIndex = titleLine.search(splitRegex);
+                        if (firstSeparatorIndex !== -1) {
+                            titleText = titleLine.substring(0, firstSeparatorIndex).trim();
+                            const contentInP = titleLine
+                                .substring(firstSeparatorIndex)
+                                .replace(/^(\n|<br\s*\/?>)+/i, "");
+                            restContent = contentInP + restContent;
+                        }
                     }
-                }
-                if (!titleText || titleText === "<br>") {
-                    titleText = type.charAt(0).toUpperCase() + type.slice(1);
-                }
-                return `<div class="callout callout-${typeLower}">
-                    <details>
-                        <summary>${titleText}</summary>
-                        <div class="callout-content">${restContent}</div>
-                    </details>
-                </div>`;
-            },
-        );
+                    if (!titleText || titleText === "<br>") {
+                        titleText = type.charAt(0).toUpperCase() + type.slice(1);
+                    }
+                    return `<div class="callout callout-${typeLower}">
+                        <details>
+                            <summary>${titleText}</summary>
+                            <div class="callout-content">${restContent}</div>
+                        </details>
+                    </div>`;
+                },
+            );
 
-        contentHtml = htmlContent;
+            contentHtml = htmlContent;
 
-        // Metadata
-        const titleTag = event.tags.find((t) => t[0] === "title");
-        if (titleTag) {
-            title = titleTag[1];
-        } else {
-            title = content.split("\n")[0].substring(0, 50) + "...";
+            // Metadata
+            const titleTag = event.tags.find((t) => t[0] === "title");
+            if (titleTag) {
+                title = titleTag[1];
+            } else {
+                title = content.split("\n")[0].substring(0, 50) + "...";
+            }
+
+            const imageTag = event.tags.find((t) => t[0] === "image");
+            if (imageTag) {
+                heroImage = imageTag[1];
+            }
+
+            publishedDate = new Date(event.created_at * 1000);
         }
-
-        const imageTag = event.tags.find((t) => t[0] === "image");
-        if (imageTag) {
-            heroImage = imageTag[1];
-        }
-
-        publishedDate = new Date(event.created_at * 1000);
     }
 } catch (e) {
     console.error(e);
@@ -213,6 +379,7 @@ try {
 // ============================================
 
 const pageUrl = `${SITE_URL}/nostr/read/${id}`;
+const ogType = isProfile ? "profile" : "article";
 
 // Person Schema (Author) - Umfangreich mit Nostr-Identifikatoren
 const authorSchema = {
@@ -239,6 +406,33 @@ const authorSchema = {
         authorWebsite || null,
     ].filter(Boolean),
 };
+
+// Profile Schema (when viewing a kind 0 profile)
+const profileSchema = isProfile ? {
+    "@type": "Person",
+    "@id": `${pageUrl}#person`,
+    name: authorName,
+    image: authorPicture || undefined,
+    description: authorAbout || undefined,
+    url: authorWebsite || undefined,
+    mainEntityOfPage: { "@id": pageUrl },
+    identifier: [
+        {
+            "@type": "PropertyValue",
+            propertyID: "nostr:npub",
+            value: authorNpub,
+        },
+        authorNip05 ? {
+            "@type": "PropertyValue",
+            propertyID: "nostr:nip05",
+            value: authorNip05,
+        } : null,
+    ].filter(Boolean),
+    sameAs: [
+        `https://njump.me/${profileCode || authorNpub}`,
+        authorWebsite || null,
+    ].filter(Boolean),
+} : null;
 
 // Organization Schema (Publisher)
 const publisherSchema = {
@@ -327,7 +521,7 @@ const websiteSchema = {
 };
 
 // Main Article Schema - Sehr umfangreich
-const articleSchema = event ? {
+const articleSchema = event && !isProfile ? {
     "@type": "Article",
     "@id": `${pageUrl}/#article`,
     headline: title,
@@ -397,6 +591,7 @@ const schemaGraph = {
         websiteSchema,
         publisherSchema,
         authorSchema,
+        profileSchema,
         imageSchema,
         breadcrumbSchema,
         webPageSchema,
@@ -443,7 +638,7 @@ const ogTags = {
         )}
 
         <!-- Open Graph / Facebook -->
-        <meta property="og:type" content="article" />
+        <meta property="og:type" content={ogType} />
         <meta property="og:url" content={pageUrl} />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={summary || `${title} von ${authorName}`} />
@@ -452,18 +647,7 @@ const ogTags = {
         {heroImage && <meta property="og:image" content={heroImage} />}
         {heroImage && <meta property="og:image:alt" content={title} />}
         
-        <!-- Article specific OG -->
-        {event && (
-            <>
-                <meta property="article:published_time" content={publishedDate.toISOString()} />
-                <meta property="article:modified_time" content={publishedDate.toISOString()} />
-                <meta property="article:author" content={authorName} />
-                <meta property="article:section" content="Nostr" />
-                {tags.map(tag => (
-                    <meta property="article:tag" content={tag} />
-                ))}
-            </>
-        )}
+        <!-- Article specific OG omitted -->
 
         <!-- Twitter -->
         <meta name="twitter:card" content="summary_large_image" />
@@ -473,11 +657,19 @@ const ogTags = {
         {heroImage && <meta name="twitter:image" content={heroImage} />}
 
         <!-- Nostr Metadata -->
-        {event && (
+        {event && !isProfile && (
             <>
                 <meta name="nostr:event" content={eventId} />
                 <meta name="nostr:nevent" content={nevent} />
                 {naddr && <meta name="nostr:naddr" content={naddr} />}
+                <meta name="nostr:author" content={authorNpub} />
+                {authorNip05 && <meta name="nostr:nip05" content={authorNip05} />}
+            </>
+        )}
+
+        {isProfile && (
+            <>
+                <meta name="nostr:kind" content="0" />
                 <meta name="nostr:author" content={authorNpub} />
                 {authorNip05 && <meta name="nostr:nip05" content={authorNip05} />}
             </>
@@ -738,6 +930,119 @@ const ogTags = {
             .light-mode .license-text {
                 color: #555;
             }
+
+            /* Profile Phase 2: stats + tabs + content cards */
+            .profile-stats {
+                font-size: 0.85rem;
+                color: #888;
+            }
+
+            .profile-tabs {
+                display: flex;
+                gap: 1.25rem;
+                border-bottom: 1px solid rgba(0, 212, 255, 0.15);
+            }
+
+            .tab-button {
+                appearance: none;
+                background: transparent;
+                border: 0;
+                padding: 0.6rem 0;
+                color: #888;
+                cursor: pointer;
+                font-size: 0.95rem;
+                font-family: inherit;
+                border-bottom: 2px solid transparent;
+            }
+
+            .tab-button:hover {
+                color: #00d4ff;
+            }
+
+            .tab-button.is-active {
+                color: #00d4ff;
+                border-bottom-color: #00d4ff;
+            }
+
+            .content-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+                gap: 0.75rem;
+            }
+
+            .content-card {
+                display: block;
+                text-decoration: none;
+                padding: 0.9rem;
+                border-radius: 10px;
+                border: 1px solid rgba(0, 212, 255, 0.15);
+                background: rgba(0, 212, 255, 0.03);
+                transition: border-color 0.15s ease, background 0.15s ease;
+                color: inherit;
+                overflow: hidden;
+            }
+
+            .content-card:hover {
+                border-color: rgba(0, 212, 255, 0.35);
+                background: rgba(0, 212, 255, 0.06);
+            }
+
+            .content-card-hero {
+                margin: -0.9rem -0.9rem 0.75rem -0.9rem;
+                height: 140px;
+                overflow: hidden;
+                border-bottom: 1px solid rgba(0, 212, 255, 0.12);
+            }
+
+            .content-card-hero img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                display: block;
+            }
+
+            .content-card-title {
+                font-weight: 600;
+                color: #00d4ff;
+                line-height: 1.35;
+                margin: 0 0 0.4rem 0;
+            }
+
+            .content-card-meta {
+                font-size: 0.75rem;
+                color: #777;
+                font-family: monospace;
+            }
+
+            .content-empty {
+                padding: 1rem;
+                border-radius: 10px;
+                border: 1px dashed rgba(0, 212, 255, 0.2);
+                color: #777;
+                background: rgba(0, 0, 0, 0.15);
+            }
+
+            .light-mode .profile-stats {
+                color: #666;
+            }
+
+            .light-mode .tab-button {
+                color: #666;
+            }
+
+            .light-mode .content-card {
+                background: rgba(0, 150, 200, 0.03);
+                border-color: rgba(0, 150, 200, 0.18);
+            }
+
+            .light-mode .content-card-title {
+                color: #007f99;
+            }
+
+            .light-mode .content-empty {
+                background: rgba(0, 0, 0, 0.03);
+                color: #555;
+            }
         </style>
       <!-- Umami Analytics -->
     <script defer src="https://stats.stevennoack.de/script.js" data-website-id="95066d20-b614-4852-85b0-673af1e2eed1"></script>
@@ -796,168 +1101,363 @@ const ogTags = {
                             </div>
                         </details>
                     </div>
-                ) : (
-                    <article role="article" itemscope itemtype="https://schema.org/Article">
-                        <meta itemprop="mainEntityOfPage" content={pageUrl} />
-                        
-                        <header>
-                            {heroImage && (
-                                <div class="hero-image">
-                                    <img 
-                                        src={heroImage} 
-                                        alt={title} 
-                                        itemprop="image"
-                                    />
+                ) : (isProfile ? (
+                        <main role="main" class="profile" itemscope itemtype="https://schema.org/Person">
+                            <header>
+                                <div class="author-card" style="margin-top: 0;">
+                                    {authorPicture ? (
+                                        <img
+                                            src={authorPicture}
+                                            alt={authorName}
+                                            class="author-avatar"
+                                            itemprop="image"
+                                        />
+                                    ) : (
+                                        <div class="author-avatar-placeholder" aria-hidden="true">
+                                            {authorName.charAt(0).toUpperCase()}
+                                        </div>
+                                    )}
+                                    <div class="author-details">
+                                        <h1 class="author-name" itemprop="name" style="margin: 0 0 0.25rem 0;">
+                                            {authorName}
+                                        </h1>
+                                        <p class="author-npub" style="margin: 0;">{authorNpub}</p>
+                                    </div>
                                 </div>
-                            )}
 
-                            <h1 itemprop="headline">{title}</h1>
-
-                            <div class="post-meta">
-                                <div class="post-meta-row">
-                                    <time 
-                                        datetime={publishedDate.toISOString()}
-                                        itemprop="datePublished"
-                                    >
-                                        {publishedDate.toLocaleDateString("de-DE", {
-                                            year: "numeric",
-                                            month: "long",
-                                            day: "numeric",
-                                            hour: "2-digit",
-                                            minute: "2-digit",
-                                        })}
-                                    </time>
-                                    <span aria-hidden="true">•</span>
-                                    <span 
-                                        class="author-inline"
-                                        itemprop="author" 
-                                        itemscope 
-                                        itemtype="https://schema.org/Person"
-                                    >
-                                        {authorPicture && (
-                                            <img src={authorPicture} alt={authorName} itemprop="image" />
+                                <div class="post-meta" style="margin-top: 1rem;">
+                                    <div class="post-meta-row">
+                                        <time datetime={publishedDate.toISOString()}>
+                                            {publishedDate.toLocaleDateString("de-DE", {
+                                                year: "numeric",
+                                                month: "long",
+                                                day: "numeric",
+                                                hour: "2-digit",
+                                                minute: "2-digit",
+                                            })}
+                                        </time>
+                                        {authorNip05 && (
+                                            <span class="badge" title="NIP-05">{authorNip05}</span>
                                         )}
-                                        <a href="/nostr" itemprop="url">
-                                            <span itemprop="name">{authorName}</span>
-                                        </a>
-                                    </span>
-                                    <span class="reading-time">• {readingTime} Min. Lesezeit</span>
+                                        {authorWebsite && (
+                                            <a
+                                                href={authorWebsite}
+                                                target="_blank"
+                                                rel="noopener"
+                                                class="badge"
+                                                itemprop="url"
+                                            >
+                                                Website
+                                            </a>
+                                        )}
+                                    </div>
+                                </div>
+
+                                <div class="verification-badges" style="margin-top: 1rem;">
                                     {authorLightning && (
-                                        <a 
+                                        <a
                                             href={`lightning:${authorLightning}`}
                                             class="badge badge-zap"
                                             title={`Zap an ${authorLightning}`}
                                         >
-                                            ⚡ Zap
+                                            Zap
                                         </a>
                                     )}
+                                    <button
+                                        class="badge"
+                                        data-copy={authorNpub}
+                                        onclick="navigator.clipboard.writeText(this.dataset.copy); this.textContent = 'Kopiert!'; setTimeout(() => this.textContent = 'npub kopieren', 2000)"
+                                    >
+                                        npub kopieren
+                                    </button>
+                                    <NostrClientPicker code={profileCode || authorNpub} kind={0} />
                                 </div>
-                            </div>
-                            
-                            {summary && (
-                                <p class="summary" itemprop="description">{summary}</p>
+                            </header>
+
+                            {authorAbout && (
+                                <section class="verification-section" style="margin-top: 1.5rem;">
+                                    <div class="verification-header">
+                                        <span>Über</span>
+                                    </div>
+                                    <div class="content">
+                                        <p itemprop="description" style="margin: 0; white-space: pre-wrap;">{authorAbout}</p>
+                                    </div>
+                                </section>
                             )}
-                        </header>
 
-                        <div class="content" itemprop="articleBody" set:html={contentHtml} />
-                        
-                        <meta itemprop="wordCount" content={wordCount.toString()} />
-                        <meta itemprop="inLanguage" content="de" />
+                            <div class="profile-stats" style="margin-top: 0.75rem;">
+                                <span>
+                                    {(followingCount ?? "—")} Following <span aria-hidden="true">·</span> {followersCount} Followers
+                                </span>
+                            </div>
 
-                        <footer>
-                            <a 
-                                href="/nostr"
-                                class="author-card"
-                            >
-                                {authorPicture ? (
-                                    <img 
-                                        src={authorPicture} 
-                                        alt={authorName} 
-                                        class="author-avatar"
-                                    />
-                                ) : (
-                                    <div class="author-avatar-placeholder">
-                                        {authorName.charAt(0).toUpperCase()}
+                            <div class="profile-tabs" style="margin-top: 1.25rem;">
+                                <button class="tab-button is-active" type="button" data-tab="notes">Notes</button>
+                                <button class="tab-button" type="button" data-tab="articles">Articles</button>
+                                <button class="tab-button" type="button" data-tab="media">Media</button>
+                                <button class="tab-button" type="button" data-tab="others">Others</button>
+                            </div>
+
+                            <section class="tab-panel" data-panel="notes" style="margin-top: 1rem;">
+                                <div class="content-grid">
+                                    {notesEvents.length > 0 ? (
+                                        notesEvents.map((e) => (
+                                            <a class="content-card" href={eventPermalink(e)}>
+                                                <div class="content-card-title">
+                                                    {getFirstLine(e.content).substring(0, 140) || "(ohne Text)"}
+                                                </div>
+                                                <div class="content-card-meta">
+                                                    <time datetime={new Date(e.created_at * 1000).toISOString()}>
+                                                        {formatDate(e.created_at)}
+                                                    </time>
+                                                </div>
+                                            </a>
+                                        ))
+                                    ) : (
+                                        <div class="content-empty">Keine Notes gefunden.</div>
+                                    )}
+                                </div>
+                            </section>
+
+                            <section class="tab-panel" data-panel="articles" hidden style="margin-top: 1rem;">
+                                <div class="content-grid">
+                                    {articleEvents.length > 0 ? (
+                                        articleEvents.map((e) => {
+                                            const aTitle = getTagValue(e, "title") || getFirstLine(e.content) || "Untitled";
+                                            const aImage = getTagValue(e, "image");
+                                            return (
+                                                <a class="content-card" href={eventPermalink(e)}>
+                                                    {aImage && (
+                                                        <div class="content-card-hero">
+                                                            <img src={aImage} alt={aTitle} loading="lazy" />
+                                                        </div>
+                                                    )}
+                                                    <div class="content-card-title">{aTitle}</div>
+                                                    <div class="content-card-meta">
+                                                        <time datetime={new Date(e.created_at * 1000).toISOString()}>
+                                                            {formatDate(e.created_at)}
+                                                        </time>
+                                                    </div>
+                                                </a>
+                                            );
+                                        })
+                                    ) : (
+                                        <div class="content-empty">Keine Articles gefunden.</div>
+                                    )}
+                                </div>
+                            </section>
+
+                            <section class="tab-panel" data-panel="media" hidden style="margin-top: 1rem;">
+                                <div class="content-grid">
+                                    {mediaEvents.length > 0 ? (
+                                        mediaEvents.map((e) => (
+                                            <a class="content-card" href={eventPermalink(e)}>
+                                                <div class="content-card-title">
+                                                    {getTagValue(e, "title") || getFirstLine(e.content) || "Media"}
+                                                </div>
+                                                <div class="content-card-meta">
+                                                    <time datetime={new Date(e.created_at * 1000).toISOString()}>
+                                                        {formatDate(e.created_at)}
+                                                    </time>
+                                                </div>
+                                            </a>
+                                        ))
+                                    ) : (
+                                        <div class="content-empty">Coming soon.</div>
+                                    )}
+                                </div>
+                            </section>
+
+                            <section class="tab-panel" data-panel="others" hidden style="margin-top: 1rem;">
+                                <div class="content-empty">Coming soon.</div>
+                            </section>
+
+                            {(authorLightning || authorNip05 || authorWebsite) && (
+                                <section class="verification-section" style="margin-top: 1.5rem;">
+                                    <div class="verification-header">
+                                        <span>Details</span>
+                                    </div>
+                                    <div class="verification-grid">
+                                        {authorLightning && (
+                                            <div class="verification-row">
+                                                <span class="verification-label">Lightning</span>
+                                                <span class="verification-value">{authorLightning}</span>
+                                            </div>
+                                        )}
+                                        {authorNip05 && (
+                                            <div class="verification-row">
+                                                <span class="verification-label">NIP-05</span>
+                                                <span class="verification-value">{authorNip05}</span>
+                                            </div>
+                                        )}
+                                        {authorWebsite && (
+                                            <div class="verification-row">
+                                                <span class="verification-label">Website</span>
+                                                <span class="verification-value">{authorWebsite}</span>
+                                            </div>
+                                        )}
+                                    </div>
+                                </section>
+                            )}
+                        </main>
+                    ) : (
+                        <article role="article" itemscope itemtype="https://schema.org/Article">
+                            <meta itemprop="mainEntityOfPage" content={pageUrl} />
+                            
+                            <header>
+                                {heroImage && (
+                                    <div class="hero-image">
+                                        <img 
+                                            src={heroImage} 
+                                            alt={title} 
+                                            itemprop="image"
+                                        />
                                     </div>
                                 )}
-                                <div class="author-details">
-                                    <p class="author-name">{authorName}</p>
-                                    <p class="author-npub">{authorNpub}</p>
-                                </div>
-                            </a>
 
-                            <div class="verification-section">
-                                <div class="verification-header">
-                                    <span>⚡</span>
-                                    <span>Verifiziert auf Nostr</span>
+                                <h1 itemprop="headline">{title}</h1>
+
+                                <div class="post-meta">
+                                    <div class="post-meta-row">
+                                        <time 
+                                            datetime={publishedDate.toISOString()}
+                                            itemprop="datePublished"
+                                        >
+                                            {publishedDate.toLocaleDateString("de-DE", {
+                                                year: "numeric",
+                                                month: "long",
+                                                day: "numeric",
+                                                hour: "2-digit",
+                                                minute: "2-digit",
+                                            })}
+                                        </time>
+                                        <span aria-hidden="true">•</span>
+                                        <span 
+                                            class="author-inline"
+                                            itemprop="author" 
+                                            itemscope 
+                                            itemtype="https://schema.org/Person"
+                                        >
+                                            {authorPicture && (
+                                                <img src={authorPicture} alt={authorName} itemprop="image" />
+                                            )}
+                                            <a href="/nostr" itemprop="url">
+                                                <span itemprop="name">{authorName}</span>
+                                            </a>
+                                        </span>
+                                        <span class="reading-time">• {readingTime} Min. Lesezeit</span>
+                                        {authorLightning && (
+                                            <a 
+                                                href={`lightning:${authorLightning}`}
+                                                class="badge badge-zap"
+                                                title={`Zap an ${authorLightning}`}
+                                            >
+                                                Zap
+                                            </a>
+                                        )}
+                                    </div>
                                 </div>
                                 
-                                <div class="verification-grid">
-                                    <div class="verification-row">
-                                        <span class="verification-label">Event</span>
-                                        <span class="verification-value">{eventId.substring(0, 16)}...{eventId.substring(eventId.length - 8)}</span>
-                                    </div>
-                                    {naddr && (
-                                        <div class="verification-row">
-                                            <span class="verification-label">naddr</span>
-                                            <span class="verification-value">{naddr.substring(0, 20)}...{naddr.substring(naddr.length - 8)}</span>
+                                {summary && (
+                                    <p class="summary" itemprop="description">{summary}</p>
+                                )}
+                            </header>
+
+                            <div class="content" itemprop="articleBody" set:html={contentHtml} />
+                            
+                            <meta itemprop="wordCount" content={wordCount.toString()} />
+                            <meta itemprop="inLanguage" content="de" />
+
+                            <footer>
+                                <a 
+                                    href="/nostr"
+                                    class="author-card"
+                                >
+                                    {authorPicture ? (
+                                        <img 
+                                            src={authorPicture} 
+                                            alt={authorName} 
+                                            class="author-avatar"
+                                        />
+                                    ) : (
+                                        <div class="author-avatar-placeholder">
+                                            {authorName.charAt(0).toUpperCase()}
                                         </div>
                                     )}
-                                    <div class="verification-row">
-                                        <span class="verification-label">Relays</span>
-                                        <span class="verification-value">{RELAYS.map(r => r.replace('wss://', '')).join(', ')}</span>
+                                    <div class="author-details">
+                                        <p class="author-name">{authorName}</p>
+                                        <p class="author-npub">{authorNpub}</p>
+                                    </div>
+                                </a>
+
+                                <div class="verification-section">
+                                    <div class="verification-header">
+                                        <span>Verifiziert auf Nostr</span>
+                                    </div>
+                                    
+                                    <div class="verification-grid">
+                                        <div class="verification-row">
+                                            <span class="verification-label">Event</span>
+                                            <span class="verification-value">{eventId.substring(0, 16)}...{eventId.substring(eventId.length - 8)}</span>
+                                        </div>
+                                        {naddr && (
+                                            <div class="verification-row">
+                                                <span class="verification-label">naddr</span>
+                                                <span class="verification-value">{naddr.substring(0, 20)}...{naddr.substring(naddr.length - 8)}</span>
+                                            </div>
+                                        )}
+                                        <div class="verification-row">
+                                            <span class="verification-label">Relays</span>
+                                            <span class="verification-value">{RELAYS.map(r => r.replace('wss://', '')).join(', ')}</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="verification-badges">
+                                        {(naddr || nevent) && (
+                                            <NostrClientPicker 
+                                                code={naddr || nevent} 
+                                                kind={event?.kind || 1} 
+                                            />
+                                        )}
+                                        {naddr && (
+                                            <button 
+                                                class="badge"
+                                                data-copy={naddr}
+                                                onclick="navigator.clipboard.writeText(this.dataset.copy); this.textContent = 'Kopiert!'; setTimeout(() => this.textContent = 'naddr kopieren', 2000)"
+                                            >
+                                                naddr kopieren
+                                            </button>
+                                        )}
+                                        {naddr && (
+                                            <a 
+                                                href={`/api/nostr/${naddr}.json`}
+                                                target="_blank"
+                                                rel="noopener"
+                                                class="badge"
+                                            >
+                                                Raw JSON
+                                            </a>
+                                        )}
+                                    </div>
+
+                                    <div class="license-section">
+                                        <a 
+                                            href="https://creativecommons.org/licenses/by/4.0/deed.de"
+                                            target="_blank"
+                                            rel="noopener license"
+                                            class="badge badge-license"
+                                        >
+                                            CC BY 4.0
+                                        </a>
+                                        <p class="license-text">
+                                            Dieser Text steht frei zur Verfügung – auch kommerziell. 
+                                            Bedingung: Namensnennung und Link zur Quelle.
+                                        </p>
                                     </div>
                                 </div>
-
-                                <div class="verification-badges">
-                                    {naddr && (
-                                        <a 
-                                            href={`https://njump.me/${naddr}`}
-                                            target="_blank"
-                                            rel="noopener"
-                                            class="badge"
-                                        >
-                                            Source
-                                        </a>
-                                    )}
-                                    {naddr && (
-                                        <button 
-                                            class="badge"
-                                            data-copy={naddr}
-                                            onclick="navigator.clipboard.writeText(this.dataset.copy); this.textContent = 'Kopiert!'; setTimeout(() => this.textContent = 'naddr kopieren', 2000)"
-                                        >
-                                            naddr kopieren
-                                        </button>
-                                    )}
-                                    {naddr && (
-                                        <a 
-                                            href={`/api/nostr/${naddr}.json`}
-                                            target="_blank"
-                                            rel="noopener"
-                                            class="badge"
-                                        >
-                                            Raw JSON
-                                        </a>
-                                    )}
-                                </div>
-
-                                <div class="license-section">
-                                    <a 
-                                        href="https://creativecommons.org/licenses/by/4.0/deed.de"
-                                        target="_blank"
-                                        rel="noopener license"
-                                        class="badge badge-license"
-                                    >
-                                        CC BY 4.0
-                                    </a>
-                                    <p class="license-text">
-                                        Dieser Text steht frei zur Verfügung – auch kommerziell. 
-                                        Bedingung: Namensnennung und Link zur Quelle.
-                                    </p>
-                                </div>
-                            </div>
-                        </footer>
-                    </article>
+                            </footer>
+                        </article>
+                    )
                 )
             }
         </div>
@@ -1018,6 +1518,23 @@ const ogTags = {
                 }
 
                 fontText.textContent = font;
+            });
+
+            // Profile tabs (client-side switch only)
+            const tabButtons = document.querySelectorAll(".profile-tabs .tab-button");
+            const tabPanels = document.querySelectorAll(".tab-panel");
+
+            tabButtons.forEach((btn) => {
+                btn.addEventListener("click", () => {
+                    const tab = btn.getAttribute("data-tab");
+                    if (!tab) return;
+
+                    tabButtons.forEach((b) => b.classList.toggle("is-active", b === btn));
+                    tabPanels.forEach((p) => {
+                        const panel = p.getAttribute("data-panel");
+                        p.toggleAttribute("hidden", panel !== tab);
+                    });
+                });
             });
         </script>
 
