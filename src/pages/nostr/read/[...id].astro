@@ -769,6 +769,116 @@ const ogTags = {
                 background: rgba(0, 212, 255, 0.1);
             }
 
+            /* QR Modal */
+            .qr-badge-icon {
+                display: inline-flex;
+                align-items: center;
+            }
+
+            .qr-badge-icon svg {
+                width: 16px;
+                height: 16px;
+            }
+
+            .qr-modal[hidden] {
+                display: none;
+            }
+
+            .qr-modal {
+                position: fixed;
+                inset: 0;
+                z-index: 9999;
+                display: grid;
+                place-items: center;
+                padding: 1rem;
+            }
+
+            .qr-modal-backdrop {
+                position: absolute;
+                inset: 0;
+                background: rgba(0, 0, 0, 0.75);
+            }
+
+            .qr-modal-panel {
+                position: relative;
+                width: min(480px, 92vw);
+                border-radius: 14px;
+                border: 1px solid rgba(0, 212, 255, 0.22);
+                background: rgba(0, 0, 0, 0.92);
+                color: inherit;
+                padding: 1rem;
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
+            }
+
+            .qr-modal-header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 0.75rem;
+                margin-bottom: 0.75rem;
+            }
+
+            .qr-modal-title {
+                font-size: 0.9rem;
+                color: #00d4ff;
+                font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+                text-transform: uppercase;
+                letter-spacing: 0.04em;
+            }
+
+            .qr-modal-close {
+                appearance: none;
+                border: 1px solid rgba(0, 212, 255, 0.18);
+                background: transparent;
+                color: #bdbdbd;
+                border-radius: 10px;
+                padding: 0.35rem 0.45rem;
+                cursor: pointer;
+                line-height: 1;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .qr-modal-close:hover {
+                border-color: rgba(0, 212, 255, 0.35);
+                color: #e6fbff;
+                background: rgba(0, 212, 255, 0.06);
+            }
+
+            .qr-modal-code {
+                margin-top: 0.25rem;
+                font-size: 0.75rem;
+                color: #888;
+                font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+                word-break: break-all;
+            }
+
+            .qr-modal-qr {
+                display: grid;
+                place-items: center;
+                padding: 0.9rem;
+                border-radius: 12px;
+                border: 1px solid rgba(0, 212, 255, 0.14);
+                background: rgba(0, 212, 255, 0.03);
+                margin-top: 0.8rem;
+            }
+
+            .qr-modal-qr svg {
+                width: min(320px, 70vw);
+                height: auto;
+                background: white;
+                border-radius: 8px;
+            }
+
+            .light-mode .qr-modal-panel {
+                background: rgba(255, 255, 255, 0.95);
+            }
+
+            .light-mode .qr-modal-backdrop {
+                background: rgba(0, 0, 0, 0.55);
+            }
+
             .badge-zap {
                 border-color: rgba(255, 200, 0, 0.4);
                 color: #ffc800;
@@ -1463,6 +1573,17 @@ const ogTags = {
                                     >
                                         npub kopieren
                                     </button>
+                                    <button
+                                        class="badge"
+                                        type="button"
+                                        data-qr={authorNpub}
+                                        data-qr-label="npub"
+                                    >
+                                        <span class="qr-badge-icon" aria-hidden="true">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3h-3z"/><path d="M17 17h4"/><path d="M14 21v-4"/></svg>
+                                        </span>
+                                        QR
+                                    </button>
                                     <NostrClientPicker code={profileCode || authorNpub} kind={0} />
                                 </div>
                             </header>
@@ -1783,6 +1904,32 @@ const ogTags = {
                                                 kind={event?.kind || 1} 
                                             />
                                         )}
+                                        {nevent && (
+                                            <button
+                                                class="badge"
+                                                type="button"
+                                                data-qr={nevent}
+                                                data-qr-label="nevent"
+                                            >
+                                                <span class="qr-badge-icon" aria-hidden="true">
+                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3h-3z"/><path d="M17 17h4"/><path d="M14 21v-4"/></svg>
+                                                </span>
+                                                QR
+                                            </button>
+                                        )}
+                                        {naddr && (
+                                            <button
+                                                class="badge"
+                                                type="button"
+                                                data-qr={naddr}
+                                                data-qr-label="naddr"
+                                            >
+                                                <span class="qr-badge-icon" aria-hidden="true">
+                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3h-3z"/><path d="M17 17h4"/><path d="M14 21v-4"/></svg>
+                                                </span>
+                                                QR
+                                            </button>
+                                        )}
                                         {naddr && (
                                             <button 
                                                 class="badge"
@@ -1825,6 +1972,75 @@ const ogTags = {
                 )
             }
         </div>
+
+        <div class="qr-modal" id="qr-modal" hidden>
+            <div class="qr-modal-backdrop" data-qr-close="true"></div>
+            <div class="qr-modal-panel" role="dialog" aria-modal="true" aria-labelledby="qr-modal-title">
+                <div class="qr-modal-header">
+                    <div class="qr-modal-title" id="qr-modal-title">QR</div>
+                    <button class="qr-modal-close" type="button" data-qr-close="true" aria-label="Close">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                    </button>
+                </div>
+                <div class="qr-modal-code" id="qr-modal-code"></div>
+                <div class="qr-modal-qr" id="qr-modal-qr"></div>
+            </div>
+        </div>
+
+        <script type="module">
+            import qrcode from "qrcode-generator";
+
+            const modal = document.getElementById("qr-modal");
+            const modalTitle = document.getElementById("qr-modal-title");
+            const modalCode = document.getElementById("qr-modal-code");
+            const modalQr = document.getElementById("qr-modal-qr");
+
+            const openModal = (code, label) => {
+                if (!modal || !modalTitle || !modalCode || !modalQr) return;
+
+                modalTitle.textContent = label ? `QR: ${label}` : "QR";
+                modalCode.textContent = code;
+
+                const qr = qrcode(0, "M");
+                qr.addData(code);
+                qr.make();
+
+                const svg = qr.createSvgTag({
+                    scalable: true,
+                    margin: 2,
+                });
+
+                modalQr.innerHTML = svg;
+                modal.removeAttribute("hidden");
+            };
+
+            const closeModal = () => {
+                if (!modal || !modalQr || !modalCode) return;
+                modal.setAttribute("hidden", "");
+                modalQr.innerHTML = "";
+                modalCode.textContent = "";
+            };
+
+            document.addEventListener("click", (e) => {
+                const t = e.target;
+                if (!(t instanceof Element)) return;
+
+                const btn = t.closest("[data-qr]");
+                if (btn) {
+                    const code = btn.getAttribute("data-qr");
+                    const label = btn.getAttribute("data-qr-label") || "";
+                    if (code) openModal(code, label);
+                }
+
+                if (t.closest("[data-qr-close]")) {
+                    closeModal();
+                }
+            });
+
+            document.addEventListener("keydown", (e) => {
+                if (e.key === "Escape") closeModal();
+            });
+        </script>
 
         <script>
             const modeToggle = document.getElementById("mode-toggle");
