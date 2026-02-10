@@ -1,7 +1,7 @@
 /**
  * Nostr QR-Code Modal
  * 
- * STATUS: FUNKTIONIERT (Stand: 2026-02-10)
+ * STATUS: NICHT GETESTET (Stand: 2026-02-10)
  * 
  * Zeigt QR-Codes für Nostr-Identifier (npub, nevent, naddr)
  * 

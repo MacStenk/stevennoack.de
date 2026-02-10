@@ -1,13 +1,11 @@
 /**
  * Nostr Engagement Stats — Client-Side Loading
  * 
- * STATUS: TEILWEISE FUNKTIONIEREND (Stand: 2026-02-10)
+ * STATUS: FUNKTIONIERT NICHT (Stand: 2026-02-10)
  * 
- * Was funktioniert:
- * - Script lädt und verbindet zu Relays
- * - Stats werden in DOM-Elemente geschrieben
+ * PROBLEM: Stats werden NICHT korrekt geladen. Zeigt 0 oder falsche Werte.
  * 
- * Was NICHT funktioniert / Probleme:
+ * Getestet:
  * - Stats sind UNVOLLSTÄNDIG — Nostr ist dezentral, verschiedene Relays haben verschiedene Daten
  * - relay.nostr.band wäre ideal (aggregiert), aber ist geblockt (1Host/DNS?)
  * - YakiHonne zeigt z.B. 132 Zaps, wir zeigen 2 — weil die einen eigenen Aggregator haben
