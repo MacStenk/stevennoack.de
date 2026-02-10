@@ -4,6 +4,8 @@ export const prerender = false;
 import { nip19, SimplePool, type Event as NostrEvent } from "nostr-tools";
 import { marked } from "marked";
 import unlockContentUrl from "../../../scripts/unlock-content.js?url";
+import nostrEngagementUrl from "../../../scripts/nostr-engagement.ts?url";
+import nostrQrcodeUrl from "../../../scripts/nostr-qrcode.ts?url";
 import NostrClientPicker from "../../../components/NostrClientPicker.astro";
 
 const { id } = Astro.params;
@@ -1993,60 +1995,7 @@ const ogTags = {
             </div>
         </div>
 
-        <script type="module">
-            import qrcode from "qrcode-generator";
-
-            const modal = document.getElementById("qr-modal");
-            const modalTitle = document.getElementById("qr-modal-title");
-            const modalCode = document.getElementById("qr-modal-code");
-            const modalQr = document.getElementById("qr-modal-qr");
-
-            const openModal = (code, label) => {
-                if (!modal || !modalTitle || !modalCode || !modalQr) return;
-
-                modalTitle.textContent = label ? `QR: ${label}` : "QR";
-                modalCode.textContent = code;
-
-                const qr = qrcode(0, "M");
-                qr.addData(code);
-                qr.make();
-
-                const svg = qr.createSvgTag({
-                    scalable: true,
-                    margin: 2,
-                });
-
-                modalQr.innerHTML = svg;
-                modal.removeAttribute("hidden");
-            };
-
-            const closeModal = () => {
-                if (!modal || !modalQr || !modalCode) return;
-                modal.setAttribute("hidden", "");
-                modalQr.innerHTML = "";
-                modalCode.textContent = "";
-            };
-
-            document.addEventListener("click", (e) => {
-                const t = e.target;
-                if (!(t instanceof Element)) return;
-
-                const btn = t.closest("[data-qr]");
-                if (btn) {
-                    const code = btn.getAttribute("data-qr");
-                    const label = btn.getAttribute("data-qr-label") || "";
-                    if (code) openModal(code, label);
-                }
-
-                if (t.closest("[data-qr-close]")) {
-                    closeModal();
-                }
-            });
-
-            document.addEventListener("keydown", (e) => {
-                if (e.key === "Escape") closeModal();
-            });
-        </script>
+        <script type="module" src={nostrQrcodeUrl}></script>
 
         <script>
             const modeToggle = document.getElementById("mode-toggle");
@@ -2124,96 +2073,7 @@ const ogTags = {
             });
         </script>
 
-        <script type="module">
-            import { SimplePool } from "nostr-tools";
-
-            const RELAY = "wss://relay.nostr.band";
-
-            const statEls = Array.from(document.querySelectorAll("[data-engagement-a][data-engagement-field]"));
-            const addrs = Array.from(new Set(statEls.map((el) => el.getAttribute("data-engagement-a") || "").filter(Boolean)));
-            const addrSet = new Set(addrs);
-
-            if (addrs.length) {
-                const pool = new SimplePool();
-
-                const timeoutMs = 7000;
-                const withTimeout = (p) =>
-                    Promise.race([
-                        p,
-                        new Promise((_, reject) => setTimeout(() => reject(new Error("timeout")), timeoutMs)),
-                    ]);
-
-                const isQuote = (ev) => Array.isArray(ev.tags) && ev.tags.some((t) => t && t[0] === "q" && t[1]);
-
-                const targetsFor = (ev) => {
-                    const out = new Set();
-                    for (const t of ev.tags || []) {
-                        if (t && t[0] === "a" && t[1] && addrSet.has(t[1])) out.add(t[1]);
-                    }
-                    return Array.from(out);
-                };
-
-                const init = () => ({ likes: 0, comments: 0, quotes: 0, reposts: 0, zaps: 0 });
-                const stats = {};
-                for (const a of addrs) stats[a] = init();
-
-                const likePubkeysByAddr = {};
-
-                const limit = 2000;
-
-                (async () => {
-                    try {
-                        const [likes, comments, reposts, zaps] = await withTimeout(
-                            Promise.all([
-                                pool.querySync([RELAY], { kinds: [7], "#a": addrs, limit }),
-                                pool.querySync([RELAY], { kinds: [1], "#a": addrs, limit }),
-                                pool.querySync([RELAY], { kinds: [6], "#a": addrs, limit }),
-                                pool.querySync([RELAY], { kinds: [9735], "#a": addrs, limit }),
-                            ]),
-                        );
-
-                        for (const ev of likes || []) {
-                            if ((ev.content || "").trim() !== "+") continue;
-                            for (const a of targetsFor(ev)) {
-                                (likePubkeysByAddr[a] ||= new Set());
-                                if (!likePubkeysByAddr[a].has(ev.pubkey)) {
-                                    likePubkeysByAddr[a].add(ev.pubkey);
-                                    stats[a].likes += 1;
-                                }
-                            }
-                        }
-
-                        for (const ev of comments || []) {
-                            if (isQuote(ev)) continue;
-                            for (const a of targetsFor(ev)) stats[a].comments += 1;
-                        }
-
-                        for (const ev of reposts || []) {
-                            for (const a of targetsFor(ev)) stats[a].reposts += 1;
-                        }
-
-                        for (const ev of zaps || []) {
-                            for (const a of targetsFor(ev)) stats[a].zaps += 1;
-                        }
-
-                        for (const el of statEls) {
-                            const a = el.getAttribute("data-engagement-a") || "";
-                            const field = el.getAttribute("data-engagement-field") || "";
-                            const val = stats[a] && field in stats[a] ? stats[a][field] : 0;
-                            el.textContent = String(val ?? 0);
-                        }
-                    } catch (e) {
-                        // keep placeholders
-                        console.warn("engagement stats client-side error", e);
-                    } finally {
-                        try {
-                            pool.close([RELAY]);
-                        } catch {}
-                    }
-                })();
-            }
-        </script>
-
+        <script type="module" src={nostrEngagementUrl}></script>
         <script type="module" src={unlockContentUrl}></script>
     </body>
 </html>
