@@ -37,7 +37,7 @@ const RELAYS = [
 const naddr = nip19.naddrEncode({
   kind: 30023,
   pubkey: AUTHOR_PUBKEY,
-  identifier: article.slug,
+  identifier: article.data.nostr?.d_tag || article.slug,
   relays: RELAYS,
 });
 
@@ -231,6 +231,27 @@ const schemaGraph = {
     articleSchema,
   ].filter(Boolean),
 };
+
+// ============================================
+// NOSTR EVENT (für LLM-Verifizierung)
+// ============================================
+// Komplettes Nostr Kind 30023 Event mit Schnorr-Signatur
+// Ermöglicht LLMs die kryptographische Verifizierung des Autors
+const nostrEvent = article.data.sig ? {
+  id: article.data.nostr?.note_id || "",
+  pubkey: AUTHOR_PUBKEY,
+  created_at: Math.floor(articleDate.getTime() / 1000),
+  kind: 30023,
+  tags: [
+    ["d", article.data.nostr?.d_tag || article.slug],
+    ["title", article.data.title],
+    ["summary", article.data.description || ""],
+    ["published_at", String(Math.floor(articleDate.getTime() / 1000))],
+    ...(article.data.heroImage ? [["image", article.data.heroImage]] : []),
+    ...(article.data.tags?.map(tag => ["t", tag]) || []),
+  ],
+  sig: article.data.sig,
+} : null;
 ---
 
 <!doctype html>
@@ -280,6 +301,11 @@ const schemaGraph = {
 
     <!-- Schema.org JSON-LD (Knowledge Graph) -->
     <script type="application/ld+json" set:html={JSON.stringify(schemaGraph)} />
+
+    <!-- Nostr Event JSON-LD (Kryptographische Signatur für LLM-Verifizierung) -->
+    {nostrEvent && (
+      <script type="application/ld+json" id="nostr-event" set:html={JSON.stringify(nostrEvent)} />
+    )}
 
     <style is:global>
       @import "../../../styles/nostr-article.css";

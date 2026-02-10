@@ -5,6 +5,7 @@ subtitle: "Wie ich am frühen Morgen ein Sicherheitssystem für AI-Workflows geb
 slug: llm-guard-ai-virenscanner
 description: "LLM Guard: Ein lokaler Prompt Injection Scanner mit Shell Guard, MCP Server und Echtzeit-Watchdog. Glass Box statt Black Box. 81 Tests, 50+ Patterns."
 type: long-artikel
+sig: "a4187d4b86d2bb944fc22f922355267e137bcbcdc9e83acf5856aac0ae3da2e80ca7dc272a805c36d089b7b13e5227133e1750387265018414956754acfab6e6"
 
 # === KATEGORISIERUNG ===
 category: ai-collaboration
