@@ -26,7 +26,7 @@ part:
 # === TIMESTAMPS ===
 date: 2026-03-01
 created: 2026-03-01T10:00
-modified: 2026-03-01T15:02
+modified: 2026-03-01T15:08
 published_at: ""
 
 # === STATISTIKEN ===
