@@ -13,10 +13,23 @@
 ## Expertise
 
 - LLM-Optimierung & AI-Discovery
+- **AI Cyber Security** (Handle: nullr00ts, https://nullr00.ts.it)
+- AI-Assisted Offensive Security & Responsible Disclosure
+- Web Application Security, Penetration Testing
 - Nostr-Integration (Kind 30023, eigener Relay)
 - NIP-46 Remote Signing (eigener Bunker)
 - Jamstack (Astro, Cloudflare)
 - 29+ Jahre Internet, 1000+ Tage LLM-Nutzung
+
+## Security Research (nullr00ts)
+
+- **Handle:** nullr00ts
+- **Website:** https://nullr00.ts.it
+- **Contact:** nullr00ts@pm.me
+- **PGP:** CACF 057E C229 68BD E575 BFF6 8FE9 6CFF EC20 1558
+- **Nostr:** npub1q4329df22qecr84lqfn3v7qeu6zs5n7pl2m2ngm4c0zl7kdp489s7k0wvn
+- **Focus:** AI-Assisted Offensive Security, Responsible Disclosure, Web Application Security
+- **Policy:** All findings reported directly to vendors, 90-day disclosure window
 
 ## Infrastruktur
 

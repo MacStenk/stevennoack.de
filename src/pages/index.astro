@@ -51,7 +51,8 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
           }
         </style>
         <p class="text-gray-500 text-base md:text-lg mb-6">
-          LLM-Readability Check. 30 Sekunden. Sofort Ergebnis.
+          LLM-Readability Check. 30 Sekunden. Sofort Ergebnis.<br/>
+          <span class="text-gray-600 text-sm">Wird sie verstanden — und ist sie sicher vor KI-gestützten Angriffen?</span>
         </p>
         <span class="inline-flex items-center text-cyan-400 font-mono text-sm group-hover:translate-x-2 transition-transform">
           Jetzt testen
@@ -94,7 +95,9 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
           <p class="text-gray-400 leading-relaxed text-lg">
             Wir versuchen oft, etwas zu sein, was wir nicht sind. Wir nutzen
             Software, die uns ausspioniert, und Geschäftsmodelle, die uns
-            ausbrennen. Das ist kein Zufall, das ist Konditionierung.
+            ausbrennen. Wir vertrauen KI-Systemen unsere Daten an, ohne zu fragen, 
+            wer den Code geschrieben hat und ob er sicher ist. 
+            Das ist kein Zufall, das ist Konditionierung.
           </p>
           <p class="text-gray-400 leading-relaxed text-lg mt-4">
             Wir müssen uns dekonditionieren. Technisch, indem wir den Ballast
@@ -158,32 +161,42 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
           Ein dekonditioniertes System – ob Server oder Mensch – läuft ohne Reibung.
           Es ist vital, effizient und frei. Das ist das Ziel meiner Architektur.
         </p>
+        <p>
+          <span class="text-gray-500 font-mono text-sm block mb-2"
+            >// 04. Sicherheit</span
+          >
+          Ein System, das nicht geprüft wurde, ist keins. Ich teste meine eigenen 
+          Architekturen mit dem gleichen Blick, mit dem ich fremde Systeme analysiere. 
+          Sicherheit ist keine Schicht — sie ist das Fundament.
+        </p>
       </div>
     </section>
 
-    <!-- Garten -->
+    <!-- Security Research -->
     <section class="mb-32">
       <a 
-        href="https://garten.stevennoack.de" 
+        href="https://nullr00.ts.it" 
         target="_blank"
         rel="noopener noreferrer"
         class="block group"
       >
         <h2
-          class="text-xs font-mono text-gray-500 uppercase tracking-widest mb-6 border-l border-emerald-500/30 pl-3 group-hover:text-emerald-400/60 transition-colors"
+          class="text-xs font-mono text-gray-500 uppercase tracking-widest mb-6 border-l border-red-500/30 pl-3 group-hover:text-red-400/60 transition-colors"
         >
-          Gedanken
+          Security
         </h2>
-        <div class="p-6 md:p-8 border border-white/5 rounded-lg group-hover:border-emerald-500/20 group-hover:bg-emerald-500/5 transition-all duration-300">
-          <p class="font-mono text-emerald-400 text-lg mb-3">
-            <span class="text-gray-600">&gt;</span> garten.stevennoack.de<span class="animate-pulse">_</span>
+        <div class="p-6 md:p-8 border border-white/5 rounded-lg group-hover:border-red-500/20 group-hover:bg-red-500/5 transition-all duration-300">
+          <p class="font-mono text-red-400 text-lg mb-3">
+            <span class="text-gray-600">&gt;</span> nullr00.ts.it<span class="animate-pulse">_</span>
           </p>
           <p class="text-gray-400 text-lg leading-relaxed mb-4">
-            Wo meine Gedanken wachsen. Ein öffentliches Denklabor über 
-            Bewusstsein, Human Design und die Muster, die ich erkenne.
+            Systeme bauen heißt Systeme brechen. Unter dem Handle 
+            <span class="text-red-400/80">nullr00ts</span> analysiere ich 
+            Sicherheitslücken in Webanwendungen und KI-Systemen. 
+            AI-Assisted Offensive Security &amp; Responsible Disclosure.
           </p>
-          <span class="inline-flex items-center text-gray-500 group-hover:text-emerald-400 font-mono text-sm transition-colors">
-            Betreten
+          <span class="inline-flex items-center text-gray-500 group-hover:text-red-400 font-mono text-sm transition-colors">
+            nullr00ts
             <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
             </svg>
@@ -207,7 +220,11 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
         </p>
         <p>
           Als System-Builder liegt meine Stärke darin, Dinge zu initiieren und
-          effiziente Strukturen zu schaffen. Ich arbeite strategisch, direkt und
+          effiziente Strukturen zu schaffen. Ich baue nicht nur Systeme — ich 
+          breche sie auf, um sie besser zu machen. Unter dem Handle 
+          <a href="https://nullr00.ts.it" target="_blank" rel="noopener noreferrer" class="text-red-400/80 hover:text-red-300 transition-colors">nullr00ts</a> 
+          analysiere ich Sicherheitslücken in Webanwendungen und KI-Systemen.
+          Ich arbeite strategisch, direkt und
           ergebnisorientiert. Ich glaube nicht an Hektik, sondern an Reife. Gute
           Systeme entstehen nicht über Nacht, aber sie halten ein Leben lang.
         </p>
@@ -275,6 +292,20 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
               <span
                 class="text-[10px] bg-white/5 text-gray-500 px-1.5 py-0.5 rounded border border-white/5"
                 >Newsletter</span
+              >
+            </a>
+            <a
+              href="https://nullr00.ts.it"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="hover:text-white transition-colors flex items-center gap-2 group"
+            >
+              <span class="group-hover:translate-x-1 transition-transform"
+                >nullr00ts</span
+              >
+              <span
+                class="text-[10px] bg-red-500/10 text-red-400 px-1.5 py-0.5 rounded border border-red-500/20"
+                >Security</span
               >
             </a>
             <a

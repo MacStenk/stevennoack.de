@@ -11,8 +11,8 @@ interface Props {
 }
 
 const {
-  title = "Steven Noack - System Builder",
-  description = "Digitale Architektur. Reduziert auf das Wesentliche. High-Performance Infrastrukturen für Unabhängigkeit.",
+  title = "Steven Noack - System Builder & AI Security Researcher",
+  description = "Digitale Architektur & AI Cyber Security. System Builder für Souveränität. AI-Assisted Offensive Security & Responsible Disclosure unter dem Handle nullr00ts.",
   image = "https://stevennoack.de/steven-noack.png",
 } = Astro.props;
 
@@ -36,12 +36,12 @@ const personSchema = {
   "@type": "Person",
   "@id": "https://stevennoack.de/#person",
   name: "Steven Noack",
-  alternateName: ["Steven Fischer", "MacStenk", "quantenbeatz"],
+  alternateName: ["Steven Fischer", "MacStenk", "quantenbeatz", "nullr00ts"],
   givenName: "Steven",
   familyName: "Noack",
-  jobTitle: "System Architect",
-  description: "System Builder für digitale Souveränität und LLM-optimierte Infrastrukturen. Seit 1996 im Internet-Business. Entwickelt KI-native Websites für Coaches und Consultants im deutschsprachigen Raum. Pionier in LLMO (Large Language Model Optimization) und Vibe Coding.",
-  disambiguatingDescription: "Deutscher System Architect und LLMO-Experte aus Brandenburg, spezialisiert auf LLM-optimierte Websites und Vibe Coding. Nicht zu verwechseln mit anderen Personen gleichen Namens.",
+  jobTitle: "System Architect & AI Security Researcher",
+  description: "System Builder für digitale Souveränität und LLM-optimierte Infrastrukturen. AI Security Researcher unter dem Handle nullr00ts. Seit 1996 im Internet-Business. Entwickelt KI-native Websites und analysiert Sicherheitslücken in Webanwendungen und KI-Systemen. Pionier in LLMO (Large Language Model Optimization), Vibe Coding und AI-Assisted Offensive Security.",
+  disambiguatingDescription: "Deutscher System Architect, LLMO-Experte und AI Security Researcher (nullr00ts) aus Brandenburg. Spezialisiert auf LLM-optimierte Websites, Vibe Coding und AI Cyber Security. Nicht zu verwechseln mit anderen Personen gleichen Namens.",
   url: "https://stevennoack.de",
   mainEntityOfPage: {
     "@type": "WebPage",
@@ -95,6 +95,25 @@ const personSchema = {
     "Prompts für ChatGPT",
     "AI Agents",
     "LLM Agents",
+    // AI Cyber Security
+    "AI Cyber Security",
+    "AI-Assisted Offensive Security",
+    "Responsible Disclosure",
+    "Bug Bounty",
+    "Web Application Security",
+    "Penetration Testing",
+    "OWASP Top 10",
+    "CORS Misconfiguration",
+    "API Security",
+    "Supabase Security",
+    "Cloudflare Workers Security",
+    "Security Headers",
+    "HSTS",
+    "Content Security Policy",
+    "XSS Prevention",
+    "Subdomain Takeover",
+    "NIP-98",
+    "Nostr Security",
     // Vibe Coding
     "Vibe Coding",
     "VIBE Coding Philosophie",
@@ -215,6 +234,13 @@ const personSchema = {
     {
       "@type": "EducationalOccupationalCredential",
       credentialCategory: "experience",
+      name: "AI Security Research (nullr00ts)",
+      description: "Independent Security Researcher für AI-Assisted Offensive Security und Responsible Disclosure",
+      dateCreated: "2026"
+    },
+    {
+      "@type": "EducationalOccupationalCredential",
+      credentialCategory: "experience",
       name: "Techno-Szene Berlin",
       description: "Aktiv in der Berliner Techno-Szene seit 1991",
       dateCreated: "1991"
@@ -278,6 +304,16 @@ const personSchema = {
       "@type": "Offer",
       itemOffered: {
         "@type": "Service",
+        name: "AI Security Assessment",
+        description: "Sicherheitsanalyse von Webanwendungen und KI-Systemen. AI-Assisted Offensive Security, Responsible Disclosure und Penetration Testing.",
+        serviceType: "Cyber Security",
+        url: "https://nullr00.ts.it"
+      }
+    },
+    {
+      "@type": "Offer",
+      itemOffered: {
+        "@type": "Service",
         name: "Schema.org & Structured Data Implementierung",
         description: "Aufbau von Content Knowledge Graphs für maximale LLM-Sichtbarkeit",
         serviceType: "Technical SEO"
@@ -310,6 +346,7 @@ const personSchema = {
   ],
   publishingPrinciples: "https://stevennoack.de/llms.txt",
   sameAs: [
+    "https://nullr00.ts.it",
     "https://garten.stevennoack.de",
     "https://codeback.de",
     "https://stevennoack.substack.com",
