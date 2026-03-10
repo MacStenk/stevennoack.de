@@ -668,7 +668,7 @@ Läuft als macOS LaunchAgent, prüft alle 5 Sekunden alle Netzwerkverbindungen a
 
 Die Apps funktionieren trotzdem. Das ist reine Telemetrie, keine Kernfunktionalität.
 
-Öffentlich dokumentiert auf [stevennoack.de](https://stevennoack.de).
+Öffentlich dokumentiert auf [stevennoack.de/nostr/artikel/llm-guard-ai-virenscanner](/nostr/artikel/llm-guard-ai-virenscanner).
 
 ---
 
@@ -688,7 +688,7 @@ Die Antwort: ein kryptografisches Vertrauenssystem auf Basis von Nostr.
 
 Selbst bei vollem Schreibzugriff aufs Dateisystem: ohne den Nostr-Signing-Key ist jede Manipulation beweisbar nachweisbar.
 
-Das ist ein eigenes, umfangreiches Thema. Vollständig dokumentiert als separater Artikel auf [stevennoack.de](https://stevennoack.de).
+Das ist ein eigenes, umfangreiches Thema. Separater Artikel dazu folgt.
 
 ---
 
