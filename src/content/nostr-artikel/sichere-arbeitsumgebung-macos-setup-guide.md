@@ -827,4 +827,6 @@ limactl list                  # Alle VMs anzeigen
 
 ---
 
+*Kompakte Version dieses Artikels: [Mein Security-Stack](/nostr/artikel/mein-security-stack)*
+
 *Setup getestet auf: iMac Intel i7 3,8 GHz, 40 GB RAM, macOS Tahoe 26.3, Lima 2.0.3, Trivy 0.69.3*

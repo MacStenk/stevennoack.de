@@ -297,7 +297,7 @@ Der Unterschied zu klassischen Systemen: bei Servern und Codebasen denkt jeder a
 
 Also sichere ich sie ab.
 
-Mehr dazu auf [stevennoack.de](https://stevennoack.de).
+Mehr dazu im [vollständigen Setup Guide](/nostr/artikel/sichere-arbeitsumgebung-macos-setup-guide).
 
 ---
 
@@ -327,4 +327,4 @@ Die interessante Frage ist nicht ob ein gut konfiguriertes System sicher ist. So
 
 *Setup: iMac Intel i7 3,8 GHz, 40 GB RAM, macOS Tahoe 26.3, Lima 2.0.3, Trivy 0.69.3*
 
-*LLM Guard: [stevennoack.de](https://stevennoack.de) · Lima: [github.com/lima-vm/lima](https://github.com/lima-vm/lima) · Trivy: [aquasecurity.github.io/trivy](https://aquasecurity.github.io/trivy/)*
+*[Vollständiger Setup Guide](/nostr/artikel/sichere-arbeitsumgebung-macos-setup-guide) · [Lima](https://github.com/lima-vm/lima) · [Trivy](https://aquasecurity.github.io/trivy/) · [LLM Guard](https://stevennoack.de)*
