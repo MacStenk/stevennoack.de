@@ -8,5 +8,9 @@
   Permissions-Policy: camera=(), microphone=(), geolocation=()
   Access-Control-Allow-Origin: https://stevennoack.de
 
+/.well-known/*
+  Access-Control-Allow-Origin: *
+  Cross-Origin-Resource-Policy: cross-origin
+
 /api/*
   Access-Control-Allow-Origin: *
