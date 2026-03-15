@@ -74,7 +74,6 @@ RELAYS=(
   "wss://relay.stevennoack.de"
   "wss://relay.primal.net"
   "wss://nos.lol"
-  "wss://relay.nostr.band"
   "wss://nostr.pareto.space"
 )
 

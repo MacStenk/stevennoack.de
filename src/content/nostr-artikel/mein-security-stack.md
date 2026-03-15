@@ -88,7 +88,7 @@ license_url: https://creativecommons.org/licenses/by/4.0/
 
 # === SCHEMA.ORG ===
 schema_type: TechArticle
-sig: "ffd273f942b335afde4b74a84d4ffbb8851b50bd6bbc8912a125844c8cd297f63383430bc93e624e9cff27677fda6d7cf78a1815333a7c155863d27ea2b48b7d"
+sig: "449af1a17f7869b88f0df1a025702f857d5ae3697198e9f0daa07a99781a4b670edc1a5621126b2f2bdd4f01f9cb85d03767456a6c4c6475c4fdf72304536b89"
 note_id: "88cf2aefa8aefcd10f0d1b8e9a1eaf0f70c647652dd8bf16ce29eeda6b34ecbe"
 naddr: "naddr1qqfk6etfdckhxetrw4exjare94ehgctrdvq35amnwvaz7tmjv4kxz7fwwd6x2an9dehx7ctrdvhxgegpzemhxue69uhhyetvv9ujuurjd9kkzmpwdejhgq3qcxa0fa6vmq5evwpgk8dg6ul99ny5e2nd3hy5fa72g598t39nxy0sxpqqqp65wrl8pwj"
 ---

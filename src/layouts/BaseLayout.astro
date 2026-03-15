@@ -399,7 +399,7 @@ const combinedSchema = {
     <meta charset="utf-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content={Astro.generator} />
+
 
     <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
 
@@ -427,8 +427,6 @@ const combinedSchema = {
     <meta property="twitter:image" content={image} />
 
     <script type="application/ld+json" set:html={JSON.stringify(combinedSchema)} />
-    <!-- Umami Analytics -->
-    <script defer src="https://stats.stevennoack.de/script.js" data-website-id="95066d20-b614-4852-85b0-673af1e2eed1"></script>
   </head>
   <body class="bg-[#0a0a0a] text-gray-200 font-sans selection:bg-white/20">
     <slot />

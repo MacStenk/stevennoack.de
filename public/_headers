@@ -6,3 +6,7 @@
   X-Frame-Options: DENY
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=()
+  Access-Control-Allow-Origin: https://stevennoack.de
+
+/api/*
+  Access-Control-Allow-Origin: *
