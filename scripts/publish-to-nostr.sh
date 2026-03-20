@@ -1,6 +1,18 @@
 #!/bin/bash
 # publish-to-nostr.sh - Publish Markdown articles to Nostr
 # Usage: ./publish-to-nostr.sh /path/to/article.md
+#
+# Frontmatter-Template: scripts/frontmatter-template.md
+# IMMER das vollständige Template verwenden. Felder die nicht relevant
+# sind (z.B. heroImage wenn kein Bild) weglassen, Struktur beibehalten.
+#
+# Pflichtfelder: title, subtitle, slug, description, type, category,
+#   tags, date, created, modified, word_count, reading_time, status,
+#   canonical_url, nostr.*, author, author_nip05, author_npub,
+#   author_url, license, license_url, schema.*
+#
+# Achtung: Quellenlisten im Artikeltext duerfen keine "- " Listenpunkte
+# haben (werden als Tags geparst). Stattdessen "• " verwenden.
 
 ARTICLE_PATH="$1"
 
