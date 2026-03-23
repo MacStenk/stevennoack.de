@@ -6,6 +6,7 @@
 import { getCollection } from "astro:content";
 import { nip19 } from "nostr-tools";
 import unlockContentUrl from "../../../scripts/unlock-content.js?url";
+import GwernPopups from "../../../components/GwernPopups.astro";
 
 export async function getStaticPaths() {
   const articles = await getCollection("nostr-artikel");
@@ -293,6 +294,9 @@ const nostrEvent = article.data.sig ? {
     <meta name="twitter:description" content={article.data.description} />
     <meta name="twitter:image" content={article.data.ogImage || article.data.heroImage} />
 
+    <!-- Gwern Popup System: page-body-classes -->
+    <meta name="page-body-classes" content="page" />
+
     <!-- Nostr Meta -->
     <meta name="nostr:author" content={AUTHOR_NPUB} />
     <meta name="nostr:nip05" content="steven@stevennoack.de" />
@@ -569,7 +573,7 @@ const nostrEvent = article.data.sig ? {
       }
 
       <!-- Article Content -->
-      <section class="content" aria-label="Artikel-Inhalt" itemprop="articleBody">
+      <section class="content markdownBody" id="markdownBody" aria-label="Artikel-Inhalt" itemprop="articleBody">
         <Content />
       </section>
       
@@ -884,4 +888,7 @@ const nostrEvent = article.data.sig ? {
       });
     });
   </script>
+
+  <!-- Gwern Popup System -->
+  <GwernPopups />
 </body>

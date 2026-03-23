@@ -4,9 +4,10 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "node scripts/generate-annotations.mjs && node scripts/generate-gwern-annotations.mjs && astro build",
     "preview": "astro preview",
-    "build:check": "astro check && astro build"
+    "build:check": "astro check && astro build",
+    "annotations": "node scripts/generate-annotations.mjs && node scripts/generate-gwern-annotations.mjs"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^12.6.12",

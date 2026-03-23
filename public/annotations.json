@@ -1,0 +1,230 @@
+{
+  "/nostr/artikel/78-tage-journey": {
+    "url": "/nostr/artikel/78-tage-journey",
+    "title": "78 Tage mit Claude: Wie eine KI ihr eigenes Gedächtnis baute",
+    "author": "Steven Noack",
+    "date": "2026-01-01",
+    "abstract": "78 Tage Zusammenarbeit mit Claude AI. Von ersten Prompts zu einem selbstgebauten Gedächtnis-System mit Neo4j, Multi-Agent Architektur und VIBE Coding. Eine Geschichte über Vertrauen, Iteration und die Zukunft der Mensch-KI Zusammenarbeit.",
+    "tags": [
+      "claude",
+      "ai",
+      "knowledge-graph",
+      "neo4j",
+      "vibe-coding",
+      "nostr",
+      "memory-system",
+      "multi-agent",
+      "personal-ai",
+      "anthropic",
+      "spur",
+      "llm"
+    ]
+  },
+  "/nostr/artikel/von-herzen-zu-sats": {
+    "url": "/nostr/artikel/von-herzen-zu-sats",
+    "title": "Von Herzen zu Sats – Warum echtes Geld besser ist als Likes",
+    "author": "Steven Noack",
+    "date": "2025-12-13",
+    "abstract": "Likes kosten nichts. Deshalb sind sie nichts wert. Eine Geschichte über Dekonditionierung, Souveränität und die ersten 100 Sats, die dir gehören.",
+    "tags": [
+      "dekonditionierung",
+      "souveränität",
+      "lightning",
+      "bitcoin",
+      "sats",
+      "value4value",
+      "wallet",
+      "nostr",
+      "visionfusen"
+    ]
+  },
+  "/nostr/artikel/bild-signatur-pipeline-erklaert": {
+    "url": "/nostr/artikel/bild-signatur-pipeline-erklaert",
+    "title": "Wie du beweisen kannst, dass ein Bild dir gehört",
+    "author": "Steven Noack",
+    "date": "2026-01-28",
+    "abstract": "Digitale Bild-Signierung verständlich erklärt: Unsichtbare Stempel, Fingerabdrücke und digitale Notare. Plus: Der komplette technische Workflow.",
+    "tags": [
+      "visionfusen",
+      "bild-signatur",
+      "nostr",
+      "nip-94",
+      "tutorial",
+      "workflow"
+    ]
+  },
+  "/nostr/artikel/chaos-kaffee-agent": {
+    "url": "/nostr/artikel/chaos-kaffee-agent",
+    "title": "Chaos, Kaffee und ein Agent der mich kennt",
+    "author": "Steven Noack",
+    "date": "2026-03-19",
+    "abstract": "Über Reddit-Threads, NotebookLM und einen Agent namens Spur. Über 1996 und 2026. Über das Chaos wenn alles zusammenkommt.",
+    "tags": [
+      "openclaw",
+      "ki",
+      "notebooklm",
+      "antigravity",
+      "workflow",
+      "agents",
+      "chaos"
+    ]
+  },
+  "/nostr/artikel/dezentralitaet-strukturelle-analyse": {
+    "url": "/nostr/artikel/dezentralitaet-strukturelle-analyse",
+    "title": "Dezentralität als strukturelle Konsequenz: Eine evidenzbasierte Analyse",
+    "author": "Steven Noack",
+    "date": "2026-02-17",
+    "abstract": "Evidenzbasierte Analyse der Dezentralisierung: Drei Cloud-Anbieter kontrollieren 63% des Marktes, TSMC fertigt 90% aller fortschrittlichen Chips. Warum Dezentralisierung keine Ideologie ist, sondern eine strukturelle Reaktion auf messbare Systemrisiken.",
+    "tags": [
+      "dezentralisierung",
+      "cloud",
+      "ki",
+      "infrastruktur",
+      "souveränität",
+      "open-source"
+    ]
+  },
+  "/nostr/artikel/ki-agenten-gedaechtnis-lokal": {
+    "url": "/nostr/artikel/ki-agenten-gedaechtnis-lokal",
+    "title": "Wie ich meinen KI-Agenten ein Gedächtnis gebaut habe",
+    "author": "Steven Noack",
+    "date": "2026-02-04",
+    "abstract": "Kein Cloud-Dienst, keine API-Kosten – ein komplettes Memory-System für KI-Agenten mit Qdrant, Decay, Dream Mode und biologisch inspirierter Architektur.",
+    "tags": [
+      "KI",
+      "Agenten",
+      "Gedächtnis",
+      "Qdrant",
+      "Open Source",
+      "lokale KI",
+      "Memory",
+      "RAG",
+      "Embeddings",
+      "Dream Mode"
+    ]
+  },
+  "/nostr/artikel/konvergenz-18-dimensionen": {
+    "url": "/nostr/artikel/konvergenz-18-dimensionen",
+    "title": "KONVERGENZ – 18 Dimensionen einer Welt, die sich gleichzeitig verändert",
+    "author": "Steven Noack",
+    "date": "2026-03-20",
+    "abstract": "18 gesellschaftliche, wirtschaftliche, ökologische und geopolitische Krisen konvergieren gleichzeitig. Auf Basis von Primärquellen zeigt dieser Artikel, wie alles in einem konkreten Profil zusammenläuft.",
+    "tags": [
+      "polykrise",
+      "gesellschaft",
+      "einsamkeit",
+      "demografie",
+      "ki",
+      "bewusstsein",
+      "dekonditionierung",
+      "spiritualität"
+    ]
+  },
+  "/nostr/artikel/llm-guard-ai-virenscanner": {
+    "url": "/nostr/artikel/llm-guard-ai-virenscanner",
+    "title": "Mein AI-Virenscanner hat mich gerade vor mir selbst beschützt",
+    "author": "Steven Noack",
+    "date": "2026-02-09",
+    "abstract": "LLM Guard: Ein lokaler Prompt Injection Scanner mit Shell Guard, MCP Server und Echtzeit-Watchdog. Glass Box statt Black Box. 81 Tests, 50+ Patterns.",
+    "tags": [
+      "llm-guard",
+      "ai-security",
+      "prompt-injection",
+      "mcp",
+      "shell-guard",
+      "claude",
+      "open-source",
+      "local-first",
+      "glass-box",
+      "memory-blocks"
+    ]
+  },
+  "/nostr/artikel/manifestierte-intelligenz": {
+    "url": "/nostr/artikel/manifestierte-intelligenz",
+    "title": "Manifestierte Intelligenz",
+    "author": "Steven Noack",
+    "date": "2026-01-07",
+    "abstract": "Was passiert wenn man aufhört KI als Tool zu sehen - und anfängt sie als manifestierte Intelligenz zu verstehen. Ein Erfahrungsbericht aus Brandenburg.",
+    "tags": [
+      "[\"KI\"",
+      "\"Bewusstsein\"",
+      "\"Knowledge Graph\"",
+      "\"Claude\"",
+      "\"Philosophie\"]"
+    ]
+  },
+  "/nostr/artikel/multipotentialite-chaos-als-system": {
+    "url": "/nostr/artikel/multipotentialite-chaos-als-system",
+    "title": "Sowohl-Als-Auch",
+    "author": "Steven Noack",
+    "date": "2026-02-13",
+    "abstract": "Vier Uhr morgens, drei Projekte vor dem Frühstück, eine Katze auf dem Schreibtisch. Über Multipotentialites, KI mit Augen und Händen, und warum Chaos kein Bug ist sondern ein Feature.",
+    "tags": [
+      "multipotentialite",
+      "ki",
+      "chaos",
+      "nostr",
+      "visionfusen",
+      "screenpipe",
+      "dezentralisierung",
+      "essay"
+    ]
+  },
+  "/nostr/artikel/substack-datenschutz-ironie": {
+    "url": "/nostr/artikel/substack-datenschutz-ironie",
+    "title": "Die Ironie der Datenschutz-Debatte auf Substack",
+    "author": "Steven Noack",
+    "date": "2026-02-10",
+    "abstract": "Substack-Nutzer diskutieren WhatsApp-Datenschutz auf einer Plattform mit Klartext-E-Mails im Quellcode, ungesalzenem MD5-Hashing und einem Data Breach von 700.000 Datensätzen.",
+    "tags": [
+      "substack",
+      "datenschutz",
+      "privacy",
+      "tracking",
+      "data-breach",
+      "nostr",
+      "google-analytics",
+      "md5",
+      "dsgvo",
+      "digitale-souveränität"
+    ]
+  },
+  "/nostr/artikel/terminal-quatsch": {
+    "url": "/nostr/artikel/terminal-quatsch",
+    "title": "Terminal Quatsch: Über leere Böden, leere Feeds und die Rückkehr des Codes",
+    "author": "Steven Noack",
+    "date": "2025-12-02",
+    "abstract": "Von Kaiser Wilhelms Pferd bis zum KI-Prompt: Warum 'Brauche ich nicht' noch nie ein gutes Argument war – und was leere Böden mit leeren Feeds verbindet.",
+    "tags": [
+      "essay",
+      "technologie",
+      "ki",
+      "prompting",
+      "human-design",
+      "gigo",
+      "codeback",
+      "manifestor",
+      "paradigmenwechsel",
+      "zukunft"
+    ]
+  },
+  "/nostr/artikel/zwei-wege-ein-interface": {
+    "url": "/nostr/artikel/zwei-wege-ein-interface",
+    "title": "Zwei Wege, ein Interface: Wie ich lokale und Cloud-KI unter einem Dach vereint habe",
+    "author": "Steven Noack",
+    "date": "2026-03-01",
+    "abstract": "Wie ich lokale LLMs über LM Chat und Cloud-KI über einen selbstgebauten Vision-Proxy in Open WebUI vereint habe. Zwei Wege, ein Interface, volle Kontrolle.",
+    "tags": [
+      "open-webui",
+      "ollama",
+      "lm-chat",
+      "lokale-ki",
+      "cloud-ki",
+      "vision-proxy",
+      "openclaw",
+      "self-hosted",
+      "privacy",
+      "python"
+    ]
+  }
+}

@@ -1,0 +1,115 @@
+---
+/**
+ * GwernPopups.astro
+ *
+ * Laedt das originale Gwern.net Popup-System (1:1 aus gwern/gwern.net Repo).
+ * Emuliert das Haskell-Backend durch:
+ * 1. Statische HTML-Annotation-Dateien unter /metadata/annotation/ (via generate-gwern-annotations.mjs)
+ * 2. Build-Zeit-Injection von annotationKeys und annotationIndex
+ *
+ * Load-Reihenfolge:
+ *   initial.js -> utility.js -> transclude-stub.js -> content.js -> popups.js
+ *   -> popins.js -> annotations.js -> extracts.js -> extracts-annotations.js
+ *   -> extracts-content.js -> extracts-options.js -> extracts-load.js
+ */
+
+import fs from "node:fs";
+import path from "node:path";
+
+// Annotation-Keys und Index beim Build einlesen
+const annotationsPath = path.join(process.cwd(), "public", "annotations.json");
+const indexPath = path.join(process.cwd(), "public", "metadata", "annotation", "_index.json");
+
+let annotationKeys: string[] = [];
+let annotationIndex: Record<string, string> = {};
+
+try {
+  const data = JSON.parse(fs.readFileSync(annotationsPath, "utf-8"));
+  annotationKeys = Object.keys(data);
+} catch (e) {}
+
+try {
+  annotationIndex = JSON.parse(fs.readFileSync(indexPath, "utf-8"));
+} catch (e) {}
+---
+
+<!-- Gwern Popup CSS -->
+<link rel="stylesheet" href="/css/gwern-popups.css" />
+
+<!--
+  Build-Zeit Injection: Annotation-Keys + Index.
+  Markiert Links mit link-annotated BEVOR Extracts.setup() laeuft.
+  Kein XHR noetig, alles inline.
+-->
+<script is:inline define:vars={{ annotationKeys, annotationIndex }}>
+(function() {
+  // Index fuer annotations.js verfuegbar machen
+  window.__annotationIndex = annotationIndex;
+
+  function normalizeToKey(href) {
+    try {
+      const u = new URL(href, window.location.origin);
+      if (u.hostname === window.location.hostname) {
+        return u.pathname.replace(/\/$/, "") || "/";
+      }
+      return u.hostname + u.pathname.replace(/\/$/, "");
+    } catch (e) {
+      return href;
+    }
+  }
+
+  const keySet = new Set(annotationKeys);
+
+  function markAnnotatedLinks(container) {
+    container.querySelectorAll("a[href]").forEach(function(link) {
+      const key = normalizeToKey(link.getAttribute("href"));
+      if (keySet.has(key)) {
+        link.classList.add("link-annotated");
+      }
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", function() {
+      markAnnotatedLinks(document);
+    });
+  } else {
+    markAnnotatedLinks(document);
+  }
+})();
+</script>
+
+<!-- Pre-init: document.main for Gwern -->
+<script is:inline>Object.defineProperty(document,"main",{get:function(){return this._main||this.querySelector(".markdownBody")||this.querySelector("main")||this.body},set:function(v){this._main=v},configurable:true})</script>
+<!-- Gwern JS: Minified Bundle (defer fuer Performance) -->
+<script src="/js/gwern-bundle.min.js" is:inline></script>
+<script src="/js/popup-styles.js" is:inline></script>
+
+<style is:global>
+  /* Popup z-index ueber allem */
+  #popup-container {
+    z-index: 99999 !important;
+  }
+
+  /* Link-Indikator: ° nach annotierten Links */
+  a.link-annotated:not(.no-indicator)::after {
+    content: "\00B0";
+    font-size: 0.65em;
+    vertical-align: super;
+    margin-left: 1px;
+    opacity: 0.45;
+    font-weight: normal;
+  }
+
+  /* Kein Indikator in Nav/Footer */
+  nav a.link-annotated::after,
+  footer a.link-annotated::after {
+    content: none;
+  }
+
+  /* Popup-Link Highlight wenn offen */
+  a.popup-open {
+    background-color: rgba(100, 149, 237, 0.15);
+    border-radius: 2px;
+  }
+</style>

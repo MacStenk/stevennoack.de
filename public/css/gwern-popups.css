@@ -1,0 +1,835 @@
+/* Gwern-style Popups and Popins CSS
+   Adapted from gwern.net
+   License: MIT / Public Domain
+*/
+
+:root {
+    /* Popup Variables */
+    --GW-popups-popup-max-width: 640px;
+    --GW-popups-popup-max-height: 480px;
+    --GW-popups-popup-min-width: 360px;
+    --GW-popups-popup-min-height: 120px;
+    --GW-popups-popup-border-width: 3px;
+    --GW-popups-popup-title-bar-height: calc(1.5rem + 1px);
+    --GW-popups-popup-mini-title-bar-height: calc(1rem + 1px);
+
+    /* Popin Variables */
+    --GW-popins-popin-max-height: 75vh;
+    --GW-popins-popin-min-height: 120px;
+    --GW-popins-popin-border-width: 3px;
+    --GW-popins-popin-title-bar-height: calc(1rem * 16/9);
+    --GW-popins-popin-footer-bar-height: calc(1rem * 16/9);
+
+    /* Colors */
+    --GW-popups-popup-background-color: #fff;
+    --GW-popups-popup-border-color: #ccc;
+    --GW-popups-popup-box-shadow-color: rgba(0, 0, 0, 0.25);
+    --GW-popups-popup-title-bar-background-color: #f5f5f5;
+    --GW-popins-popin-background-color: #fafafa;
+    --GW-popins-popin-border-color: #ddd;
+    --popframe-title-link-color: inherit;
+}
+
+/* Dark mode colors */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --GW-popups-popup-background-color: #1a1a1a;
+        --GW-popups-popup-border-color: #444;
+        --GW-popups-popup-box-shadow-color: rgba(0, 0, 0, 0.5);
+        --GW-popups-popup-title-bar-background-color: #252525;
+        --GW-popins-popin-background-color: #1e1e1e;
+        --GW-popins-popin-border-color: #333;
+    }
+}
+
+.dark-mode {
+    --GW-popups-popup-background-color: #1a1a1a;
+    --GW-popups-popup-border-color: #444;
+    --GW-popups-popup-box-shadow-color: rgba(0, 0, 0, 0.5);
+    --GW-popups-popup-title-bar-background-color: #252525;
+    --GW-popins-popin-background-color: #1e1e1e;
+    --GW-popins-popin-border-color: #333;
+}
+
+/* ============= */
+/* POPUP STYLES  */
+/* ============= */
+
+.popup-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 10000;
+}
+
+.popup-container > * {
+    pointer-events: auto;
+}
+
+.popup.hidden,
+.popup-body.hidden {
+    display: none;
+}
+
+/* Popup Frame */
+.popup,
+.popup .popframe-scroll-view,
+.popup .popframe-content-view,
+.popup .popframe-title-bar {
+    display: flex;
+    box-sizing: border-box;
+}
+
+.popup {
+    --background-color: var(--GW-popups-popup-background-color);
+
+    position: absolute;
+    flex-flow: column;
+
+    min-width: var(--GW-popups-popup-min-width);
+    max-width: var(--GW-popups-popup-max-width);
+    min-height: var(--GW-popups-popup-min-height);
+    max-height: var(--GW-popups-popup-max-height);
+
+    background-color: var(--background-color);
+    border: var(--GW-popups-popup-border-width) double var(--GW-popups-popup-border-color);
+    box-shadow: 1px 2px 8px 0 var(--GW-popups-popup-box-shadow-color);
+    border-radius: 4px;
+
+    overflow: hidden;
+}
+
+.popup {
+    --popup-title-bar-height: 0px;
+}
+
+.popup.has-title-bar {
+    --popup-title-bar-height: var(--GW-popups-popup-title-bar-height);
+    --popup-title-bar-button-size: calc(var(--popup-title-bar-height) - 1px);
+}
+
+.popup.mini-title-bar {
+    --popup-title-bar-height: var(--GW-popups-popup-mini-title-bar-height);
+}
+
+/* Scroll View */
+.popup .popframe-scroll-view {
+    flex: 1 1 auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+/* Content View */
+.popup .popframe-content-view {
+    min-height: 100%;
+    padding: 0.7em 0.9em 0.8em 0.9em;
+}
+
+/* Shadow Body */
+.popup .shadow-body,
+.popup .popframe-body {
+    font-size: 0.9em;
+    line-height: 1.5;
+}
+
+/* Title Bar */
+.popup .popframe-title-bar {
+    flex: 0 0 auto;
+    align-items: center;
+
+    height: var(--popup-title-bar-height);
+    padding: 0 0.3em;
+
+    background-color: var(--GW-popups-popup-title-bar-background-color);
+    border-bottom: 1px solid var(--GW-popups-popup-border-color);
+
+    cursor: move;
+    user-select: none;
+}
+
+.popup .popframe-title-bar:hover {
+    background-color: color-mix(in srgb, var(--GW-popups-popup-title-bar-background-color) 90%, #000);
+}
+
+.popup .popframe-title {
+    flex: 1 1 auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 0 0.3em;
+    font-size: 0.85em;
+}
+
+.popup .popframe-title .popframe-title-link {
+    color: inherit;
+    text-decoration: none;
+}
+
+.popup .popframe-title .popframe-title-link:hover {
+    text-decoration: underline;
+}
+
+/* Title Bar Buttons */
+.popup .popframe-title-bar-button {
+    flex: 0 0 auto;
+
+    width: var(--popup-title-bar-button-size);
+    height: var(--popup-title-bar-button-size);
+
+    margin: 0;
+    padding: 2px;
+
+    background: transparent;
+    border: none;
+    border-radius: 2px;
+
+    cursor: pointer;
+    opacity: 0.6;
+}
+
+.popup .popframe-title-bar-button:hover {
+    opacity: 1;
+    background-color: rgba(128, 128, 128, 0.2);
+}
+
+.popup .popframe-title-bar-button:active {
+    background-color: rgba(128, 128, 128, 0.4);
+}
+
+.popup .popframe-title-bar-button svg {
+    width: 100%;
+    height: 100%;
+    fill: currentColor;
+}
+
+.popup .popframe-title-bar-button.close-button {
+    order: 100;
+    margin-left: auto;
+}
+
+/* Popup States */
+.popup.pinned {
+    box-shadow: 2px 4px 16px 0 var(--GW-popups-popup-box-shadow-color);
+}
+
+.popup.collapsed .popframe-scroll-view {
+    display: none;
+}
+
+.popup.collapsed {
+    min-height: auto;
+    max-height: none;
+}
+
+.popup.zoomed {
+    max-width: none;
+    max-height: none;
+    border-radius: 0;
+}
+
+.popup.minimized {
+    min-width: auto !important;
+    min-height: auto !important;
+    max-width: none;
+    max-height: none;
+    border-radius: 0;
+}
+
+.popup.minimized .popframe-scroll-view {
+    display: none;
+}
+
+/* Drag and Resize States */
+.popup.dragging {
+    user-select: none;
+    cursor: move;
+}
+
+.popup.resizing {
+    user-select: none;
+}
+
+/* Focused Popup */
+.popup.focused {
+    box-shadow: 2px 4px 20px 0 var(--GW-popups-popup-box-shadow-color);
+}
+
+/* Fade Animation */
+.popup.fading {
+    opacity: 0;
+    transition: opacity 0.25s ease-out;
+}
+
+/* Loading States */
+.popup .popframe-loading-spinner-view,
+.popup .popframe-loading-failed-message-view {
+    display: none;
+}
+
+.popup.loading .popframe-loading-spinner-view {
+    display: flex;
+}
+
+.popup.loading-failed .popframe-loading-failed-message-view {
+    display: flex;
+}
+
+.popup .popframe-loading-spinner-view::before {
+    content: "";
+    width: 32px;
+    height: 32px;
+    border: 3px solid #ccc;
+    border-top-color: #666;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: auto;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.popup .popframe-loading-failed-message-view::before {
+    content: var(--popframe-loading-failed-message, "Loading failed.");
+    margin: auto;
+    color: #999;
+    font-style: italic;
+}
+
+.popup {
+    --popframe-loading-failed-message: "Loading failed.";
+}
+
+/* ============= */
+/* POPIN STYLES  */
+/* ============= */
+
+.popin,
+.popin .popframe-scroll-view,
+.popin .popframe-content-view,
+.popin .popframe-title-bar {
+    display: flex;
+    box-sizing: border-box;
+}
+
+.popin {
+    --background-color: var(--GW-popins-popin-background-color);
+
+    flex-flow: column;
+    position: relative;
+
+    margin: 1.5em 0;
+    width: 100%;
+    max-height: var(--GW-popins-popin-max-height);
+    min-height: var(--GW-popins-popin-min-height);
+
+    background-color: var(--background-color);
+    border: var(--GW-popins-popin-border-width) solid var(--GW-popins-popin-border-color);
+    border-radius: 4px;
+
+    overflow: hidden;
+}
+
+.popin-ancestor {
+    display: block;
+}
+
+/* Popin stacking */
+.popin + .popin {
+    margin-top: -1em;
+}
+
+/* Target link highlight */
+.popin-open + .popin::before {
+    content: "";
+    position: absolute;
+    top: -1.5em;
+    left: 0;
+    width: 100%;
+    height: 1.5em;
+    background: linear-gradient(to bottom, transparent, rgba(100, 149, 237, 0.1));
+    pointer-events: none;
+}
+
+/* Scroll View */
+.popin .popframe-scroll-view {
+    flex: 1 1 auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    max-height: calc(var(--GW-popins-popin-max-height) - var(--GW-popins-popin-title-bar-height));
+}
+
+/* Content View */
+.popin .popframe-content-view {
+    padding: 0.8em 1em;
+}
+
+/* Shadow Body */
+.popin .shadow-body,
+.popin .popframe-body,
+.popin-body {
+    font-size: 0.95em;
+    line-height: 1.6;
+}
+
+/* Title Bar */
+.popin .popframe-title-bar {
+    flex: 0 0 auto;
+    align-items: center;
+
+    height: var(--GW-popins-popin-title-bar-height);
+    padding: 0 0.5em;
+
+    background-color: var(--GW-popups-popup-title-bar-background-color);
+    border-bottom: 1px solid var(--GW-popins-popin-border-color);
+}
+
+.popin {
+    --popin-title-bar-height: 0px;
+}
+
+.popin.has-title-bar {
+    --popin-title-bar-height: var(--GW-popins-popin-title-bar-height);
+}
+
+.popin .popframe-title {
+    flex: 1 1 auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 0 0.3em;
+    font-size: 0.9em;
+}
+
+.popin .popframe-title-link {
+    color: var(--popframe-title-link-color, inherit);
+    text-decoration: none;
+}
+
+.popin .popframe-title-link:hover {
+    text-decoration: underline;
+}
+
+/* Title Bar Buttons */
+.popin .popframe-title-bar-button {
+    flex: 0 0 auto;
+
+    width: calc(var(--GW-popins-popin-title-bar-height) - 6px);
+    height: calc(var(--GW-popins-popin-title-bar-height) - 6px);
+
+    margin: 0 2px;
+    padding: 3px;
+
+    background: transparent;
+    border: none;
+    border-radius: 2px;
+
+    cursor: pointer;
+    opacity: 0.6;
+}
+
+.popin .popframe-title-bar-button:hover {
+    opacity: 1;
+    background-color: rgba(128, 128, 128, 0.2);
+}
+
+.popin .popframe-title-bar-button:active {
+    background-color: rgba(128, 128, 128, 0.4);
+}
+
+.popin .popframe-title-bar-button svg {
+    width: 100%;
+    height: 100%;
+    fill: currentColor;
+}
+
+.popin .popframe-title-bar-button.close-button {
+    order: 100;
+    margin-left: auto;
+}
+
+/* Popin Stack Counter */
+.popin-stack-counter {
+    font-size: 0.75em;
+    font-weight: bold;
+    color: #666;
+    margin-right: 0.5em;
+}
+
+/* Footer Bar */
+.popin .popin-footer-bar {
+    flex: 0 0 auto;
+
+    height: var(--GW-popins-popin-footer-bar-height);
+    padding: 0.3em 0.5em;
+
+    background-color: var(--GW-popups-popup-title-bar-background-color);
+    border-top: 1px solid var(--GW-popins-popin-border-color);
+
+    text-align: center;
+    font-size: 0.85em;
+}
+
+.popin.has-footer .popin-footer-bar {
+    display: block;
+}
+
+.popin .popin-footer-bar .popframe-title-link {
+    color: inherit;
+}
+
+.popin .popin-footer-bar .bracket {
+    color: #888;
+}
+
+/* Loading States */
+.popin .popframe-loading-spinner-view,
+.popin .popframe-loading-failed-message-view {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    padding: 2em;
+}
+
+.popin.loading .popframe-loading-spinner-view {
+    display: flex;
+}
+
+.popin.loading-failed .popframe-loading-failed-message-view {
+    display: flex;
+}
+
+.popin .popframe-loading-spinner-view::before {
+    content: "";
+    width: 24px;
+    height: 24px;
+    border: 3px solid #ccc;
+    border-top-color: #666;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.popin .popframe-loading-failed-message-view::before {
+    content: var(--popframe-loading-failed-message, "Loading failed.");
+    color: #999;
+    font-style: italic;
+}
+
+/* ==================== */
+/* POPFRAME BODY STYLES */
+/* ==================== */
+
+.popframe-body {
+    color: inherit;
+}
+
+.popframe-body section.level1 > .heading {
+    display: none;
+}
+
+.popframe-body .heading {
+    font-size: 1.1em;
+}
+
+.popframe-body figure:not(.float) {
+    margin: 1em 0;
+}
+
+.popframe-body > figure:only-child {
+    margin: 0;
+}
+
+.popframe-body pre {
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.popframe-body .table-scroll-wrapper {
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+/* ======================== */
+/* SPAWNING TARGET STYLES   */
+/* ======================== */
+
+a.spawns-popup,
+a.spawns-popin {
+    cursor: pointer;
+}
+
+a.spawns-popup.popup-open,
+a.spawns-popin.popin-open {
+    background-color: rgba(100, 149, 237, 0.15);
+}
+
+a.spawns-popup.highlighted,
+a.spawns-popin.highlighted {
+    background-color: rgba(100, 149, 237, 0.2);
+}
+
+/* Has content indicator */
+a.has-content::after {
+    content: "°";
+    font-size: 0.7em;
+    vertical-align: super;
+    margin-left: 1px;
+    opacity: 0.6;
+}
+
+a.has-annotation::after {
+    content: "·";
+}
+
+/* ================= */
+/* RESPONSIVE DESIGN */
+/* ================= */
+
+@media (max-width: 649px) {
+    .popup-container {
+        display: none;
+    }
+
+    .popin {
+        margin: 1em 0;
+        max-height: 60vh;
+    }
+
+    .popin .popframe-content-view {
+        padding: 0.5em 0.75em;
+    }
+}
+
+/* =================== */
+/* ANNOTATION SPECIFIC */
+/* =================== */
+
+.popframe-body.annotation .annotation-abstract {
+    margin: 0;
+}
+
+.popframe-body.annotation .data-field.title {
+    font-weight: bold;
+    margin-bottom: 0.5em;
+}
+
+.popframe-body.annotation .data-field.author-date {
+    font-size: 0.9em;
+    color: #666;
+    margin-bottom: 0.75em;
+}
+
+.popframe-body.annotation .data-field.abstract {
+    line-height: 1.6;
+}
+
+/* Aux links */
+.popframe-body .aux-links-append {
+    margin-top: 1em;
+    padding-top: 0.5em;
+    border-top: 1px solid #eee;
+    font-size: 0.85em;
+}
+
+.dark-mode .popframe-body .aux-links-append {
+    border-top-color: #333;
+}
+
+/* ============== */
+/* PARTIAL FOOTER */
+/* ============== */
+
+.popframe .partial-annotation-append-container {
+    padding: 0.75em 1em;
+    background-color: var(--GW-popups-popup-title-bar-background-color);
+    border-top: 1px solid var(--GW-popups-popup-border-color);
+    font-size: 0.85em;
+}
+
+.popframe.has-footer .partial-annotation-append-container {
+    border-top: none;
+}
+
+/* Unicode icon fallbacks for Gwern popup buttons */
+.popframe-title-bar-button .svg-icon-placeholder {
+    font-size: 0.65rem;
+    line-height: 1;
+    display: inline-block;
+}
+.popframe-title-bar-button {
+    cursor: pointer;
+    padding: 2px 6px;
+    background: none;
+    border: none;
+    opacity: 0.6;
+}
+.popframe-title-bar-button:hover {
+    opacity: 1;
+}
+
+/* Hide loading spinner when content is already loaded */
+.popup .popframe-loading-spinner-view {
+    display: none !important;
+}
+
+/* Title bar button layout fix */
+.popframe-title-bar {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    padding: 2px 4px;
+    min-height: 24px;
+}
+
+.popframe-title-bar .popframe-title {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.8rem;
+}
+
+.popframe-title-bar-button {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 !important;
+    font-size: 0.7rem !important;
+}
+
+.popframe-title-bar-button .svg-icon-placeholder {
+    font-size: 0.7rem !important;
+    line-height: 1;
+}
+
+/* Light mode override (data-theme toggle) */
+[data-theme="light"] {
+    --GW-popups-popup-background-color: #fff;
+    --GW-popups-popup-border-color: #ccc;
+    --GW-popups-popup-box-shadow-color: rgba(0, 0, 0, 0.25);
+    --GW-popups-popup-title-bar-background-color: #f5f5f5;
+    --GW-popins-popin-background-color: #fafafa;
+    --GW-popins-popin-border-color: #ddd;
+}
+
+[data-theme="dark"] {
+    --GW-popups-popup-background-color: #1a1a1a;
+    --GW-popups-popup-border-color: #444;
+    --GW-popups-popup-box-shadow-color: rgba(0, 0, 0, 0.5);
+    --GW-popups-popup-title-bar-background-color: #252525;
+    --GW-popins-popin-background-color: #1e1e1e;
+    --GW-popins-popin-border-color: #333;
+}
+
+/* Popup text color for light mode */
+[data-theme="light"] .popup,
+[data-theme="light"] .popup .popframe-body {
+    color: #1a1a1a;
+}
+
+[data-theme="light"] .popup a {
+    color: #1a73e8;
+}
+
+[data-theme="light"] .popup .popframe-title-bar {
+    color: #333;
+}
+
+/* ================================
+   ANNOTATION POPUP HARMONISIERUNG
+   ================================ */
+
+/* Titel-Link im Popup */
+.popframe-body .annotation .title-link,
+.popframe-body .annotation p:first-child a {
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.3;
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--color-accent, #6366f1);
+  text-decoration: none;
+}
+
+.popframe-body .annotation .title-link:hover,
+.popframe-body .annotation p:first-child a:hover {
+  text-decoration: underline;
+}
+
+/* Autor + Date + Tags Zeile */
+.popframe-body .annotation .author-date-aux,
+.popframe-body .annotation .author,
+.popframe-body .annotation .date {
+  font-size: 0.8125rem;
+  color: var(--color-text-muted, #888);
+  margin-bottom: 0.75rem;
+}
+
+.popframe-body .annotation .author::after {
+  content: " · ";
+}
+
+/* Tags */
+.popframe-body .annotation .link-tags {
+  font-size: 0.75rem;
+  color: var(--color-text-muted, #888);
+}
+
+.popframe-body .annotation .link-tags a {
+  color: var(--color-accent, #6366f1);
+  text-decoration: none;
+  font-size: 0.75rem;
+}
+
+/* Abstract / Blockquote */
+.popframe-body .annotation blockquote,
+.popframe-body .annotation .annotation-abstract blockquote {
+  margin: 0;
+  padding: 0.75rem 0 0 0;
+  border-left: none;
+  border-top: 1px solid var(--color-border, #333);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--color-text, #e5e5e5);
+}
+
+.popframe-body .annotation blockquote p {
+  margin: 0;
+}
+
+/* Popup Body Padding */
+.popframe-body.annotation,
+.popup .popframe-body {
+  padding: 1rem 1.25rem;
+}
+
+/* Dark mode adjustments */
+[data-theme="dark"] .popframe-body .annotation .title-link,
+[data-theme="dark"] .popframe-body .annotation p:first-child a {
+  color: var(--color-accent, #818cf8);
+}
+
+[data-theme="dark"] .popframe-body .annotation blockquote {
+  border-top-color: var(--color-border, #333);
+  color: var(--color-text, #e5e5e5);
+}
+
+/* Light mode */
+[data-theme="light"] .popframe-body .annotation blockquote {
+  border-top-color: #ddd;
+  color: #1a1a1a;
+}
+
+[data-theme="light"] .popframe-body .annotation .author-date-aux,
+[data-theme="light"] .popframe-body .annotation .author,
+[data-theme="light"] .popframe-body .annotation .date {
+  color: #666;
+}
