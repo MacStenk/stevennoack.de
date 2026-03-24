@@ -17,6 +17,7 @@
     "@sentry/astro": "^10.38.0",
     "@tailwindcss/vite": "^4.1.17",
     "astro": "^5.15.1",
+    "astro-gwern-popups": "link:../astro-gwern-popups",
     "hast-util-to-html": "^9.0.5",
     "marked": "^17.0.1",
     "mdast-util-to-hast": "^13.2.1",

@@ -61,4 +61,132 @@
       if (c) observer.observe(c, { childList: true });
     });
   }
+
+  // Local-page section transclude: fill popup body for a.include-strict links.
+  // The Gwern bundle's Transclude stub only handles annotation includes.
+  // This handler fills local page section popups from cached content.
+  function fillLocalPagePopup(popup) {
+    if (!popup || !popup.classList.contains('local-page')) return;
+    if (!popup.classList.contains('loading')) return;
+
+    var shadowRoot = popup.querySelector('.popframe-content-view') &&
+                     popup.querySelector('.popframe-content-view').shadowRoot;
+    if (!shadowRoot) return;
+
+    var body = shadowRoot.querySelector('.shadow-body');
+    if (!body) return;
+
+    var includeLink = body.querySelector('a.include');
+    if (!includeLink) return;
+
+    var href = includeLink.getAttribute('href');
+    if (!href) return;
+
+    // Anchor link to section in current page or fetched page
+    var spawningTarget = popup.spawningTarget;
+    if (!spawningTarget) return;
+
+    var fullHref = spawningTarget.href || '';
+    var hashPart = spawningTarget.hash || '';
+
+    // Try to get content from Content cache
+    var refData = null;
+    try {
+      refData = Content && Content.referenceDataForLink && Content.referenceDataForLink(spawningTarget);
+    } catch (e) {}
+
+    if (!refData || refData === 'LOADING_FAILED') {
+      // Try to load
+      try {
+        Content && Content.load && Content.load(spawningTarget, function() {
+          fillLocalPagePopup(popup);
+        });
+      } catch (e) {}
+      return;
+    }
+
+    var contentDoc = refData.content;
+    if (!contentDoc) return;
+
+    var sectionEl = null;
+
+    // Find section by hash in cached content
+    if (hashPart && hashPart.length > 1) {
+      var anchorId = hashPart.slice(1);
+      try { anchorId = decodeURIComponent(anchorId); } catch (e) {}
+      try {
+        sectionEl = contentDoc.querySelector('[id="' + anchorId + '"]');
+      } catch (e) {}
+    }
+
+    // Build popup content
+    var contentHTML = '';
+
+    if (sectionEl) {
+      // Get heading text and next sibling paragraphs
+      var heading = sectionEl;
+      var headingText = heading.textContent || '';
+      var fragment = document.createDocumentFragment();
+      var headingClone = heading.cloneNode(true);
+      fragment.appendChild(headingClone);
+      var sibling = heading.nextElementSibling;
+      var count = 0;
+      while (sibling && count < 8) {
+        var tagName = sibling.tagName.toUpperCase();
+        if (/^H[1-6]$/.test(tagName)) break;
+        fragment.appendChild(sibling.cloneNode(true));
+        sibling = sibling.nextElementSibling;
+        count++;
+      }
+      var wrapper = document.createElement('div');
+      wrapper.appendChild(fragment);
+      contentHTML = wrapper.innerHTML;
+    } else {
+      // No hash: show page title and intro
+      var pageTitle = refData.pageTitle || '';
+      var firstP = contentDoc.querySelector('p');
+      contentHTML = '<h3>' + pageTitle + '</h3>' + (firstP ? firstP.outerHTML : '');
+    }
+
+    if (!contentHTML) return;
+
+    // Replace include link with content
+    var wrapper = document.createElement('div');
+    wrapper.innerHTML = contentHTML;
+    includeLink.replaceWith(wrapper);
+
+    // Clear loading state
+    if (typeof Popups !== 'undefined' && Popups.clearPopFrameState) {
+      try { Popups.clearPopFrameState(popup); } catch (e) {}
+    } else {
+      popup.classList.remove('loading', 'loading-failed');
+      body.classList.remove('loading', 'loading-failed');
+    }
+  }
+
+  // Hook into Popups.popupDidSpawn event
+  if (typeof GW !== 'undefined' && GW.notificationCenter) {
+    GW.notificationCenter.addHandlerForEvent('Popups.popupDidSpawn', function(info) {
+      var popup = info && info.popup;
+      if (popup) {
+        // Delay to allow Gwern's own loading attempt first
+        setTimeout(function() {
+          fillLocalPagePopup(popup);
+        }, 300);
+      }
+    });
+  } else {
+    document.addEventListener('DOMContentLoaded', function() {
+      if (typeof GW !== 'undefined' && GW.notificationCenter) {
+        GW.notificationCenter.addHandlerForEvent('Popups.popupDidSpawn', function(info) {
+          var popup = info && info.popup;
+          if (popup) {
+            setTimeout(function() {
+              fillLocalPagePopup(popup);
+            }, 300);
+          }
+        });
+      }
+    });
+  }
 })();

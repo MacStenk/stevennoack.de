@@ -221,6 +221,19 @@ if (typeof window.requestImageOutliningJudgmentsForImagesInContainer === 'undefi
     window.requestImageOutliningJudgmentsForImagesInContainer = function() {};
 }
 
+if (typeof window.pageThumbnailAttributesFromDocument === 'undefined') {
+    window.pageThumbnailAttributesFromDocument = function() { return null; };
+}
+
+if (typeof window.stripAnchorsFromLink === 'undefined') {
+    window.stripAnchorsFromLink = function(link) {
+        if (!link) return '';
+        if (typeof link === 'string') return link.split('#')[0];
+        if (link.href) return link.href.split('#')[0];
+        return '';
+    };
+}
+
 
 /* ============================================================================
    SEKTION 4: Prototype Extensions

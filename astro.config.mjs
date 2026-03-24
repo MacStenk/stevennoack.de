@@ -7,10 +7,11 @@ import tailwindcss from '@tailwindcss/vite';
 
 import remarkDirective from 'remark-directive';
 import remarkLock from './src/plugins/remark-lock.mjs';
+import gwernPopups from 'astro-gwern-popups';
 
 export default defineConfig({
   site: 'https://stevennoack.de',
-  integrations: [sentry(), sitemap()],
+  integrations: [sentry(), sitemap(), gwernPopups()],
   adapter: cloudflare({
     platformProxy: {
       enabled: true,
