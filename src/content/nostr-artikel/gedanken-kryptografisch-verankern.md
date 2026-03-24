@@ -5,7 +5,7 @@ subtitle: "Von Talebs Triade über Eriksons Generativität zum Tao: Fünf Stufen
 slug: gedanken-kryptografisch-verankern
 description: "Eine Synthese aus Taleb, Erikson und Laozi, technisch verankert mit Nostr, OpenTimestamps und Merkle Trees. Warum flüchtige Gedanken kryptografische Beweise verdienen."
 type: long-artikel
-sig: "a57086863b335b6bb75819a043bac0aa5f5016cdbc9f175e01b2c0c3dc8c6c6b4e4e5f072f6315473937537c92cfa1c8ff3d949695f435f6cd05a4ee7d2207e6"
+sig: "4f648bed9d4ec0f356c7da4243aedcd1ee908e0603c60d87658e7ad0521bebdecfe2776d9d88d6f4ebcc31a7fafb59342a8260f48cc1cb11eee74dac0e22709a"
 
 # === KATEGORISIERUNG ===
 category: philosophie
@@ -29,11 +29,11 @@ word_count: 2384
 reading_time: "11min"
 
 # === HERO IMAGE ===
-heroImage: /images/block-941988-og.jpg
+heroImage: https://stevennoack.de/images/block-941988-og.jpg
 heroImageAlt: "Bitcoin Block 941988 auf mempool.space. Timestamp 2026-03-24 10:30 UTC. Binance Pool. Der Block, in dem die erste Kristallisation dieses Artikels kryptografisch verankert wurde."
 
 # === OPEN GRAPH / SOCIAL ===
-ogImage: /images/block-941988-og.jpg
+ogImage: https://stevennoack.de/images/block-941988-og.jpg
 ogImageAlt: "Bitcoin Block 941988 — Kryptografischer Zeitbeweis für diesen Artikel"
 
 # === PUBLISHING STATUS ===
