@@ -1,54 +1,79 @@
 ---
 /**
- * GwernPopups.astro
+ * GwernPopups.astro — Universelle Gwern-Popup-Komponente
  *
- * Laedt das originale Gwern.net Popup-System (1:1 aus gwern/gwern.net Repo).
- * Emuliert das Haskell-Backend durch:
- * 1. Statische HTML-Annotation-Dateien unter /metadata/annotation/ (via generate-gwern-annotations.mjs)
- * 2. Build-Zeit-Injection von annotationKeys und annotationIndex
+ * Passt sich automatisch an das Layout an. Benötigt KEINEN spezifischen
+ * Selektor vom Aufrufer. Der Content-Container wird automatisch gefunden.
+ *
+ * document.main Fallback-Kette: .markdownBody → main → article → section → body
  *
  * Load-Reihenfolge:
- *   initial.js -> utility.js -> transclude-stub.js -> content.js -> popups.js
- *   -> popins.js -> annotations.js -> extracts.js -> extracts-annotations.js
- *   -> extracts-content.js -> extracts-options.js -> extracts-load.js
+ *   initial.js → utility.js → transclude-stub.js → content.js → popups.js
+ *   → popins.js → annotations.js → extracts.js → extracts-annotations.js
+ *   → extracts-content.js → extracts-options.js → extracts-load.js
+ *
+ * Verwendung:
+ *   import GwernPopups from 'astro-gwern-popups/components/GwernPopups.astro';
+ *   <GwernPopups />
+ *
+ *   Mit eigenem Annotations-Pfad:
+ *   <GwernPopups annotationsJsonPath="/pfad/zu/annotations.json" />
  */
 
 import fs from "node:fs";
 import path from "node:path";
 
+interface Props {
+  /** Pfad zu annotations.json relativ zum Projekt-Root (default: "public/annotations.json") */
+  annotationsJsonPath?: string;
+  /** Pfad zu _index.json relativ zum Projekt-Root (default: "public/metadata/annotation/_index.json") */
+  annotationIndexPath?: string;
+  /** CSS-Pfad für gwern-popups.css (default: "/css/gwern-popups.css") */
+  cssPath?: string;
+}
+
+const {
+  annotationsJsonPath = "public/annotations.json",
+  annotationIndexPath = "public/metadata/annotation/_index.json",
+  cssPath = "/css/gwern-popups.css",
+} = Astro.props;
+
 // Annotation-Keys und Index beim Build einlesen
-const annotationsPath = path.join(process.cwd(), "public", "annotations.json");
-const indexPath = path.join(process.cwd(), "public", "metadata", "annotation", "_index.json");
+const annotationsFile = path.join(process.cwd(), annotationsJsonPath);
+const indexFile = path.join(process.cwd(), annotationIndexPath);
 
 let annotationKeys: string[] = [];
 let annotationIndex: Record<string, string> = {};
 
 try {
-  const data = JSON.parse(fs.readFileSync(annotationsPath, "utf-8"));
+  const data = JSON.parse(fs.readFileSync(annotationsFile, "utf-8"));
   annotationKeys = Object.keys(data);
-} catch (e) {}
+} catch (_e) {
+  // Keine annotations.json vorhanden. Popups funktionieren ohne Annotationen (kein Fehler).
+}
 
 try {
-  annotationIndex = JSON.parse(fs.readFileSync(indexPath, "utf-8"));
-} catch (e) {}
+  annotationIndex = JSON.parse(fs.readFileSync(indexFile, "utf-8"));
+} catch (_e) {
+  // Kein Index vorhanden. Popups funktionieren ohne Index (kein Fehler).
+}
 ---
 
 <!-- Gwern Popup CSS -->
-<link rel="stylesheet" href="/css/gwern-popups.css" />
+<link rel="stylesheet" href={cssPath} />
 
 <!--
   Build-Zeit Injection: Annotation-Keys + Index.
-  Markiert Links mit link-annotated BEVOR Extracts.setup() laeuft.
-  Kein XHR noetig, alles inline.
+  Markiert Links mit link-annotated BEVOR Extracts.setup() läuft.
 -->
 <script is:inline define:vars={{ annotationKeys, annotationIndex }}>
 (function() {
-  // Index fuer annotations.js verfuegbar machen
+  // Index für annotations.js verfügbar machen
   window.__annotationIndex = annotationIndex;
 
   function normalizeToKey(href) {
     try {
-      const u = new URL(href, window.location.origin);
+      var u = new URL(href, window.location.origin);
       if (u.hostname === window.location.hostname) {
         return u.pathname.replace(/\/$/, "") || "/";
       }
@@ -58,11 +83,11 @@ try {
     }
   }
 
-  const keySet = new Set(annotationKeys);
+  var keySet = new Set(annotationKeys);
 
   function markAnnotatedLinks(container) {
     container.querySelectorAll("a[href]").forEach(function(link) {
-      const key = normalizeToKey(link.getAttribute("href"));
+      var key = normalizeToKey(link.getAttribute("href"));
       if (keySet.has(key)) {
         link.classList.add("link-annotated");
       }
@@ -79,14 +104,90 @@ try {
 })();
 </script>
 
-<!-- Pre-init: document.main for Gwern -->
-<script is:inline>Object.defineProperty(document,"main",{get:function(){return this._main||this.querySelector(".markdownBody")||this.querySelector("main")||this.body},set:function(v){this._main=v},configurable:true})</script>
-<!-- Gwern JS: Minified Bundle (defer fuer Performance) -->
+<!--
+  document.main: Dynamisch gesetzt. Kein hartcodierter Selektor.
+  Fallback-Kette: .markdownBody → main → article → section → body
+-->
+<script is:inline>
+(function() {
+  function findContentContainer() {
+    return (
+      document.querySelector(".markdownBody") ||
+      document.querySelector("#markdownBody") ||
+      document.querySelector("main") ||
+      document.querySelector("article") ||
+      document.querySelector("section") ||
+      document.body
+    );
+  }
+
+  Object.defineProperty(document, "main", {
+    get: function() {
+      return this._main || findContentContainer();
+    },
+    set: function(v) {
+      this._main = v;
+    },
+    configurable: true,
+  });
+})();
+</script>
+
+<!-- Pre-Bundle Stubs: Funktionen die das Bundle beim Laden sofort aufruft -->
+<script is:inline>
+if(typeof window.pageThumbnailAttributesFromDocument==='undefined'){window.pageThumbnailAttributesFromDocument=function(){return null}}
+if(typeof window.stripAnchorsFromLink==='undefined'){window.stripAnchorsFromLink=function(link){if(!link)return;if(typeof link==='string')return;if(link.hash!==undefined)link.hash='';return link}}
+if(typeof window.doWhenMainExists==='undefined'){window.doWhenMainExists=function(fn){if(document.main)fn(document.main);else document.addEventListener('DOMContentLoaded',function(){fn(document.main)})}}
+if(typeof window.targetElementInDocument==='undefined'){window.targetElementInDocument=function(link,doc){if(!link||!link.hash||link.hash.length<2)return null;var d=doc||document;try{return d.querySelector('[id="'+link.hash.slice(1)+'"]')||d.querySelector(link.hash)||null}catch(e){return null}}}
+if(typeof window.revealElement==='undefined'){window.revealElement=function(el){if(el&&el.scrollIntoView)el.scrollIntoView({block:'nearest',behavior:'smooth'})}}
+if(typeof window.isOnScreen==='undefined'){window.isOnScreen=function(el){if(!el)return false;var r=el.getBoundingClientRect();return r.bottom>0&&r.top<window.innerHeight&&r.right>0&&r.left<window.innerWidth}}
+if(typeof window.isWithinRect==='undefined'){window.isWithinRect=function(el,rect){if(!el||!rect)return false;var r=el.getBoundingClientRect();return r.top>=rect.top&&r.left>=rect.left&&r.bottom<=rect.bottom&&r.right<=rect.right}}
+if(typeof window.rectUnion==='undefined'){window.rectUnion=function(){var rects=Array.from(arguments).filter(Boolean);if(!rects.length)return null;var top=Math.min.apply(null,rects.map(function(r){return r.top})),left=Math.min.apply(null,rects.map(function(r){return r.left})),bottom=Math.max.apply(null,rects.map(function(r){return r.bottom})),right=Math.max.apply(null,rects.map(function(r){return r.right}));return new DOMRect(left,top,right-left,bottom-top)}}
+if(typeof window.pointWithinRect==='undefined'){window.pointWithinRect=function(p,r){return p&&r&&p.x>=r.left&&p.x<=r.right&&p.y>=r.top&&p.y<=r.bottom}}
+if(typeof window.valMinMax==='undefined'){window.valMinMax=function(val,min,max){return Math.max(min,Math.min(max,val))}}
+if(typeof window.togglePageScrolling==='undefined'){window.togglePageScrolling=function(enable){document.documentElement.style.overflow=enable?'':'hidden'}}
+if(typeof window.addScrollListener==='undefined'){window.addScrollListener=function(fn,opts){var name=(opts&&opts.name)||null;if(opts&&opts.defer){if(opts.ifDeferCallWhenAdd){try{fn({target:window})}catch(e){}}window.addEventListener('scroll',fn)}else{window.addEventListener('scroll',fn)}return function(){window.removeEventListener('scroll',fn)}}}
+if(typeof window.removeScrollListener==='undefined'){window.removeScrollListener=function(name){}}
+if(typeof window.addMousemoveListener==='undefined'){window.addMousemoveListener=function(fn,opts){var target=(opts&&opts.target)||window;target.addEventListener('mousemove',fn);return function(){target.removeEventListener('mousemove',fn)}}}
+if(typeof window.removeMousemoveListener==='undefined'){window.removeMousemoveListener=function(name){}}
+if(typeof window.addWindowResizeListener==='undefined'){window.addWindowResizeListener=function(fn,opts){if(opts&&opts.defer){var t;var wrapped=function(){clearTimeout(t);t=setTimeout(fn,100)};window.addEventListener('resize',wrapped)}else{window.addEventListener('resize',fn)}}}
+if(typeof window.addContentInjectHandler==='undefined'){window.addContentInjectHandler=function(name,fn,phase){GW&&GW.notificationCenter&&GW.notificationCenter.addHandlerForEvent&&GW.notificationCenter.addHandlerForEvent('GW.contentDidInject',fn,{name:name,phase:phase||''})}}
+if(typeof window.scrollContainerOf==='undefined'){window.scrollContainerOf=function(el){return el?el.closest('.popframe-scroll-view')||window:window}}
+if(typeof window.lazyLoadObserver==='undefined'){window.lazyLoadObserver=function(fn,el,opts){fn();}}
+if(typeof window.GWTimer==='undefined'){window.GWTimer=function(fn,arg){var s=performance.now();fn(arg);return performance.now()-s}}
+if(typeof window.GWLog==='undefined'){window.GWLog=function(){}}
+if(typeof window.newElement==='undefined'){window.newElement=function(tag,attrs,props){var el=document.createElement(tag);if(attrs)Object.entries(attrs).forEach(function(e){el.setAttribute(e[0],e[1])});if(props)Object.entries(props).forEach(function(e){el[e[0]]=e[1]});return el}}
+if(typeof window.newDocument==='undefined'){window.newDocument=function(content){var df=document.createDocumentFragment();if(!content)return df;if(content instanceof HTMLCollection||content instanceof NodeList||Array.isArray(content)){Array.from(content).forEach(function(n){df.appendChild(n.cloneNode?n.cloneNode(true):document.createTextNode(n))});return df}var d=document.createElement('div');d.innerHTML=typeof content==='string'?content:'';while(d.firstChild)df.appendChild(d.firstChild);return df}}
+if(typeof window.elementFromHTML==='undefined'){window.elementFromHTML=function(html){var d=document.createElement('div');d.innerHTML=html;return d.firstElementChild||null}}
+if(typeof window.unwrap==='undefined'){window.unwrap=function(el){if(!el||!el.parentElement)return;var p=el.parentElement;while(el.firstChild)p.insertBefore(el.firstChild,el);p.removeChild(el)}}
+if(typeof window.unwrapAll==='undefined'){window.unwrapAll=function(sel,opts){var root=(opts&&opts.root)||document;root.querySelectorAll(sel).forEach(window.unwrap)}}
+if(typeof window.wrapElement==='undefined'){window.wrapElement=function(el,wrapperSelector){var wrapper=document.createElement('div');if(wrapperSelector&&wrapperSelector.startsWith('.')){wrapper.className=wrapperSelector.slice(1).replace(/\./g,' ')}el.parentElement&&el.parentElement.insertBefore(wrapper,el);wrapper.appendChild(el)}}
+if(typeof window.wrapAll==='undefined'){window.wrapAll=function(sel,wrapperSelector,opts){var root=(opts&&opts.root)||document;root.querySelectorAll(sel).forEach(function(el){window.wrapElement(el,wrapperSelector)})}}
+if(typeof window.stripStyles==='undefined'){window.stripStyles=function(el,opts){if(!el)return;var save=(opts&&opts.saveProperties)||[];var saved={};save.forEach(function(p){saved[p]=el.style[p]});el.removeAttribute('style');Object.entries(saved).forEach(function(e){if(e[1])el.style[e[0]]=e[1]})}}
+if(typeof window.modifiedURL==='undefined'){window.modifiedURL=function(url,mods){try{var u=new URL(url.href||url);Object.entries(mods).forEach(function(e){u[e[0]]=e[1]||''});return u}catch(e){return url}}}
+if(typeof window.URLFromString==='undefined'){window.URLFromString=function(s){try{return new URL(s)}catch(e){try{return new URL(s,window.location.origin)}catch(e2){return null}}}}
+if(typeof window.selectorFromHash==='undefined'){window.selectorFromHash=function(hash){if(!hash||hash.length<2)return null;return'[id="'+hash.slice(1)+'"]'}}
+if(typeof window.fixedEncodeURIComponent==='undefined'){window.fixedEncodeURIComponent=function(s){return encodeURIComponent(s).replace(/[!'()*]/g,function(c){return'%'+c.charCodeAt(0).toString(16)})}}
+if(typeof window.urlEncodeQuery==='undefined'){window.urlEncodeQuery=function(params){return new URLSearchParams(params).toString()}}
+if(typeof window.doAjax==='undefined'){window.doAjax=function(opts){var req=new XMLHttpRequest;req.addEventListener('load',function(e){e.target.status<400?opts.onSuccess&&opts.onSuccess(e):opts.onFailure&&opts.onFailure(e)});req.addEventListener('error',function(e){opts.onFailure&&opts.onFailure(e)});req.open(opts.method||'GET',opts.location);if(opts.headers)Object.entries(opts.headers).forEach(function(h){req.setRequestHeader(h[0],h[1])});req.send()}}
+if(typeof window._π==='undefined'){window._π=function(prefix,arr){return(Array.isArray(arr)?arr:[arr]).map(function(s){return prefix+s})}}
+if(typeof window.isOnlyChild==='undefined'){window.isOnlyChild=function(el){return el&&el.parentElement&&el.parentElement.children.length===1}}
+if(typeof window.expandLockCollapseBlock==='undefined'){window.expandLockCollapseBlock=function(){}}
+if(typeof window.highlightTargetElementInDocument==='undefined'){window.highlightTargetElementInDocument=function(){}}
+if(typeof window.Notes==='undefined'){window.Notes={noteNumber:function(el){var sup=el&&el.querySelector('sup');return sup?parseInt(sup.textContent)||1:1},footnoteIdForNumber:function(n){return'fn'+n},allNotesForCitation:function(){return[]}}}
+if(typeof window.DarkMode==='undefined'){window.DarkMode={currentMode:function(){return'dark'},switchedElementsSelector:'[media]',mediaAttributeValues:{dark:'',light:'print'}}}
+if(typeof window.baseLocationForDocument==='undefined'){window.baseLocationForDocument=function(node){return window.location}}
+if(typeof window.rollDie==='undefined'){window.rollDie=function(n){return Math.floor(Math.random()*n)+1}}
+if(typeof window.paragraphizeTextNodesOfElementRetainingMetadata==='undefined'){window.paragraphizeTextNodesOfElementRetainingMetadata=function(){}}
+if(typeof window.unescapeHTML==='undefined'){window.unescapeHTML=function(s){var d=document.createElement('div');d.innerHTML=s;return d.textContent}}
+if(typeof window.isNodeEmpty==='undefined'){window.isNodeEmpty=function(n){return!n||0===n.childNodes.length}}
+</script>
+<!-- Gwern Bundle (minified, defer für Performance) -->
 <script src="/js/gwern-bundle.min.js" is:inline></script>
 <script src="/js/popup-styles.js" is:inline></script>
 
 <style is:global>
-  /* Popup z-index ueber allem */
+  /* Popup z-index über allem */
   #popup-container {
     z-index: 99999 !important;
   }
