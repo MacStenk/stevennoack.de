@@ -32,6 +32,11 @@ D_TAG=$(grep '^slug:' "$ARTICLE_PATH" | sed 's/^slug: *//;s/"//g')
 SUMMARY=$(grep '^description:' "$ARTICLE_PATH" | sed 's/^description: *"\(.*\)"/\1/')
 IMAGE=$(grep '^heroImage:' "$ARTICLE_PATH" | sed 's/^heroImage: *//;s/"//g')
 
+# Convert relative image paths to absolute URLs for Nostr
+if [ -n "$IMAGE" ] && [[ ! "$IMAGE" =~ ^https?:// ]]; then
+  IMAGE="https://stevennoack.de${IMAGE}"
+fi
+
 # Extract tags (supports YAML list format and inline format)
 TAGS=()
 
@@ -244,3 +249,79 @@ Relays: ${RELAYS[*]}
 EOF
 
 echo "💾 Log saved: $LOG_FILE"
+
+# === OPENTIMESTAMPS ===
+if command -v ots &> /dev/null; then
+  echo ""
+  echo "⏱️  OpenTimestamps..."
+  
+  # Stamp the article
+  ots stamp "$ARTICLE_PATH" 2>&1
+  OTS_FILE="${ARTICLE_PATH}.ots"
+  
+  if [ -f "$OTS_FILE" ]; then
+    # Copy proof to public/proofs/
+    PROOFS_DIR="$(dirname "$ARTICLE_PATH")/../../public/proofs"
+    mkdir -p "$PROOFS_DIR"
+    OTS_BASENAME="$(basename "$OTS_FILE")"
+    cp "$OTS_FILE" "$PROOFS_DIR/$OTS_BASENAME"
+    
+    SHA256=$(shasum -a 256 "$ARTICLE_PATH" | cut -d' ' -f1)
+    
+    echo "  ✅ Timestamped"
+    echo "  SHA-256: $SHA256"
+    echo "  Proof: public/proofs/$OTS_BASENAME"
+    
+    # Append to log
+    cat >> "$LOG_FILE" << OTSEOF
+
+## OpenTimestamps
+SHA-256: $SHA256
+Proof: $OTS_FILE
+OTSEOF
+  else
+    echo "  ⚠️  OTS stamp failed"
+  fi
+else
+  echo ""
+  echo "⏱️  OpenTimestamps: ots not installed, skipping"
+fi
+
+# === ZITIER-BLOCK (BibTeX) ===
+# Check if article already has a Zitieren section
+if ! grep -q '## Zitieren' "$ARTICLE_PATH"; then
+  echo ""
+  echo "📚 Adding BibTeX citation block..."
+  
+  # Generate BibTeX key from slug
+  BIBTEX_KEY="noack$(date +%Y)$(echo "$D_TAG" | sed 's/-/_/g' | cut -c1-20)"
+  YEAR=$(date +%Y)
+  MONTH=$(date +%-m)
+  DAY=$(date +%-d)
+  CANONICAL="https://stevennoack.de/nostr/artikel/$D_TAG"
+  
+  # Append citation block
+  cat >> "$ARTICLE_PATH" << CITEOF
+
+---
+
+## Zitieren
+
+\`\`\`bibtex
+@article{$BIBTEX_KEY,
+  title     = {$(echo "$TITLE" | sed 's/–/--/g')},
+  author    = {Noack, Steven},
+  year      = {$YEAR},
+  month     = {$MONTH},
+  day       = {$DAY},
+  url       = {$CANONICAL},
+  language  = {de}
+}
+\`\`\`
+CITEOF
+  
+  echo "  ✅ BibTeX block added"
+else
+  echo ""
+  echo "📚 BibTeX citation block already exists, skipping"
+fi

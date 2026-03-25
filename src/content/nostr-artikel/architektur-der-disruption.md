@@ -4,7 +4,7 @@ title: "Die Architektur der Disruption: Internet-Pioniere vs. KI-Pioniere"
 subtitle: "Eine vergleichende Analyse der strukturellen Muster, die bestimmen, wer in technologischen Revolutionen gewinnt und wer verschwindet."
 slug: architektur-der-disruption
 description: "Strukturelle Parallelen zwischen Internet (1995-2005) und KI (2020-2030): Welche Muster entscheiden, wer die nächsten Google und Amazon werden. Basierend auf vier Deep-Research-Analysen."
-sig: "dc1d16f2b6e2a8ceb075a03cbb1fca34d352757e66949d71a77ad0f1d72bc22f31f45c1c48a5e276f05a6baef3dbd0d43ba2addefe67f5bd42335ff64fcf1bae"
+sig: "5fbfc08c9bc58d12d00c51576b0c5e12190c06e7a33283cbd88ad750ae0c5f0b9118dbc7d3378f44199734434b61b2787224824e1cbde79e0d7d9e125a85232b"
 type: long-artikel
 
 # === KATEGORISIERUNG ===
@@ -30,7 +30,7 @@ word_count: 6775
 reading_time: 27min
 
 # === HERO IMAGE ===
-heroImage: /images/architektur-der-disruption-hero.webp
+heroImage: https://stevennoack.de/images/architektur-der-disruption-hero.webp
 heroImageAlt: "Datenvisualisierung: Zwei S-Kurven vergleichen die Adoptionsgeschwindigkeit von Internet (1995-2005) und KI (2020-2030). Die KI-Kurve steigt 42x steiler. Ein roter Punkt markiert das Jahr 2026. Bloomberg-Terminal-Ästhetik auf schwarzem Hintergrund."
 heroImageHash: "d821a3b16b58286b0d389ecaa753a7b3e5a716d363d63d613cae1bccc3be2f28"
 
