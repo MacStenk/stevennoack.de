@@ -662,6 +662,14 @@ Die strukturelle Wiederholung der Internet-Revolution läuft. Nur bei zehn- bis 
 
 ---
 
+## Verifizierung
+
+Dieser Artikel ist kryptografisch verankert:
+
+**Nostr-Signatur:** Publiziert als Kind 30023 Long-form Event, signiert mit npub1cxa0fa6vmq5evwpgk8dg6ul99ny5e2nd3hy5fa72g598t39nxy0surzuva
+
+**OpenTimestamps:** SHA-256 `874e45f10796c8fd452d1e39c74d809f241f991947dda9de8a22d727837f3004` — verankert in der Bitcoin-Blockchain via [OpenTimestamps](https://opentimestamps.org). Proof: [architektur-der-disruption.md.ots](/proofs/architektur-der-disruption.md.ots)
+
 ## Zitieren
 
 ```bibtex
