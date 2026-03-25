@@ -4,7 +4,7 @@ title: "Die Architektur der Disruption: Internet-Pioniere vs. KI-Pioniere"
 subtitle: "Eine vergleichende Analyse der strukturellen Muster, die bestimmen, wer in technologischen Revolutionen gewinnt und wer verschwindet."
 slug: architektur-der-disruption
 description: "Strukturelle Parallelen zwischen Internet (1995-2005) und KI (2020-2030): Welche Muster entscheiden, wer die nächsten Google und Amazon werden. Basierend auf vier Deep-Research-Analysen."
-sig: "5fbfc08c9bc58d12d00c51576b0c5e12190c06e7a33283cbd88ad750ae0c5f0b9118dbc7d3378f44199734434b61b2787224824e1cbde79e0d7d9e125a85232b"
+sig: "a122788cd72d7c8cebb302986849e7631345ce9638a66cbc3589d46114364614bfc3649eb8bf9d4105dd19047ec74ebd1f44871903fedf236f1122f1dfd9a330"
 type: long-artikel
 
 # === KATEGORISIERUNG ===

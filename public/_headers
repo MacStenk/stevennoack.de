@@ -13,3 +13,7 @@
 
 /api/*
   Access-Control-Allow-Origin: *
+
+/images/*
+  Access-Control-Allow-Origin: *
+  Cross-Origin-Resource-Policy: cross-origin
