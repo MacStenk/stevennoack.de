@@ -20,6 +20,23 @@
       "llm"
     ]
   },
+  "/nostr/artikel/architektur-der-disruption": {
+    "url": "/nostr/artikel/architektur-der-disruption",
+    "title": "Die Architektur der Disruption: Internet-Pioniere vs. KI-Pioniere",
+    "author": "Steven Noack",
+    "date": "2026-03-25",
+    "abstract": "Strukturelle Parallelen zwischen Internet (1995-2005) und KI (2020-2030): Welche Muster entscheiden, wer die nächsten Google und Amazon werden. Basierend auf vier Deep-Research-Analysen.",
+    "tags": [
+      "KI",
+      "Internet",
+      "Disruption",
+      "Deutschland",
+      "Open Source",
+      "Infrastruktur",
+      "Geschäftsmodelle",
+      "Europa"
+    ]
+  },
   "/nostr/artikel/von-herzen-zu-sats": {
     "url": "/nostr/artikel/von-herzen-zu-sats",
     "title": "Von Herzen zu Sats – Warum echtes Geld besser ist als Likes",
