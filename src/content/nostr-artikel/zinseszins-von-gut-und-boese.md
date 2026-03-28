@@ -95,6 +95,8 @@ In Emily Brontës Sturmhöhe lässt sich beobachten, wie diese Buchführung übe
 
 > Hindley hatte scheinbar den stärkeren Kopf, erwies sich aber als der weit schlechtere und schwächere Mann. Als sein Schiff auf Grund lief, verließ der Kapitän seinen Posten; und die Mannschaft versuchte nicht, das Schiff zu retten, sondern stürzte sich in Aufruhr und Verwirrung. Linton hingegen zeigte den wahren Mut einer treuen Seele: Er vertraute Gott, und Gott tröstete ihn. Der eine hoffte, der andere verzweifelte: Sie wählten ihre eigenen Lose.
 
+*Emily Brontë, Sturmhöhe*
+
 Was Nelly Dean hier beschreibt, ist keine Charakterschwäche, die sich plötzlich offenbart, sondern eine, die sich über viele kleine Entscheidungen akkumuliert hatte. Hindley hatte in guten Zeiten keine Reserven aufgebaut. Als die Krise kam, gab es nichts, worauf er hätte zurückgreifen können.
 
 Konfuzius nannte die Summe dieser aufgebauten Qualitäten Rén, jene höchste Tugend, die Güte, Aufrichtigkeit, Mut, Mitgefühl und Gegenseitigkeit umfasst. Rén hat nach konfuzianischem Verständnis keine einzelne Definition, weil sie keine einzelne Handlung ist. Sie ist das Ergebnis eines Lebens, das in zahllosen kleinen Momenten auf Würde und Fürsorge ausgerichtet wurde. Ein Herrscher, der den Auftrag des Himmels trägt, führt durch moralisches Vorbild, weil er eine Autorität besitzt, die aus gelebter Tugend gewachsen ist.
@@ -109,6 +111,8 @@ Als diese Korrekturen wegfallen und Victor in seine Obsession versinkt, vollzieh
 
 > Nichts ist dem menschlichen Geist schmerzhafter als nach einer raschen Folge von Ereignissen die tote Stille von Untätigkeit und Gewissheit, die folgt und der Seele sowohl Hoffnung als auch Furcht raubt. Justine starb, sie ruhte, und ich lebte. Das Blut floss frei in meinen Adern, aber ein Gewicht aus Verzweiflung und Reue drückte auf mein Herz, das nichts entfernen konnte.
 
+*Mary Shelley, Frankenstein*
+
 Das Erschütternde an Victors Zustand ist die Erkenntnis, dass er ein Mensch war, der mit guten Absichten begann. Sein Herz, wie er sagt, überfloss von Güte und Liebe zur Tugend. Die kleinen Kompromisse jedoch, die er einging, die Entscheidungen, die er verdrängte, hatten eine Struktur des Bösen aufgebaut, die sich schließlich als stärker erwies als seine ursprünglichen Vorsätze.
 
 Das Geschöpf selbst kennt diese Logik am besten. Es beschreibt, wie es einst von hohen Gedanken der Ehre und Hingabe genährt wurde, wie seine Fantasie von Träumen der Tugend, des Ruhms und der Freude besänftigt wurde. Doch Verbrechen hatte es unter das niedrigste Tier erniedrigt. Der gefallene Engel wird zum bösartigen Teufel durch eine Kette von Reaktionen auf erlittenes Unrecht, von denen jede die nächste wahrscheinlicher machte.
@@ -118,6 +122,8 @@ Das Geschöpf selbst kennt diese Logik am besten. Es beschreibt, wie es einst vo
 Herman Melville verstand diese Mechanik mit einer Tiefe, die über das Moralische hinausgeht ins Kosmologische. In Moby-Dick beschreibt Ishmael, wie Ahab eine Besatzung zusammengestellt hat, die scheinbar für monomanische Rache geschaffen wurde: Starbucks Tugend ist zu schwach, um allein zu wirken; Stubbs unerschütterliche Gleichgültigkeit macht ihn formbar; Flasks Mittelmäßigkeit bietet keinen Widerstand. Jeder von ihnen hatte in kleinen Momenten entschieden, wer er war, und diese Entscheidungen machten sie zu idealen Werkzeugen für Ahabs Zwecke.
 
 > Wie es geschah, dass sie so bereitwillig auf den Zorn des alten Mannes reagierten, durch welche böse Magie ihre Seelen besessen waren, sodass sein Hass bisweilen fast der ihre schien, wie all dies zustande kam, zu erklären, würde tiefer tauchen, als Ismael kann. Der unterirdische Bergmann, der in uns allen arbeitet, wie kann man sagen, wohin sein Schacht führt?
+
+*Herman Melville, Moby-Dick*
 
 Melville erkennt, dass die moralische Erosion nicht immer bewusst geschieht. Es gibt einen unterirdischen Bergmann in jedem Menschen, der in Stille arbeitet, dessen Richtung sich erst offenbart, wenn es zu spät ist, die Arbeit rückgängig zu machen. Starbuck ist tugendhaft, aber seine Tugend ist ungestützt, bloß rechtschaffenes Denken ohne die Tiefe, die aus geübter Praxis entsteht. Aristoteles hätte gesagt: Er hat die richtige Meinung, aber nicht die richtige Disposition.
 
@@ -140,6 +146,8 @@ Es gibt eine beunruhigende Asymmetrie in dieser Mechanik. Der Aufbau von Charakt
 Der Verfall beginnt mit diesen kleinen Niederträchtigkeiten. Mit der Entscheidung, eine Form zu benutzen, die nicht für den eigenen Zweck gedacht war. Mit dem ersten Mal, dass eine Gelegenheit ausgenutzt statt respektiert wird. Jede dieser Entscheidungen macht die nächste leichter.
 
 > Einst wurden meine Gedanken von erhabenen und transzendenten Visionen der Schönheit und Majestät des Guten erfüllt. Aber es ist nun einmal so: Der gefallene Engel wird zum bösartigen Teufel.
+
+*Mary Shelley, Frankenstein*
 
 Shelleys Geschöpf beschreibt hier eine universale Logik. Die Visionen des Guten sind am Anfang da. Sie verblassen nicht plötzlich. Sie werden durch kleine Entscheidungen überschrieben, durch Reaktionen auf Unrecht, die verständlich sind, aber dennoch eine Richtung einschlagen, die sich mit jeder Wiederholung verfestigt.
 
