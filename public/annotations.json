@@ -225,6 +225,20 @@
       "zukunft"
     ]
   },
+  "/nostr/artikel/zinseszins-von-gut-und-boese": {
+    "url": "/nostr/artikel/zinseszins-von-gut-und-boese",
+    "title": "Der Zinseszins von Gut und Böse",
+    "author": "Steven Noack",
+    "date": "2026-03-28",
+    "abstract": "Charakter entsteht nicht in den großen Momenten. Er entsteht in den kleinen, kaum bemerkten Entscheidungen, die sich aufschichten wie Zinseszinsen. Über Aristoteles, Shelley, Melville und die Mechanik des moralischen Lebens.",
+    "tags": [
+      "Philosophie",
+      "Charakter",
+      "Tugend",
+      "Aristoteles",
+      "Literatur"
+    ]
+  },
   "/nostr/artikel/zwei-wege-ein-interface": {
     "url": "/nostr/artikel/zwei-wege-ein-interface",
     "title": "Zwei Wege, ein Interface: Wie ich lokale und Cloud-KI unter einem Dach vereint habe",
