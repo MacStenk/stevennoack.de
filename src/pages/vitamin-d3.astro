@@ -1,0 +1,167 @@
+---
+// src/pages/vitamin-d3.astro
+import BaseLayout from "@/layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="Vitamin D3 Protokoll - Steven Noack"
+  description="Das vollständige Vitamin-D3-Protokoll mit allen Cofaktoren. Kostenloser Guide mit konkreten Produkten und Dosierungen."
+  image="https://stevennoack.de/steven-noack.png"
+>
+  <!-- Override dark background for this page -->
+  <style is:global>
+    html, body {
+      background: #FFFAF5 !important;
+      color: #1a1a1a !important;
+    }
+  </style>
+
+  <main class="max-w-3xl mx-auto px-6 py-16 md:py-24 font-sans">
+
+    <!-- Hero -->
+    <section class="mb-16 md:mb-20 text-center">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-orange-100 text-orange-600 font-mono text-xs uppercase tracking-widest mb-8">
+        <span class="w-2 h-2 rounded-full bg-orange-400 animate-pulse"></span>
+        Kostenloser Guide
+      </div>
+
+      <h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-6 font-mono text-gray-900 leading-tight">
+        Die meisten Menschen<br/>
+        <span class="text-orange-500">haben zu wenig Vitamin D.</span>
+      </h1>
+
+      <p class="text-xl text-gray-600 leading-relaxed max-w-2xl mx-auto font-light">
+        Und die meisten, die supplementieren, machen es falsch.
+        Ohne die richtigen Cofaktoren landet dein Calcium in den Arterien statt in den Knochen.
+      </p>
+    </section>
+
+    <!-- Problem -->
+    <section class="mb-16">
+      <div class="bg-white rounded-xl border border-orange-200/60 p-8 md:p-10 shadow-sm">
+        <h2 class="text-xs font-mono text-orange-500 uppercase tracking-widest mb-6">
+          Das Problem
+        </h2>
+        <div class="space-y-4 text-gray-700 text-lg leading-relaxed">
+          <p>
+            Vitamin D3 allein reicht nicht. Dein Körper braucht ein ganzes System aus Cofaktoren,
+            damit es wirkt: <strong>K2</strong> als Verkehrspolizist für Calcium,
+            <strong>Magnesium</strong> für über 300 Enzymreaktionen,
+            <strong>B-Vitamine</strong> für den Zellstoffwechsel.
+          </p>
+          <p>
+            Ohne dieses System supplementierst du ins Leere. 
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Was du bekommst -->
+    <section class="mb-16">
+      <h2 class="text-xs font-mono text-orange-500 uppercase tracking-widest mb-8 text-center">
+        Was im Guide steht
+      </h2>
+
+      <div class="grid gap-4">
+        <div class="flex items-start gap-4 bg-white rounded-lg border border-gray-200/80 p-5">
+          <span class="flex-shrink-0 w-8 h-8 rounded-full bg-orange-100 text-orange-500 flex items-center justify-center font-mono font-bold text-sm">1</span>
+          <div>
+            <h3 class="font-semibold text-gray-900 mb-1">Das vollständige Protokoll</h3>
+            <p class="text-gray-600">6 Supplemente, die als System zusammenarbeiten. Warum jedes einzelne wichtig ist und was passiert, wenn eines fehlt.</p>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-4 bg-white rounded-lg border border-gray-200/80 p-5">
+          <span class="flex-shrink-0 w-8 h-8 rounded-full bg-orange-100 text-orange-500 flex items-center justify-center font-mono font-bold text-sm">2</span>
+          <div>
+            <h3 class="font-semibold text-gray-900 mb-1">Konkrete Produkte</h3>
+            <p class="text-gray-600">Keine vagen Empfehlungen. Echte Produktnamen, Preise und worauf du beim Kauf achten musst.</p>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-4 bg-white rounded-lg border border-gray-200/80 p-5">
+          <span class="flex-shrink-0 w-8 h-8 rounded-full bg-orange-100 text-orange-500 flex items-center justify-center font-mono font-bold text-sm">3</span>
+          <div>
+            <h3 class="font-semibold text-gray-900 mb-1">Drei Preisstufen</h3>
+            <p class="text-gray-600">28 EUR, 50 EUR oder Premium. Alle drei funktionieren. Der Unterschied liegt im Detail, nicht im Ergebnis.</p>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-4 bg-white rounded-lg border border-gray-200/80 p-5">
+          <span class="flex-shrink-0 w-8 h-8 rounded-full bg-orange-100 text-orange-500 flex items-center justify-center font-mono font-bold text-sm">4</span>
+          <div>
+            <h3 class="font-semibold text-gray-900 mb-1">Die Biochemie dahinter</h3>
+            <p class="text-gray-600">Zwei Erklärungsebenen: Einmal einfach. Einmal die ganze Geschichte. Du entscheidest, wie tief du gehen willst.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Notebook Teaser -->
+    <section class="mb-16">
+      <div class="flex items-start gap-4 bg-white rounded-lg border border-orange-200/60 p-6 shadow-sm">
+        <span class="flex-shrink-0 w-10 h-10 rounded-full bg-orange-100 text-orange-500 flex items-center justify-center text-lg">🔬</span>
+        <div>
+          <h3 class="font-semibold text-gray-900 mb-2">Bonus: KI-Notebook mit Originalstudien</h3>
+          <p class="text-gray-600">Dieses Protokoll basiert auf zweieinhalb Jahren Eigenerfahrung und echten Studien. Nach der Anmeldung bekommst du Zugang zu einem KI-Notebook mit allen Originalquellen. Stell deine eigenen Fragen und bekomm Antworten direkt aus der Forschung. Kein Raten, keine Meinungen. Nur Biochemie und Praxis.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Social Proof / Zitat -->
+    <section class="mb-16">
+      <blockquote class="border-l-4 border-orange-300 pl-6 py-2">
+        <p class="text-xl text-gray-700 italic leading-relaxed">
+          "Die meisten Menschen kaufen Supplemente wie Waschmittel. Das steht 'Vitamin D' drauf, also wird's schon Vitamin D sein. Das Problem: Der Unterschied zwischen einem 5-Euro-Produkt und einem 15-Euro-Produkt ist nicht die Menge. Es ist die Frage, ob dein Körper überhaupt etwas damit anfangen kann."
+        </p>
+      </blockquote>
+    </section>
+
+    <!-- CTA + MailerLite Form -->
+    <section class="mb-16">
+      <div class="bg-gradient-to-br from-orange-50 to-amber-50 rounded-xl border border-orange-200/60 p-8 md:p-10">
+        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 font-mono mb-3 text-center">
+          Guide kostenlos erhalten
+        </h2>
+        <p class="text-gray-600 text-center mb-8 text-lg">
+          Trag dich ein und bekomm das vollständige Protokoll per E-Mail.
+        </p>
+
+        <!-- MailerLite Form Embed -->
+        <div class="ml-embedded" data-form="AlOroW"></div>
+      </div>
+    </section>
+
+    <!-- Trust -->
+    <section class="mb-16 text-center">
+      <p class="text-sm text-gray-400 font-mono">
+        Kein Spam. Kein Abo-Modell. Nur der Guide.
+      </p>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-gray-200 pt-12 pb-20">
+      <div class="flex flex-col md:flex-row gap-8 text-sm font-mono text-gray-400">
+        <div>
+          <a href="/" class="text-gray-500 hover:text-gray-900 transition-colors">
+            &larr; stevennoack.de
+          </a>
+        </div>
+        <div class="md:ml-auto">
+          <a href="/rechtliches" class="text-gray-400 hover:text-gray-900 transition-colors">
+            Impressum & Datenschutz
+          </a>
+        </div>
+      </div>
+    </footer>
+  </main>
+
+  <!-- MailerLite Universal -->
+  <script>
+    (function(w,d,e,u,f,l,n){w[f]=w[f]||function(){(w[f].q=w[f].q||[])
+    .push(arguments);},l=d.createElement(e),l.async=1,l.src=u,
+    n=d.getElementsByTagName(e)[0],n.parentNode.insertBefore(l,n);})
+    (window,document,'script','https://assets.mailerlite.com/js/universal.js','ml');
+    ml('account', '977546');
+  </script>
+</BaseLayout>
