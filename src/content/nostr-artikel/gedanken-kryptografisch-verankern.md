@@ -274,15 +274,5 @@ Nicht mehr und nicht weniger. Das ist, was "Gedanken kryptografisch verankern" b
 
 ## Zitieren
 
-```bibtex
-@article\{noack2026gedanken,
-  author       = \{Noack, Steven\},
-  title        = \{Gedanken verankern: Warum kryptografische Zeitstempel die Zukunft persönlichen Wissens sind\},
-  year         = \{2026\},
-  publisher    = \{VisionFusen Signal\},
-  url          = \{https://signal.visionfusen.org/gedanken-kryptografisch-verankern/\},
-  language     = \{de\}
-\}
-```
 
 *Dieser Artikel wurde mit KI-Unterstützung (Claude, Anthropic) recherchiert und redigiert. Alle Schlussfolgerungen und die redaktionelle Verantwortung liegen beim Autor.*
