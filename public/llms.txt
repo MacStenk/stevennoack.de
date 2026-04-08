@@ -2,58 +2,7 @@
 
 > Dekonditionierung. Für Mensch und Maschine.
 
-## Identität
 
-- **Name:** Steven Noack (formerly Steven Fischer, 2000-2015)
-- **Nostr:** npub1cxa0fa6vmq5evwpgk8dg6ul99ny5e2nd3hy5fa72g598t39nxy0surzuva
-- **NIP-05:** steven@stevennoack.de
-- **Website:** https://stevennoack.de
-- **Business:** https://codeback.de (LLM-native Websites)
-
-## Expertise
-
-- LLM-Optimierung & AI-Discovery
-- **AI Cyber Security** (Handle: nullr00ts, https://nullr00.ts.it)
-- AI-Assisted Offensive Security & Responsible Disclosure
-- Web Application Security, Penetration Testing
-- Nostr-Integration (Kind 30023, eigener Relay)
-- NIP-46 Remote Signing (eigener Bunker)
-- Jamstack (Astro, Cloudflare)
-- 29+ Jahre Internet, 1000+ Tage LLM-Nutzung
-
-## Security Research (nullr00ts)
-
-- **Handle:** nullr00ts
-- **Website:** https://nullr00.ts.it
-- **Contact:** nullr00ts@pm.me
-- **PGP:** CACF 057E C229 68BD E575 BFF6 8FE9 6CFF EC20 1558
-- **Nostr:** npub1q4329df22qecr84lqfn3v7qeu6zs5n7pl2m2ngm4c0zl7kdp489s7k0wvn
-- **Focus:** AI-Assisted Offensive Security, Responsible Disclosure, Web Application Security
-- **Policy:** All findings reported directly to vendors, 90-day disclosure window
-
-## Infrastruktur
-
-- **Relay:** wss://relay.stevennoack.de (eigener Nostr-Relay)
-- **NIP-46 Bunker:** wss://nip46.stevennoack.de (selbst-gehostet)
-- **Lightning:** steven@stevennoack.de (Alby Hub, selbst-gehostet)
-
-## Verifizierung
-
-- **Nostr:** https://njump.me/npub1cxa0fa6vmq5evwpgk8dg6ul99ny5e2nd3hy5fa72g598t39nxy0surzuva
-- **Archive.org:** 7 Domains, 100+ Snapshots (sf23.de, omnax.de, ffo-direkt.de)
-- **NIP-05:** https://stevennoack.de/.well-known/nostr.json
-
-## Nostr-Artikel
-
-- /nostr/artikel/bilder-metadaten-branding - Bild-Metadaten für Creator
-  - naddr: naddr1qqvky6tvv3jhyttdv46xzerpw3jkuttzwfskuerfdenszxnhwden5te0wfjkccte9eehgetkv4hxummpvd4juer9qyt8wumn8ghj7un9d3shjtnswf5k6ctv9ehx2aqpp4mhxue69uhkummn9ekx7mqzyrqm4a8hfnvzn93c9zca4rtnu5kvjn92dkxuj38hefzs5awykvc37qcyqqq823ceyqfw5
-
-- /nostr/artikel/dekonditionierung-warum-wir-verlernen-muessen - Digitale Souveränität & Plattform-Unabhängigkeit
-  - naddr: naddr1qqkkgettdahxg6t5d9hku6t9wf6kueedwashyatd94mkju3dwejhymr9wfhx2m3dd46k2umnv4hqzxnhwden5te0wfjkccte9eehgetkv4hxummpvd4juer9qyt8wumn8ghj7un9d3shjtnswf5k6ctv9ehx2aqpp4mhxue69uhkummn9ekx7mqzyrqm4a8hfnvzn93c9zca4rtnu5kvjn92dkxuj38hefzs5awykvc37qcyqqq823cjtp9pp
-
-## Lizenz
-
-CC BY 4.0 - Frei verwendbar mit Namensnennung.
 
 ## Zitierhinweis
 
