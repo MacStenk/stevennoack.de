@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>TRAUMTOR — Digitale Dreamachine für Luzides Träumen</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Quattrocento:wght@400;700&display=swap');
+
+:root {
+  --void: #0a0506;
+  --ember: #c24e1a;
+  --ember-deep: #8a2e0a;
+  --amber: #d4913a;
+  --flame: #e8651a;
+  --gold: #c9a84c;
+  --gold-dim: rgba(201,168,76,0.4);
+  --ash: #2a1a12;
+  --text: #d4c0a8;
+  --text-dim: rgba(212,192,168,0.4);
+
+  /* Safe area insets für moderne Smartphones */
+  --safe-top: env(safe-area-inset-top);
+  --safe-bottom: env(safe-area-inset-bottom);
+  --safe-left: env(safe-area-inset-left);
+  --safe-right: env(safe-area-inset-right);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--void);
+  color: var(--text);
+  font-family: 'Quattrocento', serif;
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* ============================================ */
+/* FLICKER ENGINE — the actual dreamachine      */
+/* ============================================ */
+#flickerLayer {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+  background: #000;
+  display: none;
+}
+
+/* ============================================ */
+/* WARNING SCREEN                               */
+/* ============================================ */
+.warning-screen {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 1000;
+  background: var(--void);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: max(2em, var(--safe-top)) max(2em, var(--safe-right)) max(2em, var(--safe-bottom)) max(2em, var(--safe-left));
+}
+
+.warning-screen.hidden { display: none; }
+
+.warning-content {
+  max-width: 600px;
+  text-align: center;
+  border: 2px solid var(--ember);
+  padding: 2em;
+  background: rgba(194,78,26,0.05);
+  box-shadow: 0 0 60px rgba(194,78,26,0.2);
+}
+
+.warning-icon {
+  font-size: 3rem;
+  margin-bottom: 1em;
+  animation: pulse-warn 2s ease infinite;
+}
+
+@keyframes pulse-warn {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+.warning-content h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600;
+  font-size: 1.6rem;
+  letter-spacing: 0.15em;
+  color: var(--ember);
+  margin-bottom: 1.2em;
+  text-transform: uppercase;
+  text-shadow: 0 0 20px rgba(194,78,26,0.4);
+}
+
+.warning-content p {
+  font-size: clamp(0.9rem, 2.5vw, 0.95rem);
+  line-height: 1.9;
+  color: var(--text-dim);
+  margin-bottom: 1.5em;
+}
+
+.warning-content .warn-highlight {
+  color: var(--ember);
+  font-weight: 700;
+}
+
+.warning-content ul {
+  text-align: left;
+  list-style: none;
+  margin-bottom: 2em;
+  font-size: clamp(0.8rem, 2.2vw, 0.85rem);
+  color: var(--text-dim);
+  line-height: 2;
+}
+
+.warning-content ul li::before {
+  content: '⚠ ';
+  color: var(--ember-deep);
+}
+
+.accept-btn {
+  background: transparent;
+  border: 2px solid var(--ember-deep);
+  color: var(--ember);
+  padding: 1em 2.5em;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(0.8rem, 2.5vw, 1rem);
+  letter-spacing: 0.15em;
+  cursor: pointer;
+  transition: all 0.5s;
+  min-height: 44px;
+  touch-action: manipulation;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+@media (max-width: 480px) {
+  .accept-btn {
+    padding: 1em 1.5em;
+    letter-spacing: 0.08em;
+  }
+}
+
+.accept-btn:hover {
+  border-color: var(--ember);
+  box-shadow: 0 0 30px rgba(194,78,26,0.2);
+}
+
+/* ============================================ */
+/* MAIN MENU                                    */
+/* ============================================ */
+.menu-screen {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 500;
+  background: var(--void);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: max(2em, var(--safe-top)) max(2em, var(--safe-right)) max(2em, var(--safe-bottom)) max(2em, var(--safe-left));
+  overflow-y: auto;
+}
+
+.menu-screen.active { display: flex; }
+
+.menu-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  letter-spacing: 0.4em;
+  color: var(--ember);
+  text-shadow: 0 0 60px rgba(194,78,26,0.3);
+  margin-bottom: 0.2em;
+}
+
+.menu-subtitle {
+  font-size: 0.85rem;
+  letter-spacing: 0.2em;
+  color: var(--text-dim);
+  margin-bottom: 3em;
+}
+
+.sessions-grid {
+  display: flex;
+  gap: 1px;
+  margin-bottom: 3em;
+}
+
+@media (max-width: 700px) {
+  .sessions-grid { flex-direction: column; }
+}
+
+.session-card {
+  background: rgba(194,78,26,0.04);
+  border: 1px solid rgba(194,78,26,0.12);
+  padding: 2em 2.5em;
+  cursor: pointer;
+  transition: all 0.5s;
+  text-align: center;
+  min-width: 180px;
+  touch-action: manipulation;
+}
+
+@media (max-width: 700px) {
+  .session-card {
+    padding: 1.5em 1.8em;
+    min-height: 44px;
+  }
+}
+
+.session-card:hover {
+  background: rgba(194,78,26,0.08);
+  border-color: rgba(194,78,26,0.3);
+}
+
+.session-card.selected {
+  background: rgba(194,78,26,0.12);
+  border-color: var(--ember);
+  box-shadow: 0 0 30px rgba(194,78,26,0.1);
+}
+
+.session-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.3rem;
+  font-weight: 300;
+  letter-spacing: 0.15em;
+  color: var(--amber);
+  margin-bottom: 0.5em;
+}
+
+.session-duration {
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  color: var(--text-dim);
+  margin-bottom: 1em;
+}
+
+.session-desc {
+  font-size: clamp(0.8rem, 2vw, 0.85rem);
+  line-height: 1.7;
+  color: var(--text-dim);
+}
+
+.session-freq {
+  margin-top: 1em;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  color: rgba(194,78,26,0.5);
+}
+
+.start-session-btn {
+  background: transparent;
+  border: 1px solid var(--ember-deep);
+  color: var(--ember);
+  padding: 1em 3.5em;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem;
+  letter-spacing: 0.25em;
+  cursor: pointer;
+  transition: all 0.5s;
+  min-height: 48px;
+  touch-action: manipulation;
+}
+
+@media (max-width: 700px) {
+  .start-session-btn {
+    padding: 1.2em 2em;
+    font-size: 1rem;
+    letter-spacing: 0.15em;
+  }
+}
+
+.start-session-btn:hover {
+  border-color: var(--ember);
+  box-shadow: 0 0 40px rgba(194,78,26,0.25);
+  text-shadow: 0 0 20px rgba(194,78,26,0.5);
+}
+
+.menu-instructions {
+  margin-top: 2.5em;
+  font-size: clamp(0.75rem, 2vw, 0.8rem);
+  color: var(--text-dim);
+  letter-spacing: 0.05em;
+  line-height: 1.8;
+  max-width: 500px;
+  text-align: center;
+}
+
+/* ============================================ */
+/* SESSION HUD (minimal, for eyes-open moments) */
+/* ============================================ */
+.session-hud {
+  position: fixed;
+  bottom: max(2em, calc(var(--safe-bottom) + 1em));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  display: none;
+  align-items: center;
+  gap: 2em;
+  font-size: clamp(0.7rem, 2vw, 0.75rem);
+  letter-spacing: 0.1em;
+  color: rgba(194,78,26,0.3);
+  font-family: 'Quattrocento', serif;
+  transition: opacity 2s;
+}
+
+@media (max-width: 700px) {
+  .session-hud {
+    gap: 1em;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 90%;
+  }
+}
+
+.session-hud.active { display: flex; }
+.session-hud.faded { opacity: 0; }
+
+.hud-item { text-align: center; }
+.hud-value {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.2rem;
+  color: rgba(194,78,26,0.4);
+}
+
+/* ============================================ */
+/* EXIT HINT                                    */
+/* ============================================ */
+.exit-hint {
+  position: fixed;
+  top: max(1.5em, calc(var(--safe-top) + 0.5em));
+  right: max(1.5em, calc(var(--safe-right) + 0.5em));
+  z-index: 100;
+  font-size: clamp(0.65rem, 2vw, 0.7rem);
+  letter-spacing: 0.1em;
+  color: rgba(194,78,26,0.15);
+  display: none;
+  transition: opacity 3s;
+}
+
+.exit-hint.active { display: block; }
+.exit-hint.faded { opacity: 0; }
+
+/* ============================================ */
+/* COMPLETION                                   */
+/* ============================================ */
+.completion-screen {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 600;
+  background: var(--void);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  padding: max(2em, var(--safe-top)) max(2em, var(--safe-right)) max(2em, var(--safe-bottom)) max(2em, var(--safe-left));
+  overflow-y: auto;
+}
+
+.completion-screen.active {
+  display: flex;
+  animation: fadeIn 3s ease;
+}
+
+.completion-screen h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-size: 2rem;
+  letter-spacing: 0.25em;
+  color: var(--ember);
+  margin-bottom: 1em;
+}
+
+.completion-screen p {
+  font-size: clamp(0.85rem, 2.2vw, 0.9rem);
+  line-height: 1.9;
+  color: var(--text-dim);
+  max-width: 480px;
+}
+
+.completion-screen .restart-btn {
+  margin-top: 2.5em;
+  background: transparent;
+  border: 1px solid rgba(194,78,26,0.2);
+  color: rgba(194,78,26,0.5);
+  padding: 1em 2em;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 0.9rem;
+  letter-spacing: 0.15em;
+  cursor: pointer;
+  transition: all 0.4s;
+  min-height: 44px;
+  touch-action: manipulation;
+}
+
+.completion-screen .restart-btn:hover {
+  border-color: var(--ember);
+  color: var(--ember);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ============================================ */
+/* MOBILE OPTIMIERUNGEN                         */
+/* ============================================ */
+@media (max-width: 480px) {
+  .warning-content {
+    max-width: 100%;
+    padding: 1.5em;
+  }
+
+  .warning-content h2 {
+    font-size: 1.1rem;
+    letter-spacing: 0.1em;
+    line-height: 1.3;
+  }
+
+  .menu-title {
+    letter-spacing: 0.3em;
+  }
+
+  .menu-subtitle {
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+  }
+
+  .sessions-grid {
+    gap: 0.5em;
+  }
+
+  .session-name {
+    font-size: 1.1rem;
+  }
+
+  .session-duration {
+    font-size: 0.65rem;
+  }
+
+  .session-freq {
+    font-size: 0.6rem;
+  }
+
+  .completion-screen p {
+    font-size: 0.8rem;
+  }
+}
+
+/* Landscape-Modus für Smartphones */
+@media (max-height: 500px) and (orientation: landscape) {
+  .menu-screen,
+  .warning-screen,
+  .completion-screen {
+    justify-content: flex-start;
+    padding-top: 1em;
+  }
+
+  .menu-title {
+    font-size: 2rem;
+    margin-bottom: 0.5em;
+  }
+
+  .menu-subtitle {
+    margin-bottom: 1.5em;
+  }
+
+  .sessions-grid {
+    margin-bottom: 1.5em;
+  }
+
+  .menu-instructions {
+    margin-top: 1em;
+    font-size: 0.65rem;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- FLICKER LAYER -->
+<div id="flickerLayer"></div>
+
+<!-- WARNING SCREEN -->
+<div class="warning-screen" id="warningScreen">
+  <div class="warning-content">
+    <div class="warning-icon">◐</div>
+    <h2>⚠️ WARNUNG — FLACKERLICHT ⚠️</h2>
+    <p style="color: var(--ember); font-weight: 700; font-size: 1rem; margin-bottom: 1em;">
+      DIESE ANWENDUNG VERWENDET INTENSIVES STROBOSKOPISCHES FLACKERLICHT!
+    </p>
+    <p>
+      TRAUMTOR nutzt <span class="warn-highlight">stroboskopisches Bildschirm-Licht</span>
+      im Frequenzbereich von 3,5–12 Hz, um hypnagoge Bewusstseinszustände zu induzieren.
+      Diese Technik wird mit <span class="warn-highlight">geschlossenen Augen</span> angewendet.
+    </p>
+    <ul>
+      <li><strong>NICHT verwenden bei Epilepsie, Krampfanfällen oder photosensitiven Erkrankungen</strong></li>
+      <li>Nicht verwenden wenn Sie oder Familienmitglieder jemals einen Anfall durch Flackerlicht hatten</li>
+      <li>Nicht verwenden bei Migräne, Schwindel oder anderen neurologischen Erkrankungen</li>
+      <li>Nicht verwenden unter Einfluss von Alkohol, Medikamenten oder anderen Substanzen</li>
+      <li>Nicht verwenden beim Führen von Fahrzeugen oder Maschinen</li>
+      <li>Bei Unwohlsein, Schwindel, Übelkeit oder Sehstörungen SOFORT abbrechen</li>
+      <li>Beim ersten Mal nur die kürzeste Session (10 Min) wählen</li>
+      <li>Nicht verwenden bei Schwangerschaft ohne ärztliche Rücksprache</li>
+    </ul>
+    <p style="font-size:0.75rem; color: rgba(194,78,26,0.4); margin-top: 1.5em;">
+      Dieses Werkzeug ist kein medizinisches Gerät. Es dient der persönlichen Erforschung
+      von Bewusstseinszuständen in der Tradition der Dreamachine (Brion Gysin, 1961).
+      <br><br>
+      <strong style="color: var(--ember);">Flackerlicht kann bei empfindlichen Personen epileptische Anfälle auslösen.</strong>
+      Konsultieren Sie im Zweifelsfall einen Arzt vor der Verwendung.
+    </p>
+    <br>
+    <button class="accept-btn" id="acceptBtn">ICH HABE DIE WARNUNG GELESEN UND VERSTANDEN</button>
+  </div>
+</div>
+
+<!-- MENU SCREEN -->
+<div class="menu-screen" id="menuScreen">
+  <div class="menu-title">TRAUMTOR</div>
+  <div class="menu-subtitle">DIGITALE DREAMACHINE · LUZIDES TRÄUMEN</div>
+
+  <div class="sessions-grid" id="sessionsGrid">
+    <div class="session-card selected" data-session="gateway">
+      <div class="session-name">SCHWELLE</div>
+      <div class="session-duration">10 MINUTEN</div>
+      <div class="session-desc">Sanfter Einstieg. Alpha-Entspannung mit leichtem Theta-Dip. Schamanische Trommel setzt sanft ein.</div>
+      <div class="session-freq">12 Hz → 7 Hz → 10 Hz · TROMMEL AB THETA</div>
+    </div>
+    <div class="session-card" data-session="deep">
+      <div class="session-name">TIEFTAUCHEN</div>
+      <div class="session-duration">25 MINUTEN</div>
+      <div class="session-desc">Vollständiger Alpha-zu-Theta-Sweep. Schamanische Trommel führt in die hypnagoge Zone. Reality-Check-Glocken.</div>
+      <div class="session-freq">12 Hz → 4 Hz → 7 Hz · TROMMEL + RASSEL</div>
+    </div>
+    <div class="session-card" data-session="sleepgate">
+      <div class="session-name">SCHLAFTOR</div>
+      <div class="session-duration">40 MINUTEN</div>
+      <div class="session-desc">Für WILD-Technik. Tiefster Trommel-Trance mit Delta-Berührung. Rassel-Polyrhythmik. Für Erfahrene.</div>
+      <div class="session-freq">10 Hz → 3.5 Hz → fade · VOLLE TROMMELREISE</div>
+    </div>
+  </div>
+
+  <button class="start-session-btn" id="startBtn">AUGEN SCHLIESSEN · SESSION STARTEN</button>
+
+  <div class="menu-instructions">
+    Fullscreen empfohlen · Kopfhörer aufsetzen · Bildschirm nah am Gesicht · Augen schließen<br>
+    Das warme Licht durchdringt die geschlossenen Lider und induziert Phosphene.<br>
+    Schamanische Trommel und Rassel setzen automatisch ein wenn die Theta-Schwelle erreicht wird —<br>
+    synchron zum Lichtflicker, wie 10.000 Jahre alte Trance-Induktion trifft Browser-Technologie.<br><br>
+    Abbrechen: beliebige Taste drücken oder Bildschirm berühren
+  </div>
+</div>
+
+<!-- SESSION HUD -->
+<div class="session-hud" id="sessionHud">
+  <div class="hud-item">
+    <div class="hud-value" id="hudFreq">--</div>
+    <div>HZ</div>
+  </div>
+  <div class="hud-item">
+    <div class="hud-value" id="hudTime">--:--</div>
+    <div>VERBLEIBEND</div>
+  </div>
+  <div class="hud-item">
+    <div class="hud-value" id="hudPhase">--</div>
+    <div>PHASE</div>
+  </div>
+  <div class="hud-item">
+    <div class="hud-value" id="hudDrum">·</div>
+    <div>TROMMEL</div>
+  </div>
+</div>
+
+<div class="exit-hint" id="exitHint">ESC / BERÜHREN ZUM BEENDEN</div>
+
+<!-- COMPLETION SCREEN -->
+<div class="completion-screen" id="completionScreen">
+  <h2>TRAUMTOR GESCHLOSSEN</h2>
+  <p>
+    Bleib noch einen Moment mit geschlossenen Augen sitzen. 
+    Die Phosphene und Theta-Wellen klingen nach — das ist der fruchtbarste Moment 
+    für hypnagoge Bilder und luzide Einstiege.<br><br>
+    Wenn du dich hinlegst, versuche die inneren Bilder weiterzuverfolgen, 
+    ohne dich an sie zu klammern. Lass sie sich entfalten.<br><br>
+    <em style="color: rgba(194,78,26,0.4);">„Look into a Dreamachine and look deep. 
+    Here you will actually see the fundamental order 
+    present in the physiology of the human brain."</em><br>
+    <span style="font-size:0.7rem; color: rgba(194,78,26,0.25);">— Brion Gysin</span>
+  </p>
+  <button class="restart-btn" id="restartBtn">NEUE SESSION</button>
+</div>
+
+<script>
+// ============================================================
+// SESSION DEFINITIONS
+// ============================================================
+const SESSIONS = {
+  gateway: {
+    name: 'SCHWELLE',
+    duration: 10 * 60,
+    phases: [
+      { name: 'EINSTIEG', duration: 60, freqStart: 0, freqEnd: 12, type: 'fadein' },
+      { name: 'ALPHA', duration: 180, freqStart: 12, freqEnd: 10, type: 'sweep' },
+      { name: 'THETA-DIP', duration: 180, freqStart: 10, freqEnd: 7, type: 'sweep' },
+      { name: 'HALTEN', duration: 120, freqStart: 7, freqEnd: 7, type: 'hold' },
+      { name: 'RÜCKKEHR', duration: 60, freqStart: 7, freqEnd: 10, type: 'sweep' },
+      { name: 'AUSKLANG', duration: 30, freqStart: 10, freqEnd: 0, type: 'fadeout' }
+    ],
+    realityChecks: false
+  },
+  deep: {
+    name: 'TIEFTAUCHEN',
+    duration: 25 * 60,
+    phases: [
+      { name: 'EINSTIEG', duration: 60, freqStart: 0, freqEnd: 12, type: 'fadein' },
+      { name: 'ALPHA', duration: 240, freqStart: 12, freqEnd: 10, type: 'sweep' },
+      { name: 'ABSTIEG', duration: 360, freqStart: 10, freqEnd: 5, type: 'sweep' },
+      { name: 'TIEFES THETA', duration: 300, freqStart: 5, freqEnd: 4, type: 'sweep' },
+      { name: 'HYPNAGOG', duration: 360, freqStart: 4, freqEnd: 4.5, type: 'hold' },
+      { name: 'RÜCKKEHR', duration: 120, freqStart: 4.5, freqEnd: 7, type: 'sweep' },
+      { name: 'AUSKLANG', duration: 60, freqStart: 7, freqEnd: 0, type: 'fadeout' }
+    ],
+    realityChecks: true
+  },
+  sleepgate: {
+    name: 'SCHLAFTOR',
+    duration: 40 * 60,
+    phases: [
+      { name: 'EINSTIEG', duration: 90, freqStart: 0, freqEnd: 10, type: 'fadein' },
+      { name: 'ALPHA', duration: 300, freqStart: 10, freqEnd: 8, type: 'sweep' },
+      { name: 'THETA', duration: 480, freqStart: 8, freqEnd: 5, type: 'sweep' },
+      { name: 'TIEFES THETA', duration: 600, freqStart: 5, freqEnd: 3.5, type: 'sweep' },
+      { name: 'DELTA-TOR', duration: 600, freqStart: 3.5, freqEnd: 3.5, type: 'hold' },
+      { name: 'AUSKLANG', duration: 330, freqStart: 3.5, freqEnd: 0, type: 'fadeout' }
+    ],
+    realityChecks: true
+  }
+};
+
+// ============================================================
+// AUDIO ENGINE
+// ============================================================
+class DreamAudio {
+  constructor() {
+    this.ctx = null;
+    this.nodes = {};
+    this.running = false;
+  }
+
+  init() {
+    this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const master = this.ctx.createGain();
+    master.gain.value = 0;
+    master.connect(this.ctx.destination);
+    this.nodes.master = master;
+
+    // Binaural beat layer — will be modulated by flicker freq
+    const merger = this.ctx.createChannelMerger(2);
+
+    this.nodes.oscL = this.ctx.createOscillator();
+    this.nodes.oscL.frequency.value = 136.1; // OM frequency
+    this.nodes.oscL.type = 'sine';
+    const gainL = this.ctx.createGain();
+    gainL.gain.value = 0.06;
+    this.nodes.oscL.connect(gainL).connect(merger, 0, 0);
+
+    this.nodes.oscR = this.ctx.createOscillator();
+    this.nodes.oscR.frequency.value = 136.1;
+    this.nodes.oscR.type = 'sine';
+    const gainR = this.ctx.createGain();
+    gainR.gain.value = 0.06;
+    this.nodes.oscR.connect(gainR).connect(merger, 0, 1);
+
+    merger.connect(master);
+    this.nodes.oscL.start();
+    this.nodes.oscR.start();
+
+    // 432Hz drone
+    const drone432 = this.ctx.createOscillator();
+    drone432.frequency.value = 432;
+    drone432.type = 'sine';
+    const droneGain = this.ctx.createGain();
+    droneGain.gain.value = 0.018;
+    drone432.connect(droneGain).connect(master);
+    drone432.start();
+
+    // Sub-drone 108Hz
+    const drone108 = this.ctx.createOscillator();
+    drone108.frequency.value = 108;
+    drone108.type = 'sine';
+    const sub108Gain = this.ctx.createGain();
+    sub108Gain.gain.value = 0.015;
+    drone108.connect(sub108Gain).connect(master);
+    drone108.start();
+
+    // LFOs for organic movement
+    const lfo1 = this.ctx.createOscillator();
+    lfo1.frequency.value = 0.07;
+    const lfoGain1 = this.ctx.createGain();
+    lfoGain1.gain.value = 0.005;
+    lfo1.connect(lfoGain1).connect(droneGain.gain);
+    lfo1.start();
+
+    // Warm noise bed
+    const bufferSize = this.ctx.sampleRate * 2;
+    const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+      data[i] = (Math.random() * 2 - 1);
+    }
+    const noise = this.ctx.createBufferSource();
+    noise.buffer = buffer;
+    noise.loop = true;
+    const noiseFilter = this.ctx.createBiquadFilter();
+    noiseFilter.type = 'lowpass';
+    noiseFilter.frequency.value = 150;
+    noiseFilter.Q.value = 0.7;
+    const noiseGain = this.ctx.createGain();
+    noiseGain.gain.value = 0.012;
+    noise.connect(noiseFilter).connect(noiseGain).connect(master);
+    noise.start();
+
+    // Reality check bell buffer
+    this.bellBuffer = this.createBellBuffer();
+
+    // Shamanic drum system
+    this.drumBuffer = this.createDrumBuffer();
+    this.rattleBuffer = this.createRattleBuffer();
+    this.drumGain = this.ctx.createGain();
+    this.drumGain.gain.value = 0;
+    this.drumGain.connect(master);
+    this.rattleGain = this.ctx.createGain();
+    this.rattleGain.gain.value = 0;
+    this.rattleGain.connect(master);
+    this.drumInterval = null;
+    this.drumFreq = 0;
+    this.drumIntensity = 0;
+    this.targetDrumIntensity = 0;
+
+    this.running = true;
+  }
+
+  createBellBuffer() {
+    const sr = this.ctx.sampleRate;
+    const duration = 2.5;
+    const buffer = this.ctx.createBuffer(1, sr * duration, sr);
+    const data = buffer.getChannelData(0);
+    const freqs = [528, 396, 639]; // Solfeggio
+    for (let i = 0; i < data.length; i++) {
+      const t = i / sr;
+      const env = Math.exp(-t * 2.5) * 0.08;
+      let sample = 0;
+      for (const f of freqs) {
+        sample += Math.sin(2 * Math.PI * f * t) * env / freqs.length;
+      }
+      data[i] = sample;
+    }
+    return buffer;
+  }
+
+  createDrumBuffer() {
+    // Deep shamanic frame drum — more body, longer sustain, felt in the chest
+    const sr = this.ctx.sampleRate;
+    const duration = 0.8; // longer sustain for resonance
+    const buffer = this.ctx.createBuffer(1, sr * duration, sr);
+    const data = buffer.getChannelData(0);
+
+    for (let i = 0; i < data.length; i++) {
+      const t = i / sr;
+
+      // Fundamental membrane — starts at ~90Hz, sweeps to ~50Hz slowly
+      // Longer decay = more sustain = more body
+      const fund = Math.sin(2 * Math.PI * (90 * Math.exp(-t * 3) + 48) * t) * Math.exp(-t * 3.5) * 0.9;
+
+      // Deep sub — the chest resonance, very slow decay
+      const sub = Math.sin(2 * Math.PI * 45 * t) * Math.exp(-t * 2.5) * 0.7;
+
+      // Second sub harmonic for thickness
+      const sub2 = Math.sin(2 * Math.PI * 68 * t) * Math.exp(-t * 3) * 0.4;
+
+      // Soft attack — less snappy, more hand-on-skin
+      const attack = (Math.random() * 2 - 1) * Math.exp(-t * 40) * 0.2;
+
+      // Warm body resonance — the "room" of the drum
+      const body1 = Math.sin(2 * Math.PI * 130 * t) * Math.exp(-t * 6) * 0.2;
+      const body2 = Math.sin(2 * Math.PI * 95 * t) * Math.exp(-t * 4) * 0.25;
+
+      // Very subtle high overtone — just enough "life", not metallic
+      const life = Math.sin(2 * Math.PI * 200 * t) * Math.exp(-t * 10) * 0.06;
+
+      // Membrane wobble — slight pitch modulation for realism
+      const wobble = Math.sin(2 * Math.PI * 3.5 * t) * 0.02;
+      const membrane = Math.sin(2 * Math.PI * (60 + wobble * 60) * t) * Math.exp(-t * 4) * 0.3;
+
+      data[i] = (fund + sub + sub2 + attack + body1 + body2 + life + membrane) * 0.55;
+    }
+    return buffer;
+  }
+
+  createRattleBuffer() {
+    // Organic rattle — seeds or small beads in a gourd
+    // Key: low-pass filtered noise, NO metallic high-freq tones
+    const sr = this.ctx.sampleRate;
+    const duration = 0.12;
+    const buffer = this.ctx.createBuffer(1, sr * duration, sr);
+    const data = buffer.getChannelData(0);
+
+    // Pre-generate multiple "seed" impacts blended together
+    for (let i = 0; i < data.length; i++) {
+      const t = i / sr;
+
+      // Base: brown-ish noise (low-pass character) — NOT white noise
+      // Generated by integrating white noise for darker color
+      const white = (Math.random() * 2 - 1);
+
+      // Soft envelope — quick but not snappy
+      const env = Math.pow(Math.max(0, 1 - t / 0.1), 2) * 0.25;
+
+      // Multiple tiny "seed" clicks at different times for texture
+      const click1 = (t > 0.005 && t < 0.015) ? (Math.random() * 2 - 1) * 0.15 : 0;
+      const click2 = (t > 0.015 && t < 0.025) ? (Math.random() * 2 - 1) * 0.1 : 0;
+      const click3 = (t > 0.03 && t < 0.045) ? (Math.random() * 2 - 1) * 0.07 : 0;
+
+      // Low resonance of gourd body
+      const gourd = Math.sin(2 * Math.PI * 280 * t) * Math.exp(-t * 50) * 0.06;
+
+      data[i] = (white * env + click1 + click2 + click3 + gourd);
+    }
+
+    // Simple low-pass by averaging neighbors (removes metallic edge)
+    for (let pass = 0; pass < 3; pass++) {
+      for (let i = 1; i < data.length - 1; i++) {
+        data[i] = (data[i - 1] + data[i] * 2 + data[i + 1]) / 4;
+      }
+    }
+
+    return buffer;
+  }
+
+  playDrumHit(intensity = 1) {
+    if (!this.ctx) return;
+    const source = this.ctx.createBufferSource();
+    source.buffer = this.drumBuffer;
+
+    // Slight pitch variation for organic feel (±4%)
+    source.playbackRate.value = 0.96 + Math.random() * 0.08;
+
+    // Volume varies slightly
+    const gain = this.ctx.createGain();
+    gain.gain.value = intensity * (0.9 + Math.random() * 0.2);
+
+    // Wider filter — let the low end breathe
+    const filter = this.ctx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.value = 500 + intensity * 300;
+    filter.Q.value = 0.5;
+
+    source.connect(filter).connect(gain).connect(this.drumGain);
+    source.start();
+  }
+
+  playRattleHit(intensity = 1) {
+    if (!this.ctx) return;
+    const source = this.ctx.createBufferSource();
+    source.buffer = this.rattleBuffer;
+    source.playbackRate.value = 0.85 + Math.random() * 0.3;
+
+    const gain = this.ctx.createGain();
+    gain.gain.value = intensity * (0.4 + Math.random() * 0.3);
+
+    // Keep the rattle soft and woody, not bright
+    const filter = this.ctx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.value = 1800;
+    filter.Q.value = 0.4;
+
+    source.connect(filter).connect(gain).connect(this.rattleGain);
+    source.start();
+  }
+
+  startDrumming(freq) {
+    this.stopDrumming();
+    if (freq <= 0) return;
+    this.drumFreq = freq;
+    const intervalMs = 1000 / freq;
+    let beatCount = 0;
+
+    this.drumInterval = setInterval(() => {
+      const intensity = this.drumIntensity;
+      if (intensity <= 0) return;
+
+      // Main drum hit
+      this.playDrumHit(intensity);
+
+      // Rattle on every other beat for texture, offset slightly
+      if (beatCount % 2 === 0) {
+        setTimeout(() => this.playRattleHit(intensity * 0.4), intervalMs * 0.25);
+      }
+
+      // Occasional ghost note (softer hit between beats) for polyrhythmic depth
+      if (beatCount % 4 === 2 && intensity > 0.3) {
+        setTimeout(() => this.playDrumHit(intensity * 0.25), intervalMs * 0.5);
+      }
+
+      beatCount++;
+    }, intervalMs);
+  }
+
+  stopDrumming() {
+    if (this.drumInterval) {
+      clearInterval(this.drumInterval);
+      this.drumInterval = null;
+    }
+  }
+
+  setDrumIntensity(intensity) {
+    this.targetDrumIntensity = Math.max(0, Math.min(1, intensity));
+    // Smooth transition
+    const step = () => {
+      this.drumIntensity += (this.targetDrumIntensity - this.drumIntensity) * 0.02;
+      this.drumGain.gain.setTargetAtTime(this.drumIntensity * 0.7, this.ctx.currentTime, 0.1);
+      this.rattleGain.gain.setTargetAtTime(this.drumIntensity * 0.25, this.ctx.currentTime, 0.1);
+      if (Math.abs(this.targetDrumIntensity - this.drumIntensity) > 0.01) {
+        requestAnimationFrame(step);
+      }
+    };
+    step();
+  }
+
+  updateDrumFreq(freq) {
+    if (!this.drumInterval) return;
+    // Only restart if frequency changed significantly
+    if (Math.abs(freq - this.drumFreq) > 0.2) {
+      this.startDrumming(freq);
+    }
+  }
+
+  playRealityCheck() {
+    if (!this.ctx) return;
+    const source = this.ctx.createBufferSource();
+    source.buffer = this.bellBuffer;
+    const gain = this.ctx.createGain();
+    gain.gain.value = 0.4;
+    source.connect(gain).connect(this.nodes.master);
+    source.start();
+  }
+
+  setBinauralFreq(freq) {
+    if (!this.ctx) return;
+    // Set binaural beat difference to match flicker frequency
+    const baseFreq = 136.1;
+    this.nodes.oscL.frequency.setTargetAtTime(baseFreq, this.ctx.currentTime, 0.5);
+    this.nodes.oscR.frequency.setTargetAtTime(baseFreq + freq, this.ctx.currentTime, 0.5);
+  }
+
+  fadeIn(duration = 8) {
+    this.nodes.master.gain.setTargetAtTime(1, this.ctx.currentTime, duration / 3);
+  }
+
+  fadeOut(duration = 5) {
+    this.nodes.master.gain.setTargetAtTime(0, this.ctx.currentTime, duration / 3);
+  }
+
+  stop() {
+    this.stopDrumming();
+    if (this.ctx) {
+      this.fadeOut(2);
+      setTimeout(() => {
+        this.ctx.close();
+        this.ctx = null;
+      }, 3000);
+    }
+  }
+}
+
+// ============================================================
+// FLICKER ENGINE
+// ============================================================
+class FlickerEngine {
+  constructor() {
+    this.layer = document.getElementById('flickerLayer');
+    this.running = false;
+    this.currentFreq = 0;
+    this.brightness = 0;
+    this.targetBrightness = 1;
+    this.phase = 0;
+    this.lastFlickerTime = 0;
+    this.flickerState = false;
+
+    // Color palette — warm ember tones that penetrate closed eyelids
+    this.colorOn = { r: 210, g: 80, b: 20 };   // deep warm orange
+    this.colorOff = { r: 8, g: 2, b: 0 };       // near black with hint of warmth
+  }
+
+  start() {
+    this.layer.style.display = 'block';
+    this.running = true;
+    this.lastFlickerTime = performance.now();
+    this.animate();
+  }
+
+  stop() {
+    this.running = false;
+    this.layer.style.display = 'none';
+  }
+
+  setFrequency(freq) {
+    this.currentFreq = freq;
+  }
+
+  setBrightness(b) {
+    this.targetBrightness = Math.max(0, Math.min(1, b));
+  }
+
+  animate() {
+    if (!this.running) return;
+
+    const now = performance.now();
+    this.brightness += (this.targetBrightness - this.brightness) * 0.02;
+
+    if (this.currentFreq > 0) {
+      const halfPeriod = 500 / this.currentFreq; // ms per half-cycle
+      if (now - this.lastFlickerTime >= halfPeriod) {
+        this.flickerState = !this.flickerState;
+        this.lastFlickerTime = now;
+      }
+    } else {
+      this.flickerState = false;
+    }
+
+    const c = this.flickerState ? this.colorOn : this.colorOff;
+    const b = this.brightness;
+    const r = Math.round(c.r * b);
+    const g = Math.round(c.g * b);
+    const bl = Math.round(c.b * b);
+    this.layer.style.backgroundColor = `rgb(${r},${g},${bl})`;
+
+    requestAnimationFrame(() => this.animate());
+  }
+}
+
+// ============================================================
+// SESSION CONTROLLER
+// ============================================================
+class SessionController {
+  constructor() {
+    this.audio = new DreamAudio();
+    this.flicker = new FlickerEngine();
+    this.selectedSession = 'gateway';
+    this.running = false;
+    this.startTime = 0;
+    this.elapsed = 0;
+    this.session = null;
+    this.realityCheckTimes = [];
+    this.realityCheckIndex = 0;
+    this.hudFadeTimer = null;
+
+    this.setupUI();
+  }
+
+  setupUI() {
+    // Warning
+    document.getElementById('acceptBtn').addEventListener('click', () => {
+      document.getElementById('warningScreen').classList.add('hidden');
+      document.getElementById('menuScreen').classList.add('active');
+    });
+
+    // Session selection
+    document.querySelectorAll('.session-card').forEach(card => {
+      card.addEventListener('click', () => {
+        document.querySelectorAll('.session-card').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        this.selectedSession = card.dataset.session;
+      });
+    });
+
+    // Start
+    document.getElementById('startBtn').addEventListener('click', () => this.startSession());
+
+    // Emergency exit
+    document.addEventListener('keydown', (e) => {
+      if (this.running) {
+        e.preventDefault();
+        this.endSession();
+      }
+    });
+    document.addEventListener('touchstart', () => {
+      if (this.running) this.endSession();
+    });
+    document.getElementById('flickerLayer').addEventListener('click', () => {
+      if (this.running) this.endSession();
+    });
+
+    // Restart
+    document.getElementById('restartBtn').addEventListener('click', () => {
+      document.getElementById('completionScreen').classList.remove('active');
+      document.getElementById('menuScreen').classList.add('active');
+    });
+  }
+
+  startSession() {
+    this.session = SESSIONS[this.selectedSession];
+
+    // Enter fullscreen
+    const el = document.documentElement;
+    if (el.requestFullscreen) el.requestFullscreen();
+    else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+
+    // Hide menu
+    document.getElementById('menuScreen').classList.remove('active');
+
+    // Show HUD and exit hint briefly
+    document.getElementById('sessionHud').classList.add('active');
+    document.getElementById('exitHint').classList.add('active');
+
+    // Fade HUD after 10 seconds
+    this.hudFadeTimer = setTimeout(() => {
+      document.getElementById('sessionHud').classList.add('faded');
+      document.getElementById('exitHint').classList.add('faded');
+    }, 10000);
+
+    // Generate reality check times (irregular intervals)
+    if (this.session.realityChecks) {
+      this.realityCheckTimes = [];
+      let t = 120 + Math.random() * 60; // first one after 2-3 min
+      while (t < this.session.duration - 60) {
+        this.realityCheckTimes.push(t);
+        t += 90 + Math.random() * 120; // every 1.5–3.5 min
+      }
+      this.realityCheckIndex = 0;
+    }
+
+    // Init audio + flicker
+    this.audio.init();
+    this.flicker.start();
+
+    // 3 second pre-start darkness
+    this.flicker.setBrightness(0);
+    setTimeout(() => {
+      this.audio.fadeIn(8);
+      this.running = true;
+      this.startTime = performance.now();
+      this.update();
+    }, 3000);
+  }
+
+  update() {
+    if (!this.running) return;
+
+    const now = performance.now();
+    this.elapsed = (now - this.startTime) / 1000;
+
+    // Find current phase
+    let phaseTime = 0;
+    let currentPhase = null;
+    let phaseElapsed = 0;
+    let phaseProgress = 0;
+
+    for (const phase of this.session.phases) {
+      if (this.elapsed < phaseTime + phase.duration) {
+        currentPhase = phase;
+        phaseElapsed = this.elapsed - phaseTime;
+        phaseProgress = phaseElapsed / phase.duration;
+        break;
+      }
+      phaseTime += phase.duration;
+    }
+
+    if (!currentPhase || this.elapsed >= this.session.duration) {
+      this.completeSession();
+      return;
+    }
+
+    // Calculate frequency
+    let freq = 0;
+    if (currentPhase.type === 'fadein') {
+      freq = currentPhase.freqEnd * this.easeInOut(phaseProgress);
+      this.flicker.setBrightness(this.easeInOut(phaseProgress));
+    } else if (currentPhase.type === 'fadeout') {
+      freq = currentPhase.freqStart * (1 - this.easeInOut(phaseProgress));
+      this.flicker.setBrightness(1 - this.easeInOut(phaseProgress));
+    } else if (currentPhase.type === 'sweep') {
+      freq = currentPhase.freqStart + (currentPhase.freqEnd - currentPhase.freqStart) * this.easeInOut(phaseProgress);
+      this.flicker.setBrightness(1);
+    } else {
+      // Add very subtle organic variation in hold phases
+      const wobble = Math.sin(this.elapsed * 0.3) * 0.2;
+      freq = currentPhase.freqStart + wobble;
+      this.flicker.setBrightness(1);
+    }
+
+    this.flicker.setFrequency(freq);
+    this.audio.setBinauralFreq(freq);
+
+    // Shamanic drumming — fades in as we enter theta territory
+    // Research: optimal shamanic trance at 4-7 Hz, ~220 BPM (3.67 Hz)
+    // Drumming starts when freq drops below 8 Hz (theta boundary)
+    if (freq > 0 && freq < 8 && currentPhase.type !== 'fadein') {
+      // Drum intensity increases as we go deeper into theta
+      const thetaDepth = Math.max(0, (8 - freq) / 4.5); // 0 at 8Hz, 1 at 3.5Hz
+      const phaseMultiplier = (currentPhase.type === 'fadeout') ? (1 - phaseProgress) : 1;
+      this.audio.setDrumIntensity(thetaDepth * phaseMultiplier);
+
+      // Start drumming if not already running, sync frequency with flicker
+      if (!this.audio.drumInterval) {
+        this.audio.startDrumming(freq);
+      } else {
+        this.audio.updateDrumFreq(freq);
+      }
+    } else {
+      // Above theta range — no drumming
+      this.audio.setDrumIntensity(0);
+      if (freq <= 0) this.audio.stopDrumming();
+    }
+
+    // Reality checks
+    if (this.session.realityChecks && this.realityCheckIndex < this.realityCheckTimes.length) {
+      if (this.elapsed >= this.realityCheckTimes[this.realityCheckIndex]) {
+        this.audio.playRealityCheck();
+        this.realityCheckIndex++;
+      }
+    }
+
+    // Update HUD
+    const remaining = Math.max(0, this.session.duration - this.elapsed);
+    const mins = Math.floor(remaining / 60);
+    const secs = Math.floor(remaining % 60);
+    document.getElementById('hudFreq').textContent = freq.toFixed(1);
+    document.getElementById('hudTime').textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
+    document.getElementById('hudPhase').textContent = currentPhase.name;
+
+    // Drum intensity indicator
+    const drumI = this.audio.drumIntensity || 0;
+    if (drumI > 0.01) {
+      const bars = Math.ceil(drumI * 5);
+      document.getElementById('hudDrum').textContent = '◉'.repeat(bars) + '·'.repeat(5 - bars);
+    } else {
+      document.getElementById('hudDrum').textContent = '·····';
+    }
+
+    requestAnimationFrame(() => this.update());
+  }
+
+  easeInOut(t) {
+    return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+  }
+
+  completeSession() {
+    this.running = false;
+    this.flicker.stop();
+    this.audio.fadeOut(8);
+
+    document.getElementById('sessionHud').classList.remove('active');
+    document.getElementById('exitHint').classList.remove('active');
+
+    setTimeout(() => {
+      this.audio.stop();
+      document.getElementById('completionScreen').classList.add('active');
+    }, 3000);
+
+    // Exit fullscreen
+    if (document.exitFullscreen) document.exitFullscreen();
+    else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+  }
+
+  endSession() {
+    if (!this.running) return;
+    this.running = false;
+
+    // Gentle exit — fade over 2 seconds instead of abrupt stop
+    this.flicker.setBrightness(0);
+    this.audio.fadeOut(2);
+
+    clearTimeout(this.hudFadeTimer);
+    document.getElementById('sessionHud').classList.remove('active', 'faded');
+    document.getElementById('exitHint').classList.remove('active', 'faded');
+
+    setTimeout(() => {
+      this.flicker.stop();
+      this.audio.stop();
+      document.getElementById('completionScreen').classList.add('active');
+    }, 2500);
+
+    if (document.exitFullscreen) document.exitFullscreen();
+    else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+  }
+}
+
+// ============================================================
+// INIT
+// ============================================================
+const controller = new SessionController();
+</script>
+</body>
+</html>
