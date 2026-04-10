@@ -295,6 +295,33 @@ body {
   text-shadow: 0 0 20px rgba(194,78,26,0.5);
 }
 
+.audio-status {
+  margin-top: 1.5em;
+  padding: 0.5em 1em;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.audio-status.ready {
+  color: #4a9b4a;
+  background: rgba(74, 155, 74, 0.1);
+  border: 1px solid rgba(74, 155, 74, 0.3);
+}
+
+.audio-status.checking {
+  color: var(--amber);
+  background: rgba(212, 145, 58, 0.1);
+  border: 1px solid rgba(212, 145, 58, 0.3);
+}
+
+.audio-status.error {
+  color: var(--ember);
+  background: rgba(194, 78, 26, 0.1);
+  border: 1px solid var(--ember);
+}
+
 .menu-instructions {
   margin-top: 2.5em;
   font-size: clamp(0.75rem, 2vw, 0.8rem);
@@ -608,6 +635,8 @@ body {
 
   <button class="start-session-btn" id="startBtn">AUGEN SCHLIESSEN · SESSION STARTEN</button>
 
+  <div class="audio-status checking" id="audioStatus">AUDIO-STATUS: WIRD GEPRÜFT...</div>
+
   <div class="menu-instructions">
     Fullscreen empfohlen · Kopfhörer aufsetzen · Bildschirm nah am Gesicht · Augen schließen<br>
     Das warme Licht durchdringt die geschlossenen Lider und induziert Phosphene.<br>
@@ -716,15 +745,29 @@ class DreamAudio {
   async init() {
     this.ctx = new (window.AudioContext || window.webkitAudioContext)();
 
+    console.log('AudioContext state before resume:', this.ctx.state);
+
     // CRITICAL FIX: Mobile browsers require AudioContext to be resumed after user interaction
     if (this.ctx.state === 'suspended') {
       await this.ctx.resume();
+      console.log('AudioContext resumed, new state:', this.ctx.state);
+    }
+
+    // Force additional resume attempts for stubborn browsers
+    let attempts = 0;
+    while (this.ctx.state !== 'running' && attempts < 5) {
+      await this.ctx.resume();
+      await new Promise(resolve => setTimeout(resolve, 100));
+      attempts++;
+      console.log(`Resume attempt ${attempts}, state: ${this.ctx.state}`);
     }
 
     const master = this.ctx.createGain();
     master.gain.value = 0;
     master.connect(this.ctx.destination);
     this.nodes.master = master;
+
+    console.log('AudioContext final state:', this.ctx.state);
 
     // Binaural beat layer — will be modulated by flicker freq
     const merger = this.ctx.createChannelMerger(2);
@@ -1134,14 +1177,43 @@ class SessionController {
   setupUI() {
     // Warning
     document.getElementById('acceptBtn').addEventListener('click', async () => {
-      // MOBILE FIX: Pre-unlock audio on first user interaction
+      // MOBILE FIX: Pre-unlock audio on first user interaction with test tone
       if (!this.audioUnlocked) {
-        const tempCtx = new (window.AudioContext || window.webkitAudioContext)();
-        if (tempCtx.state === 'suspended') {
-          await tempCtx.resume();
+        try {
+          const tempCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+          // Force resume
+          if (tempCtx.state === 'suspended') {
+            await tempCtx.resume();
+          }
+
+          // Play a brief test tone to unlock audio system
+          const osc = tempCtx.createOscillator();
+          const gain = tempCtx.createGain();
+          gain.gain.value = 0.01; // Very quiet test tone
+          osc.connect(gain);
+          gain.connect(tempCtx.destination);
+          osc.frequency.value = 440;
+          osc.start(tempCtx.currentTime);
+          osc.stop(tempCtx.currentTime + 0.05); // 50ms beep
+
+          // Wait for tone to finish
+          await new Promise(resolve => setTimeout(resolve, 100));
+
+          tempCtx.close();
+          this.audioUnlocked = true;
+          console.log('Audio unlocked successfully');
+
+          // Update status indicator
+          const status = document.getElementById('audioStatus');
+          status.className = 'audio-status ready';
+          status.textContent = '🔊 AUDIO BEREIT';
+        } catch (e) {
+          console.error('Audio unlock failed:', e);
+          const status = document.getElementById('audioStatus');
+          status.className = 'audio-status error';
+          status.textContent = '⚠️ AUDIO-FEHLER - EVTL. STUMM';
         }
-        tempCtx.close();
-        this.audioUnlocked = true;
       }
 
       document.getElementById('warningScreen').classList.add('hidden');
