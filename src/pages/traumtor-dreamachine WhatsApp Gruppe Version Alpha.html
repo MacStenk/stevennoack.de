@@ -713,8 +713,14 @@ class DreamAudio {
     this.running = false;
   }
 
-  init() {
+  async init() {
     this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+
+    // CRITICAL FIX: Mobile browsers require AudioContext to be resumed after user interaction
+    if (this.ctx.state === 'suspended') {
+      await this.ctx.resume();
+    }
+
     const master = this.ctx.createGain();
     master.gain.value = 0;
     master.connect(this.ctx.destination);
@@ -1120,13 +1126,24 @@ class SessionController {
     this.realityCheckTimes = [];
     this.realityCheckIndex = 0;
     this.hudFadeTimer = null;
+    this.audioUnlocked = false; // Mobile audio unlock flag
 
     this.setupUI();
   }
 
   setupUI() {
     // Warning
-    document.getElementById('acceptBtn').addEventListener('click', () => {
+    document.getElementById('acceptBtn').addEventListener('click', async () => {
+      // MOBILE FIX: Pre-unlock audio on first user interaction
+      if (!this.audioUnlocked) {
+        const tempCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (tempCtx.state === 'suspended') {
+          await tempCtx.resume();
+        }
+        tempCtx.close();
+        this.audioUnlocked = true;
+      }
+
       document.getElementById('warningScreen').classList.add('hidden');
       document.getElementById('menuScreen').classList.add('active');
     });
@@ -1164,7 +1181,7 @@ class SessionController {
     });
   }
 
-  startSession() {
+  async startSession() {
     this.session = SESSIONS[this.selectedSession];
 
     // Enter fullscreen
@@ -1196,8 +1213,8 @@ class SessionController {
       this.realityCheckIndex = 0;
     }
 
-    // Init audio + flicker
-    this.audio.init();
+    // Init audio + flicker (AWAIT for mobile compatibility)
+    await this.audio.init();
     this.flicker.start();
 
     // 3 second pre-start darkness
