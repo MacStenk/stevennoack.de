@@ -1,5 +1,0 @@
-# Verhindere Pretty-URL Redirect für traumtor.html
-/traumtor.html /traumtor.html 200!
-
-# Optional: Leite /traumtor auf /traumtor.html weiter
-/traumtor /traumtor.html 301
