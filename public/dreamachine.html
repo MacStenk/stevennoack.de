@@ -850,6 +850,7 @@
 
         console.log('AudioContext state before resume:', this.ctx.state);
 
+        try {
         // CRITICAL FIX: Mobile browsers require AudioContext to be resumed after user interaction
         if (this.ctx.state === 'suspended') {
           await this.ctx.resume();
@@ -863,6 +864,9 @@
           await new Promise(resolve => setTimeout(resolve, 100));
           attempts++;
           console.log(`Resume attempt ${attempts}, state: ${this.ctx.state}`);
+        }
+        } catch (e) {
+          console.warn("AudioContext resume error (continuing anyway):", e);
         }
 
         const master = this.ctx.createGain();
