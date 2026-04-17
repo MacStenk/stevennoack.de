@@ -1,0 +1,17 @@
+{
+  "arkanum": 14,
+  "name_traditional": "Mäßigkeit (Der Alchemist)",
+  "name_ra": "Großer Weg des Körpers",
+  "dimension": "Körper",
+  "classification": "Großer Weg",
+  "triad_partners": [7, 21],
+  "pair_partner": 13,
+  "core_teaching": {
+    "essence": "Der Große Weg des Körpers ist die Mäßigkeit oder Alchemie — die Integration und Veredelung aller körperlichen Erfahrung.",
+    "description": "Die Mäßigkeit gießt Flüssigkeit von einem Gefäß ins andere — die Kunst des Ausgleichs, der Integration, der Alchemie. Der Große Weg des Körpers ist nicht Askese oder Hingabe an Sinnesfreuden, sondern die weise Balance zwischen beiden.",
+    "metaphor": "Der Alchemist verwandelt Blei in Gold — nicht durch Magie, sondern durch geduldige Arbeit. So verwandelt der Große Weg des Körpers rohe körperliche Erfahrung in verkörperte Weisheit."
+  },
+  "practical_reflection": "Den Großen Weg des Körpers einzuladen bedeutet, den Körper weder zu vergöttern noch zu verleugnen, sondern zum Alchemisten der eigenen körperlichen Erfahrung zu werden. Frage dich: Wo in meinem Umgang mit meinem Körper fehlt die Balance?",
+  "sessions": ["88.17", "88.24"],
+  "related_links": {"deep_dive": "https://ganzwachsen.de/ra-tarot-grosser-weg-des-koerpers"}
+}

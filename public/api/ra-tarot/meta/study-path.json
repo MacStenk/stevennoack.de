@@ -1,0 +1,74 @@
+{
+  "name": "Ras Tarot-Lehrplan",
+  "purpose": {
+    "ra_statement": "Die Großen Arkana haben keinen rechtmäßigen Platz in Wahrsagung, sondern sind stattdessen Werkzeuge für die weitergehende Erkenntnis des Selbst durch das Selbst, mit dem Ziel, in einen tieferen, unmittelbar verwirklichten, gegenwärtigen Moment einzutreten.",
+    "clarification": "Das Tarot nach Ra ist kein Orakel-System. Es ist ein Spiegel der archetypischen Strukturen des eigenen Geistes, Körpers und der Seele. Der Zweck ist Selbsterkenntnis — nicht Vorhersage."
+  },
+  "origin": {
+    "description": "Das Tarot wurde von Wesen der dritten Dichte auf Venus entwickelt, die als Erste den Schleier teilweise durchdrangen. Sie erkannten die Natur des archetypischen Geistes und den Verschleierungsvorgang und entwickelten daraus das Tarot als Methode, andere zu unterrichten.",
+    "egyptian_connection": "Ra teilte dieses System mit ägyptischen Priestern. Spätere Einflüsse aus Ur, Chaldäa und Mesopotamien fügten astrologische Elemente hinzu, was zu den Hof-Arkana und Kleinen Arkana führte. Nur die 22 Großen Arkana stammen aus Ras ursprünglicher Lehre."
+  },
+  "structure": {
+    "total_arcana": 22,
+    "mind_arcana": {
+      "range": "I bis VII",
+      "names": ["Matrix/Magier", "Potenziator/Hohepriesterin", "Katalyst/Herrscherin", "Erfahrung/Herrscher", "Signifikator/Hierophant", "Transformation/Liebende", "Großer Weg/Wagen"]
+    },
+    "body_arcana": {
+      "range": "VIII bis XIV",
+      "names": ["Matrix/Gerechtigkeit", "Potenziator/Eremit", "Katalyst/Rad des Schicksals", "Erfahrung/Kraft", "Signifikator/Gehängter", "Transformation/Tod", "Großer Weg/Mäßigkeit"]
+    },
+    "spirit_arcana": {
+      "range": "XV bis XXI",
+      "names": ["Matrix/Teufel", "Potenziator/Turm", "Katalyst/Stern", "Erfahrung/Mond", "Signifikator/Sonne", "Transformation/Gericht", "Großer Weg/Welt"]
+    },
+    "choice": {
+      "arkanum": "XXII",
+      "name": "Die Wahl / Der Narr"
+    }
+  },
+  "study_path": {
+    "phase_1_triads": {
+      "description": "Zuerst werden die Arkana in Dreiergruppen studiert: Geist, Körper, Seele derselben Klassifikation.",
+      "order": [
+        {"group": "Matrix", "arkana": [1, 8, 15]},
+        {"group": "Potenziator", "arkana": [2, 9, 16]},
+        {"group": "Katalyst", "arkana": [3, 10, 17]},
+        {"group": "Erfahrung", "arkana": [4, 11, 18]},
+        {"group": "Signifikator", "arkana": [5, 12, 19]},
+        {"group": "Transformation", "arkana": [6, 13, 20]},
+        {"group": "Großer Weg", "arkana": [7, 14, 21]},
+        {"group": "Die Wahl", "arkana": [22]}
+      ]
+    },
+    "phase_2_pairs": {
+      "description": "Dann werden die Arkana in Paaren innerhalb jeder Dimension studiert.",
+      "mind_pairs": [
+        {"pair": "Matrix & Potenziator", "arkana": [1, 2]},
+        {"pair": "Katalyst & Erfahrung", "arkana": [3, 4]},
+        {"pair": "Signifikator (mit Wahl)", "arkana": [5, 22]},
+        {"pair": "Transformation & Großer Weg", "arkana": [6, 7]}
+      ],
+      "note": "Dasselbe Muster gilt für Körper (8-14) und Seele (15-21). Der Signifikator bleibt ungepaart, weil er mit Arkanum XXII (Die Wahl) gepaart wird."
+    },
+    "phase_3_becoming": {
+      "description": "Ra ermutigte den Eingeweihten zu lernen, jeder Archetyp zu werden, und bestmöglich innerhalb der Illusion zu wissen, wann die Übernahme der Persona eines Archetyps spirituell oder metaphysisch hilfreich sein würde.",
+      "note": "Ra betonte: 'Wir haben kein Dogma anzubieten. Jeder nimmt das wahr, was für das Selbst erforderlich und hilfreich ist.'"
+    }
+  },
+  "three_study_systems": {
+    "description": "Ra nannte drei grundlegende Auswahlmöglichkeiten für das Studium der archetypischen Strukturen:",
+    "options": [
+      "Astrologie — die zwölf Zeichen und die zehn Planeten",
+      "Tarot — die zweiundzwanzig Großen Arkana",
+      "Der Baum des Lebens — mit seinen zehn Sephiroth"
+    ],
+    "ra_note": "Es ist angemessen, eine Form von konstruierter und organisierter Verzerrung des archetypischen Geistes in Tiefe zu studieren, um an der Position anzukommen, nach Belieben zu Archetypen werden und sie erfahren zu können."
+  },
+  "dynamic_flow": {
+    "description": "Die sieben Klassifikationen beschreiben einen Prozess:",
+    "flow": "Matrix → Potenziator → Katalyst → Erfahrung → Signifikator → Transformation → Großer Weg",
+    "explanation": "Aus dem Urgrund (Matrix) wird durch den Potenziator Katalyst erzeugt. Katalyst wird zu Erfahrung. Erfahrung formt den Signifikator (das Selbst). Der Signifikator durchläuft Transformation und betritt den Großen Weg. Dieser Prozess wiederholt sich für Geist, Körper und Seele — jeweils auf unterschiedliche Weise."
+  },
+  "sessions": ["76.7", "76.8", "76.9", "78.10", "78.11", "88.15", "88.16", "88.24", "89.21", "89.23", "89.24", "89.25"]
+}

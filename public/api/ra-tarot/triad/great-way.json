@@ -1,0 +1,30 @@
+{
+  "name": "Die drei Großen Wege",
+  "classification": "Großer Weg",
+  "arkana": [7, 14, 21],
+  "theme": "Die Vollendung — drei Pfade der Integration",
+  "ras_study_order": "Siebte Dreiergruppe: 7, 14, 21.",
+  "comparison": {
+    "mind": {
+      "arkanum": 7,
+      "name": "Der Wagen / Großer Weg des Geistes",
+      "quality": "Majestätische Bewegung — der Geist als Eroberer",
+      "ra_description": "Die Grundlage ist eine Spiegelung und wesentliche Zusammenfassung der Archetypen Eins bis Sechs. Der Weg des Geistes zeigt das Königreich oder die Früchte von richtigem Reisen durch den Geist, in dem der Geist sich so majestätisch durch das Material fortbewegt wie ein Wagen, der von königlichen Löwen gezogen wird."
+    },
+    "body": {
+      "arkanum": 14,
+      "name": "Mäßigkeit / Großer Weg des Körpers",
+      "quality": "Alchemie — die Kunst des Ausgleichs und der Veredelung",
+      "ra_description": "Die weise Balance zwischen Askese und Sinnesfreude — die Verwandlung roher körperlicher Erfahrung in verkörperte Weisheit."
+    },
+    "spirit": {
+      "arkanum": 21,
+      "name": "Die Welt / Großer Weg der Seele",
+      "quality": "Tanz der Vollendung — die Integration aller spirituellen Erfahrung",
+      "ra_description": "Die tanzende Figur im Zentrum des Kranzes, umgeben von den vier Elementen. Nicht mehr suchend, sondern tanzend in der Vollständigkeit des Seins."
+    }
+  },
+  "pattern": "Drei Formen der Vollendung: Der Geist fährt majestätisch als Wagen (linear, gerichtet, erobernd), der Körper verwandelt alchemistisch (zirkulär, ausgleichend, veredelnd), die Seele tanzt als Welt (integriert, jenseits von linear und zirkulär, einfach seiend).",
+  "key_insight": "Die drei Großen Wege zeigen die Reife des Wesens in jeder Dimension: geistige Meisterschaft (der Wagen), körperliche Weisheit (der Alchemist), spirituelle Ganzheit (die Welt). Zusammen bilden sie das vollständige Bild eines Wesens, das alle drei Dimensionen seiner Existenz integriert hat.",
+  "sessions": ["79.41", "88.17", "88.24"]
+}

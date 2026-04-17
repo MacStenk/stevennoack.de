@@ -1,0 +1,27 @@
+{
+  "arkanum": 7,
+  "name_traditional": "Der Wagen",
+  "name_ra": "Großer Weg des Geistes",
+  "dimension": "Geist",
+  "classification": "Großer Weg",
+  "triad_partners": [14, 21],
+  "pair_partner": 6,
+  "core_teaching": {
+    "essence": "Der Große Weg des Geistes ist der Archetyp, der das Ergebnis der gesamten Geist-Evolution zusammenfasst — der Weg, der sich aus Matrix, Potenziator, Katalyst, Erfahrung, Signifikator und Transformation ergibt.",
+    "description": "Der Wagen repräsentiert die Bewegung auf dem gewählten Pfad — die dynamische Umsetzung aller vorherigen Archetypen in gelebte Ausrichtung. Nachdem Katalyst verarbeitet, Erfahrung integriert und die Transformation durchlaufen wurde, fährt der Geist auf seinem Weg.",
+    "metaphor": "Der Wagen zieht durch die Landschaft — nicht ziellos, sondern mit Richtung. Die Pferde (oder Sphinxe) repräsentieren die gebündelten Kräfte des Geistes, die nun in eine Richtung ziehen."
+  },
+  "dynamic_flow_completion": {
+    "description": "Der Große Weg ist die siebte und letzte Station des Geist-Zyklus: Matrix (Bewusstsein) → Potenziator (Unbewusstes) → Katalyst (was auf den Geist einwirkt) → Erfahrung (was daraus wird) → Signifikator (das Selbst als Komplex) → Transformation (die Wahl) → Großer Weg (die Reise).",
+    "significance": "Dieser Zyklus wiederholt sich für Körper und Seele — jeweils mit den Eigenheiten der jeweiligen Dimension."
+  },
+  "study_guidance": {
+    "pair_study": "Arkanum VII wird mit Arkanum VI (Transformation des Geistes / Die Liebenden) als Paar studiert: Transformation und Großer Weg. Die Transformation ermöglicht den Großen Weg.",
+    "triad_study": "In der Triade wird der Große Weg des Geistes (VII) mit dem Großen Weg des Körpers (XIV / Mäßigkeit) und dem Großen Weg der Seele (XXI / Die Welt) verglichen."
+  },
+  "practical_reflection": "Den Großen Weg des Geistes einzuladen bedeutet zu erkennen, dass du bereits unterwegs bist. Die Frage ist nicht, ob du auf dem Weg bist, sondern ob du bewusst fährst oder ob der Wagen dich fährt. Frage dich: Ist meine geistige Ausrichtung bewusst gewählt, oder bin ich auf Autopilot?",
+  "sessions": ["88.17", "88.24"],
+  "related_links": {
+    "deep_dive": "https://ganzwachsen.de/ra-tarot-grosser-weg-des-geistes"
+  }
+}

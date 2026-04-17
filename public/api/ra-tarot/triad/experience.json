@@ -1,0 +1,30 @@
+{
+  "name": "Die drei Erfahrungen",
+  "classification": "Erfahrung",
+  "arkana": [4, 11, 18],
+  "theme": "Was aus Katalyst wird — die drei Gesichter gelebter Erfahrung",
+  "ras_study_order": "Vierte Dreiergruppe: 4, 11, 18.",
+  "comparison": {
+    "mind": {
+      "arkanum": 4,
+      "name": "Der Herrscher / Erfahrung des Geistes",
+      "quality": "Autorität — ergreift mit fester Hand was gegeben wird",
+      "ra_description": "Streckt sich nicht aus, sondern ergreift mit fester Autorität, was gegeben wird. Negative Erfahrungen erscheinen im Überfluss — die magische positive Erfahrung zu entwickeln ist die große Herausforderung."
+    },
+    "body": {
+      "arkanum": 11,
+      "name": "Die Kraft / Erfahrung des Körpers",
+      "quality": "Sanfte Kraft — den Löwen bezähmen ohne Gewalt",
+      "ra_description": "Die Erfahrung des Körpers wird gemeistert durch innere Stärke, nicht durch Unterdrückung der physischen Impulse."
+    },
+    "spirit": {
+      "arkanum": 18,
+      "name": "Der Mond / Erfahrung der Seele",
+      "quality": "Reflektiertes Licht — real aber nie ganz greifbar",
+      "ra_description": "Spirituelle Erfahrung im Zwielicht: nicht volle Klarheit, nicht totale Dunkelheit, sondern das geheimnisvolle Dazwischen."
+    }
+  },
+  "pattern": "Drei Modi der Integration: Der Geist ergreift und ordnet (aktiv), der Körper bezähmt durch sanfte Kraft (harmonisierend), die Seele erfährt im Mondlicht (empfangend, geheimnisvoll).",
+  "key_insight": "Ra warnte: Durch freien Willen und unvollkommene Erinnerung wird Katalyst sehr oft nur teilweise genutzt und die Erfahrung dementsprechend verzerrt. Nicht aller Katalyst wird zur Erfahrung — was nicht verarbeitet wird, zirkuliert weiter.",
+  "sessions": ["79.35", "80.8", "80.10", "81.12", "92.14", "94.15", "94.23"]
+}

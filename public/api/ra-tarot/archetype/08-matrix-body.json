@@ -1,0 +1,29 @@
+{
+  "arkanum": 8,
+  "name_traditional": "Gerechtigkeit",
+  "name_ra": "Matrix des Körpers",
+  "dimension": "Körper",
+  "classification": "Matrix",
+  "triad_partners": [1, 15],
+  "pair_partner": 9,
+  "signifikator_pair": null,
+  "core_teaching": {
+    "essence": "Die Matrix des Körpers kann als eine Spiegelung in Gegensätzen des Geistes gesehen werden, das heißt uneingeschränkte Bewegung.",
+    "description": "Die Matrix des Körpers ist als Ausgeglichenes Arbeiten oder Gleichmäßiges Funktionieren zu verstehen. Die Matrix ist hier immer aktiv und verfügt über keine Mittel, inaktiv zu sein.",
+    "metaphor": "Wo der Geist (Arkanum I) regungslos wartet, ist der Körper in ständiger Bewegung — Herzschlag, Atem, Stoffwechsel. Er kennt keine Pause, nur verschiedene Grade von Aktivität."
+  },
+  "relationship_to_mind_and_spirit": {
+    "mind_matrix": "Exaktes Gegenstück zur Matrix des Geistes: Geist ist Stille, Körper ist Bewegung. Geist wartet, Körper handelt. Diese Polarität innerhalb der Matrizen ist Ras erstes Lehr-Element.",
+    "spirit_matrix": "Die Matrix der Seele (Arkanum XV) ist die tiefste Dunkelheit — 'die Nacht der Seele'. Sie teilt mit der Geist-Matrix die Regungslosigkeit, aber auf einer viel tieferen Ebene, verbunden mit Zeit/Raum statt Raum/Zeit."
+  },
+  "study_guidance": {
+    "ras_method": "Ra präsentierte Arkanum 1, 8 und 15 als erste Dreiergruppe. Der Vergleich der drei Matrizen — Stille des Geistes, Bewegung des Körpers, Dunkelheit der Seele — war der erste Schritt im Lehrplan.",
+    "pair_study": "Arkanum 8 wird mit Arkanum 9 (Potenziator des Körpers / Der Eremit / Weisheit) als Paar studiert: unaufhörliche Aktivität und die Weisheit, diese Aktivität sinnvoll zu lenken."
+  },
+  "practical_reflection": "Die Matrix des Körpers einzuladen bedeutet, die unaufhörliche Aktivität des physischen Selbst bewusst wahrzunehmen — ohne sie zu bewerten oder kontrollieren zu wollen. Dein Körper ist nie still, selbst im Schlaf. Frage dich: Höre ich meinem Körper zu, oder versuche ich nur, ihn zu steuern?",
+  "sessions": ["78.11", "79.17", "79.20"],
+  "related_links": {
+    "deep_dive": "https://ganzwachsen.de/ra-tarot-matrix-des-koerpers",
+    "triad": "https://ganzwachsen.de/ra-tarot-die-drei-matrizen"
+  }
+}

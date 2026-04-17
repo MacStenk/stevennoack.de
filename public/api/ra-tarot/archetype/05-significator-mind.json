@@ -1,0 +1,32 @@
+{
+  "arkanum": 5,
+  "name_traditional": "Der Hierophant",
+  "name_ra": "Signifikator des Geistes",
+  "dimension": "Geist",
+  "classification": "Signifikator",
+  "triad_partners": [12, 19],
+  "pair_partner": 22,
+  "core_teaching": {
+    "essence": "Das Herzstück des Geist-Komplexes ist das dynamische Wesen, das aufnimmt, sucht und versucht, um zu lernen.",
+    "description": "Der Signifikator des Geistes ist einerseits Handelnder, andererseits wird auch auf ihn eingewirkt. Er repräsentiert das Selbst als Ganzes — nicht statisch, sondern als lebendiger Komplex, der Matrix, Potenziator, Katalyst und Erfahrung in sich integriert.",
+    "metaphor": "Der Hierophant ist nicht der Vermittler zwischen bewusst und unbewusst, sondern das Wesen selbst in seiner Gesamtheit — der Suchende, der alle Erfahrungen in sich trägt und daraus seine Ausrichtung formt."
+  },
+  "complexity": {
+    "description": "Ra sagte, der Signifikator musste 'ein Komplex werden', um den freien Willen zu erweitern. Komplex zu sein bedeutet, aus mehr als einem charakteristischen Element oder Konzept zu bestehen.",
+    "before_veil": "Vor der Verschleierung war der Signifikator einfach und einheitlich — 'der Geist'. Nach der Verschleierung wurde er zum Komplex: das bewusste Selbst mit seinem verborgenen Unbewussten, seinen Erfahrungen, seinen Neigungen.",
+    "overarching_role": "Der dynamische Prozess zwischen Matrix, Potenziator, Katalyst und Erfahrung bildet die Natur des Geistes oder den Signifikator des Geistes — aber der Signifikator ist nicht nur Ergebnis, sondern auch Akteur in diesem Prozess."
+  },
+  "pairing_with_choice": {
+    "description": "Im Studienplan blieb der Signifikator ungepaart — weil er mit Arkanum XXII (Die Wahl) gepaart wird. Die Ausrichtung des Signifikators bestimmt, wie die Wahl getroffen wird.",
+    "significance": "Wenn das Wesen sich auf bewusste Weise dieses Prozesses gewahr wird, programmiert es diese Aktivität vor der Inkarnation selbst."
+  },
+  "study_guidance": {
+    "pair_study": "Der Signifikator (V) wird mit der Wahl (XXII) gepaart, nicht mit einem anderen Arkanum der Geist-Reihe. Dies unterstreicht seine zentrale Bedeutung.",
+    "ra_correction": "Don vermutete, der Hierophant sei ein Sortier-Mechanismus zwischen Bewusstem und Unbewusstem. Ra korrigierte: Das Herzstück ist das dynamische Wesen, das aufnimmt, sucht und versucht, um zu lernen."
+  },
+  "practical_reflection": "Den Signifikator des Geistes einzuladen bedeutet, sich selbst als Ganzes zu sehen — nicht als fragmentiertes Wesen mit einem 'guten' und einem 'schlechten' Teil, sondern als lebendigen Komplex, der in jedem Moment wählt. Frage dich: Wer bin ich, wenn ich alle meine Erfahrungen als Teil eines einzigen Wesens anerkenne?",
+  "sessions": ["78.10", "78.12", "79.17", "79.18", "79.19", "79.36", "79.37", "92.15", "92.16"],
+  "related_links": {
+    "deep_dive": "https://ganzwachsen.de/ra-tarot-signifikator-des-geistes"
+  }
+}

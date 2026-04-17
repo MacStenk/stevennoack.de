@@ -1,0 +1,22 @@
+{
+  "arkanum": 9,
+  "name_traditional": "Der Eremit (Weisheit)",
+  "name_ra": "Potenziator des Körpers",
+  "dimension": "Körper",
+  "classification": "Potenziator",
+  "triad_partners": [2, 16],
+  "pair_partner": 8,
+  "core_teaching": {
+    "essence": "Der Potenziator des Körperkomplexes mag Weisheit genannt werden, denn nur durch Urteil können die unaufhörlichen Aktivitäten und Neigungen des Körperkomplexes in nützlichen Modi erfahren werden.",
+    "description": "Wo der Potenziator des Geistes (II) das Meer des Unbewussten ist, ist der Potenziator des Körpers die Weisheit des Urteilens. Der Körper ist ständig aktiv — der Eremit bringt die Stille und das Urteil, die nötig sind, um diese Aktivität sinnvoll zu lenken.",
+    "metaphor": "Der Eremit mit seiner Laterne — Licht der Weisheit in der Dunkelheit der unaufhörlichen körperlichen Aktivität."
+  },
+  "relationship_to_triad": {
+    "mind_potentiator": "Das Meer des Unbewussten (Geist) — endlose Tiefe, in die man eintaucht.",
+    "body_potentiator": "Die Weisheit des Urteils (Körper) — die Fähigkeit, körperliche Impulse zu lenken.",
+    "spirit_potentiator": "Der Blitz (Seele) — plötzliche, feurige Erleuchtung."
+  },
+  "practical_reflection": "Den Potenziator des Körpers einzuladen bedeutet, Weisheit in den Umgang mit deinem Körper zu bringen. Nicht Kontrolle durch den Verstand, sondern weises Urteil: Wann braucht mein Körper Bewegung, wann Ruhe? Was nährt ihn wirklich?",
+  "sessions": ["78.11", "79.20"],
+  "related_links": {"deep_dive": "https://ganzwachsen.de/ra-tarot-potenziator-des-koerpers"}
+}

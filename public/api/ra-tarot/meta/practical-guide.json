@@ -1,0 +1,116 @@
+{
+  "name": "Praxisleitfaden — Die 22 Archetypen im Alltag",
+  "subtitle": "Für normale Menschen, nicht nur für Eingeweihte",
+  "what_this_is": {
+    "not_fortune_telling": "Das Tarot nach Ra ist kein Tages-Orakel. Du ziehst keine Karte und hoffst auf eine gute Energie. Ra sagte ausdrücklich: Die Großen Arkana haben 'keinen rechtmäßigen Platz in Wahrsagung'. Es geht nicht um Vorhersage.",
+    "what_it_actually_is": "Es ist eine Landkarte deiner inneren Architektur. Stell dir vor, du hast ein Haus — Geist, Körper, Seele. Jedes hat sieben Räume. Du lebst darin, jeden Tag, aber du hast nie einen Grundriss gesehen. Du weißt nicht, welche Wand tragend ist, wo die Rohre verlaufen, warum es in der einen Ecke immer zieht. Das Tarot nach Ra ist der Grundriss.",
+    "why_it_matters": "Wenn du die Architektur deines Bewusstseins kennst, hörst du auf, Opfer deiner eigenen Reaktionen zu sein. Du wirst zum bewussten Teilnehmer an deiner eigenen Evolution. Ra nannte das: 'Die Erkenntnis des Selbst durch das Selbst, mit dem Ziel, in einen tieferen, unmittelbar verwirklichten, gegenwärtigen Moment einzutreten.'"
+  },
+  "the_seven_rooms": {
+    "description": "Jede Dimension deines Wesens — Geist, Körper, Seele — hat sieben Aspekte. Zusammen ergeben sie ein Vokabular für das, was dir täglich passiert:",
+    "rooms": {
+      "matrix": "Der Urgrund — woraus alles kommt, bevor irgendetwas geschieht",
+      "potentiator": "Was aktiviert — die Kraft, die den Urgrund in Bewegung bringt",
+      "catalyst": "Was einwirkt — Situationen, Begegnungen, Herausforderungen",
+      "experience": "Was du daraus machst — wie du Katalyst verarbeitest (oder nicht)",
+      "significator": "Wer du dabei bist — dein Selbst als Ganzes, mit allen Erfahrungen",
+      "transformation": "Wie du dich änderst — der Moment der bewussten Wahl",
+      "great_way": "Wohin das führt — die Frucht des gesamten Prozesses"
+    }
+  },
+  "everyday_examples": {
+    "meeting_anger": {
+      "situation": "Du sitzt in einem Meeting und wirst wütend auf einen Kollegen.",
+      "without_system": "Du denkst: 'Der Typ nervt.' Du reagierst — oder unterdrückst.",
+      "with_system": "Du erkennst: Das ist Katalyst (Arkanum III). Die Frage wird nicht 'Wie werde ich die Wut los?' sondern 'Was für eine Erfahrung (Arkanum IV) will dieser Katalyst erzeugen? Ergreife ich sie bewusst — oder lasse ich sie vorbeigehen und der Katalyst kommt wieder?'"
+    },
+    "night_restlessness": {
+      "situation": "Du wachst nachts auf mit einem Gefühl, das du nicht einordnen kannst — Unruhe, Sehnsucht, etwas Namenloses.",
+      "without_system": "Du denkst: 'Kann nicht schlafen, blöd.' Du greifst zum Handy.",
+      "with_system": "Du erkennst: Das könnte der Stern sein — Katalyst der Seele (Arkanum XVII). Eine leise Einladung, tiefer zu schauen. Nicht jede Unruhe ist ein Problem. Manche ist ein Ruf."
+    },
+    "body_pain": {
+      "situation": "Dein Rücken schmerzt seit Wochen, ohne klare medizinische Ursache.",
+      "without_system": "Du denkst: 'Ich werde alt.' Oder du ignorierst es.",
+      "with_system": "Du erkennst: Das Rad des Schicksals dreht sich — Katalyst des Körpers (Arkanum X). Die Frage wird: 'Was lehrt mich mein Körper gerade? Welche Erfahrung (Arkanum XI, Die Kraft) will daraus entstehen? Kann ich mit sanfter Kraft statt mit Unterdrückung reagieren?'"
+    },
+    "life_crossroads": {
+      "situation": "Du stehst vor einer großen Lebensentscheidung — Job wechseln, Beziehung beenden, umziehen.",
+      "without_system": "Du erstellst Pro-Contra-Listen. Du fragst Freunde. Du schiebst es auf.",
+      "with_system": "Du erkennst: Das ist die Transformation des Geistes (Arkanum VI) — der Moment, an dem du zwischen zwei Wegen wählen musst. Und du verstehst: Nicht die richtige Wahl ist entscheidend, sondern DASS du wählst. Nicht zu wählen ist die eigentliche Falle (Arkanum XXII)."
+    },
+    "sudden_insight": {
+      "situation": "Unter der Dusche, beim Spaziergang, aus dem Nichts — ein plötzliches Verständnis, das alles verändert.",
+      "without_system": "Du denkst: 'Interessant.' Und vergisst es nach einer Stunde.",
+      "with_system": "Du erkennst: Der Turm — Potenziator der Seele (Arkanum XVI). Ein Blitz, der eine alte Struktur aufbricht. Diese Momente sind selten und kostbar. Schreib es auf. Lass es nachwirken. Die tiefste Dunkelheit deiner Seele (Arkanum XV) hat gerade Licht empfangen."
+    }
+  },
+  "seven_week_practice": {
+    "description": "Ras Lehrplan, übersetzt in einen 7-Wochen-Praxisleitfaden. Nicht als intellektuelles Studium, sondern als gelebte Beobachtung. Pro Woche eine Dreiergruppe — Geist, Körper, Seele derselben Klassifikation.",
+    "how_to_practice": "Lies morgens die kurze Beschreibung der drei Archetypen der Woche. Dann geh in deinen Tag — und beobachte. Nicht analysieren, nicht bewerten. Nur beobachten: Wo taucht dieses Prinzip in meinem Alltag auf? Abends, vor dem Schlafen, eine Notiz: Was habe ich heute bemerkt?",
+    "weeks": [
+      {
+        "week": 1,
+        "theme": "Die drei Matrizen — Woraus alles kommt",
+        "arkana": [1, 8, 15],
+        "names": "Der Magier, Gerechtigkeit, Der Teufel",
+        "daily_question": "Wo erlebe ich heute die Stille meines Geistes (bevor Gedanken kommen), die Unruhe meines Körpers (der nie still steht), die Dunkelheit meiner Seele (das, was ich noch nicht über mich weiß)?",
+        "evening_reflection": "Gab es einen Moment der Stille heute? Einen Moment, in dem mein Körper mir etwas sagte? Einen Moment, in dem ich etwas Unbekanntes in mir spürte?"
+      },
+      {
+        "week": 2,
+        "theme": "Die drei Potenziatoren — Was den Urgrund aktiviert",
+        "arkana": [2, 9, 16],
+        "names": "Die Hohepriesterin, Der Eremit, Der Turm",
+        "daily_question": "Was hat heute meinen Geist in die Tiefe gezogen (das Meer)? Was hat meinen Körper weise gelenkt (der Eremit)? Was hat meine Seele aufgerissen oder erschüttert (der Blitz)?",
+        "evening_reflection": "Bin ich heute irgendwo tiefer getaucht als gewöhnlich? Hat mein Körper heute auf Weisheit gehört? Gab es einen Blitz-Moment — plötzlich, unerwartet, erhellend?"
+      },
+      {
+        "week": 3,
+        "theme": "Die drei Katalysten — Was auf mich einwirkt",
+        "arkana": [3, 10, 17],
+        "names": "Die Herrscherin, Rad des Schicksals, Der Stern",
+        "daily_question": "Was ist heute auf meinen Geist eingewirkt (eine Situation, eine Begegnung)? Was hat mein Körper heute erfahren (Energie, Müdigkeit, Schmerz, Lust)? Was hat meine Seele heute berührt (eine Sehnsucht, ein leiser Ruf)?",
+        "evening_reflection": "Welcher Katalyst war heute am stärksten? Habe ich ihn bewusst wahrgenommen — oder erst jetzt, im Rückblick?"
+      },
+      {
+        "week": 4,
+        "theme": "Die drei Erfahrungen — Was ich daraus mache",
+        "arkana": [4, 11, 18],
+        "names": "Der Herrscher, Die Kraft, Der Mond",
+        "daily_question": "Habe ich heute Katalyst bewusst verarbeitet oder automatisch reagiert? Habe ich mit sanfter Kraft auf meinen Körper reagiert oder mit Unterdrückung? Gab es eine spirituelle Erfahrung — auch wenn sie nur ein Schimmer war, wie Mondlicht?",
+        "evening_reflection": "Wo habe ich heute bewusst ergriffen, was mir gegeben wurde? Wo habe ich Katalyst vorbeiziehen lassen?"
+      },
+      {
+        "week": 5,
+        "theme": "Die drei Signifikatoren — Wer ich dabei bin",
+        "arkana": [5, 12, 19],
+        "names": "Der Hierophant, Der Gehängte, Die Sonne",
+        "daily_question": "Wer war ich heute in meinem Geist — suchend, lernend, wollend? Wie habe ich meinen Körper heute erlebt — als Werkzeug, als Last, als Partner? Wo habe ich heute mein eigenes spirituelles Licht gespürt — oder versteckt?",
+        "evening_reflection": "Wenn ich mich als Ganzes betrachte — Geist, Körper, Seele zusammen — wer bin ich gerade? Nicht wer ich sein sollte. Wer ich bin."
+      },
+      {
+        "week": 6,
+        "theme": "Die drei Transformationen — Wie ich mich ändere",
+        "arkana": [6, 13, 20],
+        "names": "Die Liebenden, Der Tod, Das Gericht",
+        "daily_question": "Wo stehe ich heute an einer Gabelung und muss wählen? Was muss in meinem körperlichen Leben sterben, damit Neues wachsen kann? Welche alte spirituelle Überzeugung will aufwachen und sich verwandeln?",
+        "evening_reflection": "Habe ich heute eine bewusste Wahl getroffen — oder die Gabelung umgangen? Was wäre gestorben, wenn ich mutiger gewesen wäre?"
+      },
+      {
+        "week": 7,
+        "theme": "Die drei Großen Wege + Die Wahl",
+        "arkana": [7, 14, 21, 22],
+        "names": "Der Wagen, Mäßigkeit, Die Welt, Der Narr",
+        "daily_question": "Wohin fährt mein geistiger Wagen gerade — bewusst oder auf Autopilot? Wo finde ich die alchemistische Balance in meinem Körper? Kann ich einen Moment lang spüren, dass die Welt bereits tanzt — und ich mit ihr?",
+        "evening_reflection": "Was ist meine Wahl? Nicht die große, abstrakte Lebenswahl. Die kleine Wahl von heute: Habe ich gewählt, oder habe ich das Wählen vermieden?"
+      }
+    ],
+    "after_seven_weeks": "Nach sieben Wochen hast du alle 22 Archetypen einmal gelebt — nicht studiert, gelebt. Jetzt beginnt Ras zweite Phase: Die Betrachtung in Paaren. Aber das muss nicht sofort kommen. Lass das Erlebte erst sacken. Die Archetypen arbeiten in dir weiter, auch wenn du nicht an sie denkst. Besonders dann."
+  },
+  "for_whom": {
+    "description": "Dieser Leitfaden ist für Menschen, die spüren, dass es mehr gibt — aber keine 600 Seiten Ra-Material lesen wollen oder können. Er ist für den Morgenkaffee, nicht für das Meditationskissen. Für den Feierabend, nicht für das Retreat. Das Studium der Archetypen ist keine Aufgabe, die du deinem Alltag hinzufügst — es ist eine Brille, die du aufsetzt, und plötzlich siehst du Muster in dem, was ohnehin passiert.",
+    "ra_spirit": "Ra sagte: 'Wir haben kein Dogma anzubieten. Jeder nimmt das wahr, was für das Selbst erforderlich und hilfreich ist.' Das gilt auch hier. Wenn eine Woche nichts bringt — überspringe sie. Wenn eine Woche dich tief berührt — bleib länger. Es gibt keinen richtigen Weg. Es gibt nur deinen Weg."
+  },
+  "sessions": ["76.9", "88.17", "88.24", "89.25"]
+}

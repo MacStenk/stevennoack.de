@@ -1,0 +1,31 @@
+{
+  "name": "Die drei Potenziatoren",
+  "classification": "Potenziator",
+  "arkana": [2, 9, 16],
+  "theme": "Was den Urgrund aktiviert — drei Kräfte der Potenzierung",
+  "ras_study_order": "Zweite Dreiergruppe im Lehrplan: 2, 9, 16.",
+  "comparison": {
+    "mind": {
+      "arkanum": 2,
+      "name": "Die Hohepriesterin / Potenziator des Geistes",
+      "quality": "Das Meer — tief, einladend, endlos",
+      "ra_description": "Die große Ressource, die als das Meer gesehen werden kann, in welches das Bewusstsein immer tiefer eintaucht, um zu erschaffen, vorzustellen und selbstbewusster zu werden."
+    },
+    "body": {
+      "arkanum": 9,
+      "name": "Der Eremit / Potenziator des Körpers",
+      "quality": "Weisheit — ruhig, urteilend, lenkend",
+      "ra_description": "Weisheit, denn nur durch Urteil können die unaufhörlichen Aktivitäten und Neigungen des Körperkomplexes in nützlichen Modi erfahren werden."
+    },
+    "spirit": {
+      "arkanum": 16,
+      "name": "Der Turm / Potenziator der Seele",
+      "quality": "Der Blitz — plötzlich, feurig, umwälzend",
+      "ra_description": "Kann als Blitz gesehen werden — der höchst überraschende, erwachende, erleuchtende und erzeugende Einfluss. Licht in seiner plötzlichen und feurigen Form."
+    }
+  },
+  "pattern": "Drei radikal verschiedene Kräfte der Potenzierung: das Meer lädt zum Eintauchen ein (sanft, freiwillig), die Weisheit lenkt durch Urteil (ruhig, stetig), der Blitz bricht herein (plötzlich, unkontrollierbar). Vom Sanftesten zum Dramatischsten.",
+  "key_insight": "Der Potenziator wirkt in jeder Dimension anders auf die Matrix: Der Geist wird sanft in die Tiefe eingeladen, der Körper wird durch weise Lenkung reguliert, die Seele wird durch blitzartige Erleuchtung aufgerissen. Die Seelen-Dimension ist die dramatischste.",
+  "practical_reflection": "Spüre die drei Potenziatoren in deinem Leben: Wohin taucht dein Geist gerade tiefer ein? Welche Weisheit lenkt deinen Körper? Und — wartest du auf den Blitz, oder wehrt sich ein Teil von dir dagegen, aufgerissen zu werden?",
+  "sessions": ["78.11", "79.20"]
+}

@@ -1,0 +1,27 @@
+{
+  "arkanum": 6,
+  "name_traditional": "Die Liebenden (Zwei Wege)",
+  "name_ra": "Transformation des Geistes",
+  "dimension": "Geist",
+  "classification": "Transformation",
+  "triad_partners": [13, 20],
+  "pair_partner": 7,
+  "core_teaching": {
+    "essence": "Die Transformation des Geistes zeigt den Schüler der Mysterien, wie er durch das Erfordernis, im Geist zwischen dem Licht und der Dunkelheit zu wählen, transformiert wird.",
+    "description": "Dieser Archetyp wird passender die Transformation des Geistes genannt als 'Die Liebenden'. Die traditionelle Darstellung der zwei Wege — ein Pfad nach links, ein Pfad nach rechts — drückt das Wesen dieser Transformation aus: Die bewusste Wahl zwischen Polaritäten.",
+    "metaphor": "An der Gabelung stehen und erkennen, dass die Wahl selbst die Transformation ist — nicht das Ergebnis. Der Moment der Entscheidung verändert den Geist unwiderruflich."
+  },
+  "relationship_to_choice": {
+    "description": "Während Arkanum XXII (Die Wahl) die übergeordnete, fundamentale Wahl zwischen Dienst an Anderen und Dienst am Selbst darstellt, ist Arkanum VI die konkrete Transformation, die im Geist geschieht, wenn diese Wahl in einer bestimmten Situation getroffen wird.",
+    "distinction": "Die Wahl (XXII) ist das Prinzip. Die Transformation (VI) ist der Prozess, der im Geist stattfindet, wenn das Prinzip gelebt wird."
+  },
+  "study_guidance": {
+    "pair_study": "Arkanum VI wird mit Arkanum VII (Großer Weg des Geistes / Der Wagen) als Paar studiert: Transformation und der Große Weg bedingen einander — wer sich transformiert, betritt den Großen Weg.",
+    "ra_correction": "Don vermutete, Arkanum VI stelle die Verschmelzung von Bewusstem und Unbewusstem dar. Ra korrigierte: Es ist die Transformation des Geistes durch die Notwendigkeit zu wählen."
+  },
+  "practical_reflection": "Transformation des Geistes einzuladen bedeutet, die Gabelpunkte in deinem Leben zu erkennen — und zu wählen, statt zu vermeiden. Jede bewusste Entscheidung zwischen Licht und Dunkelheit transformiert deinen Geist. Frage dich: Wo stehe ich gerade an einer Gabelung und tue so, als gäbe es nur einen Weg?",
+  "sessions": ["79.39", "79.40"],
+  "related_links": {
+    "deep_dive": "https://ganzwachsen.de/ra-tarot-transformation-des-geistes"
+  }
+}

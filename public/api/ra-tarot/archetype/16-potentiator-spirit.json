@@ -1,0 +1,22 @@
+{
+  "arkanum": 16,
+  "name_traditional": "Der Turm",
+  "name_ra": "Potenziator der Seele",
+  "dimension": "Seele",
+  "classification": "Potenziator",
+  "triad_partners": [2, 9],
+  "pair_partner": 15,
+  "core_teaching": {
+    "essence": "Der Potenziator der Seele kann als Blitz gesehen werden — der höchst überraschende, erwachende, erleuchtende und erzeugende Einfluss.",
+    "description": "Die potenzielle Kraft der extrem empfänglichen Matrix der Seele (Urdunkelheit) ist so beschaffen, dass der Potenziator als Blitz verstanden werden muss. Im Tarot wurde dies verfeinert zum Konzept des vom Blitz getroffenen Turms. Der ursprüngliche Potenziator war jedoch Licht in seiner plötzlichen und feurigen Form — der Blitz selbst.",
+    "metaphor": "Der Turm wird vom Blitz getroffen — Strukturen zerbrechen, Menschen fallen. Was starr war, wird aufgebrochen. Dies ist kein Unglück, sondern der Potenziator der Seele in Aktion: plötzliche, feurige Erleuchtung."
+  },
+  "relationship_to_triad": {
+    "mind_potentiator": "Das Meer (sanft, tief, einladend)",
+    "body_potentiator": "Weisheit (ruhig, urteilend, lenkend)",
+    "spirit_potentiator": "Der Blitz (plötzlich, feurig, umwälzend) — der dramatischste aller drei Potenziatoren"
+  },
+  "practical_reflection": "Den Potenziator der Seele einzuladen bedeutet, bereit zu sein für das plötzliche Aufbrechen von Strukturen, die dir Sicherheit gaben. Spirituelle Durchbrüche sind selten sanft — sie sind Blitze. Frage dich: Welche Türme in meinem Leben müssen fallen, damit das Licht durchkommen kann?",
+  "sessions": ["78.11"],
+  "related_links": {"deep_dive": "https://ganzwachsen.de/ra-tarot-potenziator-der-seele"}
+}

@@ -1,0 +1,30 @@
+{
+  "name": "Die drei Transformationen",
+  "classification": "Transformation",
+  "arkana": [6, 13, 20],
+  "theme": "Die Wandlung — drei Dimensionen fundamentaler Veränderung",
+  "ras_study_order": "Sechste Dreiergruppe: 6, 13, 20.",
+  "comparison": {
+    "mind": {
+      "arkanum": 6,
+      "name": "Die Liebenden / Transformation des Geistes",
+      "quality": "Wahl zwischen Licht und Dunkelheit — der Schüler wird transformiert",
+      "ra_description": "Der Schüler der Mysterien, der durch das Erfordernis, im Geist zwischen dem Licht und der Dunkelheit zu wählen, transformiert wird."
+    },
+    "body": {
+      "arkanum": 13,
+      "name": "Tod / Transformation des Körpers",
+      "quality": "Loslassen — alte Muster, Identitäten und Gewohnheiten sterben",
+      "ra_description": "Der Tod als Transformation der körperlichen Existenz — das Aufgeben dessen, was war, um Platz für Neues zu schaffen."
+    },
+    "spirit": {
+      "arkanum": 20,
+      "name": "Das Gericht / Transformation der Seele",
+      "quality": "Erwachen — der Ruf der Trompete, spiritueller Tod und Auferstehung",
+      "ra_description": "Das vollständige Erwachen des spirituellen Wesens — nicht mehr in Dunkelheit, nicht mehr in reflektiertem Licht, sondern in vollem Bewusstsein der ewigen Natur."
+    }
+  },
+  "pattern": "Drei Dimensionen der Wandlung: Im Geist geschieht Transformation durch Wahl (bewusst, Freiheit). Im Körper durch Tod und Loslassen (radikal, unumkehrbar). In der Seele durch Erwachen aus dem spirituellen Schlaf (kosmisch, umfassend). Von der persönlichen Wahl über den physischen Tod zum spirituellen Erwachen.",
+  "key_insight": "Die Transformation wird immer dramatischer über die drei Dimensionen: Im Geist ist es eine Gabelung (zwei Wege), im Körper ist es der Tod (keine Rückkehr), in der Seele ist es das Gericht (endgültiges Erwachen). Die Intensität steigt von Geist über Körper zur Seele.",
+  "sessions": ["79.39", "79.40", "80.1", "81.13", "88.17"]
+}

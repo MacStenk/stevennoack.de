@@ -1,0 +1,30 @@
+{
+  "name": "Die drei Katalysten",
+  "classification": "Katalyst",
+  "arkana": [3, 10, 17],
+  "theme": "Was auf das Wesen einwirkt — die drei Türen der Veränderung",
+  "ras_study_order": "Dritte Dreiergruppe: 3, 10, 17.",
+  "comparison": {
+    "mind": {
+      "arkanum": 3,
+      "name": "Die Herrscherin / Katalyst des Geistes",
+      "quality": "Fülle — alles was dem bewussten Geist begegnet",
+      "ra_description": "Das, was auf den bewussten Geist einwirkt, um ihn zu verändern. Nach der Verschleierung wird Katalyst zum Motor der Evolution durch die Möglichkeit der polarisierten Interpretation."
+    },
+    "body": {
+      "arkanum": 10,
+      "name": "Rad des Schicksals / Katalyst des Körpers",
+      "quality": "Zyklen — Gesundheit, Krankheit, körperliche Wendungen",
+      "ra_description": "Was dem Körper widerfährt — die zyklische, unberechenbare Natur körperlicher Erfahrung."
+    },
+    "spirit": {
+      "arkanum": 17,
+      "name": "Der Stern / Katalyst der Seele",
+      "quality": "Sehnsucht — der leise Ruf des Spirituellen",
+      "ra_description": "Die leise Einladung, tiefer zu schauen. Spiritueller Katalyst kommt als Sehnsucht, als unerklärliche Anziehung zum Höheren."
+    }
+  },
+  "pattern": "Drei Wege, wie das Leben auf uns einwirkt: geistig durch Situationen und Begegnungen, körperlich durch das Rad der physischen Erfahrung, spirituell durch die leise Sehnsucht nach dem Transzendenten.",
+  "key_insight": "Ra betonte: Jeder Archetyp des Katalysten, der Erfahrung, der Transformation und des Großen Weges wird am fruchtbarsten als unabhängiger Komplex betrachtet, der seine eigene Melodie hat. Katalyst im Geist fühlt sich anders an als Katalyst im Körper als Katalyst der Seele.",
+  "sessions": ["79.35", "88.17", "93.7", "93.11", "93.12", "94.22"]
+}
