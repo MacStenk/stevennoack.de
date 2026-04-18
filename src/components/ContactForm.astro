@@ -1,0 +1,208 @@
+---
+/**
+ * ContactForm.astro
+ *
+ * Wiederverwendbares Kontaktformular mit Honeypot-Spam-Schutz.
+ * Sendet an /api/contact, dort geht's via Resend raus an kontakt@stevennoack.de.
+ *
+ * Agent-ready: Das Formular trägt WebMCP-Attribute (tool-name,
+ * tool-description, tool-param-description). WebMCP-fähige Browser-Agenten
+ * (Chrome 146+ Canary, Edge 147+) können es so strukturiert als Tool aufrufen,
+ * ohne DOM-Scraping. Für normale Menschen und alte Browser: unsichtbar.
+ *
+ * Props:
+ *   - compact: boolean — wenn true, kleinere Abstände und kompaktere Labels
+ */
+
+interface Props {
+    compact?: boolean;
+}
+
+const { compact = false } = Astro.props;
+
+const spacingClass = compact ? "space-y-5" : "space-y-6";
+const textareaRows = compact ? 6 : 8;
+---
+
+<form
+    id="contact-form"
+    class={spacingClass}
+    novalidate
+    tool-name="kontakt_senden"
+    tool-description="Eine Nachricht an Steven Noack senden. Reply-To wird auf die angegebene E-Mail-Adresse gesetzt."
+>
+    <!-- Honeypot: für Menschen unsichtbar, Bots tappen rein -->
+    <div
+        aria-hidden="true"
+        style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;"
+    >
+        <label for="website">Webseite (bitte leer lassen)</label>
+        <input
+            type="text"
+            id="website"
+            name="website"
+            tabindex="-1"
+            autocomplete="off"
+        />
+    </div>
+
+    <div>
+        <label
+            for="name"
+            class="block text-xs font-mono text-gray-500 uppercase tracking-widest mb-2"
+            >Name</label
+        >
+        <input
+            type="text"
+            id="name"
+            name="name"
+            required
+            maxlength="200"
+            autocomplete="name"
+            tool-param-description="Vor- und Nachname des Absenders"
+            class="w-full bg-white/5 border border-white/10 rounded px-4 py-3 text-white font-mono text-sm focus:outline-none focus:border-white/40 transition-colors"
+        />
+    </div>
+
+    <div>
+        <label
+            for="email"
+            class="block text-xs font-mono text-gray-500 uppercase tracking-widest mb-2"
+            >E-Mail</label
+        >
+        <input
+            type="email"
+            id="email"
+            name="email"
+            required
+            maxlength="254"
+            autocomplete="email"
+            tool-param-description="E-Mail-Adresse des Absenders (wird als Reply-To gesetzt)"
+            class="w-full bg-white/5 border border-white/10 rounded px-4 py-3 text-white font-mono text-sm focus:outline-none focus:border-white/40 transition-colors"
+        />
+    </div>
+
+    <div>
+        <label
+            for="subject"
+            class="block text-xs font-mono text-gray-500 uppercase tracking-widest mb-2"
+            >Betreff
+            <span class="text-gray-600 normal-case tracking-normal"
+                >(optional)</span
+            >
+        </label>
+        <input
+            type="text"
+            id="subject"
+            name="subject"
+            maxlength="200"
+            tool-param-description="Kurzer Betreff der Nachricht. Optional."
+            class="w-full bg-white/5 border border-white/10 rounded px-4 py-3 text-white font-mono text-sm focus:outline-none focus:border-white/40 transition-colors"
+        />
+    </div>
+
+    <div>
+        <label
+            for="message"
+            class="block text-xs font-mono text-gray-500 uppercase tracking-widest mb-2"
+            >Nachricht</label
+        >
+        <textarea
+            id="message"
+            name="message"
+            required
+            minlength="10"
+            maxlength="10000"
+            rows={textareaRows}
+            tool-param-description="Freier Nachrichtentext. Mindestens 10 Zeichen."
+            class="w-full bg-white/5 border border-white/10 rounded px-4 py-3 text-white font-mono text-sm focus:outline-none focus:border-white/40 transition-colors resize-y"
+        ></textarea>
+    </div>
+
+    <div class="pt-2 flex flex-col sm:flex-row sm:items-center gap-4">
+        <button
+            type="submit"
+            id="submit-btn"
+            class="font-mono text-xs uppercase tracking-widest border border-white/20 text-white px-5 py-3 rounded hover:bg-white hover:text-black transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+            Absenden
+        </button>
+        <p
+            id="status-message"
+            class="text-sm font-mono"
+            role="status"
+            aria-live="polite"
+        >
+        </p>
+    </div>
+
+    <p class="text-xs text-gray-600 font-mono leading-relaxed pt-2">
+        Klassisch geht's auch:
+        <a
+            href="mailto:kontakt@stevennoack.de"
+            class="text-gray-400 hover:text-white transition-colors"
+            >kontakt@stevennoack.de</a
+        >
+    </p>
+</form>
+
+<script>
+    const form = document.getElementById("contact-form") as HTMLFormElement | null;
+    const submitBtn = document.getElementById("submit-btn") as HTMLButtonElement | null;
+    const statusMessage = document.getElementById("status-message") as HTMLElement | null;
+
+    function setStatus(message: string, type: "info" | "success" | "error") {
+        if (!statusMessage) return;
+        statusMessage.textContent = message;
+        statusMessage.className = "text-sm font-mono ";
+        if (type === "success") statusMessage.className += "text-green-400";
+        else if (type === "error") statusMessage.className += "text-red-400";
+        else statusMessage.className += "text-gray-400";
+    }
+
+    form?.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        if (!submitBtn || !statusMessage) return;
+
+        const formData = new FormData(form);
+        const payload = {
+            name: formData.get("name"),
+            email: formData.get("email"),
+            subject: formData.get("subject"),
+            message: formData.get("message"),
+            website: formData.get("website"),
+        };
+
+        submitBtn.disabled = true;
+        setStatus("Wird gesendet…", "info");
+
+        try {
+            const response = await fetch("/api/contact", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                setStatus("Nachricht ist angekommen. Ich melde mich.", "success");
+                form.reset();
+            } else {
+                setStatus(
+                    data.error ??
+                        "Da ist was schiefgelaufen. Probier's gleich nochmal.",
+                    "error"
+                );
+                submitBtn.disabled = false;
+            }
+        } catch (err) {
+            setStatus(
+                "Verbindung hat nicht geklappt. Schreib mir zur Not direkt: kontakt@stevennoack.de",
+                "error"
+            );
+            submitBtn.disabled = false;
+        }
+    });
+</script>

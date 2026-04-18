@@ -1,0 +1,45 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import ContactForm from "@/components/ContactForm.astro";
+---
+
+<BaseLayout
+    title="Kontakt | Steven Noack"
+    description="Schreib mir eine Nachricht — direkt, ohne Umwege."
+>
+    <main class="max-w-3xl mx-auto px-6 py-20 font-sans text-gray-400">
+        <div class="mb-12 border-b border-white/10 pb-8">
+            <a
+                href="/"
+                class="inline-block mb-4 text-sm font-mono text-gray-500 hover:text-white transition-colors"
+                >← Zurück zur Zentrale</a
+            >
+            <h1 class="text-3xl md:text-4xl font-bold text-white font-mono">
+                Kontakt
+            </h1>
+            <p class="mt-4 text-gray-400 text-lg max-w-2xl leading-relaxed">
+                Schreib mir, was dich bewegt. Direkt, ohne Formular-Flut, ohne
+                automatische Bestätigungsmails. Deine Nachricht landet in meinem
+                Posteingang, ich antworte selbst.
+            </p>
+        </div>
+
+        <ContactForm />
+
+        <div class="mt-16 pt-8 border-t border-white/10">
+            <p class="text-xs font-mono text-gray-600 leading-relaxed">
+                Dieses Formular ist für Menschen und für Agenten.
+                Wer einen WebMCP-fähigen Browser nutzt (Chrome 146+, Edge 147+),
+                kann es als strukturiertes Tool
+                <code class="text-gray-500">kontakt_senden</code>
+                aufrufen — statt das DOM zu parsen.
+                <a
+                    href="view-source:https://stevennoack.de/kontakt"
+                    class="text-gray-500 hover:text-white transition-colors underline decoration-dotted"
+                    >View-Source</a
+                >
+                einladend.
+            </p>
+        </div>
+    </main>
+</BaseLayout>
