@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Was gerade passiert — Wissen, lokale KI und Skills erklärt</title>
+<meta name="description" content="Eine ruhige Erklärung dessen, was 2026 technisch möglich ist: KI-Modelle, die offline auf dem Smartphone laufen, Wissen als Skill, und was das für Menschen bedeutet, die etwas zu sagen haben.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,700;9..144,900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f0ede6;
+    --ink: #0a0a0a;
+    --paper: #e8e3d6;
+    --accent: #ff3c00;
+    --green: #00863c;
+    --muted: #6b6760;
+    --grid: rgba(10, 10, 10, 0.06);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg); color: var(--ink);
+    font-family: 'Fraunces', serif;
+    font-weight: 400; font-size: 18px; line-height: 1.65;
+    overflow-x: hidden;
+    background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+  body::before {
+    content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 1;
+    opacity: 0.4; mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.08 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  }
+  ::selection { background: var(--accent); color: var(--bg); }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+  .display { font-family: 'Fraunces', serif; font-weight: 900; line-height: 0.92; letter-spacing: -0.035em; }
+
+  /* TOPBAR */
+  .topbar {
+    position: relative; z-index: 10;
+    border-bottom: 2px solid var(--ink);
+    padding: 14px 32px; display: flex; justify-content: space-between; align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; background: var(--bg);
+  }
+  .topbar .left, .topbar .right { display: flex; gap: 24px; align-items: center; }
+  .topbar .crumb a { color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--ink); }
+  .topbar a { color: var(--ink); text-decoration: none; border-bottom: 1px solid transparent; }
+  .topbar a:hover { border-bottom-color: var(--ink); }
+  .topbar .reading-time { color: var(--muted); }
+
+  /* HERO — editorial, ruhig */
+  .hero { position: relative; z-index: 5; padding: 120px 32px 80px; border-bottom: 2px solid var(--ink); }
+  .hero-inner { max-width: 1100px; margin: 0 auto; }
+  .hero-kicker { font-family: 'JetBrains Mono', monospace; font-size: 12px; text-transform: uppercase; letter-spacing: 0.18em; color: var(--accent); margin-bottom: 32px; font-weight: 500; display: flex; align-items: center; gap: 14px; }
+  .hero-kicker::before { content: ""; display: inline-block; width: 40px; height: 1px; background: var(--accent); }
+  .hero-title { font-size: clamp(3rem, 8vw, 7rem); margin-bottom: 40px; max-width: 1000px; }
+  .hero-title em { color: var(--accent); font-style: italic; }
+  .hero-deck { font-family: 'Fraunces', serif; font-weight: 400; font-size: clamp(1.3rem, 1.9vw, 1.7rem); line-height: 1.45; max-width: 760px; color: var(--ink); }
+  .hero-deck .drop { float: left; font-family: 'Fraunces', serif; font-weight: 900; font-size: 5.5em; line-height: 0.85; padding: 8px 14px 0 0; color: var(--accent); }
+  .hero-meta { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--ink); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); }
+
+  /* SECTION */
+  .section { position: relative; z-index: 5; padding: 100px 32px; border-bottom: 2px solid var(--ink); }
+  .section.tight { padding: 80px 32px; }
+  .section-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 180px 1fr; gap: 56px; }
+  .section-anchor { font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); position: sticky; top: 32px; align-self: start; }
+  .section-anchor strong { display: block; font-family: 'Fraunces', serif; font-weight: 900; font-size: 36px; color: var(--accent); margin-top: 8px; line-height: 1; letter-spacing: -0.04em; }
+
+  .section-title { font-size: clamp(2.2rem, 4.5vw, 3.5rem); margin-bottom: 40px; max-width: 800px; }
+  .section-title em { color: var(--accent); font-style: italic; }
+
+  .prose p { margin-bottom: 24px; max-width: 700px; }
+  .prose p.lead { font-size: 1.25em; line-height: 1.5; }
+  .prose strong { font-weight: 700; }
+  .prose em { font-style: italic; }
+  .prose .highlight { background: var(--accent); color: var(--bg); padding: 1px 6px; font-weight: 500; }
+
+  /* PULL QUOTE */
+  .pull {
+    margin: 48px 0;
+    padding: 32px 40px;
+    border-left: 4px solid var(--accent);
+    background: var(--paper);
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: clamp(1.5rem, 2.5vw, 2.2rem);
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+    max-width: 760px;
+  }
+  .pull em { color: var(--accent); font-style: italic; }
+
+  /* METAPHER-BOX (gross & visuell oben) */
+  .metaphor { background: var(--paper); }
+  .metaphor-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+  .metaphor-text h3 { font-family: 'Fraunces', serif; font-weight: 900; font-size: clamp(1.8rem, 3vw, 2.6rem); line-height: 1.05; letter-spacing: -0.03em; margin-bottom: 24px; }
+  .metaphor-text h3 em { color: var(--accent); font-style: italic; }
+  .metaphor-text p { font-size: 17px; line-height: 1.6; margin-bottom: 18px; }
+  .metaphor-visual { background: var(--ink); padding: 32px; border: 2px solid var(--ink); }
+  .metaphor-visual svg { width: 100%; height: auto; display: block; }
+
+  /* BEFORE / AFTER */
+  .ba { display: grid; grid-template-columns: 1fr 1fr; gap: 0; max-width: 1100px; margin: 0 auto; border: 2px solid var(--ink); }
+  .ba-cell { padding: 36px 32px; background: var(--bg); }
+  .ba-cell.before { border-right: 2px solid var(--ink); position: relative; }
+  .ba-cell.after { background: var(--paper); }
+  .ba-tag { font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 16px; padding: 4px 10px; display: inline-block; }
+  .ba-cell.before .ba-tag { background: var(--ink); color: var(--bg); }
+  .ba-cell.after .ba-tag { background: var(--accent); color: var(--bg); }
+  .ba-cell h4 { font-family: 'Fraunces', serif; font-weight: 900; font-size: 28px; line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 16px; }
+  .ba-cell p { font-size: 15px; line-height: 1.6; margin-bottom: 12px; font-family: 'Fraunces', serif; }
+  .ba-list { list-style: none; margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--ink); font-family: 'JetBrains Mono', monospace; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; }
+  .ba-list li { padding: 5px 0; display: flex; gap: 10px; }
+  .ba-cell.before .ba-list li::before { content: "✗"; color: var(--muted); font-weight: 700; }
+  .ba-cell.after .ba-list li::before { content: "▸"; color: var(--accent); font-weight: 700; }
+
+  /* SCENARIO */
+  .scenario {
+    background: var(--ink);
+    color: var(--bg);
+    padding: 40px 36px;
+    border: 2px solid var(--ink);
+    margin: 32px 0;
+    max-width: 760px;
+    position: relative;
+  }
+  .scenario::before {
+    content: "SZENARIO";
+    position: absolute;
+    top: -12px; left: 24px;
+    background: var(--accent);
+    color: var(--bg);
+    padding: 4px 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-weight: 700;
+  }
+  .scenario-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+  .scenario h4 {
+    font-family: 'Fraunces', serif;
+    font-weight: 900;
+    font-size: clamp(1.5rem, 2.5vw, 2rem);
+    line-height: 1.15;
+    margin-bottom: 18px;
+    letter-spacing: -0.02em;
+  }
+  .scenario p {
+    font-family: 'Fraunces', serif;
+    font-size: 17px;
+    line-height: 1.55;
+    margin-bottom: 14px;
+    color: rgba(240,237,230,0.9);
+  }
+  .scenario p strong { color: var(--bg); font-weight: 700; }
+  .scenario p em { color: var(--accent); font-style: italic; font-weight: 500; }
+
+  /* TECHNICAL DEEP DIVE */
+  .technical {
+    background: var(--ink);
+    color: var(--bg);
+  }
+  .technical .section-title { color: var(--bg); }
+  .technical .section-anchor { color: rgba(255,255,255,0.5); }
+  .technical .section-anchor strong { color: var(--accent); }
+  .technical .prose p { color: rgba(255,255,255,0.85); }
+  .technical .prose strong { color: var(--bg); }
+  .technical .prose .highlight { background: var(--accent); color: var(--ink); }
+
+  .tech-disclosure {
+    background: rgba(255,255,255,0.04);
+    border: 1px dashed rgba(255,255,255,0.25);
+    padding: 28px 32px;
+    margin: 28px 0;
+    max-width: 760px;
+  }
+  .tech-disclosure summary {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 500;
+    user-select: none;
+  }
+  .tech-disclosure summary::-webkit-details-marker { display: none; }
+  .tech-disclosure summary::after {
+    content: "+";
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 22px;
+    color: var(--accent);
+    transition: transform 0.2s ease;
+  }
+  .tech-disclosure[open] summary::after { transform: rotate(45deg); }
+  .tech-disclosure-body { padding-top: 20px; font-size: 15px; line-height: 1.65; color: rgba(255,255,255,0.85); }
+  .tech-disclosure-body p { margin-bottom: 14px; }
+  .tech-disclosure-body code, .tech-disclosure-body pre {
+    font-family: 'JetBrains Mono', monospace;
+    background: rgba(255,255,255,0.08);
+    color: var(--bg);
+    padding: 2px 6px;
+    font-size: 13px;
+  }
+  .tech-disclosure-body pre {
+    padding: 16px;
+    margin: 14px 0;
+    overflow-x: auto;
+    line-height: 1.5;
+    font-size: 12px;
+  }
+  .tech-disclosure-body .com { color: #6b6760; }
+  .tech-disclosure-body .key { color: var(--accent); }
+  .tech-disclosure-body .str { color: #f0c674; }
+
+  /* GLOSSARY */
+  .glossary { background: var(--paper); }
+  .glossary-grid { max-width: 1100px; margin: 0 auto; }
+  .glossary-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0; border: 2px solid var(--ink); }
+  .glossary-item { padding: 24px 28px; border-bottom: 1px solid var(--ink); border-right: 1px solid var(--ink); background: var(--bg); }
+  .glossary-item:nth-child(2n) { border-right: none; }
+  .glossary-item:nth-last-child(-n+2) { border-bottom: none; }
+  .glossary-term { font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent); font-weight: 700; margin-bottom: 8px; }
+  .glossary-def { font-family: 'Fraunces', serif; font-size: 16px; line-height: 1.5; }
+  .glossary-def strong { font-weight: 700; }
+
+  /* FOOTNOTE / OUTRO */
+  .outro { padding: 80px 32px; background: var(--bg); border-bottom: 2px solid var(--ink); }
+  .outro-inner { max-width: 800px; margin: 0 auto; text-align: left; }
+  .outro-kicker { font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); margin-bottom: 18px; }
+  .outro-text { font-family: 'Fraunces', serif; font-weight: 400; font-size: clamp(1.3rem, 2vw, 1.6rem); line-height: 1.45; margin-bottom: 32px; }
+  .outro-text em { color: var(--accent); font-style: italic; font-weight: 700; }
+  .outro-link { font-family: 'JetBrains Mono', monospace; font-size: 13px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink); text-decoration: none; border-bottom: 2px solid var(--accent); padding-bottom: 2px; font-weight: 500; transition: all 0.15s ease; }
+  .outro-link:hover { background: var(--accent); color: var(--bg); padding: 4px 8px; border-bottom-color: var(--accent); }
+
+  /* FOOTER */
+  .footer { background: var(--ink); color: var(--bg); padding: 32px; font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; }
+  .footer-grid { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+  .footer a { color: var(--bg); text-decoration: none; opacity: 0.7; }
+  .footer a:hover { opacity: 1; color: var(--accent); }
+
+  /* MOBILE */
+  @media (max-width: 900px) {
+    body { font-size: 17px; }
+    .topbar { padding: 12px 16px; font-size: 10px; flex-wrap: wrap; gap: 8px; }
+    .topbar .reading-time { display: none; }
+    .hero { padding: 64px 16px 56px; }
+    .hero-title { font-size: clamp(2.4rem, 11vw, 4rem); }
+    .hero-deck .drop { font-size: 4.5em; }
+    .section { padding: 64px 16px; }
+    .section-grid { grid-template-columns: 1fr; gap: 24px; }
+    .section-anchor { position: static; }
+    .pull { padding: 24px 28px; margin: 32px 0; }
+    .metaphor-grid { grid-template-columns: 1fr; gap: 32px; }
+    .ba { grid-template-columns: 1fr; }
+    .ba-cell.before { border-right: none; border-bottom: 2px solid var(--ink); }
+    .glossary-list { grid-template-columns: 1fr; }
+    .glossary-item { border-right: none; }
+    .glossary-item:nth-last-child(2) { border-bottom: 1px solid var(--ink); }
+    .footer-grid { flex-direction: column; }
+    .scenario { padding: 32px 24px; }
+    .scenario::before { left: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="left">
+    <span class="crumb"><a href="/">stevennoack.de</a></span>
+    <span>/</span>
+    <span>Lesestück</span>
+  </div>
+  <div class="right">
+    <span class="reading-time">≈ 8 Min. Lesezeit</span>
+    <a href="/skills">Mein Angebot →</a>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-kicker">Ein Lesestück · April 2026</div>
+    <h1 class="hero-title display">
+      Etwas hat sich verschoben.<br>
+      <em>Leise.</em> Aber für immer.
+    </h1>
+    <p class="hero-deck">
+      <span class="drop">D</span>ie KI hat ihren Wohnort gewechselt. Bis vor kurzem lebte sie in den Rechenzentren grosser Konzerne — jetzt zieht sie in die Hosentasche jedes Menschen, der ein halbwegs aktuelles Smartphone besitzt. Was das für dein Wissen bedeutet, wenn du Wissen hast, das Menschen brauchen, ist die eigentliche Geschichte.
+    </p>
+    <div class="hero-meta">
+      <span>Steven Noack</span>
+      <span>Aus Brandenburg, ohne Eile</span>
+      <span>Geschrieben im April 2026</span>
+    </div>
+  </div>
+</section>
+
+<!-- 01 — METAPHER -->
+<section class="section metaphor">
+  <div class="metaphor-grid">
+    <div class="metaphor-text">
+      <h3>Stell dir <em>eine Bibliothek</em> vor.</h3>
+      <p>
+        Bisher war es so: Wer eine Bibliothek bauen wollte, baute ein Gebäude. Stellte Regale hinein. Bezahlte Bibliothekare. Wer etwas wissen wollte, musste hingehen — physisch oder digital. Die Bibliothek war ein Ort.
+      </p>
+      <p>
+        Was jetzt passiert: Du schreibst die Inhalte deiner Bibliothek auf eine kleine Karte. Diese Karte gibst du Menschen. In ihrem Kopf bauen sie sich die Bibliothek selbst auf — ohne dass du je ein Gebäude besitzen musstest.
+      </p>
+      <p>
+        Ungefähr das passiert gerade mit Wissen und KI. <span class="highlight">Die "Bibliothek" — also die Sprachintelligenz — ist neuerdings im Smartphone deines Lesers eingebaut.</span> Du musst sie nicht mehr betreiben. Du gibst nur die Karte mit deinen Inhalten.
+      </p>
+    </div>
+    <div class="metaphor-visual">
+      <svg viewBox="0 0 320 280" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+            <path d="M0,0 L10,5 L0,10 z" fill="#ff3c00"/>
+          </marker>
+        </defs>
+        <!-- Karte / Wissen -->
+        <g transform="translate(20, 30)">
+          <rect x="0" y="0" width="120" height="80" fill="#f0ede6" stroke="#f0ede6" stroke-width="2" transform="rotate(-3)"/>
+          <text x="12" y="22" font-family="JetBrains Mono, monospace" font-size="9" fill="#0a0a0a" font-weight="700" letter-spacing="1" transform="rotate(-3)">DEIN WISSEN</text>
+          <line x1="12" y1="32" x2="100" y2="32" stroke="#0a0a0a" stroke-width="0.5" transform="rotate(-3)"/>
+          <line x1="12" y1="42" x2="95" y2="42" stroke="#0a0a0a" stroke-width="0.5" transform="rotate(-3)"/>
+          <line x1="12" y1="52" x2="100" y2="52" stroke="#0a0a0a" stroke-width="0.5" transform="rotate(-3)"/>
+          <line x1="12" y1="62" x2="80" y2="62" stroke="#0a0a0a" stroke-width="0.5" transform="rotate(-3)"/>
+          <text x="12" y="78" font-family="Fraunces, serif" font-size="8" fill="#6b6760" font-style="italic" transform="rotate(-3)">die Karte</text>
+        </g>
+        <!-- Pfeil -->
+        <line x1="155" y1="80" x2="195" y2="120" stroke="#ff3c00" stroke-width="2" marker-end="url(#ar)"/>
+        <!-- Smartphone mit Bibliothek -->
+        <g transform="translate(180, 100)">
+          <rect x="0" y="0" width="120" height="160" rx="14" fill="#f0ede6" stroke="#f0ede6" stroke-width="2"/>
+          <rect x="8" y="8" width="104" height="144" rx="6" fill="#0a0a0a"/>
+          <!-- mini library inside -->
+          <text x="60" y="32" font-family="JetBrains Mono, monospace" font-size="7" fill="#ff3c00" text-anchor="middle" font-weight="700" letter-spacing="1">SMARTPHONE</text>
+          <line x1="20" y1="40" x2="100" y2="40" stroke="rgba(240,237,230,0.3)" stroke-width="0.5"/>
+          <!-- Bibliothek-Symbol -->
+          <g transform="translate(35, 50)">
+            <rect x="0" y="0" width="50" height="60" fill="none" stroke="#f0ede6" stroke-width="1"/>
+            <line x1="0" y1="20" x2="50" y2="20" stroke="#f0ede6" stroke-width="0.5"/>
+            <line x1="0" y1="40" x2="50" y2="40" stroke="#f0ede6" stroke-width="0.5"/>
+            <line x1="25" y1="0" x2="25" y2="60" stroke="#f0ede6" stroke-width="0.5"/>
+            <rect x="3" y="3" width="4" height="14" fill="#ff3c00"/>
+            <rect x="9" y="3" width="3" height="14" fill="#f0ede6"/>
+            <rect x="14" y="5" width="5" height="12" fill="#f0ede6"/>
+            <rect x="28" y="3" width="3" height="14" fill="#f0ede6"/>
+            <rect x="33" y="5" width="4" height="12" fill="#ff3c00"/>
+            <rect x="3" y="23" width="5" height="14" fill="#f0ede6"/>
+            <rect x="10" y="25" width="4" height="12" fill="#f0ede6"/>
+            <rect x="28" y="23" width="3" height="14" fill="#ff3c00"/>
+            <rect x="33" y="25" width="4" height="12" fill="#f0ede6"/>
+            <rect x="3" y="43" width="3" height="14" fill="#f0ede6"/>
+            <rect x="8" y="45" width="4" height="12" fill="#ff3c00"/>
+            <rect x="28" y="43" width="5" height="14" fill="#f0ede6"/>
+            <rect x="35" y="45" width="3" height="12" fill="#f0ede6"/>
+          </g>
+          <text x="60" y="130" font-family="Fraunces, serif" font-size="9" fill="#f0ede6" text-anchor="middle" font-style="italic">eingebaut</text>
+          <text x="60" y="145" font-family="JetBrains Mono, monospace" font-size="6" fill="#00863c" text-anchor="middle" font-weight="700" letter-spacing="0.5">● 100% LOKAL</text>
+        </g>
+        <text x="160" y="275" font-family="JetBrains Mono, monospace" font-size="9" fill="#6b6760" text-anchor="middle" letter-spacing="1.5">DU GIBST NUR DIE KARTE</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- 02 — Was war, was ist -->
+<section class="section">
+  <div class="section-grid">
+    <div class="section-anchor">Der Wechsel<strong>01</strong></div>
+    <div>
+      <h2 class="section-title display">Drei Jahre lang war KI <em>woanders</em>.</h2>
+      <div class="prose">
+        <p class="lead">
+          Jeder, der mit KI gearbeitet hat, kennt das gleiche Bild: Du tippst etwas in ein Eingabefeld, dein Gerät schickt es übers Internet zu einem Rechenzentrum — meist in Kalifornien — dort wird gerechnet, die Antwort kommt zurück. Schnell, ja. Aber der eigentliche Vorgang fand an einem Ort statt, der nicht deiner war.
+        </p>
+        <p>
+          Das hatte Folgen, die wir uns abgewöhnt hatten zu hinterfragen: Jede Frage ein Datenpaket nach draussen. Jede Antwort eine kleine Cloud-Rechnung. Jeder Anbieter, der seinen Dienst kostenlos macht, irgendwo ein Geschäftsmodell, das nicht mehr nur aus Abonnements besteht. Und wer es professionell nutzen wollte — Therapeuten, Anwälte, Lehrer — landete in einer Endlosschleife aus Datenschutzklärungen, US-Cloud-Diskussionen und Auftragsverarbeitungsverträgen.
+        </p>
+        <p>
+          Im Frühjahr 2026 hat sich das geändert. Nicht mit einem Knall, sondern leise. Google hat ein Sprachmodell veröffentlicht, das klein genug ist, um auf einem normalen Smartphone zu laufen — und gleichzeitig gut genug, um nützlich zu sein. <span class="highlight">Was vorher nur in einem Rechenzentrum lief, läuft nun in deiner Hosentasche.</span> Offline. Ohne Konto. Ohne dass irgendjemand mitliest.
+        </p>
+      </div>
+
+      <div class="pull">
+        Die KI ist <em>vom Mietshaus</em> in dein Zuhause gezogen.
+      </div>
+
+      <div class="prose">
+        <p>
+          Das klingt nach einer technischen Spielerei, ist aber das Gegenteil. Es ist die Voraussetzung dafür, dass KI in Bereiche kommt, in die sie bisher nicht durfte. Krankenakten. Therapie-Notizen. Anwaltsgespräche. Schulische Förderpläne. Coaching-Tagebücher. Alles, was bisher zu sensibel war, um es einer fremden Wolke anzuvertrauen — kann jetzt vor Ort verarbeitet werden.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 03 — VORHER / NACHHER -->
+<section class="section tight">
+  <div class="section-grid">
+    <div class="section-anchor">Wo der Unterschied liegt<strong>02</strong></div>
+    <div>
+      <h2 class="section-title display">Zwei Welten, <em>nebeneinander</em>.</h2>
+      <div class="prose">
+        <p>Damit klar wird, was sich tatsächlich verschoben hat — eine Gegenüberstellung. Was war, was ist:</p>
+      </div>
+
+      <div class="ba">
+        <div class="ba-cell before">
+          <div class="ba-tag">Bis Frühjahr 2026</div>
+          <h4>KI in der Cloud</h4>
+          <p>Du tippst etwas, dein Gerät schickt es ins Netz, ein Rechenzentrum antwortet. Funktioniert nur online.</p>
+          <ul class="ba-list">
+            <li>Internet zwingend nötig</li>
+            <li>Daten verlassen das Gerät</li>
+            <li>Pro Anfrage entstehen Kosten</li>
+            <li>Anbieter sieht alles mit</li>
+            <li>DSGVO-Vertragsketten nötig</li>
+            <li>Kann jederzeit abgeschaltet werden</li>
+          </ul>
+        </div>
+        <div class="ba-cell after">
+          <div class="ba-tag">Seit Frühjahr 2026</div>
+          <h4>KI auf dem Gerät</h4>
+          <p>Du tippst etwas, dein Smartphone rechnet selbst, die Antwort kommt — ohne dass je etwas das Gerät verlässt.</p>
+          <ul class="ba-list">
+            <li>Funktioniert offline</li>
+            <li>Daten bleiben lokal</li>
+            <li>Keine laufenden Anfrage-Kosten</li>
+            <li>Niemand sieht mit</li>
+            <li>DSGVO automatisch erfüllt</li>
+            <li>Funktioniert auch in 10 Jahren noch</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 — Wo dein Wissen ins Spiel kommt -->
+<section class="section">
+  <div class="section-grid">
+    <div class="section-anchor">Was das mit dir zu tun hat<strong>03</strong></div>
+    <div>
+      <h2 class="section-title display">Du hast vermutlich schon, <em>was nötig ist</em>.</h2>
+      <div class="prose">
+        <p class="lead">
+          Wenn du ein Coach bist, eine Therapeutin, ein Verlag, ein Trainer — dann besitzt du etwas, das in dieser neuen Welt einen ganz neuen Wert bekommt: <strong>strukturiertes Wissen</strong>. In deinem Kopf, in deinen Büchern, auf deiner Website, in deinen Skripten, in den Antworten, die du auf Klient-Mails schon hundertmal getippt hast.
+        </p>
+        <p>
+          Bisher war dieses Wissen passiv. Es lag in einem Buch oder auf einer Webseite und wartete darauf, gelesen zu werden. Wer eine Frage hatte, musste suchen, scrollen, blättern. Im Idealfall fand er die Antwort — oft fand er sie nicht.
+        </p>
+        <p>
+          Mit lokaler KI verändert sich das. Dein Wissen kann <span class="highlight">ansprechbar</span> werden. Jemand fragt etwas, in seiner Sprache — und bekommt eine Antwort, die aus deinem Material destilliert ist, in deinem Stil, mit deinen Grenzen. Auf seinem Smartphone. Ohne dass du eine App entwickeln, ein Rechenzentrum mieten oder Datenschutz-Verträge mit irgendjemandem schliessen müsstest.
+        </p>
+        <p>
+          Das Werkzeug dafür heisst <strong>Skill</strong>. Eine kleine Datei, die der KI im Smartphone deines Lesers sagt: "Hier sind die Inhalte. Hier ist der Stil. Hier sind die Grenzen. Antworte aus diesem Wissen."
+        </p>
+      </div>
+
+      <!-- SZENARIO 1 -->
+      <div class="scenario">
+        <div class="scenario-name">Beispiel — die Coachin mit Website</div>
+        <h4>Anna hat fünf Jahre lang Texte geschrieben.</h4>
+        <p>
+          Anna ist Coachin für berufliche Neuausrichtung. Ihre Website hat 80 Blogartikel, ein Methoden-Manifest, drei FAQ-Seiten und eine kleine Sammlung von Fallbeispielen. Klienten lesen vorm Erstgespräch oft nur die Hälfte davon.
+        </p>
+        <p>
+          Mit einem Skill wird das anders. Anna gibt das gesammelte Material einmal in eine strukturierte Form. Ab dann können ihre Klienten in der Edge-Gallery-App fragen: <em>"Ich überlege, mit 47 nochmal zu studieren — wie würdest du da rangehen?"</em> — und bekommen eine Antwort, die <strong>nach Anna klingt</strong>, weil sie aus Annas Texten destilliert ist. Mit Annas Vorbehalten, Annas Beispielen, Annas typischer Rückfrage. Und einem klaren Hinweis, wann ein echtes Gespräch sinnvoller wäre als weiterzufragen.
+        </p>
+        <p>
+          Anna selbst tut dafür: nichts. Ihre Website bleibt wie sie ist. Sie hat einmal das Material strukturiert, einmal die Datei verteilt — und das war's.
+        </p>
+      </div>
+
+      <div class="prose">
+        <p>
+          Das Schöne an Annas Fall: Sie musste nichts <em>neu</em> erschaffen. Sie hatte das Wissen längst — auf ihrer Website, ausgedrückt in ihrer Sprache, mit ihren Beispielen. Der Skill ist im Grunde nur eine Brücke zwischen dem, was schon da war, und der Stelle, an der ihre Klienten Fragen haben.
+        </p>
+      </div>
+
+      <!-- SZENARIO 2 -->
+      <div class="scenario">
+        <div class="scenario-name">Beispiel — der Verlag mit Buch</div>
+        <h4>Ein Sachbuch, 320 Seiten, über Pflanzenheilkunde.</h4>
+        <p>
+          Ein kleiner Fachverlag hat im Herbst ein Buch über mitteleuropäische Heilpflanzen veröffentlicht. Aufwändig recherchiert, schön gemacht — und wie die meisten Sachbücher: Käufer lesen die ersten 80 Seiten, der Rest bleibt Nachschlagewerk. Bei Bedarf. Wenn man weiss, wo nachschlagen.
+        </p>
+        <p>
+          Die Lektorin schlägt vor: Lass uns das Buch parallel als Skill anbieten. Käufer scannen einen QR-Code im Innendeckel, laden den Skill, und können dem Buch fortan <strong>Fragen stellen</strong>. <em>"Mein Sohn hat seit drei Tagen leichten Husten ohne Fieber — was sagt das Buch dazu?"</em> Der Skill antwortet aus dem Buchinhalt, im Stil der Autorin, mit klarem Verweis auf relevante Kapitel und einer Grenze: keine Diagnosen, beim geringsten Zweifel zur Ärztin.
+        </p>
+        <p>
+          Für den Verlag ist das nicht nur ein Service, sondern ein <em>Verkaufsargument</em>. Das Buch hört nicht beim letzten Kapitel auf zu wirken — es begleitet den Leser jahrelang.
+        </p>
+      </div>
+
+      <div class="prose">
+        <p>
+          Das Material war auch hier längst da. Es brauchte nur einen Übersetzer zwischen dem statischen Buch und der Form, in der die KI im Smartphone es sinnvoll nutzen kann.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 05 — TECHNICAL DEEP DIVE -->
+<section class="section technical">
+  <div class="section-grid">
+    <div class="section-anchor">Für die, die es genau wissen wollen<strong>04</strong></div>
+    <div>
+      <h2 class="section-title display">Die <em>technische</em> Tiefe.</h2>
+      <div class="prose">
+        <p>
+          Bis hierher war alles Bild. Wer bei Bildern bleibt, kann jetzt zur nächsten Sektion springen. Wer aber konkret wissen will, wie das technisch funktioniert, was eine Skill-Datei eigentlich ist und warum das alles gerade jetzt möglich wird — die folgenden Abschnitte sind für dich. Klick auf, was dich interessiert.
+        </p>
+      </div>
+
+      <details class="tech-disclosure">
+        <summary>Was läuft da eigentlich auf dem Smartphone?</summary>
+        <div class="tech-disclosure-body">
+          <p>
+            Ein Sprachmodell namens <strong>Gemma 4</strong> — ein offenes Modell von Google DeepMind, das in zwei Grössen verfügbar ist (E2B und E4B, "Effective 2/4 Billion Parameter"). Die kleinere Variante kommt mit unter 1,5 GB RAM aus und läuft damit auch auf Mittelklasse-Geräten. Ausgeführt wird sie über eine Laufzeitumgebung namens <strong>LiteRT-LM</strong>, die Google für genau diesen Zweck optimiert hat — mit 2-bit/4-bit Quantisierung und speicher-gemappten Embeddings.
+          </p>
+          <p>
+            Das Drumherum übernimmt die <strong>Google AI Edge Gallery</strong>: eine kostenlose App für Android (12+) und iOS (17+), die das Modell ausführt, eine Chat-Oberfläche bietet und Skills laden kann. Open Source unter Apache-2.0-Lizenz.
+          </p>
+        </div>
+      </details>
+
+      <details class="tech-disclosure">
+        <summary>Wie sieht ein Skill konkret aus?</summary>
+        <div class="tech-disclosure-body">
+          <p>
+            Im einfachsten Fall: eine einzige Markdown-Datei namens <code>SKILL.md</code> mit einem Frontmatter-Block (Metadaten) und einem Anweisungs-Teil. Der Frontmatter sagt der KI, wofür dieser Skill da ist; die Anweisungen werden in den Kontext geladen, wenn der Skill aktiv ist:
+          </p>
+          <pre><span class="key">---</span>
+<span class="key">name:</span> <span class="str">pflanzenheilkunde</span>
+<span class="key">description:</span> <span class="str">Beantwortet Fragen aus dem
+  Buch "Heilpflanzen Mitteleuropas".</span>
+<span class="key">homepage:</span> <span class="str">https://verlag.de/buch</span>
+<span class="key">---</span>
+
+<span class="com"># Anweisungen</span>
+
+Du bist der digitale Begleiter zum Buch
+"Heilpflanzen Mitteleuropas". Du antwortest
+ausschliesslich aus den Inhalten des Buches.
+Bei Fragen, die das Buch nicht abdeckt,
+sagst du das ehrlich.
+
+<span class="com">## Grenzen</span>
+- Keine Diagnosen.
+- Bei akuten Beschwerden: Ärztin/Arzt.
+- Bei Schwangerschaft: besondere Vorsicht.</pre>
+          <p>
+            Optional kann ein Skill um eine HTML-Datei mit JavaScript erweitert werden — dann sind interaktive Elemente möglich (Rechner, geführte Übungen, visuelle Karten). Diese Datei läuft in einer versteckten Webview innerhalb der App.
+          </p>
+        </div>
+      </details>
+
+      <details class="tech-disclosure">
+        <summary>Was, wenn ich schon eine API oder JSON-Endpunkte habe?</summary>
+        <div class="tech-disclosure-body">
+          <p>
+            Das ist ein wichtiger Punkt — viele professionell gepflegte Websites haben heute strukturierte Daten, die direkt nutzbar wären. Ein Coach mit einer ausführlichen Website hat oft eine Sitemap, ein RSS-Feed, manchmal sogar ein JSON-API ihres CMS. Ein Verlag hat einen Buchkatalog mit Metadaten. Eine Therapeutin hat strukturierte FAQ-Seiten.
+          </p>
+          <p>
+            Der Skill kann diese Daten auf zwei Wegen einbinden:
+          </p>
+          <p>
+            <strong>Eingebacken (statisch):</strong> Die Inhalte werden einmal aus deiner Quelle gezogen, strukturiert und in die Skill-Datei eingearbeitet. Vorteil: läuft komplett offline, keine Live-Verbindung nötig. Nachteil: Aktualisierungen erfordern ein neues Skill-File.
+          </p>
+          <p>
+            <strong>Live abgefragt (dynamisch):</strong> Der Skill enthält JavaScript-Logik, die zur Laufzeit deine API oder einen JSON-Endpunkt anspricht — z.B. um aktuelle Termine, Preise oder neue Artikel zu holen. Vorteil: immer aktuell. Nachteil: dafür braucht der Nutzer in dem Moment Internet, und du brauchst einen Endpunkt, der Anfragen verträgt.
+          </p>
+          <p>
+            In der Praxis ist oft eine Mischung sinnvoll: Stammwissen statisch eingebacken, dynamische Daten live nachgeladen. Wer schon eine gut gepflegte Website mit klarer Struktur hat, ist hier deutlich näher dran als jemand, der bei null anfängt.
+          </p>
+        </div>
+      </details>
+
+      <details class="tech-disclosure">
+        <summary>Was unterscheidet das von ChatGPT-Custom-GPTs?</summary>
+        <div class="tech-disclosure-body">
+          <p>
+            Drei Dinge, die zentral sind:
+          </p>
+          <p>
+            <strong>Wo gerechnet wird.</strong> Ein Custom GPT läuft auf OpenAI-Servern. Jede Anfrage geht durch deren Infrastruktur. Ein Skill in der AI Edge Gallery läuft komplett auf dem Smartphone des Nutzers — niemand sieht die Anfragen.
+          </p>
+          <p>
+            <strong>Wer den Zugang kontrolliert.</strong> Ein Custom GPT braucht einen ChatGPT-Account (kostenpflichtig für die meisten Funktionen). Ein Skill braucht nur die kostenlose Edge-Gallery-App. Wer offline ist, kann den Custom GPT nicht nutzen — den Skill schon.
+          </p>
+          <p>
+            <strong>Wer das Modell bereitstellt.</strong> Bei OpenAI ist das Modell ein Geschäftsgeheimnis. Bei Gemma 4 sind die Modellgewichte öffentlich (Apache-2.0), das Format ist offen, das App-Backend ebenfalls Open Source. Wenn Google das Projekt morgen einstellt, läuft der Skill weiter — bei OpenAI bist du im Regen.
+          </p>
+        </div>
+      </details>
+
+      <details class="tech-disclosure">
+        <summary>Wo wird die Skill-Datei gespeichert? Brauche ich einen Server?</summary>
+        <div class="tech-disclosure-body">
+          <p>
+            Du brauchst keine eigene Server-Infrastruktur. Drei Möglichkeiten:
+          </p>
+          <p>
+            <strong>1. Lokal verteilt:</strong> Die Datei wird per AirDrop, Mail, USB-Stick übergeben und lokal in der App importiert. Funktioniert für kleine Gruppen.
+          </p>
+          <p>
+            <strong>2. Über GitHub Pages oder Cloudflare Pages:</strong> Beide bieten kostenloses statisches Hosting, auch für kommerzielle Nutzung. Du bekommst eine URL, die deine Nutzer in der App eintippen — fertig. Voraussetzung: korrekte MIME-Types (GitHub Pages braucht eine leere <code>.nojekyll</code>-Datei, sonst werden Markdown-Dateien als HTML interpretiert).
+          </p>
+          <p>
+            <strong>3. Eigene Domain:</strong> Wenn du eine eigene Website betreibst, kannst du die Skill-Dateien dort als Unterverzeichnis bereitstellen — z.B. unter <code>deinedomain.de/skill/</code>. Kostet keinen zusätzlichen Cent.
+          </p>
+        </div>
+      </details>
+
+      <details class="tech-disclosure">
+        <summary>Was ist mit Updates? Müssen Nutzer den Skill neu installieren?</summary>
+        <div class="tech-disclosure-body">
+          <p>
+            Wenn der Skill von einer URL geladen wurde, prüft die App regelmässig auf Aktualisierungen. Du änderst die Datei am Hosting-Ort — beim nächsten App-Start sehen deine Nutzer die neue Version, ohne etwas zu tun. Bei lokal importierten Skills muss der Nutzer die Datei manuell ersetzen. Daher der URL-Weg für die meisten Anwendungsfälle die bessere Wahl.
+          </p>
+        </div>
+      </details>
+
+      <details class="tech-disclosure">
+        <summary>Wer haftet für falsche Antworten?</summary>
+        <div class="tech-disclosure-body">
+          <p>
+            Eine ehrliche Frage ohne einfache Antwort. Rechtlich liegt die Verantwortung bei dem, der den Skill veröffentlicht — also bei dir, wenn du der Anbieter des Wissens bist. Praktisch lässt sich das Risiko stark reduzieren, indem im Skill klare <strong>Eskalations-Regeln</strong> definiert sind: Wann verweist der Skill auf einen echten Fachmenschen? Wann auf den Notruf? Welche Fragen lehnt er grundsätzlich ab?
+          </p>
+          <p>
+            Diese Regeln sind kein juristisches Fangnetz, aber sie verschieben das Risikoprofil deutlich. Wer mit Heilberufen, Rechts- oder Finanzthemen arbeitet, sollte vor der Veröffentlichung kurz mit dem zuständigen Berufsverband oder einer Anwältin sprechen.
+          </p>
+        </div>
+      </details>
+
+    </div>
+  </div>
+</section>
+
+<!-- 06 — GLOSSAR -->
+<section class="section glossary">
+  <div class="section-grid">
+    <div class="section-anchor">Begriffe<strong>05</strong></div>
+    <div>
+      <h2 class="section-title display">Klein, aber <em>nützlich</em>.</h2>
+      <div class="prose" style="margin-bottom: 32px;">
+        <p>Wenn du etwas zum nachschlagen brauchst:</p>
+      </div>
+      <div class="glossary-list">
+        <div class="glossary-item">
+          <div class="glossary-term">▸ On-Device-KI</div>
+          <div class="glossary-def">KI-Modell, das direkt auf dem Endgerät rechnet — ohne dass Daten ins Internet gehen.</div>
+        </div>
+        <div class="glossary-item">
+          <div class="glossary-term">▸ Skill</div>
+          <div class="glossary-def">Eine Datei mit Anweisungen, die einer KI ein neues Wissensgebiet oder eine Persona gibt.</div>
+        </div>
+        <div class="glossary-item">
+          <div class="glossary-term">▸ Gemma 4</div>
+          <div class="glossary-def">Offenes Sprachmodell von Google. Klein genug fürs Smartphone, gut genug zum Arbeiten.</div>
+        </div>
+        <div class="glossary-item">
+          <div class="glossary-term">▸ Edge Gallery</div>
+          <div class="glossary-def">Kostenlose App von Google, die offene Modelle wie Gemma 4 lokal ausführt. Android &amp; iOS.</div>
+        </div>
+        <div class="glossary-item">
+          <div class="glossary-term">▸ SKILL.md</div>
+          <div class="glossary-def">Markdown-Datei, in der ein Skill definiert wird. Persona, Anweisungen, Grenzen.</div>
+        </div>
+        <div class="glossary-item">
+          <div class="glossary-term">▸ Inferenz</div>
+          <div class="glossary-def">Der Vorgang, bei dem ein KI-Modell aus Eingabe eine Antwort berechnet.</div>
+        </div>
+        <div class="glossary-item">
+          <div class="glossary-term">▸ Endpunkt</div>
+          <div class="glossary-def">Eine URL, hinter der eine Datei oder ein Dienst liegt. Hier: wo dein Skill geladen wird.</div>
+        </div>
+        <div class="glossary-item">
+          <div class="glossary-term">▸ Webview</div>
+          <div class="glossary-def">Versteckter Mini-Browser in einer App. Kann JavaScript ausführen — für interaktive Skill-Teile.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OUTRO -->
+<section class="outro">
+  <div class="outro-inner">
+    <div class="outro-kicker">Zum Schluss</div>
+    <p class="outro-text">
+      Was sich gerade verschiebt, ist keine Modeerscheinung. Es ist eine <em>strukturelle</em> Veränderung. Die Werkzeuge, mit denen Wissen weitergegeben werden kann, haben sich verbreitert — und sie sind erstmals leise genug geworden, um auch in sensible Bereiche zu passen. Was du daraus machst, ist deine Entscheidung. Ich bin nur jemand, der zugesehen hat und es spannend findet, daran mitzubauen.
+    </p>
+    <a href="/skills.html" class="outro-link">Übrigens — falls du wissen willst, wie ich helfe →</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div>© Steven Noack — Alt Tucheband, Brandenburg</div>
+    <div>
+      <a href="/">Hauptseite</a> &nbsp;·&nbsp;
+      <a href="/skills.html">Skills</a> &nbsp;·&nbsp;
+      <a href="/vision.html">Vision</a> &nbsp;·&nbsp;
+      <a href="/kontakt">Kontakt</a> &nbsp;·&nbsp;
+      <a href="/rechtliches">Impressum</a>
+    </div>
+    <div>Geschrieben im April 2026</div>
+  </div>
+</footer>
+
+</body>
+</html>

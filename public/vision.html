@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Das Web bekommt ein zweites Gesicht — Steven Noack</title>
+<meta name="description" content="Das Web wurde für Menschen gebaut. Jetzt zieht ein zweites Publikum ein: Agenten. Was das für alle bedeutet, die Wissen haben — Coaches, Verlage, Therapeuten, Trainer — und wie ein Kontaktformular zum Symptom einer viel grösseren Verschiebung wird.">
+
+<!-- JSON-LD für Agenten -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Das Web bekommt ein zweites Gesicht",
+  "author": { "@type": "Person", "name": "Steven Noack", "url": "https://stevennoack.de" },
+  "datePublished": "2026-04",
+  "description": "Wie das Web gerade in zwei Kanäle zerfällt — einen für Menschen, einen für Agenten — und was das für alle bedeutet, die Wissen haben.",
+  "about": ["AI Agents", "Web APIs", "Knowledge APIs", "MCP", "Agent-readable Web", "LLM Agents"]
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,700;9..144,900&display=swap" rel="stylesheet">
+
+<!-- Agent-Discoverable Endpoints -->
+<link rel="alternate" type="application/json" href="https://stevennoack.de/api/vitamin-d3/protocol.json" title="Vitamin D3 Protokoll — Agent API">
+<link rel="alternate" type="application/json" href="https://stevennoack.de/api/ra-tarot/archetype/01-matrix-mind.json" title="Ra Tarot Archetypen — Agent API">
+
+<style>
+  :root {
+    --bg: #f0ede6;
+    --ink: #0a0a0a;
+    --paper: #e8e3d6;
+    --accent: #ff3c00;
+    --green: #00863c;
+    --muted: #6b6760;
+    --grid: rgba(10, 10, 10, 0.06);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg); color: var(--ink);
+    font-family: 'Fraunces', serif;
+    font-weight: 400; font-size: 18px; line-height: 1.65;
+    overflow-x: hidden;
+    background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+  body::before {
+    content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 1;
+    opacity: 0.4; mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.08 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  }
+  ::selection { background: var(--accent); color: var(--bg); }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+  .display { font-family: 'Fraunces', serif; font-weight: 900; line-height: 0.92; letter-spacing: -0.035em; }
+
+  /* TOPBAR */
+  .topbar {
+    position: relative; z-index: 10;
+    border-bottom: 2px solid var(--ink);
+    padding: 14px 32px; display: flex; justify-content: space-between; align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; background: var(--bg);
+  }
+  .topbar .left, .topbar .right { display: flex; gap: 24px; align-items: center; }
+  .topbar .crumb a { color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--ink); }
+  .topbar a { color: var(--ink); text-decoration: none; border-bottom: 1px solid transparent; }
+  .topbar a:hover { border-bottom-color: var(--ink); }
+  .topbar .reading-time { color: var(--muted); }
+
+  /* HERO */
+  .hero { position: relative; z-index: 5; padding: 120px 32px 80px; border-bottom: 2px solid var(--ink); }
+  .hero-inner { max-width: 1100px; margin: 0 auto; }
+  .hero-kicker { font-family: 'JetBrains Mono', monospace; font-size: 12px; text-transform: uppercase; letter-spacing: 0.18em; color: var(--accent); margin-bottom: 32px; font-weight: 500; display: flex; align-items: center; gap: 14px; }
+  .hero-kicker::before { content: ""; display: inline-block; width: 40px; height: 1px; background: var(--accent); }
+  .hero-title { font-size: clamp(3rem, 8vw, 7rem); margin-bottom: 40px; max-width: 1000px; }
+  .hero-title em { color: var(--accent); font-style: italic; }
+  .hero-deck { font-family: 'Fraunces', serif; font-weight: 400; font-size: clamp(1.3rem, 1.9vw, 1.7rem); line-height: 1.45; max-width: 760px; }
+  .hero-deck .drop { float: left; font-family: 'Fraunces', serif; font-weight: 900; font-size: 5.5em; line-height: 0.85; padding: 8px 14px 0 0; color: var(--accent); }
+  .hero-meta { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--ink); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); }
+
+  /* SECTION */
+  .section { position: relative; z-index: 5; padding: 100px 32px; border-bottom: 2px solid var(--ink); }
+  .section.tight { padding: 80px 32px; }
+  .section-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 180px 1fr; gap: 56px; }
+  .section-anchor { font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); position: sticky; top: 32px; align-self: start; }
+  .section-anchor strong { display: block; font-family: 'Fraunces', serif; font-weight: 900; font-size: 36px; color: var(--accent); margin-top: 8px; line-height: 1; letter-spacing: -0.04em; }
+  .section-title { font-size: clamp(2.2rem, 4.5vw, 3.5rem); margin-bottom: 40px; max-width: 800px; }
+  .section-title em { color: var(--accent); font-style: italic; }
+  .prose p { margin-bottom: 24px; max-width: 700px; }
+  .prose p.lead { font-size: 1.25em; line-height: 1.5; }
+  .prose strong { font-weight: 700; }
+  .prose em { font-style: italic; }
+  .prose .highlight { background: var(--accent); color: var(--bg); padding: 1px 6px; font-weight: 500; }
+  .prose code { font-family: 'JetBrains Mono', monospace; background: var(--paper); padding: 2px 6px; font-size: 0.85em; border: 1px solid var(--ink); }
+
+  /* PULL QUOTE */
+  .pull {
+    margin: 48px 0;
+    padding: 32px 40px;
+    border-left: 4px solid var(--accent);
+    background: var(--paper);
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: clamp(1.5rem, 2.5vw, 2.2rem);
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+    max-width: 760px;
+  }
+  .pull em { color: var(--accent); font-style: italic; }
+
+  /* FORM DEMO — Kontaktformular-Vergleich */
+  .form-demo {
+    max-width: 1100px;
+    margin: 48px auto 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border: 2px solid var(--ink);
+  }
+  .form-col { padding: 32px; background: var(--bg); }
+  .form-col.mensch { border-right: 2px solid var(--ink); background: var(--paper); }
+  .form-col-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 20px; padding: 4px 10px; display: inline-block; }
+  .form-col.mensch .form-col-label { background: var(--ink); color: var(--bg); }
+  .form-col.agent .form-col-label { background: var(--accent); color: var(--bg); }
+  .form-col h4 { font-family: 'Fraunces', serif; font-weight: 900; font-size: 22px; margin-bottom: 16px; letter-spacing: -0.02em; }
+  .form-col p { font-size: 14px; line-height: 1.55; font-family: 'Fraunces', serif; margin-bottom: 14px; }
+
+  /* Mock-Kontaktformular */
+  .mock-form { margin-top: 16px; }
+  .mock-form label { display: block; font-family: 'JetBrains Mono', monospace; font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 4px; margin-top: 12px; }
+  .mock-form input, .mock-form textarea {
+    width: 100%; padding: 8px 10px; border: 1px solid var(--ink);
+    background: var(--bg); font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--ink);
+  }
+  .mock-form textarea { min-height: 50px; resize: none; }
+  .mock-form .captcha {
+    margin-top: 12px; padding: 8px 10px; border: 1px dashed var(--ink);
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    display: flex; align-items: center; gap: 8px; color: var(--muted);
+  }
+  .mock-form .captcha::before { content: "☐"; font-size: 14px; }
+  .mock-form button {
+    margin-top: 12px; padding: 10px 16px; border: 1px solid var(--ink);
+    background: var(--ink); color: var(--bg);
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em;
+    cursor: pointer;
+  }
+
+  /* Code-Block für Agent-Seite */
+  .code-block {
+    background: var(--ink); color: var(--bg);
+    padding: 16px; border: 1px solid var(--ink);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; line-height: 1.5;
+    overflow-x: auto; white-space: pre;
+    margin-top: 12px;
+  }
+  .code-block .k { color: var(--accent); }
+  .code-block .s { color: #f0c674; }
+  .code-block .c { color: #6b6760; }
+
+  /* PROOF CARDS (Endpunkte als Beweise) */
+  .proofs {
+    max-width: 1100px;
+    margin: 48px auto 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  .proof {
+    background: var(--bg);
+    border: 2px solid var(--ink);
+    padding: 28px;
+    position: relative;
+    box-shadow: 10px 10px 0 var(--accent);
+  }
+  .proof-kicker {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em;
+    color: var(--accent); margin-bottom: 14px; font-weight: 700;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .proof-kicker::before { content: "●"; color: var(--green); font-size: 14px; }
+  .proof h3 {
+    font-family: 'Fraunces', serif; font-weight: 900;
+    font-size: 28px; line-height: 1.05;
+    letter-spacing: -0.02em; margin-bottom: 14px;
+  }
+  .proof p {
+    font-family: 'Fraunces', serif;
+    font-size: 15px; line-height: 1.55;
+    margin-bottom: 16px;
+  }
+  .proof-stack {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    padding: 12px;
+    background: var(--paper);
+    border: 1px solid var(--ink);
+    word-break: break-all;
+    margin-bottom: 14px;
+  }
+  .proof-stack .pfx { color: var(--muted); }
+  .proof-stack .emph { color: var(--accent); font-weight: 700; }
+  .proof-links { display: flex; gap: 10px; flex-wrap: wrap; }
+  .proof-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em;
+    text-decoration: none; color: var(--ink);
+    border: 1px solid var(--ink);
+    background: var(--bg);
+    transition: all 0.15s ease;
+  }
+  .proof-link:hover { background: var(--ink); color: var(--bg); }
+  .proof-link.primary { background: var(--ink); color: var(--bg); }
+  .proof-link.primary:hover { background: var(--accent); border-color: var(--accent); }
+  .proof-link::after { content: "↗"; font-size: 12px; }
+
+  /* PUSH-PULL DIAGRAM */
+  .pushpull-wrap {
+    max-width: 1100px;
+    margin: 48px auto 0;
+    background: var(--paper);
+    border: 2px solid var(--ink);
+    padding: 40px 32px;
+    box-shadow: 10px 10px 0 var(--accent);
+  }
+  .pushpull-svg { width: 100%; height: auto; display: block; max-width: 820px; margin: 0 auto; }
+
+  /* GLOSSARY */
+  .glossary { background: var(--paper); }
+  .glossary-grid { max-width: 1100px; margin: 0 auto; }
+  .glossary-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0; border: 2px solid var(--ink); }
+  .glossary-item { padding: 24px 28px; border-bottom: 1px solid var(--ink); border-right: 1px solid var(--ink); background: var(--bg); }
+  .glossary-item:nth-child(2n) { border-right: none; }
+  .glossary-item:nth-last-child(-n+2) { border-bottom: none; }
+  .glossary-term { font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent); font-weight: 700; margin-bottom: 8px; }
+  .glossary-def { font-family: 'Fraunces', serif; font-size: 16px; line-height: 1.5; }
+
+  /* OUTRO */
+  .outro { padding: 80px 32px; background: var(--bg); border-bottom: 2px solid var(--ink); }
+  .outro-inner { max-width: 800px; margin: 0 auto; }
+  .outro-kicker { font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); margin-bottom: 18px; }
+  .outro-text { font-family: 'Fraunces', serif; font-weight: 400; font-size: clamp(1.3rem, 2vw, 1.6rem); line-height: 1.45; margin-bottom: 32px; }
+  .outro-text em { color: var(--accent); font-style: italic; font-weight: 700; }
+  .outro-link { font-family: 'JetBrains Mono', monospace; font-size: 13px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink); text-decoration: none; border-bottom: 2px solid var(--accent); padding-bottom: 2px; font-weight: 500; transition: all 0.15s ease; }
+  .outro-link:hover { background: var(--accent); color: var(--bg); padding: 4px 8px; border-bottom-color: var(--accent); }
+
+  /* FOOTER */
+  .footer { background: var(--ink); color: var(--bg); padding: 32px; font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; }
+  .footer-grid { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+  .footer a { color: var(--bg); text-decoration: none; opacity: 0.7; }
+  .footer a:hover { opacity: 1; color: var(--accent); }
+
+  /* MOBILE */
+  @media (max-width: 900px) {
+    body { font-size: 17px; }
+    .topbar { padding: 12px 16px; font-size: 10px; flex-wrap: wrap; gap: 8px; }
+    .topbar .reading-time { display: none; }
+    .hero { padding: 64px 16px 56px; }
+    .hero-title { font-size: clamp(2.4rem, 11vw, 4rem); }
+    .hero-deck .drop { font-size: 4.5em; }
+    .section { padding: 64px 16px; }
+    .section-grid { grid-template-columns: 1fr; gap: 24px; }
+    .section-anchor { position: static; }
+    .pull { padding: 24px 28px; margin: 32px 0; }
+    .form-demo { grid-template-columns: 1fr; }
+    .form-col.mensch { border-right: none; border-bottom: 2px solid var(--ink); }
+    .proofs { grid-template-columns: 1fr; }
+    .proof { box-shadow: 6px 6px 0 var(--accent); }
+    .pushpull-wrap { padding: 24px 16px; box-shadow: 6px 6px 0 var(--accent); }
+    .glossary-list { grid-template-columns: 1fr; }
+    .glossary-item { border-right: none; }
+    .glossary-item:nth-last-child(2) { border-bottom: 1px solid var(--ink); }
+    .footer-grid { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="left">
+    <span class="crumb"><a href="/">stevennoack.de</a></span>
+    <span>/</span>
+    <span>Vision</span>
+  </div>
+  <div class="right">
+    <span class="reading-time">≈ 10 Min. Lesezeit</span>
+    <a href="/skills">Mein Angebot →</a>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-kicker">Ein Lesestück · April 2026</div>
+    <h1 class="hero-title display">
+      Das Web bekommt<br>
+      ein <em>zweites</em><br>
+      Gesicht.
+    </h1>
+    <p class="hero-deck">
+      <span class="drop">D</span>as Web, das wir kennen, wurde für Menschen gebaut. Schöne Typografie, grosse Bilder, Scrollbalken, Cookie-Banner. Ein zweiter Besucher hat sich eingeschlichen: Agenten. Sie sehen nicht, sie lesen nicht — sie <em>parsen</em>. Und sie stehen gerade vor jeder Webseite wie jemand, der eine fremde Sprache nur ahnungsweise versteht. Das muss nicht so bleiben.
+    </p>
+    <div class="hero-meta">
+      <span>Steven Noack</span>
+      <span>Aus Brandenburg, ohne Eile</span>
+      <span>Geschrieben im April 2026</span>
+    </div>
+  </div>
+</section>
+
+<!-- 01 — Das Kontaktformular als Symptom -->
+<section class="section">
+  <div class="section-grid">
+    <div class="section-anchor">Ein kleines Symptom<strong>01</strong></div>
+    <div>
+      <h2 class="section-title display">Fang mit dem <em>Kontaktformular</em> an.</h2>
+      <div class="prose">
+        <p class="lead">
+          Stell dir vor, jemand sucht einen Coach. Früher googelte er, klickte auf eine Webseite, fand ein Kontaktformular, tippte Namen und Anliegen rein, klickte ab. Funktioniert heute noch so. Aber immer häufiger beauftragt derselbe Mensch einen Agenten: <em>"Finde mir drei Coaches, vergleiche sie und schreib denen, die passen, an."</em>
+        </p>
+        <p>
+          Der Agent geht los. Er findet deine Webseite. Er findet auch dein Kontaktformular. Und dann steht er da wie ein höflicher Gast in einem Haus ohne Türklinken. Er sieht das Formular, versteht aber nicht, wie es bedient wird. Pflichtfelder, Captchas, JavaScript-Validierung, Cookie-Zustimmung — alles auf Menschen-Augen ausgerichtet. Der Agent scheitert. Die Anfrage kommt nie bei dir an. Du weisst nicht einmal, dass du ein Geschäft verloren hast.
+        </p>
+      </div>
+
+      <div class="form-demo">
+        <div class="form-col mensch">
+          <span class="form-col-label">Für Menschen</span>
+          <h4>Ein klassisches Formular</h4>
+          <p>Pflichtfelder, Captcha, "Bitte bestätigen Sie, dass Sie kein Roboter sind". Für Menschen kein Problem. Für Agenten eine Wand.</p>
+          <div class="mock-form">
+            <label>Name</label>
+            <input type="text" placeholder="Max Mustermann">
+            <label>E-Mail</label>
+            <input type="email" placeholder="max@example.com">
+            <label>Anliegen</label>
+            <textarea placeholder="Worum geht es?"></textarea>
+            <div class="captcha">Ich bin kein Roboter</div>
+            <button type="button">Absenden</button>
+          </div>
+        </div>
+        <div class="form-col agent">
+          <span class="form-col-label">Für Agenten</span>
+          <h4>Ein strukturierter Endpunkt</h4>
+          <p>Dieselbe Anfrage, aber in einer Sprache, die ein Agent lesen und schreiben kann. Ein paar Zeilen JSON. Fertig.</p>
+          <div class="code-block"><span class="c">POST /api/contact</span>
+{
+  <span class="k">"von"</span>: <span class="s">"agent@klient.de"</span>,
+  <span class="k">"im_auftrag_von"</span>: <span class="s">"Max Mustermann"</span>,
+  <span class="k">"anliegen"</span>: <span class="s">"Coaching-Skill"</span>,
+  <span class="k">"zeitfenster"</span>: <span class="s">"Q3 2026"</span>,
+  <span class="k">"antwort_an"</span>: <span class="s">"max@..."</span>
+}</div>
+        </div>
+      </div>
+
+      <div class="pull">
+        Zwei Kanäle, <em>ein Haus</em>. Mensch geht durch die Tür, Agent durch die Serviceklappe.
+      </div>
+
+      <div class="prose">
+        <p>
+          Das Kontaktformular ist nur ein Beispiel. Dasselbe gilt für Preislisten, Öffnungszeiten, Produktkataloge, Terminbuchungen, Literaturverzeichnisse, FAQs. Überall dort, wo Menschen heute mit einer Maus umgehen, könnten Agenten mit einer API umgehen — wenn sie eine fänden. Finden sie keine, scraper'n sie sich durch HTML und scheitern an Cookie-Bannern. Oder sie finden den Weg nicht und verschwinden.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 02 — Die zwei Welten -->
+<section class="section tight">
+  <div class="section-grid">
+    <div class="section-anchor">Was gerade passiert<strong>02</strong></div>
+    <div>
+      <h2 class="section-title display">Das Web <em>spaltet sich</em>.</h2>
+      <div class="prose">
+        <p class="lead">
+          In den letzten zwölf Monaten ist ohne grosse Ankündigung ein zweites Publikum in die Ränge des Webs eingezogen: Agenten. LLM-gesteuerte Programme, die im Auftrag eines Menschen recherchieren, einkaufen, vergleichen, Termine vereinbaren, Anträge stellen. Sie sind noch ungeschickt, aber sie werden besser — und ihre Zahl steigt.
+        </p>
+        <p>
+          Das Web wurde für diese Besucher nie gebaut. Seine Anatomie — HTML für Menschen-Augen, JavaScript für Menschen-Klicks, Design für Menschen-Aufmerksamkeit — ist für Agenten ein Labyrinth. Sie kommen durch, irgendwie, mit Rechenaufwand und Fehlerquote. Aber es ist, als würde jemand jeden Tag durch ein fremdes Land reisen, dessen Sprache er nur per Kamera und Wörterbuch übersetzt.
+        </p>
+        <p>
+          Die natürliche Antwort heisst: <span class="highlight">gib dem Web ein zweites Gesicht</span>. Neben der Menschen-Seite (HTML, schön) eine Agenten-Seite (JSON, strukturiert, direkt konsumierbar). Nicht als Ersatz — als Parallelkanal. Wer beides anbietet, bedient beide Publika. Wer nur das eine hat, wird für die andere Hälfte unsichtbar.
+        </p>
+      </div>
+
+      <div class="pull">
+        Schema.org war der Versuch. <em>Das hier</em> ist die Antwort.
+      </div>
+
+      <div class="prose">
+        <p>
+          Vor Jahren gab es mit Schema.org einen ersten Versuch, Webseiten für Maschinen lesbarer zu machen — kleine semantische Marker im HTML, damit Google besser versteht, was eine Rezension, ein Rezept, ein Event ist. Das hat geholfen, bleibt aber eine Beilage zum Menschen-Content. Was jetzt kommt, ist eine andere Stufe: nicht Markup neben HTML, sondern <strong>echte Zwei-Kanal-Architektur</strong>. Dein Inhalt, einmal gepflegt, wird in zwei Formen ausgespielt — eine für die Augen, eine für die Algorithmen.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 03 — Push und Pull -->
+<section class="section">
+  <div class="section-grid">
+    <div class="section-anchor">Das Prinzip<strong>03</strong></div>
+    <div>
+      <h2 class="section-title display">Push und <em>Pull</em>.</h2>
+      <div class="prose">
+        <p class="lead">
+          Wenn dein Wissen in beiden Formen existiert — PDF für Menschen, JSON für Agenten — entsteht etwas Schönes: ein Kreislauf. Der Agent liest die strukturierte Form, antwortet einem Nutzer, verweist bei tieferem Interesse zurück auf die Menschen-Form. Die Menschen-Form wirbt bei genügend Interesse für tiefere Recherche im Notebook. Beide zeigen aufeinander. Beide verstärken einander.
+        </p>
+      </div>
+
+      <div class="pushpull-wrap">
+        <svg class="pushpull-svg" viewBox="0 0 800 360" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="arrow-ink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+              <path d="M0,0 L10,5 L0,10 z" fill="#0a0a0a"/>
+            </marker>
+            <marker id="arrow-acc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+              <path d="M0,0 L10,5 L0,10 z" fill="#ff3c00"/>
+            </marker>
+          </defs>
+
+          <!-- Wissen-Kern in der Mitte oben -->
+          <rect x="320" y="30" width="160" height="80" fill="#0a0a0a" stroke="#0a0a0a" stroke-width="2"/>
+          <text x="400" y="56" font-family="JetBrains Mono, monospace" font-size="10" fill="#ff3c00" text-anchor="middle" font-weight="700" letter-spacing="1.5">EINE QUELLE</text>
+          <text x="400" y="80" font-family="Fraunces, serif" font-size="18" fill="#f0ede6" text-anchor="middle" font-weight="900" letter-spacing="-0.5">Dein Wissen</text>
+          <text x="400" y="98" font-family="JetBrains Mono, monospace" font-size="9" fill="#6b6760" text-anchor="middle">strukturiert &amp; gepflegt</text>
+
+          <!-- Zwei Pfeile von Wissen nach unten -->
+          <line x1="360" y1="115" x2="200" y2="170" stroke="#0a0a0a" stroke-width="2" marker-end="url(#arrow-ink)"/>
+          <line x1="440" y1="115" x2="600" y2="170" stroke="#0a0a0a" stroke-width="2" marker-end="url(#arrow-ink)"/>
+
+          <!-- Mensch-Form links -->
+          <rect x="60" y="180" width="280" height="110" fill="#e8e3d6" stroke="#0a0a0a" stroke-width="2"/>
+          <text x="76" y="204" font-family="JetBrains Mono, monospace" font-size="10" fill="#0a0a0a" font-weight="700" letter-spacing="1.5">FÜR MENSCHEN</text>
+          <text x="76" y="232" font-family="Fraunces, serif" font-size="20" fill="#0a0a0a" font-weight="900" letter-spacing="-0.5">PDF · Webseite</text>
+          <text x="76" y="254" font-family="JetBrains Mono, monospace" font-size="10" fill="#6b6760">Zum Lesen, Drucken, Teilen.</text>
+          <text x="76" y="272" font-family="JetBrains Mono, monospace" font-size="10" fill="#6b6760">Typografie. Bilder. Atmung.</text>
+
+          <!-- Agent-Form rechts -->
+          <rect x="460" y="180" width="280" height="110" fill="#0a0a0a" stroke="#0a0a0a" stroke-width="2"/>
+          <text x="476" y="204" font-family="JetBrains Mono, monospace" font-size="10" fill="#ff3c00" font-weight="700" letter-spacing="1.5">FÜR AGENTEN</text>
+          <text x="476" y="232" font-family="Fraunces, serif" font-size="20" fill="#f0ede6" font-weight="900" letter-spacing="-0.5">JSON-Endpunkt</text>
+          <text x="476" y="254" font-family="JetBrains Mono, monospace" font-size="10" fill="#6b6760">Zum Lesen, Abfragen, Einbinden.</text>
+          <text x="476" y="272" font-family="JetBrains Mono, monospace" font-size="10" fill="#6b6760">Struktur. Metadaten. Direkt.</text>
+
+          <!-- Push-Pull-Pfeile zwischen den Formen (horizontal im unteren Bereich) -->
+          <path d="M 200 320 Q 400 355 600 320" fill="none" stroke="#ff3c00" stroke-width="2" marker-end="url(#arrow-acc)"/>
+          <path d="M 600 340 Q 400 305 200 340" fill="none" stroke="#ff3c00" stroke-width="2" marker-end="url(#arrow-acc)"/>
+          <text x="400" y="315" font-family="JetBrains Mono, monospace" font-size="10" fill="#ff3c00" text-anchor="middle" font-weight="700" letter-spacing="1.5">PUSH &amp; PULL</text>
+        </svg>
+      </div>
+
+      <div class="prose">
+        <p>
+          Das konkret zu bauen ist weniger kompliziert, als es klingt. Die Skills-Architektur, die Google mit der AI Edge Gallery etabliert hat, geht genau diesen Weg: Eine kleine strukturierte Definition (<code>SKILL.md</code>) plus optionales JavaScript lädt Wissen zur Laufzeit von einer URL — und der Agent nutzt es direkt. Dein Endpunkt liefert das Wissen, der Agent verarbeitet es, der Nutzer bekommt die Antwort. Wenn der Nutzer tiefer will, verweist der Agent auf die PDF oder die Webseite. Push und Pull. Derselbe Inhalt, zwei Verpackungen.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 — Lebende Beweise -->
+<section class="section tight">
+  <div class="section-grid">
+    <div class="section-anchor">Zwei laufende Beispiele<strong>04</strong></div>
+    <div>
+      <h2 class="section-title display">Ich habe das an mir <em>selbst</em> ausprobiert.</h2>
+      <div class="prose">
+        <p class="lead">
+          Damit das kein Denkspiel bleibt, hier zwei Endpunkte, die ich für eigene Wissensbereiche gebaut habe. Beide sind öffentlich zugänglich. Beide lassen sich direkt in einen Agenten laden. Beide zeigen die Push-Pull-Architektur, von der ich eben geredet habe.
+        </p>
+      </div>
+
+      <div class="proofs">
+        <div class="proof">
+          <div class="proof-kicker">Live seit April 2026</div>
+          <h3>Ra-Tarot Archetypen</h3>
+          <p>
+            22 Archetypen aus dem Ra-Material als navigierbarer Wissensgraph. Jeder Archetyp ein eigener Endpunkt, mit Querverweisen zu Triaden, Paaren und Dimensionen. Gebaut aus langjähriger Forschung, strukturiert als JSON.
+          </p>
+          <div class="proof-stack"><span class="pfx">GET </span>stevennoack.de/api/ra-tarot/<br><span class="pfx">    archetype/</span><span class="emph">01-matrix-mind</span>.json</div>
+          <div class="proof-links">
+            <a href="https://stevennoack.de/api/ra-tarot/archetype/01-matrix-mind.json" class="proof-link primary">Endpunkt öffnen</a>
+            <a href="https://ganzwachsen.de" class="proof-link">Mensch-Seite</a>
+          </div>
+        </div>
+
+        <div class="proof">
+          <div class="proof-kicker">Live seit April 2026</div>
+          <h3>Vitamin D3 Protokoll</h3>
+          <p>
+            Ein Einkaufsführer für Vitamin D3 und die fünf Co-Faktoren. Als PDF für Menschen, als Endpunkt-Satz für Agenten. Jedes Supplement mit Originaltext, Kaufkriterien, Produktliste, und Verweisen zurück auf die Landingpage.
+          </p>
+          <div class="proof-stack"><span class="pfx">GET </span>stevennoack.de/api/vitamin-d3/<br><span class="emph">    protocol</span>.json</div>
+          <div class="proof-links">
+            <a href="https://stevennoack.de/api/vitamin-d3/protocol.json" class="proof-link primary">Endpunkt öffnen</a>
+            <a href="https://stevennoack.de/vitamin-d3/" class="proof-link">Mensch-Seite</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="prose" style="margin-top: 40px;">
+        <p>
+          Das zweite Beispiel ist das klarere, weil es Push und Pull in voller Symmetrie zeigt. Die Mensch-Seite bietet die PDF zum Download. Der Endpunkt enthält zusätzlich strukturierte <code>call_to_action</code>-Felder, die dem Agenten sagen: <em>"Wenn der Nutzer Interesse zeigt, den vollständigen Ratgeber zu lesen — verweise hierauf."</em> Derselbe Inhalt, zweimal verpackt, und beide Verpackungen kennen einander.
+        </p>
+        <p>
+          Die JSON-Felder sind dabei so gestaltet, dass meine Stimme durchklingt. Originalsätze aus der PDF stehen wörtlich drin — <em>"Das ist kein Vitamin im klassischen Sinn. Das ist ein Hormon."</em>, <em>"Rechne nach. Wenn die Mathe nicht aufgeht, stimmt was nicht."</em> — damit ein Agent nicht paraphrasiert, sondern zitiert. Das unterscheidet einen Wissens-Endpunkt von einer Datenbank: er trägt <span class="highlight">die Stimme dessen, der das Wissen hat</span>.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 05 — Was das für Wissens-Anbieter bedeutet -->
+<section class="section">
+  <div class="section-grid">
+    <div class="section-anchor">Was das bedeutet<strong>05</strong></div>
+    <div>
+      <h2 class="section-title display">Dein Wissen hat <em>zwei Leben</em>.</h2>
+      <div class="prose">
+        <p class="lead">
+          Für alle, die Wissen haben — Coaches, Verlage, Therapeuten, Trainer, Heilpraktiker, Berater — ändert sich durch diese Verschiebung etwas Grundsätzliches. Dein Wissen muss nicht mehr nur gelesen werden, um zu wirken. Es kann auch <em>abgefragt</em> werden. Und zwar von einem Agenten, der im Auftrag deines zukünftigen Klienten unterwegs ist und nach Antworten sucht, die zu ihm passen.
+        </p>
+        <p>
+          Wer Wissen heute strukturiert ausliefert, wird in fünf Jahren dort gefunden, wo ein neues Publikum sucht. Wer es nicht tut, bleibt für diese zweite Hälfte des Webs unsichtbar — und weiss es oft nicht einmal. Die Webseite sieht für einen selbst ja weiterhin gut aus.
+        </p>
+        <p>
+          Das Gute: Es ist keine Raketenwissenschaft. Die schwierige Arbeit — <strong>strukturiertes Verstehen des eigenen Wissens</strong> — hast du, wenn du ein Coach, ein Autor, ein Therapeut bist, längst geleistet. Was fehlt, ist die Übersetzung in eine Form, die Agenten lesen können. Das ist Handwerk, nicht Magie.
+        </p>
+      </div>
+
+      <div class="pull">
+        Die KI selbst löst das nicht. Die <em>Strukturierung von Wissen</em> bleibt Handwerk. Das ist die gute Nachricht.
+      </div>
+
+      <div class="prose">
+        <p>
+          Es gibt einen Grund, warum die grosse Automatisierungs-Welle ausgerechnet hier stottert: Ein Agent kann aus deinen 80 Blogartikeln nicht von selbst einen sauberen, navigierbaren Endpunkt machen. Dafür braucht es Entscheidungen. Was gehört zusammen? Was ist Oberkategorie, was Detail? Welche Beziehungen bestehen zwischen den Teilen? Welche Stimme, welche Grenzen, welche Eskalation? Diese Fragen beantwortet dein Kopf — weil er versteht, was du meinst, wenn du es schreibst. Eine KI kann dabei helfen, aber sie kann es dir nicht abnehmen. Und genau deshalb bleibt hier Arbeit für Menschen, die wissen was sie tun.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 06 — GLOSSAR -->
+<section class="section glossary">
+  <div class="section-grid">
+    <div class="section-anchor">Begriffe<strong>06</strong></div>
+    <div>
+      <h2 class="section-title display">Klein, aber <em>nützlich</em>.</h2>
+      <div class="prose" style="margin-bottom: 32px;">
+        <p>Wenn du etwas zum nachschlagen brauchst:</p>
+      </div>
+      <div class="glossary-list">
+        <div class="glossary-item">
+          <div class="glossary-term">▸ Agent</div>
+          <div class="glossary-def">Ein LLM-gesteuertes Programm, das im Auftrag eines Menschen selbstständig Aufgaben im Web erledigt.</div>
+        </div>
+        <div class="glossary-item">
+          <div class="glossary-term">▸ Endpunkt</div>
+          <div class="glossary-def">Eine URL, die strukturierte Daten (meist JSON) ausliefert. Für Agenten das Äquivalent zu einer Webseite.</div>
+        </div>
+        <div class="glossary-item">
+          <div class="glossary-term">▸ JSON</div>
+          <div class="glossary-def">Ein einfaches, strukturiertes Textformat. Die Lingua Franca der Maschinen-Kommunikation im Web.</div>
+        </div>
+        <div class="glossary-item">
+          <div class="glossary-term">▸ Schema.org</div>
+          <div class="glossary-def">Ein Vokabular für Webseiten-Metadaten. Der erste Versuch, Webseiten für Maschinen lesbar zu machen.</div>
+        </div>
+        <div class="glossary-item">
+          <div class="glossary-term">▸ MCP</div>
+          <div class="glossary-def">Model Context Protocol. Anthropics Standard, um Tools und Datenquellen an KI-Modelle anzuschliessen.</div>
+        </div>
+        <div class="glossary-item">
+          <div class="glossary-term">▸ Skill</div>
+          <div class="glossary-def">Eine modulare Wissens-Erweiterung für On-Device-LLMs. Markdown plus optional JavaScript.</div>
+        </div>
+        <div class="glossary-item">
+          <div class="glossary-term">▸ Push-Pull</div>
+          <div class="glossary-def">Wissen existiert parallel in zwei Formen — eine für Menschen, eine für Agenten — die aufeinander verweisen.</div>
+        </div>
+        <div class="glossary-item">
+          <div class="glossary-term">▸ Scraping</div>
+          <div class="glossary-def">Der verzweifelte Versuch, HTML mühsam so zu parsen, dass Maschinen etwas damit anfangen können.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OUTRO -->
+<section class="outro">
+  <div class="outro-inner">
+    <div class="outro-kicker">Zum Schluss</div>
+    <p class="outro-text">
+      Was sich gerade verschiebt, ist keine Modeerscheinung. Es ist eine <em>strukturelle</em> Veränderung. Das Web bekommt ein zweites Gesicht — für ein Publikum, das es vor kurzem noch nicht gab. Wer sein Wissen heute übersetzbar macht, baut sich einen Vorsprung auf, der nicht morgen wieder weg ist. Nicht weil die Technologie so schwer wäre — sondern weil das Verstehen des eigenen Wissens Zeit und Kopf braucht. Genau darin liegt die Arbeit. Und genau darin liegt der Wert.
+    </p>
+    <a href="/skills.html" class="outro-link">Übrigens — falls du wissen willst, wie ich helfe →</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div>© Steven Noack — Alt Tucheband, Brandenburg</div>
+    <div>
+      <a href="/">Hauptseite</a> &nbsp;·&nbsp;
+      <a href="/skills.html">Skills</a> &nbsp;·&nbsp;
+      <a href="/lesestueck.html">Lesestück</a> &nbsp;·&nbsp;
+      <a href="/kontakt">Kontakt</a> &nbsp;·&nbsp;
+      <a href="/rechtliches">Impressum</a>
+    </div>
+    <div>Geschrieben im April 2026</div>
+  </div>
+</footer>
+
+</body>
+</html>
