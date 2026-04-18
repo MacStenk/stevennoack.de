@@ -1,763 +1,1814 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dein Wissen als Skill — Steven Noack</title>
-<meta name="description" content="Ich verpacke dein Fachwissen als Agent Skill für die Google AI Edge Gallery. Du bekommst die fertigen Skill-Dateien plus eine Anleitung, wie du sie auf GitHub Pages, Cloudflare oder deinem eigenen Server bereitstellst.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,700;9..144,900&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg: #f0ede6;
-    --ink: #0a0a0a;
-    --paper: #e8e3d6;
-    --accent: #ff3c00;
-    --green: #00863c;
-    --line: #0a0a0a;
-    --muted: #6b6760;
-    --grid: rgba(10, 10, 10, 0.06);
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body {
-    background: var(--bg); color: var(--ink);
-    font-family: 'JetBrains Mono', monospace;
-    font-weight: 400; font-size: 15px; line-height: 1.5;
-    overflow-x: hidden;
-    background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-    background-size: 40px 40px;
-  }
-  body::before {
-    content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 1;
-    opacity: 0.4; mix-blend-mode: multiply;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.08 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
-  }
-  ::selection { background: var(--accent); color: var(--bg); }
-  .display { font-family: 'Fraunces', serif; font-weight: 900; line-height: 0.88; letter-spacing: -0.04em; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dein Wissen als Skill — Steven Noack</title>
+  <meta name="description"
+    content="Ich verpacke dein Fachwissen als Agent Skill für die Google AI Edge Gallery. Du bekommst die fertigen Skill-Dateien plus eine Anleitung, wie du sie auf GitHub Pages, Cloudflare oder deinem eigenen Server bereitstellst.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,700;9..144,900&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f0ede6;
+      --ink: #0a0a0a;
+      --paper: #e8e3d6;
+      --accent: #ff3c00;
+      --green: #00863c;
+      --line: #0a0a0a;
+      --muted: #6b6760;
+      --grid: rgba(10, 10, 10, 0.06);
+    }
 
-  /* TOPBAR */
-  .topbar {
-    position: relative; z-index: 10;
-    border-bottom: 2px solid var(--ink);
-    padding: 14px 32px; display: flex; justify-content: space-between; align-items: center;
-    font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; background: var(--bg);
-  }
-  .topbar .left, .topbar .right { display: flex; gap: 24px; align-items: center; }
-  .topbar .crumb a { color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--ink); }
-  .topbar .dot { display: inline-block; width: 8px; height: 8px; background: var(--accent); border-radius: 50%; animation: pulse 2s infinite; }
-  @keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.3); } }
-  .topbar a { color: var(--ink); text-decoration: none; border-bottom: 1px solid transparent; }
-  .topbar a:hover { border-bottom-color: var(--ink); }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-  /* HERO */
-  .hero { position: relative; z-index: 5; padding: 72px 32px 48px; border-bottom: 2px solid var(--ink); }
-  .hero-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 48px; align-items: end; max-width: 1400px; margin: 0 auto; }
-  .hero-meta { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 28px; display: flex; gap: 12px; flex-wrap: wrap; }
-  .hero-meta span { padding: 5px 12px; border: 1px solid var(--ink); background: var(--bg); }
-  .hero-meta span.live { background: var(--green); color: var(--bg); border-color: var(--green); }
-  .hero-title { font-size: clamp(2.8rem, 7.8vw, 7rem); margin-bottom: 28px; }
-  .hero-title .l1, .hero-title .l3 { display: block; }
-  .hero-title .l2 { display: block; font-style: italic; color: var(--accent); }
+    html {
+      scroll-behavior: smooth;
+    }
 
-  .arch { width: 100%; background: var(--paper); border: 2px solid var(--ink); padding: 24px 20px; box-shadow: 14px 14px 0 var(--accent); position: relative; }
-  .arch::before { content: "ARCHITEKTUR"; position: absolute; top: -2px; left: -2px; background: var(--ink); color: var(--bg); padding: 4px 10px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; font-weight: 700; }
-  .arch-svg { width: 100%; height: auto; display: block; margin-top: 18px; }
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 400;
+      font-size: 15px;
+      line-height: 1.5;
+      overflow-x: hidden;
+      background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
 
-  .hero-claim { font-family: 'Fraunces', serif; font-weight: 400; font-size: clamp(1.2rem, 1.65vw, 1.5rem); line-height: 1.4; border-left: 3px solid var(--accent); padding-left: 20px; max-width: 720px; margin-bottom: 32px; }
-  .hero-claim strong { font-weight: 900; font-style: italic; }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.4;
+      mix-blend-mode: multiply;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.08 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    }
 
-  .hero-cta-row { display: flex; gap: 16px; flex-wrap: wrap; }
-  .cta-primary, .cta-secondary { display: inline-flex; align-items: center; gap: 12px; padding: 18px 26px; text-decoration: none; text-transform: uppercase; font-weight: 700; font-size: 13px; letter-spacing: 0.1em; border: 2px solid var(--ink); transition: transform 0.15s ease; cursor: pointer; }
-  .cta-primary { background: var(--ink); color: var(--bg); box-shadow: 6px 6px 0 var(--accent); }
-  .cta-secondary { background: var(--bg); color: var(--ink); }
-  .cta-primary:hover { transform: translate(-3px, -3px); box-shadow: 9px 9px 0 var(--accent); }
-  .cta-secondary:hover { background: var(--ink); color: var(--bg); }
-  .cta-primary::after, .cta-secondary::after { content: "→"; font-size: 16px; }
+    ::selection {
+      background: var(--accent);
+      color: var(--bg);
+    }
 
-  /* MARQUEE */
-  .marquee { position: relative; z-index: 5; background: var(--ink); color: var(--bg); padding: 16px 0; overflow: hidden; border-bottom: 2px solid var(--ink); }
-  .marquee-track { display: flex; gap: 40px; white-space: nowrap; animation: scroll 50s linear infinite; font-size: 13px; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 500; }
-  .marquee-track span { display: inline-flex; align-items: center; gap: 12px; }
-  .marquee-track span::after { content: "✦"; color: var(--accent); }
-  @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+    .display {
+      font-family: 'Fraunces', serif;
+      font-weight: 900;
+      line-height: 0.88;
+      letter-spacing: -0.04em;
+    }
 
-  /* SECTION */
-  .section { position: relative; z-index: 5; padding: 80px 32px; border-bottom: 2px solid var(--ink); }
-  .section-header { max-width: 1400px; margin: 0 auto 56px; display: grid; grid-template-columns: 200px 1fr; gap: 32px; align-items: baseline; }
-  .section-num { font-size: 12px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--muted); }
-  .section-num strong { color: var(--ink); display: block; font-size: 32px; font-family: 'Fraunces', serif; margin-top: 4px; }
-  .section-title { font-size: clamp(2.2rem, 5vw, 4rem); }
-  .section-title em { color: var(--accent); font-style: italic; }
+    /* TOPBAR */
+    .topbar {
+      position: relative;
+      z-index: 10;
+      border-bottom: 2px solid var(--ink);
+      padding: 14px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      background: var(--bg);
+    }
 
-  /* HOW */
-  .how { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
-  .how-text { padding: 32px; border: 2px solid var(--ink); background: var(--bg); }
-  .how-text h3 { font-family: 'Fraunces', serif; font-weight: 900; font-size: 28px; margin-bottom: 20px; letter-spacing: -0.02em; }
-  .how-text h3 em { color: var(--accent); font-style: italic; }
-  .how-text p { font-size: 14px; line-height: 1.7; margin-bottom: 16px; }
-  .how-text strong { font-weight: 700; background: var(--accent); color: var(--bg); padding: 1px 5px; }
+    .topbar .left,
+    .topbar .right {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+    }
 
-  /* DELIVERY */
-  .delivery { max-width: 1100px; margin: 56px auto 0; background: var(--ink); color: var(--bg); padding: 36px 32px; border: 2px solid var(--ink); box-shadow: 14px 14px 0 var(--accent); }
-  .delivery-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent); margin-bottom: 16px; font-weight: 700; }
-  .delivery-title { font-family: 'Fraunces', serif; font-weight: 900; font-size: clamp(24px, 3vw, 32px); line-height: 1.1; margin-bottom: 20px; letter-spacing: -0.02em; }
-  .delivery-list { list-style: none; font-size: 14px; line-height: 1.7; }
-  .delivery-list li { padding: 8px 0; border-bottom: 1px dashed rgba(255,255,255,0.2); display: flex; align-items: flex-start; gap: 12px; }
-  .delivery-list li:last-child { border-bottom: none; }
-  .delivery-list li::before { content: "▸"; color: var(--accent); font-weight: 700; flex-shrink: 0; }
+    .topbar .crumb a {
+      color: var(--ink);
+      text-decoration: none;
+      border-bottom: 1px solid var(--ink);
+    }
 
-  /* AUDIENCE */
-  .audience { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border: 2px solid var(--ink); }
-  .aud-cell { padding: 32px 24px; border-right: 2px solid var(--ink); background: var(--bg); transition: background 0.2s ease; min-height: 280px; display: flex; flex-direction: column; }
-  .aud-cell:last-child { border-right: none; }
-  .aud-cell:hover { background: var(--paper); }
-  .aud-icon { font-family: 'Fraunces', serif; font-weight: 900; font-size: 56px; line-height: 1; color: var(--accent); margin-bottom: 16px; }
-  .aud-title { font-family: 'Fraunces', serif; font-weight: 900; font-size: 24px; margin-bottom: 12px; letter-spacing: -0.02em; }
-  .aud-body { font-size: 13px; line-height: 1.6; flex: 1; }
+    .topbar .dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
 
-  /* BENEFITS */
-  .benefits-bg { background: var(--ink); color: var(--bg); }
-  .benefits-bg .section-num { color: rgba(255,255,255,0.5); }
-  .benefits-bg .section-num strong { color: var(--bg); }
-  .benefits { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(255,255,255,0.15); border: 2px solid rgba(255,255,255,0.15); }
-  .benefit { background: var(--ink); padding: 36px 28px; transition: background 0.2s ease; }
-  .benefit:hover { background: #1a1a1a; }
-  .benefit-num { font-family: 'Fraunces', serif; font-weight: 900; font-size: 14px; color: var(--accent); margin-bottom: 12px; letter-spacing: 0.05em; }
-  .benefit-title { font-family: 'Fraunces', serif; font-weight: 700; font-size: 22px; line-height: 1.15; margin-bottom: 14px; letter-spacing: -0.02em; }
-  .benefit-body { font-size: 13px; line-height: 1.6; color: rgba(255,255,255,0.75); }
-  .benefit-stat { margin-top: 18px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.2); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); }
+    @keyframes pulse {
 
-  /* PROCESS */
-  .process { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; counter-reset: step; }
-  .step { padding: 32px 24px; border-left: 2px solid var(--ink); counter-increment: step; }
-  .step:last-child { border-right: 2px solid var(--ink); }
-  .step::before { content: counter(step, decimal-leading-zero); font-family: 'Fraunces', serif; font-weight: 900; font-size: 72px; line-height: 1; color: var(--accent); display: block; margin-bottom: 16px; letter-spacing: -0.04em; }
-  .step-title { font-family: 'Fraunces', serif; font-weight: 700; font-size: 22px; margin-bottom: 10px; letter-spacing: -0.02em; }
-  .step-body { font-size: 13px; line-height: 1.6; }
-  .step-meta { margin-top: 14px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); }
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
 
-  /* EXAMPLE */
-  .example { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: stretch; }
-  .example-text { padding: 32px; border: 2px solid var(--ink); background: var(--paper); }
-  .example-tag { display: inline-block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; background: var(--accent); color: var(--bg); padding: 4px 10px; margin-bottom: 16px; font-weight: 700; }
-  .example-headline { font-family: 'Fraunces', serif; font-weight: 900; font-size: 32px; line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 16px; }
-  .example-body { font-size: 14px; line-height: 1.6; margin-bottom: 16px; }
-  .example-list { list-style: none; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; border-top: 1px solid var(--ink); padding-top: 14px; }
-  .example-list li { padding: 5px 0; display: flex; gap: 10px; }
-  .example-list li::before { content: "▸"; color: var(--accent); }
+      50% {
+        opacity: 0.5;
+        transform: scale(1.3);
+      }
+    }
 
-  .skill-md { background: var(--ink); color: var(--bg); padding: 24px; border: 2px solid var(--ink); font-family: 'JetBrains Mono', monospace; font-size: 12px; line-height: 1.6; overflow-x: auto; white-space: pre; position: relative; }
-  .skill-md::before { content: "SKILL.md"; position: absolute; top: 0; right: 0; background: var(--accent); color: var(--bg); padding: 4px 10px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 700; }
-  .skill-md .com { color: #6b6760; }
-  .skill-md .key { color: var(--accent); }
-  .skill-md .str { color: #f0c674; }
-  .skill-md .head { color: #8abeb7; font-weight: 700; }
+    .topbar a {
+      color: var(--ink);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+    }
 
-  /* PRICING */
-  .pricing { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border: 2px solid var(--ink); }
-  .price-card { background: var(--bg); padding: 36px 28px; border-right: 2px solid var(--ink); display: flex; flex-direction: column; transition: background 0.2s ease; }
-  .price-card:last-child { border-right: none; }
-  .price-card.featured { background: var(--ink); color: var(--bg); position: relative; }
-  .price-card:hover:not(.featured) { background: var(--paper); }
-  .price-card.featured::before { content: "EMPFOHLEN"; position: absolute; top: -2px; left: -2px; background: var(--accent); color: var(--bg); padding: 5px 12px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.15em; font-weight: 700; }
-  .price-tier { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 12px; }
-  .price-card.featured .price-tier { color: rgba(255,255,255,0.6); }
-  .price-name { font-family: 'Fraunces', serif; font-weight: 900; font-size: 26px; line-height: 1; margin-bottom: 16px; letter-spacing: -0.02em; }
-  .price-amount { font-family: 'Fraunces', serif; font-weight: 900; font-size: 48px; line-height: 1; margin-bottom: 6px; letter-spacing: -0.04em; }
-  .price-amount sup { font-size: 20px; vertical-align: super; }
-  .price-amount sub { font-size: 12px; font-family: 'JetBrains Mono', monospace; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); font-weight: 400; vertical-align: baseline; }
-  .price-card.featured .price-amount sub { color: rgba(255,255,255,0.5); }
-  .price-once { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px dashed currentColor; }
-  .price-card.featured .price-once { color: rgba(255,255,255,0.6); }
-  .price-desc { font-size: 13px; line-height: 1.6; margin-bottom: 20px; }
-  .price-list { list-style: none; font-size: 13px; line-height: 1.7; flex: 1; margin-bottom: 24px; }
-  .price-list li { padding: 4px 0; display: flex; gap: 10px; }
-  .price-list li::before { content: "✓"; color: var(--accent); font-weight: 700; }
-  .price-cta { display: inline-block; text-align: center; padding: 14px 20px; border: 2px solid currentColor; text-decoration: none; color: inherit; text-transform: uppercase; font-weight: 700; font-size: 12px; letter-spacing: 0.1em; transition: all 0.15s ease; }
-  .price-cta:hover { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+    .topbar a:hover {
+      border-bottom-color: var(--ink);
+    }
 
-  /* ADDONS */
-  .addons { max-width: 1400px; margin: 32px auto 0; padding: 24px 28px; border: 2px dashed var(--ink); background: var(--paper); display: grid; grid-template-columns: 1fr 2fr; gap: 32px; align-items: center; }
-  .addons-label { font-family: 'Fraunces', serif; font-weight: 900; font-size: 22px; line-height: 1.1; letter-spacing: -0.02em; }
-  .addons-label span { display: block; font-family: 'JetBrains Mono', monospace; font-weight: 400; font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin-top: 6px; }
-  .addons-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; font-size: 13px; line-height: 1.5; }
-  .addons-list strong { display: block; color: var(--accent); font-family: 'Fraunces', serif; font-weight: 700; font-size: 16px; margin-bottom: 4px; letter-spacing: -0.01em; }
+    /* HERO */
+    .hero {
+      position: relative;
+      z-index: 5;
+      padding: 72px 32px 48px;
+      border-bottom: 2px solid var(--ink);
+    }
 
-  /* FAQ */
-  .faq { max-width: 900px; margin: 0 auto; }
-  .faq-item { border-bottom: 1px solid var(--ink); }
-  .faq-item:first-child { border-top: 2px solid var(--ink); }
-  .faq-item:last-child { border-bottom: 2px solid var(--ink); }
-  .faq-q { width: 100%; text-align: left; background: none; border: none; padding: 24px 0; font-family: 'Fraunces', serif; font-weight: 700; font-size: 22px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; color: var(--ink); letter-spacing: -0.01em; line-height: 1.2; gap: 16px; }
-  .faq-q::after { content: "+"; font-family: 'JetBrains Mono', monospace; font-size: 28px; color: var(--accent); transition: transform 0.2s ease; font-weight: 700; flex-shrink: 0; }
-  .faq-item.open .faq-q::after { transform: rotate(45deg); }
-  .faq-a { max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s ease; font-size: 14px; line-height: 1.7; }
-  .faq-item.open .faq-a { max-height: 700px; padding-bottom: 24px; }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 48px;
+      align-items: end;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
 
-  /* CONTACT */
-  .contact { background: var(--paper); }
-  .contact-grid { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
-  .contact-big { font-family: 'Fraunces', serif; font-weight: 900; font-size: clamp(2.2rem, 5vw, 4.2rem); line-height: 0.95; letter-spacing: -0.03em; }
-  .contact-big em { color: var(--accent); font-style: italic; }
-  .contact-info { font-size: 14px; line-height: 1.8; }
-  .contact-info dt { text-transform: uppercase; font-size: 11px; letter-spacing: 0.12em; color: var(--muted); margin-top: 24px; }
-  .contact-info dt:first-child { margin-top: 0; }
-  .contact-info dd { font-family: 'Fraunces', serif; font-weight: 700; font-size: 22px; margin-bottom: 8px; }
-  .contact-info a { color: var(--ink); text-decoration: none; border-bottom: 2px solid var(--accent); }
-  .contact-info a:hover { background: var(--accent); color: var(--bg); }
+    .hero-meta {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      margin-bottom: 28px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
 
-  /* FOOTER */
-  .footer { background: var(--ink); color: var(--bg); padding: 32px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; }
-  .footer-grid { max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
-  .footer a { color: var(--bg); text-decoration: none; opacity: 0.7; }
-  .footer a:hover { opacity: 1; color: var(--accent); }
+    .hero-meta span {
+      padding: 5px 12px;
+      border: 1px solid var(--ink);
+      background: var(--bg);
+    }
 
-  /* MOBILE */
-  @media (max-width: 900px) {
-    .topbar { padding: 12px 16px; font-size: 10px; flex-wrap: wrap; gap: 8px; }
-    .hero { padding: 48px 16px 40px; }
-    .hero-grid { grid-template-columns: 1fr; gap: 32px; }
-    .arch { box-shadow: 8px 8px 0 var(--accent); }
-    .hero-title { font-size: clamp(2.4rem, 11vw, 4rem); }
-    .section { padding: 56px 16px; }
-    .section-header { grid-template-columns: 1fr; gap: 12px; margin-bottom: 36px; }
-    .how { grid-template-columns: 1fr; }
-    .audience { grid-template-columns: 1fr 1fr; }
-    .aud-cell { border-right: none; min-height: auto; }
-    .aud-cell:nth-child(odd) { border-right: 2px solid var(--ink); }
-    .aud-cell:not(:last-child):not(:nth-last-child(2)) { border-bottom: 2px solid var(--ink); }
-    .benefits { grid-template-columns: 1fr; }
-    .process { grid-template-columns: 1fr; }
-    .step { border-left: 0; border-top: 2px solid var(--ink); border-right: 2px solid var(--ink); }
-    .example { grid-template-columns: 1fr; }
-    .pricing { grid-template-columns: 1fr; }
-    .price-card { border-right: none; border-bottom: 2px solid var(--ink); }
-    .price-card:last-child { border-bottom: none; }
-    .addons { grid-template-columns: 1fr; gap: 20px; }
-    .addons-list { grid-template-columns: 1fr; gap: 12px; }
-    .contact-grid { grid-template-columns: 1fr; gap: 32px; }
-    .footer-grid { flex-direction: column; }
-    .hero-cta-row { flex-direction: column; }
-    .cta-primary, .cta-secondary { width: 100%; justify-content: center; }
-  }
-  @media (max-width: 500px) {
-    .audience { grid-template-columns: 1fr; }
-    .aud-cell { border-right: none !important; border-bottom: 2px solid var(--ink); }
-    .aud-cell:last-child { border-bottom: none; }
-  }
-</style>
+    .hero-meta span.live {
+      background: var(--green);
+      color: var(--bg);
+      border-color: var(--green);
+    }
+
+    .hero-title {
+      font-size: clamp(2.8rem, 7.8vw, 7rem);
+      margin-bottom: 28px;
+    }
+
+    .hero-title .l1,
+    .hero-title .l3 {
+      display: block;
+    }
+
+    .hero-title .l2 {
+      display: block;
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .arch {
+      width: 100%;
+      background: var(--paper);
+      border: 2px solid var(--ink);
+      padding: 24px 20px;
+      box-shadow: 14px 14px 0 var(--accent);
+      position: relative;
+    }
+
+    .arch::before {
+      content: "ARCHITEKTUR";
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      background: var(--ink);
+      color: var(--bg);
+      padding: 4px 10px;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      font-weight: 700;
+    }
+
+    .arch-svg {
+      width: 100%;
+      height: auto;
+      display: block;
+      margin-top: 18px;
+    }
+
+    .hero-claim {
+      font-family: 'Fraunces', serif;
+      font-weight: 400;
+      font-size: clamp(1.2rem, 1.65vw, 1.5rem);
+      line-height: 1.4;
+      border-left: 3px solid var(--accent);
+      padding-left: 20px;
+      max-width: 720px;
+      margin-bottom: 32px;
+    }
+
+    .hero-claim strong {
+      font-weight: 900;
+      font-style: italic;
+    }
+
+    .hero-cta-row {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .cta-primary,
+    .cta-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 18px 26px;
+      text-decoration: none;
+      text-transform: uppercase;
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.1em;
+      border: 2px solid var(--ink);
+      transition: transform 0.15s ease;
+      cursor: pointer;
+    }
+
+    .cta-primary {
+      background: var(--ink);
+      color: var(--bg);
+      box-shadow: 6px 6px 0 var(--accent);
+    }
+
+    .cta-secondary {
+      background: var(--bg);
+      color: var(--ink);
+    }
+
+    .cta-primary:hover {
+      transform: translate(-3px, -3px);
+      box-shadow: 9px 9px 0 var(--accent);
+    }
+
+    .cta-secondary:hover {
+      background: var(--ink);
+      color: var(--bg);
+    }
+
+    .cta-primary::after,
+    .cta-secondary::after {
+      content: "→";
+      font-size: 16px;
+    }
+
+    /* MARQUEE */
+    .marquee {
+      position: relative;
+      z-index: 5;
+      background: var(--ink);
+      color: var(--bg);
+      padding: 16px 0;
+      overflow: hidden;
+      border-bottom: 2px solid var(--ink);
+    }
+
+    .marquee-track {
+      display: flex;
+      gap: 40px;
+      white-space: nowrap;
+      animation: scroll 50s linear infinite;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-weight: 500;
+    }
+
+    .marquee-track span {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .marquee-track span::after {
+      content: "✦";
+      color: var(--accent);
+    }
+
+    @keyframes scroll {
+      0% {
+        transform: translateX(0);
+      }
+
+      100% {
+        transform: translateX(-50%);
+      }
+    }
+
+    /* SECTION */
+    .section {
+      position: relative;
+      z-index: 5;
+      padding: 80px 32px;
+      border-bottom: 2px solid var(--ink);
+    }
+
+    .section-header {
+      max-width: 1400px;
+      margin: 0 auto 56px;
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 32px;
+      align-items: baseline;
+    }
+
+    .section-num {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--muted);
+    }
+
+    .section-num strong {
+      color: var(--ink);
+      display: block;
+      font-size: 32px;
+      font-family: 'Fraunces', serif;
+      margin-top: 4px;
+    }
+
+    .section-title {
+      font-size: clamp(2.2rem, 5vw, 4rem);
+    }
+
+    .section-title em {
+      color: var(--accent);
+      font-style: italic;
+    }
+
+    /* HOW */
+    .how {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+
+    .how-text {
+      padding: 32px;
+      border: 2px solid var(--ink);
+      background: var(--bg);
+    }
+
+    .how-text h3 {
+      font-family: 'Fraunces', serif;
+      font-weight: 900;
+      font-size: 28px;
+      margin-bottom: 20px;
+      letter-spacing: -0.02em;
+    }
+
+    .how-text h3 em {
+      color: var(--accent);
+      font-style: italic;
+    }
+
+    .how-text p {
+      font-size: 14px;
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
+
+    .how-text strong {
+      font-weight: 700;
+      background: var(--accent);
+      color: var(--bg);
+      padding: 1px 5px;
+    }
+
+    /* DELIVERY */
+    .delivery {
+      max-width: 1100px;
+      margin: 56px auto 0;
+      background: var(--ink);
+      color: var(--bg);
+      padding: 36px 32px;
+      border: 2px solid var(--ink);
+      box-shadow: 14px 14px 0 var(--accent);
+    }
+
+    .delivery-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+      margin-bottom: 16px;
+      font-weight: 700;
+    }
+
+    .delivery-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 900;
+      font-size: clamp(24px, 3vw, 32px);
+      line-height: 1.1;
+      margin-bottom: 20px;
+      letter-spacing: -0.02em;
+    }
+
+    .delivery-list {
+      list-style: none;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .delivery-list li {
+      padding: 8px 0;
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.2);
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .delivery-list li:last-child {
+      border-bottom: none;
+    }
+
+    .delivery-list li::before {
+      content: "▸";
+      color: var(--accent);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    /* AUDIENCE */
+    .audience {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      border: 2px solid var(--ink);
+    }
+
+    .aud-cell {
+      padding: 32px 24px;
+      border-right: 2px solid var(--ink);
+      background: var(--bg);
+      transition: background 0.2s ease;
+      min-height: 280px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .aud-cell:last-child {
+      border-right: none;
+    }
+
+    .aud-cell:hover {
+      background: var(--paper);
+    }
+
+    .aud-icon {
+      font-family: 'Fraunces', serif;
+      font-weight: 900;
+      font-size: 56px;
+      line-height: 1;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+
+    .aud-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 900;
+      font-size: 24px;
+      margin-bottom: 12px;
+      letter-spacing: -0.02em;
+    }
+
+    .aud-body {
+      font-size: 13px;
+      line-height: 1.6;
+      flex: 1;
+    }
+
+    /* BENEFITS */
+    .benefits-bg {
+      background: var(--ink);
+      color: var(--bg);
+    }
+
+    .benefits-bg .section-num {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .benefits-bg .section-num strong {
+      color: var(--bg);
+    }
+
+    .benefits {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: rgba(255, 255, 255, 0.15);
+      border: 2px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .benefit {
+      background: var(--ink);
+      padding: 36px 28px;
+      transition: background 0.2s ease;
+    }
+
+    .benefit:hover {
+      background: #1a1a1a;
+    }
+
+    .benefit-num {
+      font-family: 'Fraunces', serif;
+      font-weight: 900;
+      font-size: 14px;
+      color: var(--accent);
+      margin-bottom: 12px;
+      letter-spacing: 0.05em;
+    }
+
+    .benefit-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 22px;
+      line-height: 1.15;
+      margin-bottom: 14px;
+      letter-spacing: -0.02em;
+    }
+
+    .benefit-body {
+      font-size: 13px;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.75);
+    }
+
+    .benefit-stat {
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+    }
+
+    /* PROCESS */
+    .process {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      counter-reset: step;
+    }
+
+    .step {
+      padding: 32px 24px;
+      border-left: 2px solid var(--ink);
+      counter-increment: step;
+    }
+
+    .step:last-child {
+      border-right: 2px solid var(--ink);
+    }
+
+    .step::before {
+      content: counter(step, decimal-leading-zero);
+      font-family: 'Fraunces', serif;
+      font-weight: 900;
+      font-size: 72px;
+      line-height: 1;
+      color: var(--accent);
+      display: block;
+      margin-bottom: 16px;
+      letter-spacing: -0.04em;
+    }
+
+    .step-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 22px;
+      margin-bottom: 10px;
+      letter-spacing: -0.02em;
+    }
+
+    .step-body {
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .step-meta {
+      margin-top: 14px;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+    }
+
+    /* EXAMPLE */
+    .example {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      align-items: stretch;
+    }
+
+    .example-text {
+      padding: 32px;
+      border: 2px solid var(--ink);
+      background: var(--paper);
+    }
+
+    .example-tag {
+      display: inline-block;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      background: var(--accent);
+      color: var(--bg);
+      padding: 4px 10px;
+      margin-bottom: 16px;
+      font-weight: 700;
+    }
+
+    .example-headline {
+      font-family: 'Fraunces', serif;
+      font-weight: 900;
+      font-size: 32px;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+    }
+
+    .example-body {
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .example-list {
+      list-style: none;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      border-top: 1px solid var(--ink);
+      padding-top: 14px;
+    }
+
+    .example-list li {
+      padding: 5px 0;
+      display: flex;
+      gap: 10px;
+    }
+
+    .example-list li::before {
+      content: "▸";
+      color: var(--accent);
+    }
+
+    .skill-md {
+      background: var(--ink);
+      color: var(--bg);
+      padding: 24px;
+      border: 2px solid var(--ink);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      line-height: 1.6;
+      overflow-x: auto;
+      white-space: pre;
+      position: relative;
+    }
+
+    .skill-md::before {
+      content: "SKILL.md";
+      position: absolute;
+      top: 0;
+      right: 0;
+      background: var(--accent);
+      color: var(--bg);
+      padding: 4px 10px;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-weight: 700;
+    }
+
+    .skill-md .com {
+      color: #6b6760;
+    }
+
+    .skill-md .key {
+      color: var(--accent);
+    }
+
+    .skill-md .str {
+      color: #f0c674;
+    }
+
+    .skill-md .head {
+      color: #8abeb7;
+      font-weight: 700;
+    }
+
+    /* PRICING */
+    .pricing {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      border: 2px solid var(--ink);
+    }
+
+    .price-card {
+      background: var(--bg);
+      padding: 36px 28px;
+      border-right: 2px solid var(--ink);
+      display: flex;
+      flex-direction: column;
+      transition: background 0.2s ease;
+    }
+
+    .price-card:last-child {
+      border-right: none;
+    }
+
+    .price-card.featured {
+      background: var(--ink);
+      color: var(--bg);
+      position: relative;
+    }
+
+    .price-card:hover:not(.featured) {
+      background: var(--paper);
+    }
+
+    .price-card.featured::before {
+      content: "EMPFOHLEN";
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      background: var(--accent);
+      color: var(--bg);
+      padding: 5px 12px;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      font-weight: 700;
+    }
+
+    .price-tier {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .price-card.featured .price-tier {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .price-name {
+      font-family: 'Fraunces', serif;
+      font-weight: 900;
+      font-size: 26px;
+      line-height: 1;
+      margin-bottom: 16px;
+      letter-spacing: -0.02em;
+    }
+
+    .price-amount {
+      font-family: 'Fraunces', serif;
+      font-weight: 900;
+      font-size: 48px;
+      line-height: 1;
+      margin-bottom: 6px;
+      letter-spacing: -0.04em;
+    }
+
+    .price-amount sup {
+      font-size: 20px;
+      vertical-align: super;
+    }
+
+    .price-amount sub {
+      font-size: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      font-weight: 400;
+      vertical-align: baseline;
+    }
+
+    .price-card.featured .price-amount sub {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .price-once {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      margin-bottom: 18px;
+      padding-bottom: 14px;
+      border-bottom: 1px dashed currentColor;
+    }
+
+    .price-card.featured .price-once {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .price-desc {
+      font-size: 13px;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .price-list {
+      list-style: none;
+      font-size: 13px;
+      line-height: 1.7;
+      flex: 1;
+      margin-bottom: 24px;
+    }
+
+    .price-list li {
+      padding: 4px 0;
+      display: flex;
+      gap: 10px;
+    }
+
+    .price-list li::before {
+      content: "✓";
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .price-cta {
+      display: inline-block;
+      text-align: center;
+      padding: 14px 20px;
+      border: 2px solid currentColor;
+      text-decoration: none;
+      color: inherit;
+      text-transform: uppercase;
+      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      transition: all 0.15s ease;
+    }
+
+    .price-cta:hover {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: var(--bg);
+    }
+
+    /* ADDONS */
+    .addons {
+      max-width: 1400px;
+      margin: 32px auto 0;
+      padding: 24px 28px;
+      border: 2px dashed var(--ink);
+      background: var(--paper);
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 32px;
+      align-items: center;
+    }
+
+    .addons-label {
+      font-family: 'Fraunces', serif;
+      font-weight: 900;
+      font-size: 22px;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+    }
+
+    .addons-label span {
+      display: block;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 400;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    .addons-list {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .addons-list strong {
+      display: block;
+      color: var(--accent);
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 16px;
+      margin-bottom: 4px;
+      letter-spacing: -0.01em;
+    }
+
+    /* FAQ */
+    .faq {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .faq-item {
+      border-bottom: 1px solid var(--ink);
+    }
+
+    .faq-item:first-child {
+      border-top: 2px solid var(--ink);
+    }
+
+    .faq-item:last-child {
+      border-bottom: 2px solid var(--ink);
+    }
+
+    .faq-q {
+      width: 100%;
+      text-align: left;
+      background: none;
+      border: none;
+      padding: 24px 0;
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 22px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--ink);
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+      gap: 16px;
+    }
+
+    .faq-q::after {
+      content: "+";
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 28px;
+      color: var(--accent);
+      transition: transform 0.2s ease;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .faq-item.open .faq-q::after {
+      transform: rotate(45deg);
+    }
+
+    .faq-a {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .faq-item.open .faq-a {
+      max-height: 700px;
+      padding-bottom: 24px;
+    }
+
+    /* CONTACT */
+    .contact {
+      background: var(--paper);
+    }
+
+    .contact-grid {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: start;
+    }
+
+    .contact-big {
+      font-family: 'Fraunces', serif;
+      font-weight: 900;
+      font-size: clamp(2.2rem, 5vw, 4.2rem);
+      line-height: 0.95;
+      letter-spacing: -0.03em;
+    }
+
+    .contact-big em {
+      color: var(--accent);
+      font-style: italic;
+    }
+
+    .contact-info {
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    .contact-info dt {
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      margin-top: 24px;
+    }
+
+    .contact-info dt:first-child {
+      margin-top: 0;
+    }
+
+    .contact-info dd {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 22px;
+      margin-bottom: 8px;
+    }
+
+    .contact-info a {
+      color: var(--ink);
+      text-decoration: none;
+      border-bottom: 2px solid var(--accent);
+    }
+
+    .contact-info a:hover {
+      background: var(--accent);
+      color: var(--bg);
+    }
+
+    /* FOOTER */
+    .footer {
+      background: var(--ink);
+      color: var(--bg);
+      padding: 32px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .footer-grid {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer a {
+      color: var(--bg);
+      text-decoration: none;
+      opacity: 0.7;
+    }
+
+    .footer a:hover {
+      opacity: 1;
+      color: var(--accent);
+    }
+
+    /* MOBILE */
+    @media (max-width: 900px) {
+      .topbar {
+        padding: 12px 16px;
+        font-size: 10px;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .hero {
+        padding: 48px 16px 40px;
+      }
+
+      .hero-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+
+      .arch {
+        box-shadow: 8px 8px 0 var(--accent);
+      }
+
+      .hero-title {
+        font-size: clamp(2.4rem, 11vw, 4rem);
+      }
+
+      .section {
+        padding: 56px 16px;
+      }
+
+      .section-header {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        margin-bottom: 36px;
+      }
+
+      .how {
+        grid-template-columns: 1fr;
+      }
+
+      .audience {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .aud-cell {
+        border-right: none;
+        min-height: auto;
+      }
+
+      .aud-cell:nth-child(odd) {
+        border-right: 2px solid var(--ink);
+      }
+
+      .aud-cell:not(:last-child):not(:nth-last-child(2)) {
+        border-bottom: 2px solid var(--ink);
+      }
+
+      .benefits {
+        grid-template-columns: 1fr;
+      }
+
+      .process {
+        grid-template-columns: 1fr;
+      }
+
+      .step {
+        border-left: 0;
+        border-top: 2px solid var(--ink);
+        border-right: 2px solid var(--ink);
+      }
+
+      .example {
+        grid-template-columns: 1fr;
+      }
+
+      .pricing {
+        grid-template-columns: 1fr;
+      }
+
+      .price-card {
+        border-right: none;
+        border-bottom: 2px solid var(--ink);
+      }
+
+      .price-card:last-child {
+        border-bottom: none;
+      }
+
+      .addons {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .addons-list {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+
+      .footer-grid {
+        flex-direction: column;
+      }
+
+      .hero-cta-row {
+        flex-direction: column;
+      }
+
+      .cta-primary,
+      .cta-secondary {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 500px) {
+      .audience {
+        grid-template-columns: 1fr;
+      }
+
+      .aud-cell {
+        border-right: none !important;
+        border-bottom: 2px solid var(--ink);
+      }
+
+      .aud-cell:last-child {
+        border-bottom: none;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<!-- TOP BAR -->
-<div class="topbar">
-  <div class="left">
-    <span class="crumb"><a href="/">stevennoack.de</a></span>
-    <span>/</span>
-    <span>Skills</span>
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="left">
+      <span class="crumb"><a href="/">stevennoack.de</a></span>
+      <span>/</span>
+      <span>Skills</span>
+    </div>
+    <div class="right">
+      <span><span class="dot"></span>2 Slots im Monat</span>
+      <a href="#kontakt">Anfragen</a>
+    </div>
   </div>
-  <div class="right">
-    <span><span class="dot"></span>2 Slots im Monat</span>
-    <a href="#kontakt">Anfragen</a>
-  </div>
-</div>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-grid">
-    <div>
-      <div class="hero-meta">
-        <span class="live">● Einmal-Auftrag</span>
-        <span>Google AI Edge Gallery</span>
-        <span>Gemma 4 / On-Device</span>
-        <span>DSGVO-konform</span>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-grid">
+      <div>
+        <div class="hero-meta">
+          <span class="live">● Einmal-Auftrag</span>
+          <span>Google AI Edge Gallery</span>
+          <span>Gemma 4 / On-Device</span>
+          <span>DSGVO-konform</span>
+        </div>
+        <h1 class="hero-title display">
+          <span class="l1">Dein Wissen,</span>
+          <span class="l2">verpackt als</span>
+          <span class="l3">Skill.</span>
+        </h1>
+        <p class="hero-claim">
+          Ich verpacke dein Fachwissen als <strong>Agent Skill</strong> für die Google AI Edge Gallery. Du bekommst die
+          fertigen Skill-Dateien plus eine Anleitung, wo du sie kostenlos bereitstellen kannst, GitHub Pages, Cloudflare
+          Pages, dein eigener Server. Deine Nutzer laden den Skill von dieser URL und haben dich als KI-Begleiter im
+          Smartphone. <strong>Inferenz läuft offline auf dem Gerät.</strong>
+        </p>
+        <div class="hero-cta-row">
+          <a href="#kontakt" class="cta-primary">Skill anfragen</a>
+          <a href="#wie" class="cta-secondary">So läuft das</a>
+        </div>
       </div>
-      <h1 class="hero-title display">
-        <span class="l1">Dein Wissen,</span>
-        <span class="l2">verpackt als</span>
-        <span class="l3">Skill.</span>
-      </h1>
-      <p class="hero-claim">
-        Ich verpacke dein Fachwissen als <strong>Agent Skill</strong> für die Google AI Edge Gallery. Du bekommst die fertigen Skill-Dateien plus eine Anleitung, wo du sie kostenlos bereitstellen kannst — GitHub Pages, Cloudflare Pages, dein eigener Server. Deine Nutzer laden den Skill von dieser URL und haben dich als KI-Begleiter im Smartphone. <strong>Inferenz läuft offline auf dem Gerät.</strong>
-      </p>
-      <div class="hero-cta-row">
-        <a href="#kontakt" class="cta-primary">Skill anfragen</a>
-        <a href="#wie" class="cta-secondary">So läuft das</a>
+      <div>
+        <div class="arch">
+          <svg class="arch-svg" viewBox="0 0 360 320" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <marker id="arro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+                <path d="M0,0 L10,5 L0,10 z" fill="#ff3c00" />
+              </marker>
+            </defs>
+            <rect x="20" y="20" width="320" height="78" fill="#0a0a0a" stroke="#0a0a0a" stroke-width="2" />
+            <text x="36" y="44" font-family="JetBrains Mono, monospace" font-size="10" fill="#ff3c00" font-weight="700"
+              letter-spacing="1.5">DEIN HOSTING (KOSTENLOS MÖGLICH)</text>
+            <text x="36" y="68" font-family="JetBrains Mono, monospace" font-size="11"
+              fill="#f0ede6">deinedomain.de/skill/</text>
+            <text x="36" y="84" font-family="JetBrains Mono, monospace" font-size="11" fill="#f0ede6"> SKILL.md</text>
+            <line x1="180" y1="105" x2="180" y2="148" stroke="#ff3c00" stroke-width="2" marker-end="url(#arro)" />
+            <text x="190" y="130" font-family="JetBrains Mono, monospace" font-size="9" fill="#0a0a0a"
+              letter-spacing="1">LADEN VIA URL</text>
+            <rect x="115" y="155" width="130" height="148" rx="14" fill="#0a0a0a" stroke="#0a0a0a" stroke-width="2" />
+            <rect x="123" y="163" width="114" height="132" rx="8" fill="#f0ede6" />
+            <text x="180" y="186" font-family="JetBrains Mono, monospace" font-size="9" fill="#0a0a0a"
+              text-anchor="middle" font-weight="700" letter-spacing="1">AI EDGE GALLERY</text>
+            <line x1="135" y1="195" x2="225" y2="195" stroke="#0a0a0a" stroke-width="1" />
+            <text x="180" y="214" font-family="Fraunces, serif" font-size="11" fill="#0a0a0a" text-anchor="middle"
+              font-weight="700">Skill aktiv</text>
+            <rect x="138" y="222" width="84" height="14" fill="#ff3c00" />
+            <text x="180" y="232" font-family="JetBrains Mono, monospace" font-size="8" fill="#f0ede6"
+              text-anchor="middle" font-weight="700" letter-spacing="1">DEIN SKILL</text>
+            <text x="180" y="252" font-family="JetBrains Mono, monospace" font-size="8" fill="#0a0a0a"
+              text-anchor="middle">Inferenz: Gemma 4</text>
+            <text x="180" y="266" font-family="JetBrains Mono, monospace" font-size="8" fill="#00863c"
+              text-anchor="middle" font-weight="700">● 100% LOKAL</text>
+            <text x="180" y="282" font-family="JetBrains Mono, monospace" font-size="8" fill="#6b6760"
+              text-anchor="middle">Keine Daten raus</text>
+            <text x="180" y="316" font-family="JetBrains Mono, monospace" font-size="9" fill="#6b6760"
+              text-anchor="middle" letter-spacing="1.5">DU HOSTEST · NUTZER RECHNET LOKAL</text>
+          </svg>
+        </div>
       </div>
     </div>
-    <div>
-      <div class="arch">
-        <svg class="arch-svg" viewBox="0 0 360 320" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <marker id="arro" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
-              <path d="M0,0 L10,5 L0,10 z" fill="#ff3c00"/>
-            </marker>
-          </defs>
-          <rect x="20" y="20" width="320" height="78" fill="#0a0a0a" stroke="#0a0a0a" stroke-width="2"/>
-          <text x="36" y="44" font-family="JetBrains Mono, monospace" font-size="10" fill="#ff3c00" font-weight="700" letter-spacing="1.5">DEIN HOSTING (KOSTENLOS MÖGLICH)</text>
-          <text x="36" y="68" font-family="JetBrains Mono, monospace" font-size="11" fill="#f0ede6">deinedomain.de/skill/</text>
-          <text x="36" y="84" font-family="JetBrains Mono, monospace" font-size="11" fill="#f0ede6">  SKILL.md</text>
-          <line x1="180" y1="105" x2="180" y2="148" stroke="#ff3c00" stroke-width="2" marker-end="url(#arro)"/>
-          <text x="190" y="130" font-family="JetBrains Mono, monospace" font-size="9" fill="#0a0a0a" letter-spacing="1">LADEN VIA URL</text>
-          <rect x="115" y="155" width="130" height="148" rx="14" fill="#0a0a0a" stroke="#0a0a0a" stroke-width="2"/>
-          <rect x="123" y="163" width="114" height="132" rx="8" fill="#f0ede6"/>
-          <text x="180" y="186" font-family="JetBrains Mono, monospace" font-size="9" fill="#0a0a0a" text-anchor="middle" font-weight="700" letter-spacing="1">AI EDGE GALLERY</text>
-          <line x1="135" y1="195" x2="225" y2="195" stroke="#0a0a0a" stroke-width="1"/>
-          <text x="180" y="214" font-family="Fraunces, serif" font-size="11" fill="#0a0a0a" text-anchor="middle" font-weight="700">Skill aktiv</text>
-          <rect x="138" y="222" width="84" height="14" fill="#ff3c00"/>
-          <text x="180" y="232" font-family="JetBrains Mono, monospace" font-size="8" fill="#f0ede6" text-anchor="middle" font-weight="700" letter-spacing="1">DEIN SKILL</text>
-          <text x="180" y="252" font-family="JetBrains Mono, monospace" font-size="8" fill="#0a0a0a" text-anchor="middle">Inferenz: Gemma 4</text>
-          <text x="180" y="266" font-family="JetBrains Mono, monospace" font-size="8" fill="#00863c" text-anchor="middle" font-weight="700">● 100% LOKAL</text>
-          <text x="180" y="282" font-family="JetBrains Mono, monospace" font-size="8" fill="#6b6760" text-anchor="middle">Keine Daten raus</text>
-          <text x="180" y="316" font-family="JetBrains Mono, monospace" font-size="9" fill="#6b6760" text-anchor="middle" letter-spacing="1.5">DU HOSTEST · NUTZER RECHNET LOKAL</text>
-        </svg>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee">
+    <div class="marquee-track">
+      <span>OFFLINE INFERENZ</span><span>DEINE STIMME</span><span>EINMAL
+        ZAHLEN</span><span>DSGVO-KONFORM</span><span>HOSTING KOSTENLOS MÖGLICH</span><span>DU BEHÄLTST DIE
+        DATEIEN</span><span>OFFLINE INFERENZ</span><span>DEINE STIMME</span><span>EINMAL
+        ZAHLEN</span><span>DSGVO-KONFORM</span><span>HOSTING KOSTENLOS MÖGLICH</span><span>DU BEHÄLTST DIE
+        DATEIEN</span>
+    </div>
+  </div>
+
+  <!-- WIE -->
+  <section class="section" id="wie">
+    <div class="section-header">
+      <div class="section-num">Wie es technisch läuft<strong>01</strong></div>
+      <h2 class="section-title display">Zwei Welten,<br><em>klar getrennt</em>.</h2>
+    </div>
+
+    <div class="how">
+      <div class="how-text">
+        <h3>Die <em>Skill-Datei</em>: bei dir</h3>
+        <p>
+          Ein Skill ist im Kern eine <strong>Markdown-Datei</strong> mit Anweisungen, optional erweitert um eine
+          HTML-/JavaScript-Datei für interaktive Elemente. Diese Dateien legst du auf deinem eigenen Hosting ab.
+          <strong>GitHub Pages und Cloudflare Pages sind kostenlos</strong> und dafür perfekt geeignet.
+        </p>
+        <p>
+          Du behältst die Dateien. Änderst du etwas, lädst du es neu hoch, beim nächsten App-Start sehen deine Nutzer
+          die neue Version. Keine Plattform sitzt zwischen dir und deinem Wissen.
+        </p>
+      </div>
+
+      <div class="how-text">
+        <h3>Die <em>Inferenz</em>: beim Nutzer</h3>
+        <p>
+          Sobald die App den Skill geladen hat, läuft die KI komplett auf dem Smartphone deines Nutzers, über
+          <strong>Gemma 4</strong> in der Google AI Edge Gallery. Keine Anfrage geht mehr an einen Server, keine Anfrage
+          geht an Google, keine Anfrage geht an OpenAI.
+        </p>
+        <p>
+          Das Beste aus beiden Welten: Du behältst dein Wissen. Die Nutzer behalten ihre Daten.
+        </p>
       </div>
     </div>
-  </div>
-</section>
 
-<!-- MARQUEE -->
-<div class="marquee">
-  <div class="marquee-track">
-    <span>OFFLINE INFERENZ</span><span>DEINE STIMME</span><span>EINMAL ZAHLEN</span><span>DSGVO-KONFORM</span><span>HOSTING KOSTENLOS MÖGLICH</span><span>DU BEHÄLTST DIE DATEIEN</span><span>OFFLINE INFERENZ</span><span>DEINE STIMME</span><span>EINMAL ZAHLEN</span><span>DSGVO-KONFORM</span><span>HOSTING KOSTENLOS MÖGLICH</span><span>DU BEHÄLTST DIE DATEIEN</span>
-  </div>
-</div>
-
-<!-- WIE -->
-<section class="section" id="wie">
-  <div class="section-header">
-    <div class="section-num">Wie es technisch läuft<strong>01</strong></div>
-    <h2 class="section-title display">Zwei Welten,<br><em>klar getrennt</em>.</h2>
-  </div>
-
-  <div class="how">
-    <div class="how-text">
-      <h3>Die <em>Skill-Datei</em>: bei dir</h3>
-      <p>
-        Ein Skill ist im Kern eine <strong>Markdown-Datei</strong> mit Anweisungen, optional erweitert um eine HTML-/JavaScript-Datei für interaktive Elemente. Diese Dateien legst du auf deinem eigenen Hosting ab — <strong>GitHub Pages und Cloudflare Pages sind kostenlos</strong> und dafür perfekt geeignet.
-      </p>
-      <p>
-        Du behältst die Dateien. Änderst du etwas, lädst du es neu hoch — beim nächsten App-Start sehen deine Nutzer die neue Version. Keine Plattform sitzt zwischen dir und deinem Wissen.
-      </p>
-    </div>
-
-    <div class="how-text">
-      <h3>Die <em>Inferenz</em>: beim Nutzer</h3>
-      <p>
-        Sobald die App den Skill geladen hat, läuft die KI komplett auf dem Smartphone deines Nutzers — über <strong>Gemma 4</strong> in der Google AI Edge Gallery. Keine Anfrage geht mehr an einen Server, keine Anfrage geht an Google, keine Anfrage geht an OpenAI.
-      </p>
-      <p>
-        Das Beste aus beiden Welten: Du behältst dein Wissen. Die Nutzer behalten ihre Daten.
-      </p>
-    </div>
-  </div>
-
-  <!-- WAS DU BEKOMMST -->
-  <div class="delivery">
-    <div class="delivery-label">▸ Was du nach Abschluss bekommst</div>
-    <h3 class="delivery-title">Ein Ordner, eine Anleitung, fertig.</h3>
-    <ul class="delivery-list">
-      <li>Die fertige <strong>SKILL.md</strong> — vollständig, getestet, mit allen Anweisungen, Persona und Grenzen</li>
-      <li>Optional: <strong>scripts/index.html</strong> für interaktive Elemente (bei interaktivem Skill)</li>
-      <li>Eine <strong>Schritt-für-Schritt-Anleitung</strong> für GitHub Pages, Cloudflare Pages und eigenes Hosting</li>
-      <li>Eine <strong>Nutzer-Anleitung</strong> als PDF, die du an deine Klienten weitergeben kannst</li>
-      <li>Auf Wunsch: <strong>Setup-Hilfe</strong> beim Hosting als bezahltes Add-on</li>
-    </ul>
-  </div>
-</section>
-
-<!-- AUDIENCE -->
-<section class="section" id="fuer-wen">
-  <div class="section-header">
-    <div class="section-num">Für wen ich baue<strong>02</strong></div>
-    <h2 class="section-title display">Du hast <em>Wissen</em>.<br>Andere brauchen es täglich.</h2>
-  </div>
-
-  <div class="audience">
-    <div class="aud-cell">
-      <div class="aud-icon">¶</div>
-      <h3 class="aud-title">Verlage</h3>
-      <p class="aud-body">
-        Eure Bücher und Hefte werden zur Wissensquelle eines smarten Begleiters. Leser bekommen den Skill als Teil des Kaufs — ihr behaltet die Hoheit über Inhalt und Verbreitung.
-      </p>
-    </div>
-
-    <div class="aud-cell">
-      <div class="aud-icon">⚇</div>
-      <h3 class="aud-title">Coaches</h3>
-      <p class="aud-body">
-        Deine Methode begleitet Klienten zwischen den Sessions. Sie fragen morgens, abends, im Auto — und bekommen deine Antworten, in deinem Stil.
-      </p>
-    </div>
-
-    <div class="aud-cell">
-      <div class="aud-icon">▲</div>
-      <h3 class="aud-title">Trainer</h3>
-      <p class="aud-body">
-        Dein Curriculum wandert in die Hosentasche der Teilnehmer. Pro Kurs ein Skill, mit Übungen, Korrekturen und Erinnerungen aus deinem System.
-      </p>
-    </div>
-
-    <div class="aud-cell">
-      <div class="aud-icon">✚</div>
-      <h3 class="aud-title">Therapeuten</h3>
-      <p class="aud-body">
-        Patienten haben deine Empfehlungen jederzeit dabei — ohne dass je Daten dein Praxisnetz oder das Smartphone verlassen. Echter Datenschutz, weil alles lokal.
-      </p>
-    </div>
-  </div>
-</section>
-
-<!-- BENEFITS -->
-<section class="section benefits-bg">
-  <div class="section-header">
-    <div class="section-num">Was du gewinnst<strong>03</strong></div>
-    <h2 class="section-title display">Sechs <em>echte</em> Vorteile.</h2>
-  </div>
-
-  <div class="benefits">
-    <div class="benefit">
-      <div class="benefit-num">⊘ 01</div>
-      <h3 class="benefit-title">Du zahlst nur einmal</h3>
-      <p class="benefit-body">
-        Keine monatlichen Lizenzkosten an mich, keine Cloud-Rechnung, keine API-Tokens. Einmal bauen, dann gehört der Skill dir.
-      </p>
-      <div class="benefit-stat">Keine Abhängigkeit von mir</div>
-    </div>
-
-    <div class="benefit">
-      <div class="benefit-num">⊘ 02</div>
-      <h3 class="benefit-title">Hosting kostet dich (fast) nichts</h3>
-      <p class="benefit-body">
-        GitHub Pages und Cloudflare Pages sind für solche Projekte kostenlos. Selbst kommerziell. Du brauchst maximal eine eigene Domain — den Rest deckt der Free-Plan.
-      </p>
-      <div class="benefit-stat">0 € / Monat realistisch</div>
-    </div>
-
-    <div class="benefit">
-      <div class="benefit-num">⊘ 03</div>
-      <h3 class="benefit-title">DSGVO ohne Vertrag</h3>
-      <p class="benefit-body">
-        Nach dem Laden gehen keine Nutzerdaten mehr durch irgendeinen Server. Kein Auftragsverarbeiter, keine Datenschutz-Folgenabschätzung, keine US-Cloud-Diskussion.
-      </p>
-      <div class="benefit-stat">100% lokale Inferenz</div>
-    </div>
-
-    <div class="benefit">
-      <div class="benefit-num">⊘ 04</div>
-      <h3 class="benefit-title">Offline brauchbar</h3>
-      <p class="benefit-body">
-        Einmal geladen, funktioniert der Skill ohne Internet weiter. Im Wartezimmer, im ICE-Tunnel, in der Berghütte — wenn deine Nutzer dich am dringendsten brauchen.
-      </p>
-      <div class="benefit-stat">Funktioniert im Flugmodus</div>
-    </div>
-
-    <div class="benefit">
-      <div class="benefit-num">⊘ 05</div>
-      <h3 class="benefit-title">Deine Stimme, nicht ChatGPT</h3>
-      <p class="benefit-body">
-        Der Skill antwortet in deinem Sprachstil, mit deinen Begriffen, deiner Methodik. Kein generisches KI-Wischiwaschi — sondern erkennbar du.
-      </p>
-      <div class="benefit-stat">Eigene Persona · eigene Quelle</div>
-    </div>
-
-    <div class="benefit">
-      <div class="benefit-num">⊘ 06</div>
-      <h3 class="benefit-title">Du bleibst der Eigentümer</h3>
-      <p class="benefit-body">
-        Du bekommst alle Dateien. Du veröffentlichst sie. Du updatest sie. Keine Plattform sitzt zwischen dir und deinem Wissen — und niemand kann es dir wegnehmen.
-      </p>
-      <div class="benefit-stat">Kein Lock-In · kein Mittelsmann</div>
-    </div>
-  </div>
-</section>
-
-<!-- PROCESS -->
-<section class="section" id="ablauf">
-  <div class="section-header">
-    <div class="section-num">Wie es läuft<strong>04</strong></div>
-    <h2 class="section-title display">Vier Schritte. <em>Drei bis fünf Wochen.</em></h2>
-  </div>
-
-  <div class="process">
-    <div class="step">
-      <h3 class="step-title">Wissen sammeln</h3>
-      <p class="step-body">Du gibst mir, was du hast: Bücher, Skripte, Kursunterlagen, Audio-Mitschnitte, Klient-FAQs. Was vorliegt — vorliegt.</p>
-      <div class="step-meta">~ 1 Woche · Du lieferst</div>
-    </div>
-    <div class="step">
-      <h3 class="step-title">Wissen strukturieren</h3>
-      <p class="step-body">Ich destilliere Methodik, Sprachstil, Grenzen, Eskalations-Regeln. Du bekommst einen Entwurf zur Freigabe — nichts geht weiter ohne dein Ja.</p>
-      <div class="step-meta">~ 1 Woche · Ich arbeite</div>
-    </div>
-    <div class="step">
-      <h3 class="step-title">Skill bauen &amp; testen</h3>
-      <p class="step-body">SKILL.md, optional Webview-Logik. Tests auf echten Geräten mit Gemma 4. Du testest mit. Wir feilen bis es passt.</p>
-      <div class="step-meta">~ 2 Wochen · Wir iterieren</div>
-    </div>
-    <div class="step">
-      <h3 class="step-title">Übergabe</h3>
-      <p class="step-body">Du bekommst alle Dateien plus Anleitungen für Hosting und Nutzer. Du veröffentlichst — oder buchst die Setup-Hilfe als Add-on.</p>
-      <div class="step-meta">~ 1 Woche · Du startest</div>
-    </div>
-  </div>
-</section>
-
-<!-- EXAMPLE -->
-<section class="section" id="beispiel">
-  <div class="section-header">
-    <div class="section-num">Wie das aussieht<strong>05</strong></div>
-    <h2 class="section-title display">Ein <em>echtes</em> Beispiel.</h2>
-  </div>
-
-  <div class="example">
-    <div class="example-text">
-      <span class="example-tag">Heilpraktiker / TCM</span>
-      <h3 class="example-headline">Der "Praxis Wagner"-Skill</h3>
-      <p class="example-body">
-        Eine Heilpraktikerin mit 20 Jahren Erfahrung in TCM. Patienten bekommen nach der Behandlung einen QR-Code mit der Skill-URL. Sie können zwischen den Terminen Fragen stellen — der Skill kennt ihren Stil, ihre Empfehlungen, ihre Grenzen ("Bei Atemnot: Notarzt, nicht ich").
-      </p>
-      <p class="example-body">
-        Frau Wagner hostet die Datei auf Cloudflare Pages — kostenlos. Hat sie eine Änderung, lädt sie die neue Datei hoch. Beim nächsten App-Start ihrer Patienten ist die Aktualisierung da.
-      </p>
-      <ul class="example-list">
-        <li>Beantwortet Patienten-Fragen 24/7</li>
-        <li>Verweist auf Praxis-Termin wenn unklar</li>
-        <li>Erklärt Ernährungs-Prinzipien nach ihrem System</li>
-        <li>Funktioniert im Wartezimmer ohne WLAN</li>
-        <li>Keine Patientendaten verlassen das Handy</li>
+    <!-- WAS DU BEKOMMST -->
+    <div class="delivery">
+      <div class="delivery-label">▸ Was du nach Abschluss bekommst</div>
+      <h3 class="delivery-title">Ein Ordner, eine Anleitung, fertig.</h3>
+      <ul class="delivery-list">
+        <li>Die fertige <strong>SKILL.md</strong>, vollständig, getestet, mit allen Anweisungen, Persona und Grenzen
+        </li>
+        <li>Optional: <strong>scripts/index.html</strong> für interaktive Elemente (bei interaktivem Skill)</li>
+        <li>Eine <strong>Schritt-für-Schritt-Anleitung</strong> für GitHub Pages, Cloudflare Pages und eigenes Hosting
+        </li>
+        <li>Eine <strong>Nutzer-Anleitung</strong> als PDF, die du an deine Klienten weitergeben kannst</li>
+        <li>Auf Wunsch: <strong>Setup-Hilfe</strong> beim Hosting als bezahltes Add-on</li>
       </ul>
     </div>
-    <div class="skill-md"><span class="head">---</span>
-<span class="key">name:</span> <span class="str">praxis-wagner</span>
-<span class="key">description:</span> <span class="str">TCM-Begleiter im Stil
-  von Frau Dr. Wagner. Antwortet
-  auf Fragen zu Ernährung,
-  Akupunktur und Lebenspflege
-  nach den 5 Wandlungsphasen.</span>
-<span class="key">homepage:</span> <span class="str">https://praxis-wagner.de</span>
-<span class="head">---</span>
+  </section>
 
-<span class="head"># Anweisungen</span>
-
-Du bist die digitale Begleitung
-der Praxis Wagner. Du sprichst
-ruhig, klar, ohne Fachjargon zu
-streuen. Du kennst die Methode
-der 5 Wandlungsphasen.
-
-<span class="head">## Grenzen</span>
-
-<span class="com">- Bei akuten Symptomen (Atemnot,
-  Brustschmerz): sofort 112.
-- Keine Diagnosen stellen.
-- Keine Medikamenten-Empfehlung.
-- Auf Praxis-Termin verweisen,
-  wenn unklar.</span>
-
-<span class="head">## Stil</span>
-
-Frau Wagner sagt nie "Studien
-zeigen". Sie sagt: "In meiner
-Erfahrung ist es so, dass..."</div>
-  </div>
-</section>
-
-<!-- PRICING -->
-<section class="section" id="preise">
-  <div class="section-header">
-    <div class="section-num">Was es kostet<strong>06</strong></div>
-    <h2 class="section-title display">Drei Pakete, <em>einmalig</em>.</h2>
-  </div>
-
-  <div class="pricing">
-    <div class="price-card">
-      <div class="price-tier">Einsteiger</div>
-      <h3 class="price-name">Text-Skill</h3>
-      <div class="price-amount"><sup>ab</sup>1.8k €</div>
-      <div class="price-once">einmalig · keine laufenden Kosten</div>
-      <p class="price-desc">Reiner Text-Skill aus deinen Materialien. Persona, Methode, Grenzen — sauber als SKILL.md.</p>
-      <ul class="price-list">
-        <li>Bis 80 Seiten Quellmaterial</li>
-        <li>SKILL.md mit Persona &amp; Methode</li>
-        <li>Klare Grenzen &amp; Eskalations-Regeln</li>
-        <li>Tests auf 2 Geräten (Android/iOS)</li>
-        <li>1 Iterations-Runde</li>
-        <li>Hosting-Anleitung &amp; Nutzer-PDF</li>
-      </ul>
-      <a href="#kontakt" class="price-cta">Anfragen</a>
+  <!-- AUDIENCE -->
+  <section class="section" id="fuer-wen">
+    <div class="section-header">
+      <div class="section-num">Für wen ich baue<strong>02</strong></div>
+      <h2 class="section-title display">Du hast <em>Wissen</em>.<br>Andere brauchen es täglich.</h2>
     </div>
 
-    <div class="price-card featured">
-      <div class="price-tier">Standard</div>
-      <h3 class="price-name">Interaktiver Skill</h3>
-      <div class="price-amount"><sup>ab</sup>3.6k €</div>
-      <div class="price-once">einmalig · keine laufenden Kosten</div>
-      <p class="price-desc">Skill mit JavaScript-Logik im Webview. Rechner, Tracker, geführte Übungen, Visualisierungen.</p>
-      <ul class="price-list">
-        <li>Alles aus Text-Skill</li>
-        <li>JavaScript-Webview-Logik</li>
-        <li>Bis 3 interaktive Werkzeuge</li>
-        <li>Bis 200 Seiten Quellmaterial</li>
-        <li>Visuelle Ausgabe-Karten</li>
-        <li>3 Iterations-Runden</li>
-      </ul>
-      <a href="#kontakt" class="price-cta">Anfragen</a>
-    </div>
+    <div class="audience">
+      <div class="aud-cell">
+        <div class="aud-icon">¶</div>
+        <h3 class="aud-title">Verlage</h3>
+        <p class="aud-body">
+          Eure Bücher und Hefte werden zur Wissensquelle eines smarten Begleiters. Leser bekommen den Skill als Teil des
+          Kaufs,ihr behaltet die Hoheit über Inhalt und Verbreitung.
+        </p>
+      </div>
 
-    <div class="price-card">
-      <div class="price-tier">Verlag / Reihe</div>
-      <h3 class="price-name">Skill-System</h3>
-      <div class="price-amount">auf Anfrage</div>
-      <div class="price-once">individueller Umfang</div>
-      <p class="price-desc">Mehrere Skills für eine Buchreihe, ein Curriculum oder ein Praxis-Netzwerk.</p>
-      <ul class="price-list">
-        <li>Mehrere zusammenhängende Skills</li>
-        <li>Gemeinsame Persona-Architektur</li>
-        <li>Schulung deines Teams</li>
-        <li>Optional: Web-Variante des Skills</li>
-        <li>Optional: Update-Pipeline-Setup</li>
-      </ul>
-      <a href="#kontakt" class="price-cta">Gespräch</a>
-    </div>
-  </div>
+      <div class="aud-cell">
+        <div class="aud-icon">⚇</div>
+        <h3 class="aud-title">Coaches</h3>
+        <p class="aud-body">
+          Deine Methode begleitet Klienten zwischen den Sessions. Sie fragen morgens, abends, im Auto und bekommen deine
+          Antworten, in deinem Stil.
+        </p>
+      </div>
 
-  <div class="addons">
-    <div class="addons-label">Add-ons<span>auf Anfrage buchbar</span></div>
-    <div class="addons-list">
-      <div><strong>Setup-Hilfe</strong>Ich richte dir GitHub Pages oder Cloudflare Pages ein, inkl. Domain-Setup.</div>
-      <div><strong>Updates</strong>Inhaltliche Erweiterungen oder Korrekturen — auf Anfrage, je nach Aufwand.</div>
-      <div><strong>Web-Variante</strong>Dieselbe Wissensbasis als Chatbot für deine Website.</div>
-    </div>
-  </div>
-</section>
+      <div class="aud-cell">
+        <div class="aud-icon">▲</div>
+        <h3 class="aud-title">Trainer</h3>
+        <p class="aud-body">
+          Dein Curriculum wandert in die Hosentasche der Teilnehmer. Pro Kurs ein Skill, mit Übungen, Korrekturen und
+          Erinnerungen aus deinem System.
+        </p>
+      </div>
 
-<!-- FAQ -->
-<section class="section">
-  <div class="section-header">
-    <div class="section-num">Was oft gefragt wird<strong>07</strong></div>
-    <h2 class="section-title display">FAQ <em>kurz</em>.</h2>
-  </div>
-
-  <div class="faq">
-    <div class="faq-item">
-      <button class="faq-q">Moment — läuft die KI auf einem Server oder auf dem Handy?</button>
-      <div class="faq-a">
-        Auf dem Handy. Dein Hosting liefert nur die Skill-Datei aus (Persona, Anweisungen, optional JavaScript). Sobald die App den Skill geladen hat, rechnet das Sprachmodell Gemma 4 komplett offline auf dem Smartphone deines Nutzers. Niemand sieht, was deine Nutzer fragen oder was geantwortet wird.
+      <div class="aud-cell">
+        <div class="aud-icon">✚</div>
+        <h3 class="aud-title">Therapeuten</h3>
+        <p class="aud-body">
+          Patienten haben deine Empfehlungen jederzeit dabei, ohne dass je Daten dein Praxisnetz oder das Smartphone
+          verlassen. Echter Datenschutz, weil alles lokal.
+        </p>
       </div>
     </div>
-    <div class="faq-item">
-      <button class="faq-q">Was ist die Google AI Edge Gallery überhaupt?</button>
-      <div class="faq-a">
-        Eine kostenlose App von Google für Android und iOS. Sie lässt offene Sprachmodelle (Gemma 4) komplett auf dem Smartphone laufen — ohne Internet. "Skills" sind Erweiterungs-Module, die dem Modell Wissen, Persönlichkeit oder Werkzeuge geben. Genau die baue ich für dich.
+  </section>
+
+  <!-- BENEFITS -->
+  <section class="section benefits-bg">
+    <div class="section-header">
+      <div class="section-num">Was du gewinnst<strong>03</strong></div>
+      <h2 class="section-title display">Sechs <em>echte</em> Vorteile.</h2>
+    </div>
+
+    <div class="benefits">
+      <div class="benefit">
+        <div class="benefit-num">⊘ 01</div>
+        <h3 class="benefit-title">Du zahlst nur einmal</h3>
+        <p class="benefit-body">
+          Keine monatlichen Lizenzkosten an mich, keine Cloud-Rechnung, keine API-Tokens. Einmal bauen, dann gehört der
+          Skill dir.
+        </p>
+        <div class="benefit-stat">Keine Abhängigkeit von mir</div>
+      </div>
+
+      <div class="benefit">
+        <div class="benefit-num">⊘ 02</div>
+        <h3 class="benefit-title">Hosting kostet dich (fast) nichts</h3>
+        <p class="benefit-body">
+          GitHub Pages und Cloudflare Pages sind für solche Projekte kostenlos. Selbst kommerziell. Du brauchst maximal
+          eine eigene Domain,den Rest deckt der Free-Plan.
+        </p>
+        <div class="benefit-stat">0 € / Monat realistisch</div>
+      </div>
+
+      <div class="benefit">
+        <div class="benefit-num">⊘ 03</div>
+        <h3 class="benefit-title">DSGVO ohne Vertrag</h3>
+        <p class="benefit-body">
+          Nach dem Laden gehen keine Nutzerdaten mehr durch irgendeinen Server. Kein Auftragsverarbeiter, keine
+          Datenschutz-Folgenabschätzung, keine US-Cloud-Diskussion.
+        </p>
+        <div class="benefit-stat">100% lokale Inferenz</div>
+      </div>
+
+      <div class="benefit">
+        <div class="benefit-num">⊘ 04</div>
+        <h3 class="benefit-title">Offline brauchbar</h3>
+        <p class="benefit-body">
+          Einmal geladen, funktioniert der Skill ohne Internet weiter. Im Wartezimmer, im ICE-Tunnel, in der Berghütte,
+          wenn deine Nutzer dich am dringendsten brauchen.
+        </p>
+        <div class="benefit-stat">Funktioniert im Flugmodus</div>
+      </div>
+
+      <div class="benefit">
+        <div class="benefit-num">⊘ 05</div>
+        <h3 class="benefit-title">Deine Stimme, nicht ChatGPT</h3>
+        <p class="benefit-body">
+          Der Skill antwortet in deinem Sprachstil, mit deinen Begriffen, deiner Methodik. Kein generisches
+          KI-Wischiwaschi, sondern erkennbar du.
+        </p>
+        <div class="benefit-stat">Eigene Persona · eigene Quelle</div>
+      </div>
+
+      <div class="benefit">
+        <div class="benefit-num">⊘ 06</div>
+        <h3 class="benefit-title">Du bleibst der Eigentümer</h3>
+        <p class="benefit-body">
+          Du bekommst alle Dateien. Du veröffentlichst sie. Du updatest sie. Keine Plattform sitzt zwischen dir und
+          deinem Wissen und niemand kann es dir wegnehmen.
+        </p>
+        <div class="benefit-stat">Kein Lock-In · kein Mittelsmann</div>
       </div>
     </div>
-    <div class="faq-item">
-      <button class="faq-q">Wo lege ich die Skill-Dateien ab? Brauche ich einen Server?</button>
-      <div class="faq-a">
-        Ein "Server" im klassischen Sinn nicht. GitHub Pages und Cloudflare Pages reichen vollkommen aus — beide kostenlos, auch kommerziell. Wenn du eine eigene Domain hast, kannst du die einbinden. In der Anleitung, die du mit dem Skill bekommst, zeige ich dir Schritt für Schritt beide Wege. Wenn du dir das nicht selbst zutraust, kannst du die Setup-Hilfe als Add-on buchen.
+  </section>
+
+  <!-- PROCESS -->
+  <section class="section" id="ablauf">
+    <div class="section-header">
+      <div class="section-num">Wie es läuft<strong>04</strong></div>
+      <h2 class="section-title display">Vier Schritte. <em>Drei bis fünf Wochen.</em></h2>
+    </div>
+
+    <div class="process">
+      <div class="step">
+        <h3 class="step-title">Wissen sammeln</h3>
+        <p class="step-body">Du gibst mir, was du hast: Bücher, Skripte, Kursunterlagen, Audio-Mitschnitte, Klient-FAQs.
+          Was vorliegt, vorliegt.</p>
+        <div class="step-meta">~ 1 Woche · Du lieferst</div>
+      </div>
+      <div class="step">
+        <h3 class="step-title">Wissen strukturieren</h3>
+        <p class="step-body">Ich destilliere Methodik, Sprachstil, Grenzen, Eskalations-Regeln. Du bekommst einen
+          Entwurf zur Freigabe, nichts geht weiter ohne dein Ja.</p>
+        <div class="step-meta">~ 1 Woche · Ich arbeite</div>
+      </div>
+      <div class="step">
+        <h3 class="step-title">Skill bauen &amp; testen</h3>
+        <p class="step-body">SKILL.md, optional Webview-Logik. Tests auf echten Geräten mit Gemma 4. Du testest mit. Wir
+          feilen bis es passt.</p>
+        <div class="step-meta">~ 2 Wochen · Wir iterieren</div>
+      </div>
+      <div class="step">
+        <h3 class="step-title">Übergabe</h3>
+        <p class="step-body">Du bekommst alle Dateien plus Anleitungen für Hosting und Nutzer. Du veröffentlichst oder
+          buchst die Setup-Hilfe als Add-on.</p>
+        <div class="step-meta">~ 1 Woche · Du startest</div>
       </div>
     </div>
-    <div class="faq-item">
-      <button class="faq-q">Kann ich den Skill selbst ändern, nachdem du ihn übergeben hast?</button>
-      <div class="faq-a">
-        Ja. Der Skill ist eine Markdown-Datei plus optional HTML/JS. Texte kannst du selbst in jedem Editor bearbeiten — ich zeige dir wie. Für grössere Änderungen oder Erweiterungen kannst du jederzeit zurückkommen, das machen wir dann auf Anfrage.
+  </section>
+
+  <!-- EXAMPLE -->
+  <section class="section" id="beispiel">
+    <div class="section-header">
+      <div class="section-num">Wie das aussieht<strong>05</strong></div>
+      <h2 class="section-title display">Ein <em>echtes</em> Beispiel.</h2>
+    </div>
+
+    <div class="example">
+      <div class="example-text">
+        <span class="example-tag">Heilpraktiker / TCM</span>
+        <h3 class="example-headline">Der "Praxis Wagner"-Skill</h3>
+        <p class="example-body">
+          Eine Heilpraktikerin mit 20 Jahren Erfahrung in TCM. Patienten bekommen nach der Behandlung einen QR-Code mit
+          der Skill-URL. Sie können zwischen den Terminen Fragen stellen, der Skill kennt ihren Stil, ihre Empfehlungen,
+          ihre Grenzen ("Bei Atemnot: Notarzt, nicht ich").
+        </p>
+        <p class="example-body">
+          Frau Wagner hostet die Datei auf Cloudflare Pages kostenlos. Hat sie eine Änderung, lädt sie die neue Datei
+          hoch. Beim nächsten App-Start ihrer Patienten ist die Aktualisierung da.
+        </p>
+        <ul class="example-list">
+          <li>Beantwortet Patienten-Fragen 24/7</li>
+          <li>Verweist auf Praxis-Termin wenn unklar</li>
+          <li>Erklärt Ernährungs-Prinzipien nach ihrem System</li>
+          <li>Funktioniert im Wartezimmer ohne WLAN</li>
+          <li>Keine Patientendaten verlassen das Handy</li>
+        </ul>
+      </div>
+      <div class="skill-md"><span class="head">---</span>
+        <span class="key">name:</span> <span class="str">praxis-wagner</span>
+        <span class="key">description:</span> <span class="str">TCM-Begleiter im Stil
+          von Frau Dr. Wagner. Antwortet
+          auf Fragen zu Ernährung,
+          Akupunktur und Lebenspflege
+          nach den 5 Wandlungsphasen.</span>
+        <span class="key">homepage:</span> <span class="str">https://praxis-wagner.de</span>
+        <span class="head">---</span>
+
+        <span class="head"># Anweisungen</span>
+
+        Du bist die digitale Begleitung
+        der Praxis Wagner. Du sprichst
+        ruhig, klar, ohne Fachjargon zu
+        streuen. Du kennst die Methode
+        der 5 Wandlungsphasen.
+
+        <span class="head">## Grenzen</span>
+
+        <span class="com">- Bei akuten Symptomen (Atemnot,
+          Brustschmerz): sofort 112.
+          - Keine Diagnosen stellen.
+          - Keine Medikamenten-Empfehlung.
+          - Auf Praxis-Termin verweisen,
+          wenn unklar.</span>
+
+        <span class="head">## Stil</span>
+
+        Frau Wagner sagt nie "Studien
+        zeigen". Sie sagt: "In meiner
+        Erfahrung ist es so, dass..."
       </div>
     </div>
-    <div class="faq-item">
-      <button class="faq-q">Brauchen meine Nutzer ein neues Smartphone?</button>
-      <div class="faq-a">
-        Android 12 oder neuer, iOS 17 oder neuer. Das deckt die meisten Geräte der letzten 4 Jahre ab. Die Modelle laufen auch auf Mittelklasse-Hardware — Gemma 4 E2B braucht unter 1,5 GB RAM.
+  </section>
+
+  <!-- PRICING -->
+  <section class="section" id="preise">
+    <div class="section-header">
+      <div class="section-num">Was es kostet<strong>06</strong></div>
+      <h2 class="section-title display">Drei Pakete, <em>einmalig</em>.</h2>
+    </div>
+
+    <div class="pricing">
+      <div class="price-card">
+        <div class="price-tier">Einsteiger</div>
+        <h3 class="price-name">Text-Skill</h3>
+        <div class="price-amount"><sup>ab</sup>1.8k €</div>
+        <div class="price-once">einmalig · keine laufenden Kosten</div>
+        <p class="price-desc">Reiner Text-Skill aus deinen Materialien. Persona, Methode, Grenzen sauber als SKILL.md.
+        </p>
+        <ul class="price-list">
+          <li>Bis 80 Seiten Quellmaterial</li>
+          <li>SKILL.md mit Persona &amp; Methode</li>
+          <li>Klare Grenzen &amp; Eskalations-Regeln</li>
+          <li>Tests auf 2 Geräten (Android/iOS)</li>
+          <li>1 Iterations-Runde</li>
+          <li>Hosting-Anleitung &amp; Nutzer-PDF</li>
+        </ul>
+        <a href="#kontakt" class="price-cta">Anfragen</a>
+      </div>
+
+      <div class="price-card featured">
+        <div class="price-tier">Standard</div>
+        <h3 class="price-name">Interaktiver Skill</h3>
+        <div class="price-amount"><sup>ab</sup>3.6k €</div>
+        <div class="price-once">einmalig · keine laufenden Kosten</div>
+        <p class="price-desc">Skill mit JavaScript-Logik im Webview. Rechner, Tracker, geführte Übungen,
+          Visualisierungen.</p>
+        <ul class="price-list">
+          <li>Alles aus Text-Skill</li>
+          <li>JavaScript-Webview-Logik</li>
+          <li>Bis 3 interaktive Werkzeuge</li>
+          <li>Bis 200 Seiten Quellmaterial</li>
+          <li>Visuelle Ausgabe-Karten</li>
+          <li>3 Iterations-Runden</li>
+        </ul>
+        <a href="#kontakt" class="price-cta">Anfragen</a>
+      </div>
+
+      <div class="price-card">
+        <div class="price-tier">Verlag / Reihe</div>
+        <h3 class="price-name">Skill-System</h3>
+        <div class="price-amount">auf Anfrage</div>
+        <div class="price-once">individueller Umfang</div>
+        <p class="price-desc">Mehrere Skills für eine Buchreihe, ein Curriculum oder ein Praxis-Netzwerk.</p>
+        <ul class="price-list">
+          <li>Mehrere zusammenhängende Skills</li>
+          <li>Gemeinsame Persona-Architektur</li>
+          <li>Schulung deines Teams</li>
+          <li>Optional: Web-Variante des Skills</li>
+          <li>Optional: Update-Pipeline-Setup</li>
+        </ul>
+        <a href="#kontakt" class="price-cta">Gespräch</a>
       </div>
     </div>
-    <div class="faq-item">
-      <button class="faq-q">Was ist mit Haftung und Falschauskünften?</button>
-      <div class="faq-a">
-        Wichtiger Punkt — gerade bei Therapeuten und Coaches. Jeder Skill bekommt klar definierte Grenzen: was er sagt, was er nicht sagt, wann er auf dich oder einen Notruf verweist. Diese Eskalations-Regeln entwerfen wir gemeinsam. Die rechtliche Risikoabwägung bleibt deine Verantwortung — ich rate immer dazu, vorab kurz mit deinem Berufsverband oder Anwalt zu sprechen.
+
+    <div class="addons">
+      <div class="addons-label">Add-ons<span>auf Anfrage buchbar</span></div>
+      <div class="addons-list">
+        <div><strong>Setup-Hilfe</strong>Ich richte dir GitHub Pages oder Cloudflare Pages ein, inkl. Domain-Setup.
+        </div>
+        <div><strong>Updates</strong>Inhaltliche Erweiterungen oder Korrekturen auf Anfrage, je nach Aufwand.</div>
+        <div><strong>Web-Variante</strong>Dieselbe Wissensbasis als Chatbot für deine Website.</div>
       </div>
     </div>
-    <div class="faq-item">
-      <button class="faq-q">Wie verteilen meine Nutzer den Skill?</button>
-      <div class="faq-a">
-        Du gibst ihnen die URL deines Hostings — auf einer Karte, einem QR-Code, in einer Mail. In der Edge Gallery App tippen sie auf "Skill von URL laden", einmal kleben — fertig.
+  </section>
+
+  <!-- FAQ -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-num">Was oft gefragt wird<strong>07</strong></div>
+      <h2 class="section-title display">FAQ <em>kurz</em>.</h2>
+    </div>
+
+    <div class="faq">
+      <div class="faq-item">
+        <button class="faq-q">Moment, läuft die KI auf einem Server oder auf dem Handy?</button>
+        <div class="faq-a">
+          Auf dem Handy. Dein Hosting liefert nur die Skill-Datei aus (Persona, Anweisungen, optional JavaScript).
+          Sobald die App den Skill geladen hat, rechnet das Sprachmodell Gemma 4 komplett offline auf dem Smartphone
+          deines Nutzers. Niemand sieht, was deine Nutzer fragen oder was geantwortet wird.
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Was ist die Google AI Edge Gallery überhaupt?</button>
+        <div class="faq-a">
+          Eine kostenlose App von Google für Android und iOS. Sie lässt offene Sprachmodelle (Gemma 4) komplett auf dem
+          Smartphone laufen, ohne Internet. "Skills" sind Erweiterungs-Module, die dem Modell Wissen, Persönlichkeit
+          oder Werkzeuge geben. Genau die baue ich für dich.
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Wo lege ich die Skill-Dateien ab? Brauche ich einen Server?</button>
+        <div class="faq-a">
+          Ein "Server" im klassischen Sinn nicht. GitHub Pages und Cloudflare Pages reichen vollkommen aus, beide
+          kostenlos, auch kommerziell. Wenn du eine eigene Domain hast, kannst du die einbinden. In der Anleitung, die
+          du mit dem Skill bekommst, zeige ich dir Schritt für Schritt beide Wege. Wenn du dir das nicht selbst
+          zutraust, kannst du die Setup-Hilfe als Add-on buchen.
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Kann ich den Skill selbst ändern, nachdem du ihn übergeben hast?</button>
+        <div class="faq-a">
+          Ja. Der Skill ist eine Markdown-Datei plus optional HTML/JS. Texte kannst du selbst in jedem Editor
+          bearbeiten,ich zeige dir wie. Für grössere Änderungen oder Erweiterungen kannst du jederzeit zurückkommen, das
+          machen wir dann auf Anfrage.
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Brauchen meine Nutzer ein neues Smartphone?</button>
+        <div class="faq-a">
+          Android 12 oder neuer, iOS 17 oder neuer. Das deckt die meisten Geräte der letzten 4 Jahre ab. Die Modelle
+          laufen auch auf Mittelklasse-Hardware, Gemma 4 E2B braucht unter 1,5 GB RAM.
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Was ist mit Haftung und Falschauskünften?</button>
+        <div class="faq-a">
+          Wichtiger Punkt gerade bei Therapeuten und Coaches. Jeder Skill bekommt klar definierte Grenzen: was er sagt,
+          was er nicht sagt, wann er auf dich oder einen Notruf verweist. Diese Eskalations-Regeln entwerfen wir
+          gemeinsam. Die rechtliche Risikoabwägung bleibt deine Verantwortung. Ich rate immer dazu, vorab kurz mit
+          deinem Berufsverband oder Anwalt zu sprechen.
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Wie verteilen meine Nutzer den Skill?</button>
+        <div class="faq-a">
+          Du gibst ihnen die URL deines Hostings auf einer Karte, einem QR-Code, in einer Mail. In der Edge Gallery App
+          tippen sie auf "Skill von URL laden", einmal kleben und fertig.
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Kann der Skill auch online zugänglich sein, nicht nur in der App?</button>
+        <div class="faq-a">
+          Ja. Die gleiche Wissensbasis kann ich parallel als Web-Skill bauen, z.B. eine ChatGPT-/Claude-Variante oder
+          ein eigener Chatbot auf deiner Website. Für Verlage und Coaches mit grosser Reichweite oft sinnvoll. Sprich
+          mich darauf an.
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Was, wenn Google das Projekt einstellt?</button>
+        <div class="faq-a">
+          Realistische Frage. Die Skills sind Apache-2.0-Lizenz und das Konzept (Markdown plus JavaScript-Webview) ist
+          offen. Das Format wird absehbar von anderen On-Device-Apps übernommen werden. Selbst im schlimmsten Fall
+          behältst du dein strukturiertes Wissen und das ist die eigentliche Arbeit.
+        </div>
       </div>
     </div>
-    <div class="faq-item">
-      <button class="faq-q">Kann der Skill auch online zugänglich sein, nicht nur in der App?</button>
-      <div class="faq-a">
-        Ja. Die gleiche Wissensbasis kann ich parallel als Web-Skill bauen — z.B. eine ChatGPT-/Claude-Variante oder ein eigener Chatbot auf deiner Website. Für Verlage und Coaches mit grosser Reichweite oft sinnvoll. Sprich mich darauf an.
+  </section>
+
+  <!-- CONTACT -->
+  <section class="section contact" id="kontakt">
+    <div class="section-header">
+      <div class="section-num">So fängt es an<strong>08</strong></div>
+      <h2 class="section-title display">Schreib <em>kurz</em>.<br>Ich antworte.</h2>
+    </div>
+
+    <div class="contact-grid">
+      <div class="contact-big display">
+        Sag mir <em>was du hast</em><br>
+        und für <em>wen</em>.<br>
+        Den Rest klären wir.
+      </div>
+      <div>
+        <dl class="contact-info">
+          <dt>Formular</dt>
+          <dd><a href="/kontakt">stevennoack.de/kontakt</a></dd>
+
+          <dt>E-Mail</dt>
+          <dd><a href="mailto:kontakt@stevennoack.de?subject=Skill-Anfrage">kontakt@stevennoack.de</a></dd>
+
+          <dt>Erstgespräch</dt>
+          <dd>30 Minuten, kostenfrei, online</dd>
+
+          <dt>Antwortzeit</dt>
+          <dd>meist unter 24 Stunden</dd>
+
+          <dt>Aktuell frei</dt>
+          <dd>2 Slots im Monat</dd>
+        </dl>
       </div>
     </div>
-    <div class="faq-item">
-      <button class="faq-q">Was, wenn Google das Projekt einstellt?</button>
-      <div class="faq-a">
-        Realistische Frage. Die Skills sind Apache-2.0-Lizenz und das Konzept (Markdown plus JavaScript-Webview) ist offen. Das Format wird absehbar von anderen On-Device-Apps übernommen werden. Selbst im schlimmsten Fall behältst du dein strukturiertes Wissen — und das ist die eigentliche Arbeit.
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div>© Steven Noack — Oderbruch, Brandenburg</div>
+      <div>
+        <a href="/">Hauptseite</a> &nbsp;·&nbsp;
+        <a href="/vision.html">Vision</a> &nbsp;·&nbsp;
+        <a href="/lesestueck.html">Lesestück</a> &nbsp;·&nbsp;
+        <a href="/kontakt">Kontakt</a> &nbsp;·&nbsp;
+        <a href="/rechtliches">Impressum</a>
       </div>
+      <div>Skills · Offline · Souverän</div>
     </div>
-  </div>
-</section>
+  </footer>
 
-<!-- CONTACT -->
-<section class="section contact" id="kontakt">
-  <div class="section-header">
-    <div class="section-num">So fängt es an<strong>08</strong></div>
-    <h2 class="section-title display">Schreib <em>kurz</em>.<br>Ich antworte.</h2>
-  </div>
-
-  <div class="contact-grid">
-    <div class="contact-big display">
-      Sag mir <em>was du hast</em><br>
-      und für <em>wen</em>.<br>
-      Den Rest klären wir.
-    </div>
-    <div>
-      <dl class="contact-info">
-        <dt>Formular</dt>
-        <dd><a href="/kontakt">stevennoack.de/kontakt</a></dd>
-
-        <dt>E-Mail</dt>
-        <dd><a href="mailto:kontakt@stevennoack.de?subject=Skill-Anfrage">kontakt@stevennoack.de</a></dd>
-
-        <dt>Erstgespräch</dt>
-        <dd>30 Minuten, kostenfrei, online</dd>
-
-        <dt>Antwortzeit</dt>
-        <dd>meist unter 24 Stunden</dd>
-
-        <dt>Aktuell frei</dt>
-        <dd>2 Slots im Monat</dd>
-      </dl>
-    </div>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer class="footer">
-  <div class="footer-grid">
-    <div>© Steven Noack — Alt Tucheband, Brandenburg</div>
-    <div>
-      <a href="/">Hauptseite</a> &nbsp;·&nbsp;
-      <a href="/vision.html">Vision</a> &nbsp;·&nbsp;
-      <a href="/lesestueck.html">Lesestück</a> &nbsp;·&nbsp;
-      <a href="/kontakt">Kontakt</a> &nbsp;·&nbsp;
-      <a href="/rechtliches">Impressum</a>
-    </div>
-    <div>Skills · Offline · Souverän</div>
-  </div>
-</footer>
-
-<script>
-  document.querySelectorAll('.faq-q').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const item = btn.parentElement;
-      const wasOpen = item.classList.contains('open');
-      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
-      if (!wasOpen) item.classList.add('open');
+  <script>
+    document.querySelectorAll('.faq-q').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const item = btn.parentElement;
+        const wasOpen = item.classList.contains('open');
+        document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+        if (!wasOpen) item.classList.add('open');
+      });
     });
-  });
-</script>
+  </script>
 
 </body>
+
 </html>
