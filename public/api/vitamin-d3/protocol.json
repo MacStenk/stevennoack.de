@@ -1,0 +1,180 @@
+{
+  "$schema": "https://stevennoack.de/api/schema/protocol-v1.json",
+  "id": "vitamin-d3",
+  "title": "Vitamin D3 Protokoll",
+  "tagline": "Was du wirklich brauchst, was Geldverschwendung ist, und warum dein Körper das eine vom anderen nicht unterscheiden kann",
+  "subtitle": "Ein ehrlicher Einkaufsführer für Leute, die keine Biochemie studiert haben. Aber trotzdem verstehen wollen, was sie schlucken.",
+  "author": "Steven Noack",
+  "author_url": "https://stevennoack.de",
+  "license": "CC BY 4.0",
+  "license_note": "Weitergeben erwünscht. Bedingung: Nennung des Autors.",
+  "version": "2026-03",
+  "language": "de",
+
+  "introduction": {
+    "why_this_exists": "Die meisten Menschen kaufen Supplemente wie sie Waschmittel kaufen: Das steht 'Vitamin D' drauf, also wird's schon Vitamin D sein. Das Problem: Bei Nahrungsergänzungsmitteln ist der Unterschied zwischen einem 5-Euro-Produkt und einem 15-Euro-Produkt nicht die Menge. Es ist die Frage, ob dein Körper überhaupt etwas damit anfangen kann.\n\nDieser Guide erklärt sechs Supplemente. Nicht weil sechs eine magische Zahl wäre, sondern weil diese sechs zusammen ein System bilden. Sie brauchen einander. Und genau das verschweigen dir die meisten Hersteller, weil sie lieber sechs einzelne Produkte verkaufen als dir zu erklären, warum du sie zusammen brauchst.\n\nAm Ende steht eine konkrete Einkaufsliste mit drei Preisstufen: 28 Euro im Monat, 50 Euro im Monat, oder 'Geld spielt keine Rolle'. Alle drei funktionieren. Der Unterschied liegt im Detail, nicht im Ergebnis.",
+
+    "the_system": "Bevor wir über einzelne Vitamine reden, musst du eine Sache verstehen: Dein Körper ist kein Sammelbecken. Du kannst nicht einfach Nährstoffe reinwerfen und hoffen, dass sie ankommen. Es gibt eine Kette, und jedes Glied muss funktionieren.\n\nDie Kette sieht so aus:\n\n1. Magensäure (Betain HCL) zerlegt dein Essen in Einzelteile\n2. Gallensäure (TUDCA) sorgt dafür, dass Fette aufgenommen werden können\n3. Magnesium aktiviert über 300 Enzyme in deinem Körper\n4. B-Vitamine treiben den Zellstoffwechsel an\n5. Vitamin D3 holt Calcium aus dem Darm ins Blut\n6. Vitamin K2 sagt dem Calcium, wo es hin soll (Knochen, nicht Arterien)\n7. Omega-3 hält deine Zellmembranen geschmeidig und Entzündungen in Schach\n\nWenn du Vitamin D nimmst, aber kein K2 dazu, landet das Calcium in deinen Blutgefässen statt in deinen Knochen. Wenn du Magnesium nimmst, aber deine Magensäure zu schwach ist, geht das meiste ungenutzt wieder raus. Wenn dein B-Komplex die falschen Formen enthält, muss deine Leber Überstunden schieben, um sie umzubauen. Und bei jedem dritten Menschen in Europa funktioniert genau dieser Umbau genetisch nicht richtig.\n\nDas ist kein Hokuspokus. Das ist Biochemie. Und sie erklärt, warum manche Leute jahrelang Supplements nehmen und nichts merken."
+  },
+
+  "thesis": "Vitamin D3 allein wirkt nicht. Ohne die richtigen Co-Faktoren kommt es nicht in die Zellen und lässt sich nicht im Blutspiegel nachweisen. Dieses Protokoll erklärt, was neben D3 stehen muss — und warum.",
+
+  "target_supplement": {
+    "id": "d3-k2",
+    "name": "Vitamin D3 + K2",
+    "role": "Das Ziel — soll in die Zelle und im Blutspiegel messbar werden",
+    "endpoint": "/api/vitamin-d3/supplement/d3-k2.json"
+  },
+
+  "prerequisites": [
+    {
+      "id": "betain-hcl",
+      "role": "Stellt Magensäure her — ohne genug Säure werden Mineralstoffe und fettlösliche Vitamine nicht aufgenommen",
+      "endpoint": "/api/vitamin-d3/supplement/betain-hcl.json"
+    },
+    {
+      "id": "tudca",
+      "role": "Sorgt für Gallefluss — fettlösliche Vitamine wie D3 brauchen Galle zur Aufnahme",
+      "endpoint": "/api/vitamin-d3/supplement/tudca.json"
+    },
+    {
+      "id": "magnesium",
+      "role": "Aktiviert D3 — ohne Magnesium bleibt D3 biologisch inaktiv, egal wie hoch dosiert",
+      "endpoint": "/api/vitamin-d3/supplement/magnesium.json"
+    },
+    {
+      "id": "b-komplex",
+      "role": "Treibt den Zellstoffwechsel an, in dem D3 wirken soll",
+      "endpoint": "/api/vitamin-d3/supplement/b-komplex.json"
+    },
+    {
+      "id": "omega-3",
+      "role": "Hält Zellmembranen geschmeidig, damit D3-abhängige Signale überhaupt durchkommen",
+      "endpoint": "/api/vitamin-d3/supplement/omega-3.json"
+    }
+  ],
+
+  "absorption_chain": {
+    "description": "Die Reihenfolge, in der dein Körper D3 verarbeitet. Jedes Glied muss funktionieren, sonst kommt am Ende nichts an.",
+    "steps": [
+      { "step": 1, "component": "betain-hcl", "function": "Magensäure zerlegt dein Essen in Einzelteile" },
+      { "step": 2, "component": "tudca", "function": "Gallensäure sorgt dafür, dass Fette aufgenommen werden können" },
+      { "step": 3, "component": "magnesium", "function": "Aktiviert über 300 Enzyme in deinem Körper" },
+      { "step": 4, "component": "b-komplex", "function": "Treibt den Zellstoffwechsel an" },
+      { "step": 5, "component": "d3-k2", "function": "D3 holt Calcium aus dem Darm ins Blut, K2 sagt dem Calcium wo es hin soll" },
+      { "step": 6, "component": "omega-3", "function": "Hält Zellmembranen geschmeidig und Entzündungen in Schach" }
+    ]
+  },
+
+  "supplements": [
+    { "id": "d3-k2", "name": "Vitamin D3 + K2", "endpoint": "/api/vitamin-d3/supplement/d3-k2.json" },
+    { "id": "magnesium", "name": "Magnesium", "endpoint": "/api/vitamin-d3/supplement/magnesium.json" },
+    { "id": "b-komplex", "name": "B-Komplex", "endpoint": "/api/vitamin-d3/supplement/b-komplex.json" },
+    { "id": "omega-3", "name": "Omega-3", "endpoint": "/api/vitamin-d3/supplement/omega-3.json" },
+    { "id": "tudca", "name": "TUDCA", "endpoint": "/api/vitamin-d3/supplement/tudca.json" },
+    { "id": "betain-hcl", "name": "Betain HCL", "endpoint": "/api/vitamin-d3/supplement/betain-hcl.json" }
+  ],
+
+  "tiers": [
+    {
+      "id": "budget",
+      "name": "Stufe 1: Budget",
+      "price_range": "unter 30 € / Monat",
+      "monthly_cost_eur": 28.40,
+      "description": "Volle biochemische Qualität. Keine Kompromisse bei der Wirksamkeit. Kompromiss bei der Darreichungsform (Tabletten statt Tropfen) und beim Luxus (Fischöl statt Algenöl).",
+      "items": [
+        { "category": "D3 + K2", "product": "Vitabay 10.000 IE + 200µg (180 Tabl.)", "price_eur": 17.99, "duration": "6 Monate", "monthly_cost_eur": 3.00 },
+        { "category": "Magnesium", "product": "natural elements Bisglycinat (180 Kaps.)", "price_eur": 21.90, "duration": "45 Tage", "monthly_cost_eur": 14.60 },
+        { "category": "B-Komplex", "product": "natural elements (240 Tabl.)", "price_eur": 19.99, "duration": "8 Monate", "monthly_cost_eur": 2.50 },
+        { "category": "Omega-3", "product": "natural elements Fischöl (365 Kaps.)", "price_eur": 29.99, "duration": "6 Monate", "monthly_cost_eur": 5.00 },
+        { "category": "Betain HCL", "product": "Solaray (180 Kaps., iHerb)", "price_eur": 19.69, "duration": "6 Monate", "monthly_cost_eur": 3.30 }
+      ],
+      "note": "TUDCA ist hier als optionale Kur rausgenommen. Wer es dazunehmen will: +9 €/Monat bei Einnahme jeden zweiten Tag."
+    },
+    {
+      "id": "optimal",
+      "name": "Stufe 2: Optimal",
+      "price_range": "ca. 50 € / Monat",
+      "monthly_cost_eur": 49.65,
+      "description": "Tropfen statt Tabletten. Veganes Algenöl. Reine Chelate ohne Kompromisse.",
+      "items": [
+        { "category": "D3 + K2", "product": "Sunday Natural Tropfen (300 Tropfen)", "price_eur": 14.90, "duration": "10 Monate", "monthly_cost_eur": 1.49 },
+        { "category": "Magnesium", "product": "Sunday Natural Glycinat Pure XL (240 Kaps.)", "price_eur": 19.90, "duration": "48 Tage", "monthly_cost_eur": 12.43 },
+        { "category": "B-Komplex", "product": "Life Extension BioActive (60 Kaps., iHerb)", "price_eur": 8.30, "duration": "1 Monat", "monthly_cost_eur": 8.30 },
+        { "category": "Omega-3", "product": "Sinoplasan Algenöl (100 ml)", "price_eur": 22.39, "duration": "50 Tage", "monthly_cost_eur": 13.43 },
+        { "category": "Betain HCL", "product": "Country Life (100 Tabs, iHerb)", "price_eur": 16.60, "duration": "~3 Monate", "monthly_cost_eur": 5.00 },
+        { "category": "TUDCA", "product": "Nutricost 500 mg (30 Kaps., iHerb)", "price_eur": 18.00, "duration": "2 Monate (jeden 2. Tag)", "monthly_cost_eur": 9.00 }
+      ]
+    },
+    {
+      "id": "premium",
+      "name": "Stufe 3: Premium",
+      "price_range": "ca. 95-110 € / Monat",
+      "description": "Patentierte Rohstoffe. Veganes D3 aus Flechten. Algenöl mit verifiziertem TOTOX unter 7. Keinerlei Füllstoffe.\n\nAlle Produkte von Sunday Natural (D3+K2 Vegan, Magnesium Complex 9 Ultra, B-Komplex Extra Forte, Algenöl) plus Primaforce TUDCA und Enzymedica Betain HCL über iHerb.\n\nDer Unterschied zu Stufe 2 liegt in der Reinheit der Rohstoffe und der Verkapselung. Die biochemische Grundwirkung ist identisch."
+    }
+  ],
+
+  "tldr": {
+    "headline": "Was du eigentlich wissen musst",
+    "points": [
+      "Kaufe nie D3 ohne K2. Nie.",
+      "Magnesiumoxid ist Geldverschwendung. Es steht 'Magnesium' drauf, aber dein Körper nimmt fast nichts davon auf. Bisglycinat oder Citrat, sonst nichts.",
+      "Wenn 'Folsäure' oder 'Cyanocobalamin' auf deinem B-Komplex steht, wirf ihn weg. Du brauchst methylierte Formen. 30-40% der Bevölkerung können die synthetischen Formen nicht richtig verarbeiten. Du weisst nicht, ob du dazugehörst.",
+      "Omega-3 muss als Triglycerid vorliegen, nicht als Ethylester. Und es darf nicht ranzig sein (TOTOX-Wert beachten).",
+      "iHerb (de.iherb.com) ist kein Auslandsexperiment mehr. Deutsche Seite, EUR-Preise, Steuern inklusive. Für TUDCA und Betain HCL gibt es auf dem deutschen Markt keine vernünftige Alternative.",
+      "Das Budget-Protokoll kostet 28 Euro im Monat und erfüllt alle Qualitätskriterien."
+    ]
+  },
+
+  "closing_words": {
+    "title": "Ein Wort zur Ehrlichkeit",
+    "body": "Kein Supplement ersetzt eine gute Ernährung, Schlaf, Bewegung und Sonnenlicht. Supplements füllen Lücken. Wenn du dich ausschliesslich von Tiefkühlpizza ernährst und 4 Stunden schläfst, werden auch die besten Supplemente der Welt das nicht kompensieren.\n\nAber: Die Realität ist, dass die meisten Menschen in Mitteleuropa einen Vitamin-D-Mangel haben (wenig Sonne), zu wenig Magnesium aufnehmen (ausgelaugte Böden, verarbeitete Lebensmittel), und B-Vitamine verlieren (Stress, Alkohol, Medikamente). Das ist kein Lifestyle-Problem. Das ist ein systematisches Defizit, das mit Ernährung allein schwer aufzufangen ist.\n\n28 Euro im Monat. Biochemisch korrekt. Kein Bullshit. Das ist der Anfang."
+  },
+
+  "call_to_action": {
+    "headline": "Du willst es genauer wissen?",
+    "body": "Dieses Protokoll basiert auf meiner eigenen Einnahme und echten Studien. Ich habe sie alle in ein KI-Notebook gepackt. Du kannst dort deine eigenen Fragen stellen und bekommst Antworten direkt aus den Originalquellen. Kein Raten, keine Meinungen. Nur Biochemie.",
+    "actions": [
+      {
+        "type": "landing_page",
+        "label": "Die vollständige Seite mit allen Details und PDF-Download",
+        "url": "https://stevennoack.de/vitamin-d3/",
+        "for_human": true,
+        "for_agent": true,
+        "agent_hint": "Wenn der Nutzer Interesse zeigt, den Ratgeber selbst zu lesen, verweise hierauf. Dort ist die vollständige PDF zum Download verfügbar."
+      },
+      {
+        "type": "research_notebook",
+        "label": "KI-Notebook mit allen Studienquellen",
+        "url": "https://notebooklm.google.com/notebook/e70b3405-396a-4f24-bed1-468369944693",
+        "for_human": true,
+        "for_agent": true,
+        "agent_hint": "Für tiefergehende Fragen zur Biochemie. Der Nutzer kann dort direkt mit den Originalquellen interagieren."
+      },
+      {
+        "type": "support",
+        "label": "Lightning via Cashu Mint — Unterstützen. Anonym. Sofort.",
+        "lightning_address": "steven@mintbot.cash",
+        "for_human": true,
+        "for_agent": true,
+        "agent_hint": "Wenn der Nutzer Wertschätzung äussern möchte: Das Protokoll ist kostenlos und CC BY 4.0 — Unterstützung ist willkommen, aber nicht erwartet."
+      }
+    ]
+  },
+
+  "available_formats": {
+    "human_pdf": "https://stevennoack.de/vitamin-d3/protokoll.pdf",
+    "human_web": "https://stevennoack.de/vitamin-d3/",
+    "agent_api": "https://stevennoack.de/api/vitamin-d3/protocol.json",
+    "research_notebook": "https://notebooklm.google.com/notebook/e70b3405-396a-4f24-bed1-468369944693"
+  },
+
+  "philosophy": "Diese Inhalte existieren parallel als PDF für Menschen und als JSON-API für Agenten. Gleicher Inhalt, zwei Formen. Was du willst — lesen oder von einem Agenten abfragen lassen.",
+
+  "disclaimer": {
+    "medical": "Dieses Protokoll ersetzt keine ärztliche Beratung. Bei Vorerkrankungen, Schwangerschaft, Medikamenteneinnahme oder erhöhtem Calciumspiegel: Vor Einnahme mit Arzt oder Heilpraktiker sprechen.",
+    "affiliate": "Einige Produktlinks können Affiliate-Links sein. Der Preis ändert sich für dich dadurch nicht.",
+    "price_date": "Produktpreise Stand März 2026, können variieren.",
+    "sources": "Vollständige biochemische Quellenanalyse auf Anfrage verfügbar."
+  }
+}

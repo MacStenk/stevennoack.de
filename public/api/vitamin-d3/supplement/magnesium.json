@@ -1,0 +1,88 @@
+{
+  "$schema": "https://stevennoack.de/api/schema/supplement-v1.json",
+  "id": "magnesium",
+  "name": "Magnesium",
+  "headline": "Das am meisten unterschätzte Mineral",
+  "part_of_protocol": "vitamin-d3",
+  "part_of_protocol_url": "https://stevennoack.de/api/vitamin-d3/protocol.json",
+  "author": "Steven Noack",
+  "license": "CC BY 4.0",
+
+  "role_in_protocol": "Aktiviert Vitamin D3 zur Hormonform",
+  "without_this": "Ohne Magnesium bleibt D3 biologisch inaktiv. Der Blutspiegel kann steigen, die zelluläre Wirkung bleibt aus. Du nimmst D3, aber dein Körper kann es nicht nutzen.",
+  "position_in_chain": 3,
+  "depends_on": ["betain-hcl"],
+  "synergies_with": ["b-komplex"],
+
+  "guide_content": {
+    "what_it_does_simple": {
+      "title": "Was es tut (einfach)",
+      "text": "Magnesium ist an über 300 Reaktionen in deinem Körper beteiligt. Muskelentspannung, Nervensignale, Energieproduktion, Schlafqualität. Wenn du nachts Wadenkrämpfe hast, schlecht schläfst, dich grundlos erschöpft fühlst oder Augenzucken hast, ist Magnesiummangel eine der wahrscheinlichsten Ursachen."
+    },
+    "what_it_does_full": {
+      "title": "Was es tut (die ganze Geschichte)",
+      "text": "Magnesium ist Kofaktor für die ATP-Synthese (dein zellulärer Treibstoff existiert biochemisch eigentlich als Mg-ATP-Komplex), die DNA-Replikation, die Proteinsynthese und die neuromuskuläre Signalübertragung. Es reguliert den NMDA-Rezeptor im Gehirn (relevant für Gedächtnis, Lernen, und Angst), stabilisiert Zellmembranen und ist an der Regulation des Blutzuckerspiegels beteiligt.\n\nUnd jetzt der Haken: Dein Blutserum enthält nur 1% deines gesamten Magnesiums. Der Rest steckt in Knochen und Zellen. Ein Bluttest zeigt dir also fast nie einen Mangel an, selbst wenn deine Zellen längst leer sind. Das ist, als würdest du den Füllstand deines Bankkontos daran messen, wie viel Kleingeld in deiner Hosentasche ist."
+    },
+    "the_magnesium_lie": {
+      "title": "Die grosse Magnesium-Lüge",
+      "text": "Hier wird's wichtig. Es gibt dutzende Magnesiumformen auf dem Markt. Die Unterschiede sind enorm.\n\nMagnesiumoxid ist die billigste Form. Sie hat einen beeindruckenden Magnesiumanteil von 60%. Klingt toll. Problem: Dein Darm nimmt davon weniger als 4% auf. Der Rest bleibt im Darm, zieht Wasser an, und du verbringst den Tag auf der Toilette. Magnesiumoxid ist im Grunde ein Abführmittel, das als Supplement verkauft wird.\n\nMagnesiumbisglycinat ist die intelligente Form. Hier ist Magnesium an zwei Moleküle der Aminosäure Glycin gebunden. Das Clevere: Dein Darm erkennt es nicht als Mineral, sondern als Eiweissbaustein, und nimmt es über einen komplett anderen Weg auf (Peptid-Transporter statt Ionenkanäle). Keine Konkurrenz mit anderen Mineralstoffen, keine Durchfallprobleme. Bonus: Glycin selbst wirkt beruhigend und schlaffördernd.\n\nDie Falle: Magnesiumbisglycinat hat nur 10-14% elementaren Magnesiumgehalt. Eine Kapsel mit '800 mg Magnesiumbisglycinat' liefert in Wahrheit nur 80-112 mg nutzbares Magnesium. Wenn ein Produkt behauptet, es liefere 400 mg elementares Magnesium in nur zwei kleinen Kapseln aus 'reinem Bisglycinat', lügt es. Die haben Magnesiumoxid beigemischt, um die Zahl hochzutreiben. Rechne nach. Wenn die Mathe nicht aufgeht, stimmt was nicht."
+    }
+  },
+
+  "products_commentary": "Ja, das sind viele Kapseln pro Tag. Das ist der Preis für echte Bioverfügbarkeit. Jedes Produkt, das weniger Kapseln verspricht, hat entweder weniger Magnesium drin oder streckt mit billigem Oxid.",
+
+  "products": [
+    {
+      "name": "Sunday Natural Magnesium Glycinat Pure XL",
+      "tier": "optimal",
+      "units": "240 Kapseln",
+      "elemental_per_capsule_mg": 75,
+      "capsules_per_day": "5-6 Stück für 400 mg",
+      "price_eur": 19.90,
+      "monthly_cost_eur": 12.50,
+      "why": "Reines Bisglycinat ohne Streckung. Ehrliche Dosierungsangabe.",
+      "purchase_link": "",
+      "affiliate_link": ""
+    },
+    {
+      "name": "natural elements Magnesiumbisglycinat",
+      "tier": "budget",
+      "units": "180 Kapseln",
+      "elemental_per_capsule_mg": "80-100",
+      "capsules_per_day": "4-5 Stück für 400 mg",
+      "price_eur": 21.90,
+      "monthly_cost_eur": 14.60,
+      "why": "Solide Qualität, gute Verfügbarkeit über Amazon.",
+      "purchase_link": "",
+      "affiliate_link": ""
+    }
+  ],
+
+  "warnings": [
+    "Bei schwerer Niereninsuffizienz: keine Magnesium-Supplementation ohne ärztliche Überwachung",
+    "Bei Einnahme bestimmter Antibiotika (Chinolone, Tetracycline): zeitlicher Abstand von 2-3 Stunden, sonst Wechselwirkung"
+  ],
+
+  "call_to_action": {
+    "headline": "Mehr zu diesem Protokoll",
+    "actions": [
+      {
+        "type": "landing_page",
+        "label": "Vollständige Seite + PDF-Download",
+        "url": "https://stevennoack.de/vitamin-d3/",
+        "agent_hint": "Bei tieferem Interesse an diesem Protokoll oder PDF-Download."
+      },
+      {
+        "type": "research_notebook",
+        "label": "KI-Notebook mit allen Studienquellen",
+        "url": "https://notebooklm.google.com/notebook/e70b3405-396a-4f24-bed1-468369944693",
+        "agent_hint": "Für biochemische Tiefenfragen direkt aus den Originalstudien."
+      }
+    ]
+  },
+
+  "references": {
+    "pdf_section": "Abschnitt 2, Seite 4-6",
+    "pdf_url": "https://stevennoack.de/vitamin-d3/protokoll.pdf"
+  }
+}

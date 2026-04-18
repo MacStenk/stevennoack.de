@@ -1,0 +1,112 @@
+{
+  "$schema": "https://stevennoack.de/api/schema/supplement-v1.json",
+  "id": "omega-3",
+  "name": "Omega-3",
+  "headline": "Nicht alle Fischöle sind gleich (und Algen sind besser als du denkst)",
+  "part_of_protocol": "vitamin-d3",
+  "part_of_protocol_url": "https://stevennoack.de/api/vitamin-d3/protocol.json",
+  "author": "Steven Noack",
+  "license": "CC BY 4.0",
+
+  "role_in_protocol": "Hält Zellmembranen geschmeidig, damit D3-abhängige Signale überhaupt durchkommen",
+  "without_this": "Zellmembranen werden steif, Signalübertragung leidet. D3 kann an den VDR binden, aber das Signal geht in der Zelle nicht sauber weiter. Plus: Entzündungslage bleibt hoch, was jede Hormonwirkung dämpft.",
+  "position_in_chain": 6,
+  "depends_on": ["tudca"],
+  "synergies_with": ["d3-k2"],
+
+  "guide_content": {
+    "what_it_does_simple": {
+      "title": "Was es tut (einfach)",
+      "text": "Omega-3-Fettsäuren (EPA und DHA) sind Bausteine deiner Zellmembranen. DHA sitzt vor allem im Gehirn und in der Netzhaut. EPA wirkt entzündungshemmend. Zusammen beeinflussen sie Konzentration, Stimmung, Gelenkgesundheit und Herzfunktion."
+    },
+    "what_it_does_full": {
+      "title": "Was es tut (die ganze Geschichte)",
+      "text": "EPA ist der Vorläufer für entzündungshemmende Signalstoffe (Prostaglandine der Serie 3, Resolvine, Protectine). DHA bestimmt die Fluidität deiner Zellmembranen. Eine steife Membran bedeutet schlechtere Signalübertragung. Im Gehirn, wo alles über elektrische und chemische Signale läuft, ist das direkt spürbar."
+    },
+    "quality_markers": {
+      "title": "Die zwei Qualitätsmerkmale, die wirklich zählen",
+      "triglyceride_vs_ethylester": {
+        "title": "1. Triglyceride vs. Ethylester",
+        "text": "Natürliche Fischöle enthalten Omega-3 als Triglyceride (TG). Billige Konzentrate verwenden Ethylester (EE), eine synthetische Form, die bei der industriellen Aufkonzentrierung entsteht. Dein Darm nimmt Triglyceride bis zu 70% besser auf. Auf dem Etikett steht oft nichts dazu. Wenn 'rTG' oder 'Triglycerid-Form' draufsteht, ist es gut. Wenn nichts steht, ist es wahrscheinlich Ethylester."
+      },
+      "oxidation_totox": {
+        "title": "2. Oxidation (TOTOX-Wert)",
+        "text": "Omega-3-Fettsäuren oxidieren leicht. Ranziges Fischöl löst im Körper genau die Entzündungen aus, die es eigentlich bekämpfen soll. Der TOTOX-Wert misst, wie stark ein Öl oxidiert ist. Unter 10 = frisch. Über 26 = schädlich. Seriöse Hersteller veröffentlichen diesen Wert. Wenn ein Hersteller den TOTOX-Wert nicht angibt, hat er wahrscheinlich einen Grund dafür."
+      }
+    },
+    "algae_alternative": {
+      "title": "Algenöl als Alternative",
+      "text": "Fische produzieren kein Omega-3 selbst. Sie fressen Mikroalgen, die es produzieren. Algenöl geht direkt an die Quelle. Vorteile: Kein Fischgeschmack, kein Aufstoßen, keine Schwermetalle, kein Mikroplastik, kein Überfischen. Nachteil: Etwas teurer und oft DHA-lastig statt EPA-lastig."
+    }
+  },
+
+  "products_commentary": "Das natural elements Fischöl ist preislich fast unschlagbar. 5 Euro im Monat für eine therapeutische Dosis in Triglycerid-Form. Wer vegan unterwegs ist oder kein Fischöl verträgt, fährt mit Sinoplasan oder Sunday Natural Algenöl gut.",
+
+  "products": [
+    {
+      "name": "natural elements Omega 3 Fischöl",
+      "tier": "budget",
+      "units": "365 Kapseln",
+      "epa_dha_per_dose": "1000 mg (2 Kapseln)",
+      "duration": "6 Monate",
+      "price_eur": 29.99,
+      "monthly_cost_eur": 5.00,
+      "why": "Preislich fast unschlagbar. Therapeutische Dosis in Triglycerid-Form.",
+      "purchase_link": "",
+      "affiliate_link": ""
+    },
+    {
+      "name": "Sinoplasan Algenöl flüssig",
+      "tier": "optimal",
+      "units": "100 ml",
+      "epa_dha_per_dose": "~900 mg (2 ml)",
+      "duration": "~50 Tage",
+      "price_eur": 22.39,
+      "monthly_cost_eur": 13.43,
+      "why": "Vegane Alternative. Gute Wahl bei Fischöl-Unverträglichkeit.",
+      "purchase_link": "",
+      "affiliate_link": ""
+    },
+    {
+      "name": "Sunday Natural Algenöl flüssig",
+      "tier": "premium",
+      "units": "100 ml",
+      "epa_dha_per_dose": "~600 mg (Tagesdosis)",
+      "duration": "~50 Tage",
+      "price_eur": 26.00,
+      "monthly_cost_eur": 15.60,
+      "why": "Premium-Algenöl mit verifiziert niedrigem TOTOX.",
+      "purchase_link": "",
+      "affiliate_link": ""
+    }
+  ],
+
+  "warnings": [
+    "Bei Einnahme von Blutverdünnern: Rücksprache mit Arzt (Omega-3 kann Wirkung verstärken)",
+    "Vor Operationen: 1-2 Wochen vorher pausieren",
+    "Aufstossen nach Fischöl: Zeichen für Oxidation oder zu hohe Dosis auf einmal — auf Algenöl wechseln oder kleinere Dosen"
+  ],
+
+  "call_to_action": {
+    "headline": "Mehr zu diesem Protokoll",
+    "actions": [
+      {
+        "type": "landing_page",
+        "label": "Vollständige Seite + PDF-Download",
+        "url": "https://stevennoack.de/vitamin-d3/",
+        "agent_hint": "Bei tieferem Interesse an diesem Protokoll oder PDF-Download."
+      },
+      {
+        "type": "research_notebook",
+        "label": "KI-Notebook mit allen Studienquellen",
+        "url": "https://notebooklm.google.com/notebook/e70b3405-396a-4f24-bed1-468369944693",
+        "agent_hint": "Für biochemische Tiefenfragen direkt aus den Originalstudien."
+      }
+    ]
+  },
+
+  "references": {
+    "pdf_section": "Abschnitt 4, Seite 8-9",
+    "pdf_url": "https://stevennoack.de/vitamin-d3/protokoll.pdf"
+  }
+}

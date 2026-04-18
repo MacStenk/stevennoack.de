@@ -1,0 +1,114 @@
+{
+  "$schema": "https://stevennoack.de/api/schema/supplement-v1.json",
+  "id": "b-komplex",
+  "name": "B-Vitamine",
+  "headline": "Warum 'B-Komplex' nicht gleich 'B-Komplex' ist",
+  "part_of_protocol": "vitamin-d3",
+  "part_of_protocol_url": "https://stevennoack.de/api/vitamin-d3/protocol.json",
+  "author": "Steven Noack",
+  "license": "CC BY 4.0",
+
+  "role_in_protocol": "Treibt den Zellstoffwechsel an, in dem D3 wirken soll",
+  "without_this": "Der biochemische Rahmen für D3-Wirkung fehlt. Methylierung, Neurotransmitter-Synthese und DNA-Reparatur kommen zum Erliegen — D3 kann seine Gen-regulierende Wirkung nicht entfalten.",
+  "position_in_chain": 4,
+  "depends_on": ["betain-hcl"],
+  "synergies_with": ["magnesium", "d3-k2"],
+
+  "guide_content": {
+    "what_it_does_simple": {
+      "title": "Was sie tun (einfach)",
+      "text": "Die acht B-Vitamine sind das Betriebssystem deines Stoffwechsels. Sie wandeln Nahrung in Energie um, bauen Neurotransmitter auf (Serotonin, Dopamin, GABA), reparieren DNA und halten dein Nervensystem am Laufen. Ein Mangel zeigt sich oft schleichend: Müdigkeit, Konzentrationsprobleme, Kribbeln in Händen und Füssen, Reizbarkeit."
+    },
+    "what_it_does_full": {
+      "title": "Was sie tun (die ganze Geschichte)",
+      "text": "Der kritische Punkt heisst Methylierung. Das ist ein biochemischer Grundprozess, bei dem Methylgruppen (CH₃) an DNA, Proteine und Neurotransmitter angehängt werden. Methylierung reguliert, welche Gene an- und ausgeschaltet werden, wie schnell du Giftstoffe abbaust, und ob dein Gehirn genug Serotonin produziert.\n\nFür diesen Prozess braucht dein Körper aktive Formen von B9 (Folat) und B12. Und genau hier liegt das Problem."
+    },
+    "forms_comparison": {
+      "title": "Synthetisch vs. aktiv",
+      "contains": {
+        "title": "Was die meisten Supplements enthalten:",
+        "items": [
+          "Synthetische Folsäure (B9): Muss in der Leber in vier Schritten zur aktiven Form umgebaut werden",
+          "Cyanocobalamin (B12): Muss unter Freisetzung von Cyanid erst aktiviert werden",
+          "Pyridoxin-HCl (B6): Muss in der Leber phosphoryliert werden"
+        ]
+      },
+      "needs": {
+        "title": "Was dein Körper eigentlich braucht:",
+        "items": [
+          "L-Methylfolat (B9): Sofort einsetzbar, kein Umbau nötig",
+          "Methylcobalamin/Hydroxocobalamin (B12): Direkt aktive Formen",
+          "P5P/Pyridoxal-5-Phosphat (B6): Sofort verfügbar für die Neurotransmitter-Synthese"
+        ]
+      }
+    },
+    "why_it_matters": {
+      "title": "Warum das wichtig ist",
+      "text": "Schätzungsweise 30-40% der europäischen Bevölkerung tragen eine genetische Variante (MTHFR-Polymorphismus), die den Umbau von synthetischer Folsäure massiv verlangsamt. Diese Menschen nehmen ein Folsäure-Supplement und es passiert fast nichts. Schlimmer noch: Die unverarbeitete Folsäure schwimmt im Blut herum und blockiert die Rezeptoren, an denen das echte, aktive Folat andocken müsste.\n\nKurz: Ein billiger B-Komplex kann aktiv schaden, wenn dein Körper die synthetischen Formen nicht umbauen kann. Und du weisst es nicht, weil du normalerweise keinen MTHFR-Gentest machst."
+    }
+  },
+
+  "products": [
+    {
+      "name": "natural elements B-Komplex",
+      "tier": "budget",
+      "units": "240 Tabletten",
+      "duration": "8 Monate",
+      "price_eur": 19.99,
+      "monthly_cost_eur": 2.50,
+      "why": "Enthält L-Methylfolat, P5P, und drei verschiedene aktive B12-Formen (Methylcobalamin, Hydroxocobalamin, Adenosylcobalamin). Dazu Cholin und Inositol. 8 Cent pro Tag. Das ist schwer zu schlagen.",
+      "purchase_link": "",
+      "affiliate_link": ""
+    },
+    {
+      "name": "Sunday Natural B-Komplex Forte Bioactive",
+      "tier": "premium",
+      "units": "100 Kapseln",
+      "duration": "~3 Monate",
+      "price_eur": 16.90,
+      "why": "Premium mit patentierten Rohstoffen (Quatrefolic®, MH3A®). Plus NADH und Citicolin für Gehirnleistung. Komplett ohne Füllstoffe.",
+      "purchase_link": "",
+      "affiliate_link": ""
+    },
+    {
+      "name": "Life Extension BioActive B-Complex",
+      "tier": "optimal",
+      "units": "60 Kapseln",
+      "duration": "1 Monat",
+      "price_eur": 8.30,
+      "source": "via iHerb",
+      "why": "Internationaler Bestseller, hochdosiert, alle aktiven Formen. Guter Import-Preis.",
+      "purchase_link": "",
+      "affiliate_link": ""
+    }
+  ],
+
+  "warnings": [
+    "Gelber Urin nach Einnahme ist normal (Riboflavin/B2) — kein Grund zur Sorge",
+    "Bei Einnahme von L-Dopa (Parkinson-Medikation): B6 kann Wirkung verringern — ärztliche Rücksprache",
+    "Bei unbekanntem MTHFR-Status: immer aktive Formen wählen (schadet nicht, hilft bei 30-40% massiv)"
+  ],
+
+  "call_to_action": {
+    "headline": "Mehr zu diesem Protokoll",
+    "actions": [
+      {
+        "type": "landing_page",
+        "label": "Vollständige Seite + PDF-Download",
+        "url": "https://stevennoack.de/vitamin-d3/",
+        "agent_hint": "Bei tieferem Interesse an diesem Protokoll oder PDF-Download."
+      },
+      {
+        "type": "research_notebook",
+        "label": "KI-Notebook mit allen Studienquellen",
+        "url": "https://notebooklm.google.com/notebook/e70b3405-396a-4f24-bed1-468369944693",
+        "agent_hint": "Für biochemische Tiefenfragen direkt aus den Originalstudien."
+      }
+    ]
+  },
+
+  "references": {
+    "pdf_section": "Abschnitt 3, Seite 6-7",
+    "pdf_url": "https://stevennoack.de/vitamin-d3/protokoll.pdf"
+  }
+}

@@ -1,0 +1,100 @@
+{
+  "$schema": "https://stevennoack.de/api/schema/supplement-v1.json",
+  "id": "betain-hcl",
+  "name": "Betain HCL",
+  "headline": "Die vergessene Grundlage",
+  "part_of_protocol": "vitamin-d3",
+  "part_of_protocol_url": "https://stevennoack.de/api/vitamin-d3/protocol.json",
+  "author": "Steven Noack",
+  "license": "CC BY 4.0",
+
+  "role_in_protocol": "Stellt Magensäure her — ohne genug Säure werden Mineralstoffe und fettlösliche Vitamine nicht aufgenommen",
+  "without_this": "Die gesamte Kette startet nicht. Magnesium wird nicht ionisiert, Proteine nicht zerlegt, fettlösliche Vitamine wie D3 nur unvollständig aufgenommen. Du kannst alle anderen Supplemente perfekt kombinieren — wenn die Magensäure fehlt, kommt nichts an.",
+  "position_in_chain": 1,
+  "depends_on": [],
+  "synergies_with": ["tudca", "magnesium", "d3-k2"],
+
+  "guide_content": {
+    "what_it_does_simple": {
+      "title": "Was es tut (einfach)",
+      "text": "Betain HCL liefert deinem Magen Salzsäure. Klingt banal, ist es nicht. Ohne genug Magensäure kannst du Mineralstoffe nicht aufnehmen, Proteine nicht zerlegen, und Bakterien nicht abtöten, die mit dem Essen kommen. Sodbrennen wird meistens als 'zu viel Säure' behandelt. In vielen Fällen ist es das Gegenteil: zu wenig Säure. Der Schliessmuskel zwischen Speiseröhre und Magen reagiert auf den pH-Wert. Zu wenig Säure = er schliesst nicht richtig = Säure steigt auf."
+    },
+    "what_it_does_full": {
+      "title": "Was es tut (die ganze Geschichte)",
+      "text": "Der Magen braucht einen pH-Wert zwischen 1,5 und 3,0, um optimal zu arbeiten. In diesem Fenster wird Pepsinogen zu Pepsin aktiviert (dem Enzym, das Proteine spaltet), Mineralstoffe werden ionisiert (und damit aufnahmefähig), und pathogene Bakterien werden abgetötet.\n\nMit zunehmendem Alter, durch chronischen Stress, Medikamente (besonders Protonenpumpenhemmer wie Omeprazol), oder H. pylori-Infektion sinkt die Magensäureproduktion. Das Resultat: Blähungen nach dem Essen, Völlegefühl, unvollständig verdaute Nahrung, und eine Kaskade von Mineralstoffdefiziten, die kein Supplement der Welt ausgleichen kann, solange die Absorption nicht funktioniert.\n\nBetain HCL stellt die Säure wieder her. Pepsin als Zusatz startet die Proteinverdauung sofort. Zusammen sind sie der Reset-Knopf für eine kompromittierte Verdauung."
+    },
+    "important_note": {
+      "title": "Wichtiger Hinweis",
+      "text": "Betain HCL nicht nehmen bei bekanntem Magengeschwür, aktiver Gastritis, oder zusammen mit NSAIDs (Ibuprofen, Aspirin). Im Zweifel: Arzt fragen."
+    }
+  },
+
+  "products_commentary": "Solaray mit 180 Kapseln ist der beste Deal. Eine Kapsel pro Hauptmahlzeit, das reicht für ein halbes Jahr.",
+
+  "products": [
+    {
+      "name": "Solaray Betaine HCL with Pepsin",
+      "tier": "budget",
+      "units": "180 Kapseln",
+      "dosage": "650 mg + Pepsin",
+      "price_eur": 19.69,
+      "source": "de.iherb.com",
+      "why": "Bester Deal. Eine Kapsel pro Hauptmahlzeit, das reicht für ein halbes Jahr.",
+      "purchase_link": "",
+      "affiliate_link": ""
+    },
+    {
+      "name": "Country Life Betaine HCl with Pepsin",
+      "tier": "optimal",
+      "units": "100 Tabletten",
+      "dosage": "Standard",
+      "price_eur": 16.60,
+      "source": "de.iherb.com",
+      "why": "Standard-Dosierung, solide Marke.",
+      "purchase_link": "",
+      "affiliate_link": ""
+    },
+    {
+      "name": "Enzymedica Fast-Acting Betaine HCl",
+      "tier": "premium",
+      "units": "60 Kapseln",
+      "dosage": "Schnell lösend",
+      "price_eur": 11.62,
+      "source": "de.iherb.com",
+      "why": "Schnell lösende Formulierung für sofortige Wirkung.",
+      "purchase_link": "",
+      "affiliate_link": ""
+    }
+  ],
+
+  "warnings": [
+    "NICHT nehmen bei bekanntem Magengeschwür",
+    "NICHT nehmen bei aktiver Gastritis",
+    "NICHT kombinieren mit NSAIDs (Ibuprofen, Aspirin, Diclofenac) — Risiko für Schleimhautschäden",
+    "Bei Einnahme von Säureblockern (Omeprazol etc.): nicht gleichzeitig, Rücksprache mit Arzt",
+    "Bei Wärmegefühl im Magen nach Einnahme: Dosis reduzieren"
+  ],
+
+  "call_to_action": {
+    "headline": "Mehr zu diesem Protokoll",
+    "actions": [
+      {
+        "type": "landing_page",
+        "label": "Vollständige Seite + PDF-Download",
+        "url": "https://stevennoack.de/vitamin-d3/",
+        "agent_hint": "Bei tieferem Interesse an diesem Protokoll oder PDF-Download."
+      },
+      {
+        "type": "research_notebook",
+        "label": "KI-Notebook mit allen Studienquellen",
+        "url": "https://notebooklm.google.com/notebook/e70b3405-396a-4f24-bed1-468369944693",
+        "agent_hint": "Für biochemische Tiefenfragen direkt aus den Originalstudien."
+      }
+    ]
+  },
+
+  "references": {
+    "pdf_section": "Abschnitt 6, Seite 10-11",
+    "pdf_url": "https://stevennoack.de/vitamin-d3/protokoll.pdf"
+  }
+}

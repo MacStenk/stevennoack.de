@@ -1,0 +1,108 @@
+{
+  "$schema": "https://stevennoack.de/api/schema/supplement-v1.json",
+  "id": "d3-k2",
+  "name": "Vitamin D3 + K2",
+  "headline": "Das Duo, das man nie trennen sollte",
+  "part_of_protocol": "vitamin-d3",
+  "part_of_protocol_url": "https://stevennoack.de/api/vitamin-d3/protocol.json",
+  "author": "Steven Noack",
+  "license": "CC BY 4.0",
+
+  "role_in_protocol": "Das Ziel des gesamten Protokolls — soll in die Zelle und im Blutspiegel messbar werden",
+  "without_this": "Das gesamte Protokoll verliert seinen Sinn. D3 ist das Ziel, alle anderen Komponenten sind Voraussetzung dafür.",
+  "position_in_chain": 5,
+  "depends_on": ["betain-hcl", "tudca", "magnesium", "b-komplex"],
+  "synergies_with": ["omega-3"],
+
+  "guide_content": {
+    "what_it_does_simple": {
+      "title": "Was es tut (einfach)",
+      "text": "Vitamin D3 ist dein Sonnenvitamin. Es sorgt dafür, dass dein Darm Calcium aufnimmt. Das Problem: Calcium im Blut ist erstmal nur Rohmaterial. Ohne Vitamin K2 weiss dein Körper nicht, wohin damit. K2 ist der Verkehrspolizist. Es aktiviert zwei Proteine: Eines baut Calcium in Knochen ein, das andere verhindert, dass sich Calcium in deinen Arterien ablagert.\n\nOhne K2 kann Vitamin D langfristig sogar schaden. Mehr Calcium im Blut, aber keine Steuerung = Verkalkung."
+    },
+    "what_it_does_full": {
+      "title": "Was es tut (die ganze Geschichte)",
+      "text": "Vitamin D3 (Cholecalciferol) wird in der Leber zu Calcidiol und dann in der Niere zu Calcitriol umgewandelt. Calcitriol ist die aktive Hormonform. Es bindet an den Vitamin-D-Rezeptor (VDR), der in fast jeder Zelle deines Körpers sitzt, und reguliert die Expression von über 1.000 Genen. Immunsystem, Stimmung, Muskelkraft, Insulinsensitivität. Das ist kein Vitamin im klassischen Sinn. Das ist ein Hormon.\n\nK2 existiert als MK-4 (kurze Halbwertszeit, ca. 2 Stunden) und MK-7 (lange Halbwertszeit, ca. 72 Stunden). MK-7 ist therapeutisch sinnvoller, weil ein gleichmässiger Blutspiegel die Carboxylierung von Osteocalcin und Matrix-Gla-Protein dauerhaft aufrechterhält. Aber: Nur die all-trans-Form des MK-7 ist biologisch aktiv. Cis-Isomere, die bei billiger Produktion entstehen, passen nicht in die Enzymstruktur. Sie sind wertlos."
+    }
+  },
+
+  "buying_criteria": {
+    "title": "Worauf du beim Kauf achten musst",
+    "must_have": [
+      "Vitamin D3 (nicht D2, das ist die Pflanzenform mit schlechterer Umwandlungsrate)",
+      "K2 als MK-7 in all-trans-Form (mindestens 99%)",
+      "Idealerweise in Öl gelöst (MCT-Öl oder Kokosöl), weil beide fettlöslich sind"
+    ],
+    "red_flags": [
+      "K2 ohne Angabe der Isomerie (all-trans). Wenn's nicht draufsteht, ist es wahrscheinlich ein Gemisch aus aktiven und nutzlosen Formen.",
+      "Tabletten ohne Fettquelle. Fettlösliche Vitamine in trockenen Tabletten sind wie ein Boot ohne Wasser."
+    ]
+  },
+
+  "dosage": {
+    "daily": "10.000 IE D3 plus 200 µg K2 pro Tag",
+    "commentary": "Ja, die offizielle Empfehlung liegt bei 800 IE. Ja, 10.000 IE klingt viel. Nein, es ist nicht gefährlich, solange K2 dabei ist und du keine Erkrankung hast, die den Calciumspiegel erhöht (im Zweifel: Arzt fragen, 25-OH-Vitamin-D-Spiegel messen lassen). D3 ist fettlöslich und wird im Körperfett gespeichert. Ein Depot, kein Sprint.",
+    "form": "mit fetthaltiger Mahlzeit"
+  },
+
+  "products": [
+    {
+      "name": "Vitabay D3 10.000 IE + K2 200µg",
+      "tier": "budget",
+      "units": "180 Tabletten",
+      "price_eur": 17.99,
+      "duration": "6 Monate",
+      "why": "Bestes Preis-Leistungs-Verhältnis. K2 als all-trans 99,7%. Tabletten, also mit fetthaltiger Mahlzeit nehmen.",
+      "purchase_link": "",
+      "affiliate_link": ""
+    },
+    {
+      "name": "Sunday Natural D3+K2 Tropfen",
+      "tier": "optimal",
+      "units": "300 Tropfen",
+      "price_eur": 14.90,
+      "duration": "10 Monate",
+      "why": "Premium. Gelöst in MCT-Öl, K2VITAL® Rohstoff. Höchste Bioverfügbarkeit, weil das Öl direkt über die Mundschleimhaut aufgenommen werden kann.",
+      "purchase_link": "",
+      "affiliate_link": ""
+    },
+    {
+      "name": "natural elements D3/K2 5.000 IE",
+      "tier": "budget_alt",
+      "units": "180 Tabletten",
+      "price_eur": 19.99,
+      "duration": "3 Monate (bei 10.000 IE/Tag)",
+      "why": "Solide Qualität mit K2VITAL®. Aber: Nur 5.000 IE pro Tablette, also brauchst du zwei am Tag.",
+      "purchase_link": "",
+      "affiliate_link": ""
+    }
+  ],
+
+  "warnings": [
+    "Nicht ohne K2 einnehmen — langfristig risikoerhöhend (Verkalkung)",
+    "Bei Erkrankungen mit erhöhtem Calciumspiegel: ärztliche Rücksprache zwingend, 25-OH-Vitamin-D-Spiegel messen lassen",
+    "Bei Einnahme von Blutverdünnern (Marcumar/Warfarin): K2 kann die Wirkung beeinflussen — Arzt fragen"
+  ],
+
+  "call_to_action": {
+    "headline": "Mehr zu diesem Protokoll",
+    "actions": [
+      {
+        "type": "landing_page",
+        "label": "Vollständige Seite + PDF-Download",
+        "url": "https://stevennoack.de/vitamin-d3/",
+        "agent_hint": "Bei tieferem Interesse an diesem Protokoll oder PDF-Download."
+      },
+      {
+        "type": "research_notebook",
+        "label": "KI-Notebook mit allen Studienquellen",
+        "url": "https://notebooklm.google.com/notebook/e70b3405-396a-4f24-bed1-468369944693",
+        "agent_hint": "Für biochemische Tiefenfragen direkt aus den Originalstudien."
+      }
+    ]
+  },
+
+  "references": {
+    "pdf_section": "Abschnitt 1, Seite 3-4",
+    "pdf_url": "https://stevennoack.de/vitamin-d3/protokoll.pdf"
+  }
+}

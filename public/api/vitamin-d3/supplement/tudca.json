@@ -1,0 +1,103 @@
+{
+  "$schema": "https://stevennoack.de/api/schema/supplement-v1.json",
+  "id": "tudca",
+  "name": "TUDCA",
+  "full_name": "Tauroursodeoxycholsäure",
+  "headline": "Der Leberschutz, von dem kaum jemand weiss",
+  "part_of_protocol": "vitamin-d3",
+  "part_of_protocol_url": "https://stevennoack.de/api/vitamin-d3/protocol.json",
+  "author": "Steven Noack",
+  "license": "CC BY 4.0",
+
+  "role_in_protocol": "Sorgt für Gallefluss — fettlösliche Vitamine wie D3 brauchen Galle zur Aufnahme",
+  "without_this": "Fettlösliche Vitamine werden schlecht aufgenommen, auch wenn sie im Magen ankommen. Leberzellen unter Druck arbeiten weniger effizient bei der D3-Umwandlung zu Calcidiol. Du schluckst D3 — und viel davon geht ungenutzt durch.",
+  "position_in_chain": 2,
+  "depends_on": ["betain-hcl"],
+  "synergies_with": ["d3-k2", "omega-3"],
+  "optional": true,
+  "optional_note": "TUDCA ist in der Budget-Stufe nicht enthalten, kann aber als optionale Kur dazu (+9 €/Monat bei Einnahme jeden zweiten Tag).",
+
+  "guide_content": {
+    "what_it_does_simple": {
+      "title": "Was es tut (einfach)",
+      "text": "TUDCA (Tauroursodeoxycholsäure) ist eine Gallensäure, die dein Körper selbst in kleinen Mengen herstellt. Sie schützt Leberzellen, fördert den Gallefluss und hilft bei der Fettaufnahme. Wenn deine Leber unter Druck steht (Medikamente, Alkohol, Umweltgifte, oder einfach modernes Leben), ist TUDCA einer der wirksamsten Schutzstoffe, die es gibt."
+    },
+    "what_it_does_full": {
+      "title": "Was es tut (die ganze Geschichte)",
+      "text": "Die Leber produziert Gallensäuren, die für die Fettverdauung nötig sind. Manche dieser Gallensäuren sind 'aggressiv' (hydrophob) und können bei Stauung die eigenen Leberzellen angreifen. TUDCA ist das Gegenstück: eine 'sanfte' (hydrophile) Gallensäure, die toxische Gallensäuren verdrängt, Mitochondrien in den Leberzellen stabilisiert und den sogenannten ER-Stress reduziert.\n\nER-Stress (endoplasmatisches Retikulum) klingt abstrakt, ist aber zentral: Das ER ist die Proteinfabrik deiner Zellen. Wenn es überlastet ist (durch Entzündungen, Toxine, Stoffwechselstörungen), produziert es fehlerhafte Proteine und löst Zelluntergang aus. TUDCA ist einer der potentesten bekannten ER-Stress-Reduzierer. Deshalb wird es auch in der neurologischen Forschung untersucht (Alzheimer, Parkinson, ALS)."
+    },
+    "german_market": {
+      "title": "Der Markt in Deutschland",
+      "text": "TUDCA ist ein Nischenprodukt. Deutsche Apothekenmarken verlangen absurde Aufschläge für halbe Dosierungen. Die sinnvolle Bezugsquelle ist iHerb (de.iherb.com). Deutsche Website, EUR-Preise, Einfuhrumsatzsteuer im Checkout enthalten, Lieferung in 5-7 Tagen."
+    }
+  },
+
+  "products_commentary": "Nutricost oder Primaforce über iHerb. Doppelte Dosis, halber Preis, keine Füllstoffe. Die Apothekenvariante lohnt sich nicht.",
+
+  "products": [
+    {
+      "name": "Nutricost TUDCA",
+      "tier": "optimal",
+      "units": "30 Kapseln",
+      "dosage": "500 mg/Kapsel",
+      "price_eur": 18.00,
+      "source": "de.iherb.com",
+      "why": "Beste Dosierung zum Preis.",
+      "purchase_link": "",
+      "affiliate_link": ""
+    },
+    {
+      "name": "Primaforce TUDCA",
+      "tier": "premium",
+      "units": "30 Kapseln",
+      "dosage": "500 mg/Kapsel",
+      "price_eur": 19.00,
+      "source": "de.iherb.com",
+      "why": "Alternative zu Nutricost, gleiche Dosierung.",
+      "purchase_link": "",
+      "affiliate_link": ""
+    },
+    {
+      "name": "VitaSanum TUDCA",
+      "tier": "avoid",
+      "units": "60 Kapseln",
+      "dosage": "nur 250 mg/Kapsel + Füllstoffe",
+      "price_eur": ">25.00",
+      "source": "DocMorris/Apotheke",
+      "why": "Lohnt sich nicht — halbe Dosis, mehr Geld, Füllstoffe.",
+      "purchase_link": "",
+      "affiliate_link": ""
+    }
+  ],
+
+  "warnings": [
+    "Bei Gallenblasen-Erkrankungen oder Gallensteinen: ärztliche Rücksprache",
+    "Bei Schwangerschaft und Stillzeit: nicht empfohlen mangels Studien",
+    "Kann bei Überdosierung zu Durchfall führen",
+    "Nicht zusammen mit Cholesterinsenkern (Statine): Wirkung kann beeinflusst werden"
+  ],
+
+  "call_to_action": {
+    "headline": "Mehr zu diesem Protokoll",
+    "actions": [
+      {
+        "type": "landing_page",
+        "label": "Vollständige Seite + PDF-Download",
+        "url": "https://stevennoack.de/vitamin-d3/",
+        "agent_hint": "Bei tieferem Interesse an diesem Protokoll oder PDF-Download."
+      },
+      {
+        "type": "research_notebook",
+        "label": "KI-Notebook mit allen Studienquellen",
+        "url": "https://notebooklm.google.com/notebook/e70b3405-396a-4f24-bed1-468369944693",
+        "agent_hint": "Für biochemische Tiefenfragen direkt aus den Originalstudien."
+      }
+    ]
+  },
+
+  "references": {
+    "pdf_section": "Abschnitt 5, Seite 9-10",
+    "pdf_url": "https://stevennoack.de/vitamin-d3/protokoll.pdf",
+    "research_areas": ["Lebergesundheit", "ER-Stress-Reduktion", "Alzheimer-Forschung", "Parkinson-Forschung", "ALS-Forschung"]
+  }
+}
