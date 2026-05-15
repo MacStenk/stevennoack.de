@@ -41,6 +41,30 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
     .vitamin-mailerlite-form.is-empty .ml-embedded {
       min-height: 0;
     }
+
+    .vitamin-mailerlite-fallback form {
+      display: grid;
+      gap: 0.75rem;
+      margin: 0 auto;
+      max-width: 26rem;
+    }
+
+    .vitamin-mailerlite-fallback input[type="email"] {
+      width: 100%;
+      border: 1px solid rgba(234, 88, 12, 0.28);
+      border-radius: 0.5rem;
+      background: #fff;
+      color: #1f2937;
+      font-size: 1rem;
+      line-height: 1.5;
+      padding: 0.85rem 1rem;
+    }
+
+    .vitamin-mailerlite-fallback input[type="email"]:focus {
+      border-color: #fb923c;
+      box-shadow: 0 0 0 3px rgba(251, 146, 60, 0.18);
+      outline: none;
+    }
   </style>
 
   <main class="max-w-3xl mx-auto px-6 py-16 md:py-24 font-sans">
@@ -234,15 +258,32 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
         <div class="ml-embedded" data-form="AlOroW"></div>
         <div class="vitamin-mailerlite-fallback text-center">
           <p class="text-gray-700 text-base leading-relaxed mb-5">
-            Falls das Formular nicht automatisch lädt, öffne es direkt hier.
+            Falls das Formular nicht automatisch lädt, trag dich hier direkt ein.
           </p>
-          <button
-            type="button"
-            class="ml-onclick-form inline-flex w-full sm:w-auto items-center justify-center rounded-lg bg-orange-500 px-6 py-3 font-mono text-sm font-semibold uppercase tracking-wide text-white transition-colors hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2 focus:ring-offset-amber-50"
-            onclick="ml('show', 'AlOroW', true)"
+          <form
+            action="https://assets.mailerlite.com/jsonp/977546/forms/183364843631281988/subscribe"
+            method="post"
+            target="_blank"
           >
-            Guide anfordern
-          </button>
+            <label class="sr-only" for="vitamin-d3-fallback-email">E-Mail</label>
+            <input
+              id="vitamin-d3-fallback-email"
+              type="email"
+              name="fields[email]"
+              autocomplete="email"
+              inputmode="email"
+              placeholder="Deine E-Mail"
+              required
+            />
+            <input type="hidden" name="ml-submit" value="1" />
+            <input type="hidden" name="anticsrf" value="true" />
+            <button
+              type="submit"
+              class="inline-flex w-full items-center justify-center rounded-lg bg-orange-500 px-6 py-3 font-mono text-sm font-semibold uppercase tracking-wide text-white transition-colors hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2 focus:ring-offset-amber-50"
+            >
+              Guide anfordern
+            </button>
+          </form>
         </div>
       </div>
     </section>
