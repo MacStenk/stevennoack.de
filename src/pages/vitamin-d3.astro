@@ -14,6 +14,33 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
       background: #FFFAF5 !important;
       color: #1a1a1a !important;
     }
+
+    .vitamin-mailerlite-form,
+    .vitamin-mailerlite-form .ml-embedded,
+    .vitamin-mailerlite-form iframe {
+      width: 100% !important;
+      max-width: 100% !important;
+    }
+
+    .vitamin-mailerlite-form {
+      overflow: hidden;
+    }
+
+    .vitamin-mailerlite-form .ml-embedded {
+      min-height: 260px;
+    }
+
+    .vitamin-mailerlite-fallback {
+      display: none;
+    }
+
+    .vitamin-mailerlite-form.is-empty .vitamin-mailerlite-fallback {
+      display: block;
+    }
+
+    .vitamin-mailerlite-form.is-empty .ml-embedded {
+      min-height: 0;
+    }
   </style>
 
   <main class="max-w-3xl mx-auto px-6 py-16 md:py-24 font-sans">
@@ -202,9 +229,21 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 
     <!-- CTA + MailerLite Form -->
     <section class="mb-16">
-      <div class="bg-gradient-to-br from-orange-50 to-amber-50 rounded-xl border border-orange-200/60 p-8 md:p-10">
+      <div class="vitamin-mailerlite-form bg-gradient-to-br from-orange-50 to-amber-50 rounded-xl border border-orange-200/60 p-6 md:p-10">
         <!-- MailerLite Form Embed -->
         <div class="ml-embedded" data-form="AlOroW"></div>
+        <div class="vitamin-mailerlite-fallback text-center">
+          <p class="text-gray-700 text-base leading-relaxed mb-5">
+            Falls das Formular nicht automatisch lädt, öffne es direkt hier.
+          </p>
+          <button
+            type="button"
+            class="ml-onclick-form inline-flex w-full sm:w-auto items-center justify-center rounded-lg bg-orange-500 px-6 py-3 font-mono text-sm font-semibold uppercase tracking-wide text-white transition-colors hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-offset-2 focus:ring-offset-amber-50"
+            onclick="ml('show', 'AlOroW', true)"
+          >
+            Guide anfordern
+          </button>
+        </div>
       </div>
     </section>
 
@@ -239,5 +278,19 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
     n=d.getElementsByTagName(e)[0],n.parentNode.insertBefore(l,n);})
     (window,document,'script','https://assets.mailerlite.com/js/universal.js','ml');
     ml('account', '977546');
+
+    window.addEventListener('load', function () {
+      window.setTimeout(function () {
+        var wrapper = document.querySelector('.vitamin-mailerlite-form');
+        var embed = wrapper && wrapper.querySelector('.ml-embedded');
+
+        if (!wrapper || !embed) return;
+
+        var hasLoadedForm = embed.querySelector('form, iframe, input, button');
+        if (!hasLoadedForm) {
+          wrapper.classList.add('is-empty');
+        }
+      }, 2500);
+    });
   </script>
 </BaseLayout>
