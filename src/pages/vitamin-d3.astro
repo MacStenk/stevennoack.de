@@ -261,9 +261,8 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
             Falls das Formular nicht automatisch lädt, trag dich hier direkt ein.
           </p>
           <form
-            action="https://assets.mailerlite.com/jsonp/977546/forms/183364843631281988/subscribe"
+            action="/api/vitamin-d3-signup"
             method="post"
-            target="_blank"
           >
             <label class="sr-only" for="vitamin-d3-fallback-email">E-Mail</label>
             <input
@@ -274,6 +273,14 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
               inputmode="email"
               placeholder="Deine E-Mail"
               required
+            />
+            <input
+              type="text"
+              name="website"
+              tabindex="-1"
+              autocomplete="off"
+              class="sr-only"
+              aria-hidden="true"
             />
             <input type="hidden" name="ml-submit" value="1" />
             <input type="hidden" name="anticsrf" value="true" />
